@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace ConnectedNotes.Models
 {
+    [Serializable]
     public class Note
     {
         public long Id {get ;set;}
