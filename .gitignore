@@ -1,0 +1,7 @@
+*.db
+bin
+bin/*
+**/bin/*
+obj
+obj/*
+**/obj/*
