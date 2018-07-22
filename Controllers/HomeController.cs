@@ -91,6 +91,7 @@ namespace ConnectedNotes.Controllers
                         foundFrom.ConnectedWith = new List<Note>();
                     }
                     foundFrom.ConnectedWith.Add(to);
+                    saveNotes(notes);
                     return new JsonResult(foundFrom);
                 }
             }

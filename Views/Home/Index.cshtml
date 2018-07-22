@@ -87,12 +87,12 @@
                 type: "POST",
                 url: "Home/ConnectNotes",
                 data: {
-                    from: toJsWithoutFunctions(self.connectFrom()),
+                    from: toJsWithoutFunctions(self.connectFrom),
                     to: toJsWithoutFunctions(data)
                 },
-                success: function(data) {
-                    var toAdd = new NoteModel(data);
-                    self.Notes.push(toAdd);
+                success: function(response) {
+                    self.connectFrom().ConnectedWith.push(data);
+                    self.connectFrom(null);
 
                 },
                 dataType: "json"
