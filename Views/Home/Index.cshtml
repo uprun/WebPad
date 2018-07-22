@@ -63,12 +63,35 @@
 
         };
 
-        self.MakeNewEmptyNode = function() {
+        self.connectFrom = ko.observable(null);
+
+        self.CreateNote = function() {
             $.ajax({
                 type: "POST",
-                url: "Home/MakeNewNode",
+                url: "Home/CreateNote",
                 success: function(data) {
-                    var toAdd = new NodeModel(data);
+                    var toAdd = new NoteModel(data);
+                    self.Notes.push(toAdd);
+
+                },
+                dataType: "json"
+            });
+        };
+
+        self.SelectFrom = function(data) {
+            self.connectFrom(data);
+        };
+
+        self.ConnectNotes = function(data) {
+            $.ajax({
+                type: "POST",
+                url: "Home/ConnectNotes",
+                data: {
+                    from: toJsWithoutFunctions(self.connectFrom()),
+                    to: toJsWithoutFunctions(data)
+                },
+                success: function(data) {
+                    var toAdd = new NoteModel(data);
                     self.Notes.push(toAdd);
 
                 },
@@ -89,6 +112,9 @@
 </script>
 <script type="text/html" id="node-template">
     <li>
+        <span data-bind="if: $root.connectFrom() != null">
+            <button data-bind="click: $root.ConnectNotes" >With</button>
+        </span>
     <span>
         <span data-bind="text: '#'"></span>
         <span data-bind="text: id"></span>
@@ -110,6 +136,7 @@
                 </li>
             </ul>
             <br>
+            <button data-bind="click: $root.SelectFrom" >Connect</button>
         </span>
         
         <span data-bind="if: RawViewIsEnabled">
@@ -121,5 +148,8 @@
 <div>
         <ul data-bind="template: {name: 'node-template', foreach: Notes} ">
         </ul>
+        <br>
+
+        <button data-bind="click: $root.CreateNote">Create note</button>
     
 </div>

@@ -55,14 +55,49 @@ namespace ConnectedNotes.Controllers
         public JsonResult RetrieveAllNotes()
         {
             List<Note> notes = retrieveNotes();
-            notes.Add(
-                new Note
+            return new JsonResult(notes);
+        }
+
+        public JsonResult CreateNote()
+        {
+            List<Note> notes = retrieveNotes();
+            var count = notes.Count == 0 ? 0 :  notes.Max(x => x.Id);
+            var date = DateTime.Now;
+            var toAdd = new Note
                 {
-                    Text = "Hello world"
-                }
+                    Id = count + 1,
+                    Text = "",
+                    CreatedOn = date,
+                    UpdatedOn = date
+                };
+            notes.Add(
+                toAdd
             );
             saveNotes(notes);
-            return new JsonResult(notes);
+            return new JsonResult(toAdd);
+        }
+
+        public JsonResult ConnectNotes(Note from, Note to)
+        {
+            List<Note> notes = retrieveNotes();
+            var foundTo = notes.FirstOrDefault(x => x.Id == to.Id);
+            if(foundTo != null)
+            {
+                var foundFrom = notes.FirstOrDefault(x => x.Id == from.Id);
+                if(foundFrom != null)
+                {
+                    if(foundFrom.ConnectedWith == null)
+                    {
+                        foundFrom.ConnectedWith = new List<Note>();
+                    }
+                    foundFrom.ConnectedWith.Add(to);
+                    return new JsonResult(foundFrom);
+                }
+            }
+            throw new Exception("Not found prerequisites.");
+
+
+            
         }
     }
 }
