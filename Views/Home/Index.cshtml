@@ -3,20 +3,31 @@
 }
 <script>
     
-    
+
+    function NoteReference(data)
+    {
+        self.id = data.id;
+        self.text = ko.computed(function() {return data.text();});
+    }
 
     function NoteModel(data)
     {
         var self = this;
-        self.id = ko.observable(data.id);
+        self.id = data.id;
         self.text = ko.observable(data.text);
         
         self.ConnectedWith = ko.observableArray(
-            ko.utils.arrayMap(data.connectedWith, function(elem) {
-                    return new NoteModel(elem);
-                }
-            )
         );
+
+        self.DataConnectedWith = data.connectedWith;
+
+        self.restoreConnections = function(lookupDictionary)
+        {
+            $.each(self.DataConnectedWith, function(k, connection) {
+                        self.ConnectedWith.push(new NoteReference(lookupDictionary[connection.id]));
+
+                    });
+        };
 
         self.RawViewIsEnabled = ko.observable(false);
         self.EnableRawView = function(){
@@ -52,10 +63,17 @@
                     
                 },
                 success: function(data) {
+                    var dictionary = {};
                     var toAdd = ko.utils.arrayMap(data, function(elem) {
-                        return new NoteModel(elem);
+                        dictionary[elem.id] = new NoteModel(elem);
+                        return dictionary[elem.id];
                     });
                     ko.utils.arrayPushAll(self.Notes, toAdd);
+                    $.each(self.Notes(), function(index, value) {
+                        value.restoreConnections(dictionary);
+                        
+
+                    });
 
                 },
                 dataType: "json"
@@ -91,7 +109,7 @@
                     to: toJsWithoutFunctions(data)
                 },
                 success: function(response) {
-                    self.connectFrom().ConnectedWith.push(data);
+                    self.connectFrom().ConnectedWith.push(new NoteReference(data));
                     self.connectFrom(null);
 
                 },
@@ -110,7 +128,7 @@
         viewModel.RetrieveDataFromServer();
     });
 </script>
-<script type="text/html" id="node-template">
+<script type="text/html" id="note-template">
     <li>
         <span data-bind="if: $root.connectFrom() != null">
             <button data-bind="click: $root.ConnectNotes" >With</button>
@@ -127,16 +145,16 @@
         </span>
         <span data-bind="if: RawViewIsEnabled">
             <input data-bind="value: text"></input>
-            <ul data-bind="foreach: ConnectedWith">
+            <ul data-bind="foreach: ConnectedWith ">
                 <li >
                     <button data-bind="click: $parent.Disconnect">Disconnect</button>
                     <span data-bind="text: '#'"></span>
                     <span data-bind="text: id"></span>
-                    <input data-bind="value: text"></input>
+                    <span data-bind="text: text"></input> 
                 </li>
             </ul>
             <br>
-            <button data-bind="click: $root.SelectFrom" >Connect</button>
+            <button data-bind="click: $root.SelectFrom" >Edit Connections</button>
         </span>
         
         <span data-bind="if: RawViewIsEnabled">
@@ -146,7 +164,7 @@
     </li>
 </script>
 <div>
-        <ul data-bind="template: {name: 'node-template', foreach: Notes} ">
+        <ul data-bind="template: {name: 'note-template', foreach: Notes} ">
         </ul>
         <br>
 
