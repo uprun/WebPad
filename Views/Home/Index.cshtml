@@ -15,6 +15,19 @@
         var self = this;
         self.id = data.id;
         self.text = ko.observable(data.text);
+        // self.text
+        //     .subscribe(function() {
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "Home/UpdateNote",
+        //             data: {
+        //                 note: toJsWithoutFunctions(self)
+        //             },
+        //             success: function(response) {
+        //             },
+        //             dataType: "json"
+        //         });
+        //     });
         
         self.ConnectedWith = ko.observableArray(
         );
@@ -110,7 +123,7 @@
                     to: toJsWithoutFunctions(data)
                 },
                 success: function(response) {
-                    self.connectFrom().ConnectedWith.push(new NoteReference(data));
+                    self.connectFrom.ConnectedWith.push(new NoteReference(data));
                     self.connectFrom(null);
 
                 },
@@ -145,7 +158,7 @@
             <button data-bind="click: EnableRawView" >Edit</button>
         </span>
         <span data-bind="if: RawViewIsEnabled">
-            <input data-bind="value: text"></input>
+            <input data-bind="value: text, valueUpdate: 'keypress keyup'"></input>
             <ul data-bind="foreach: ConnectedWith ">
                 <li >
                     <button data-bind="click: $parent.Disconnect">Disconnect</button>
@@ -155,7 +168,7 @@
                 </li>
             </ul>
             <br>
-            <button data-bind="click: $root.SelectFrom" >Edit Connections</button>
+            <button data-bind="click: $root.SelectFrom" >Connect</button>
         </span>
         
         <span data-bind="if: RawViewIsEnabled">
