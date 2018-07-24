@@ -23,10 +23,11 @@
 
         self.restoreConnections = function(lookupDictionary)
         {
-            $.each(self.DataConnectedWith, function(k, connection) {
-                        self.ConnectedWith.push(new NoteReference(lookupDictionary[connection.id]));
-
-                    });
+            var restored = $.map(self.DataConnectedWith, function(data) {
+                var toAdd = lookupDictionary[data.id];
+                return toAdd;
+            });
+            ko.utils.arrayPushAll(self.ConnectedWith, restored);
         };
 
         self.RawViewIsEnabled = ko.observable(false);
