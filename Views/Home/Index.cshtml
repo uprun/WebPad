@@ -2,46 +2,24 @@
     ViewData["Title"] = "Notes";
 }
 <script>
-    
-
-    function NoteReference(data)
-    {
-        self.id = data.id;
-        self.text = ko.computed(function() {return data.text();});
-    }
-
     function NoteModel(data)
     {
         var self = this;
         self.id = data.id;
         self.text = ko.observable(data.text);
-        // self.text
-        //     .subscribe(function() {
-        //         $.ajax({
-        //             type: "POST",
-        //             url: "Home/UpdateNote",
-        //             data: {
-        //                 note: toJsWithoutFunctions(self)
-        //             },
-        //             success: function(response) {
-        //             },
-        //             dataType: "json"
-        //         });
-        //     });
-        
-        self.ConnectedWith = ko.observableArray(
-        );
-
-        self.DataConnectedWith = data.connectedWith;
-
-        self.restoreConnections = function(lookupDictionary)
-        {
-            var restored = $.map(self.DataConnectedWith, function(data) {
-                var toAdd = lookupDictionary[data.id];
-                return toAdd;
+        self.text
+            .subscribe(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "Home/UpdateNote",
+                    data: {
+                        note: toJsWithoutFunctions(self)
+                    },
+                    success: function(response) {
+                    },
+                    dataType: "json"
+                });
             });
-            ko.utils.arrayPushAll(self.ConnectedWith, restored);
-        };
 
         self.RawViewIsEnabled = ko.observable(false);
         self.EnableRawView = function(){
@@ -50,6 +28,15 @@
         self.DisableRawView = function() {
             self.RawViewIsEnabled(false);
         };
+
+        self.DataConnectedWith = data.connectedWith;
+    };
+
+    function ConnectedNotesModel(a, b)
+    {
+        var self = this;
+        self.Source = a;
+        self.Destination = b;
     };
 
     function toJsWithoutFunctions(data) {
@@ -67,6 +54,7 @@
         var self = this;
         
         self.Notes = ko.observableArray([]);
+        self.Connections = ko.observableArray([]);
         
 
         self.RetrieveDataFromServer = function() {
@@ -83,9 +71,13 @@
                         return dictionary[elem.id];
                     });
                     ko.utils.arrayPushAll(self.Notes, toAdd);
+
                     $.each(self.Notes(), function(index, value) {
-                        value.restoreConnections(dictionary);
-                        
+                        var valueConnections = ko.utils.arrayMap(value.DataConnectedWith, function(elem) {
+                            var Destination = dictionary[elem.id];
+                            return new ConnectedNotesModel(value, Destination);
+                        });
+                        ko.utils.arrayPushAll(self.Connections, valueConnections );
 
                     });
 
@@ -123,7 +115,7 @@
                     to: toJsWithoutFunctions(data)
                 },
                 success: function(response) {
-                    self.connectFrom.ConnectedWith.push(new NoteReference(data));
+                    self.Connections.push(new ConnectedNotesModel(self.connectFrom(), data));
                     self.connectFrom(null);
 
                 },
@@ -159,14 +151,14 @@
         </span>
         <span data-bind="if: RawViewIsEnabled">
             <input data-bind="value: text, valueUpdate: 'keypress keyup'"></input>
-            <ul data-bind="foreach: ConnectedWith ">
+            <!-- <ul data-bind="foreach: ConnectedWith ">
                 <li >
                     <button data-bind="click: $parent.Disconnect">Disconnect</button>
                     <span data-bind="text: '#'"></span>
                     <span data-bind="text: id"></span>
                     <span data-bind="text: text"></input> 
                 </li>
-            </ul>
+            </ul> -->
             <br>
             <button data-bind="click: $root.SelectFrom" >Connect</button>
         </span>
@@ -183,5 +175,17 @@
         <br>
 
         <button data-bind="click: $root.CreateNote">Create note</button>
+
+        <ul data-bind="foreach: Connections">
+            <li>
+                <span>Source: #</span>
+                <span data-bind="text: Source.id"></span>
+                <span>, </span>
+                <span data-bind="text: Source.text"></span>
+                <span>Destination:</span>
+                <span data-bind="text: Destination.id"></span>
+            </li>
+
+        </ul>
     
 </div>
