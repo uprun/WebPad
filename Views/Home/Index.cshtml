@@ -35,9 +35,18 @@
         self.DataConnectedWith = data.connectedWith;
 
         self.MyComputedConnections = ko.pureComputed(function() {
-            return ko.utils.arrayFilter(self.allConnections(), function(conn) {
-                return conn.Source.id == self.id;
-            });   
+            // if(self.allConnections().length == 0)
+            // {
+            //     return ko.observableArray([]);
+
+            // }
+            // else
+            {
+                return ko.utils.arrayFilter(self.allConnections(), function(conn) {
+                    return conn.Source.id == self.id;
+                }); 
+            }
+              
         });
     };
 
@@ -106,7 +115,7 @@
                 type: "POST",
                 url: "Home/CreateNote",
                 success: function(data) {
-                    var toAdd = new NoteModel(data);
+                    var toAdd = new NoteModel(data, self.Connections);
                     self.Notes.push(toAdd);
 
                 },
