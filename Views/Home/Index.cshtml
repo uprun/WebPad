@@ -178,12 +178,14 @@
 
         <ul data-bind="foreach: Connections">
             <li>
-                <span>Source: #</span>
+                <span>#</span>
                 <span data-bind="text: Source.id"></span>
                 <span>, </span>
                 <span data-bind="text: Source.text"></span>
-                <span>Destination:</span>
+                <span> => #</span>
                 <span data-bind="text: Destination.id"></span>
+                <span>, </span>
+                <span data-bind="text: Destination.text"></span>
             </li>
 
         </ul>
