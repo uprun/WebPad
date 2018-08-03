@@ -2,24 +2,27 @@
     ViewData["Title"] = "Notes";
 }
 <script>
-    function NoteModel(data)
+    function NoteModel(data, allConnections)
     {
         var self = this;
         self.id = data.id;
         self.text = ko.observable(data.text);
         self.text
             .subscribe(function() {
+                var temp = toJsWithoutFunctions(self);
                 $.ajax({
                     type: "POST",
                     url: "Home/UpdateNote",
                     data: {
-                        note: toJsWithoutFunctions(self)
+                        note: temp
                     },
                     success: function(response) {
                     },
                     dataType: "json"
                 });
             });
+
+        self.allConnections = allConnections;
 
         self.RawViewIsEnabled = ko.observable(false);
         self.EnableRawView = function(){
@@ -30,6 +33,12 @@
         };
 
         self.DataConnectedWith = data.connectedWith;
+
+        self.MyComputedConnections = ko.pureComputed(function() {
+            return ko.utils.arrayFilter(self.allConnections(), function(conn) {
+                return conn.Source.id == self.id;
+            });   
+        });
     };
 
     function ConnectedNotesModel(a, b)
@@ -40,7 +49,10 @@
     };
 
     function toJsWithoutFunctions(data) {
-        var model = ko.toJS(data);
+        var mapping = {
+            'ignore': ["allConnections", "RawViewIsEnabled", "DataConnectedWith", "MyComputedConnections"]
+        }
+        var model = ko.mapping.toJS(data, mapping);
             for(var x in model) {
                 if(typeof(model[x]) === "function") {
                     model[x] = null;
@@ -67,7 +79,7 @@
                 success: function(data) {
                     var dictionary = {};
                     var toAdd = ko.utils.arrayMap(data, function(elem) {
-                        dictionary[elem.id] = new NoteModel(elem);
+                        dictionary[elem.id] = new NoteModel(elem, self.Connections);
                         return dictionary[elem.id];
                     });
                     ko.utils.arrayPushAll(self.Notes, toAdd);
@@ -151,14 +163,18 @@
         </span>
         <span data-bind="if: RawViewIsEnabled">
             <input data-bind="value: text, valueUpdate: 'keypress keyup'"></input>
-            <!-- <ul data-bind="foreach: ConnectedWith ">
-                <li >
-                    <button data-bind="click: $parent.Disconnect">Disconnect</button>
-                    <span data-bind="text: '#'"></span>
-                    <span data-bind="text: id"></span>
-                    <span data-bind="text: text"></input> 
+            <ul data-bind="foreach: MyComputedConnections">
+                <li>
+                    <span>#</span>
+                    <span data-bind="text: Source.id"></span>
+                    <span>, </span>
+                    <span data-bind="text: Source.text"></span>
+                    <span> => #</span>
+                    <span data-bind="text: Destination.id"></span>
+                    <span>, </span>
+                    <span data-bind="text: Destination.text"></span>
                 </li>
-            </ul> -->
+            </ul>
             <br>
             <button data-bind="click: $root.SelectFrom" >Connect</button>
         </span>
