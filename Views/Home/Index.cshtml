@@ -155,8 +155,11 @@
 </script>
 <script type="text/html" id="note-template">
     <li>
-        <span data-bind="if: $root.connectFrom() != null">
-            <button data-bind="click: $root.ConnectNotes" >With</button>
+        <span data-bind="if: $root.connectFrom() != null && $root.connectFrom().id != id">
+            <button data-bind="click: $root.ConnectNotes" >To</button>
+        </span>
+        <span data-bind="if: $root.connectFrom() != null && $root.connectFrom().id == id">
+            <span>From</span>
         </span>
     <span>
         <span data-bind="text: '#'"></span>
@@ -183,13 +186,15 @@
                 </li>
             </ul>
             <br>
-            <div data-bind="if: $root.connectFrom() != null && $root.connectFrom().id == id">
+            <span data-bind="if: $root.connectFrom() != null && $root.connectFrom().id == id">
                 <button data-bind="click: $root.CancelSelectFrom">Cancel</button>    
-            </div>
-            <div data-bind="if: $root.connectFrom()==null">
+            </span>
+            <span data-bind="if: $root.connectFrom() == null">
                 <button data-bind="click: $root.SelectFrom" >Connect</button>
-            </div>
-            
+            </span>
+            <span data-bind="if: $root.connectFrom() != null && $root.connectFrom().id != id">
+                <button data-bind="click: $root.SelectFrom" >Change From</button>
+            </span>
         </span>
         
         <span data-bind="if: RawViewIsEnabled">
