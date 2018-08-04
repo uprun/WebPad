@@ -24,14 +24,6 @@
 
         self.allConnections = allConnections;
 
-        self.RawViewIsEnabled = ko.observable(false);
-        self.EnableRawView = function(){
-            self.RawViewIsEnabled(true);
-        };
-        self.DisableRawView = function() {
-            self.RawViewIsEnabled(false);
-        };
-
         self.DataConnectedWith = data.connectedWith;
 
         self.MyComputedConnections = ko.pureComputed(function() {
@@ -161,67 +153,33 @@
         <span data-bind="if: $root.connectFrom() != null && $root.connectFrom().id == id">
             <span>From</span>
         </span>
-    <span>
-        <span data-bind="text: '#'"></span>
-        <span data-bind="text: id"></span>
-        <span data-bind="text: ','"></span>
-    </span>
-    <span>
-        <span data-bind="ifnot: RawViewIsEnabled">
-            <span data-bind="text: text"></span>
-            <button data-bind="click: EnableRawView" >Edit</button>
-        </span>
-        <span data-bind="if: RawViewIsEnabled">
+        <span>
             <input data-bind="value: text, valueUpdate: 'keypress keyup'"></input>
-            <ul data-bind="foreach: MyComputedConnections">
+            <ul>
+                <!-- ko foreach: MyComputedConnections -->
+                    <li>
+                        <span> => </span>
+                        <span data-bind="text: Destination.text"></span>
+                    </li>
+                <!-- /ko -->
                 <li>
-                    <span>#</span>
-                    <span data-bind="text: Source.id"></span>
-                    <span>, </span>
-                    <span data-bind="text: Source.text"></span>
-                    <span> => #</span>
-                    <span data-bind="text: Destination.id"></span>
-                    <span>, </span>
-                    <span data-bind="text: Destination.text"></span>
+                    <span data-bind="if: $root.connectFrom() != null && $root.connectFrom().id == id">
+                        <button data-bind="click: $root.CancelSelectFrom">Cancel</button>    
+                    </span>
+                    <span data-bind="if: $root.connectFrom() == null">
+                        <button data-bind="click: $root.SelectFrom" >Connect</button>
+                    </span>
+                    <span data-bind="if: $root.connectFrom() != null && $root.connectFrom().id != id">
+                        <button data-bind="click: $root.SelectFrom" >Change From</button>
+                    </span>
                 </li>
             </ul>
-            <br>
-            <span data-bind="if: $root.connectFrom() != null && $root.connectFrom().id == id">
-                <button data-bind="click: $root.CancelSelectFrom">Cancel</button>    
-            </span>
-            <span data-bind="if: $root.connectFrom() == null">
-                <button data-bind="click: $root.SelectFrom" >Connect</button>
-            </span>
-            <span data-bind="if: $root.connectFrom() != null && $root.connectFrom().id != id">
-                <button data-bind="click: $root.SelectFrom" >Change From</button>
-            </span>
         </span>
-        
-        <span data-bind="if: RawViewIsEnabled">
-            <button data-bind="click: DisableRawView" >Collapse</button>
-        </span>
-    </span>
     </li>
 </script>
 <div>
         <ul data-bind="template: {name: 'note-template', foreach: Notes} ">
         </ul>
         <br>
-
         <button data-bind="click: $root.CreateNote">Create note</button>
-
-        <ul data-bind="foreach: Connections">
-            <li>
-                <span>#</span>
-                <span data-bind="text: Source.id"></span>
-                <span>, </span>
-                <span data-bind="text: Source.text"></span>
-                <span> => #</span>
-                <span data-bind="text: Destination.id"></span>
-                <span>, </span>
-                <span data-bind="text: Destination.text"></span>
-            </li>
-
-        </ul>
-    
 </div>
