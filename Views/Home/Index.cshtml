@@ -35,17 +35,11 @@
         self.DataConnectedWith = data.connectedWith;
 
         self.MyComputedConnections = ko.pureComputed(function() {
-            // if(self.allConnections().length == 0)
-            // {
-            //     return ko.observableArray([]);
 
-            // }
-            // else
-            {
+
                 return ko.utils.arrayFilter(self.allConnections(), function(conn) {
                     return conn.Source.id == self.id;
                 }); 
-            }
               
         });
     };
@@ -127,6 +121,10 @@
             self.connectFrom(data);
         };
 
+        self.CancelSelectFrom = function() {
+            self.connectFrom(null);
+        };
+
         self.ConnectNotes = function(data) {
             $.ajax({
                 type: "POST",
@@ -185,7 +183,13 @@
                 </li>
             </ul>
             <br>
-            <button data-bind="click: $root.SelectFrom" >Connect</button>
+            <div data-bind="if: $root.connectFrom() != null && $root.connectFrom().id == id">
+                <button data-bind="click: $root.CancelSelectFrom">Cancel</button>    
+            </div>
+            <div data-bind="if: $root.connectFrom()==null">
+                <button data-bind="click: $root.SelectFrom" >Connect</button>
+            </div>
+            
         </span>
         
         <span data-bind="if: RawViewIsEnabled">
