@@ -41,6 +41,7 @@
         var self = this;
         self.Source = a;
         self.Destination = b;
+        self.label = ko.observable("");
     };
 
     function toJsWithoutFunctions(data) {
@@ -209,7 +210,7 @@
             nodes.add( {id: added.id, label: added.text()});
         },
         function(connectionAdded) {
-            edges.add( { from: connectionAdded.Source.id, to: connectionAdded.Destination.id, arrows: 'to' });
+            edges.add( { from: connectionAdded.Source.id, to: connectionAdded.Destination.id, arrows: 'to', label: 'label', font: {align: 'top'} });
         });
         ko.applyBindings(viewModel);
         viewModel.RetrieveDataFromServer();
@@ -232,6 +233,7 @@
             <ul>
                 <!-- ko foreach: MyComputedConnections -->
                     <li>
+                        <input data-bind="value: label, valueUpdate: 'keypress keyup'" > </input>
                         <span> => </span>
                         <span data-bind="text: Destination.text"></span>
                     </li>
