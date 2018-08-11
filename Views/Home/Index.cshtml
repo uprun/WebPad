@@ -209,7 +209,7 @@
             nodes.add( {id: added.id, label: added.text()});
         },
         function(connectionAdded) {
-            edges.add( { from: connectionAdded.Source.id, to: connectionAdded.Destination.id });
+            edges.add( { from: connectionAdded.Source.id, to: connectionAdded.Destination.id, arrows: 'to' });
         });
         ko.applyBindings(viewModel);
         viewModel.RetrieveDataFromServer();
