@@ -61,11 +61,29 @@
         var self = this;
         
         self.Notes = ko.observableArray([]);
+        // self.Notes.subscribe(function(changes) {
+        //     console.log(changes);
+        //     // add call to callback
+        // }, null, "arrayChange");
+        self.Connections = ko.observableArray([]);
+
         self.Notes.subscribe(function(changes) {
             console.log(changes);
+            if(changes && changes.length > 0)
+            {
+                $.each(changes, function(index, value) {
+                    if(noteAddedCallback && typeof(noteAddedCallback) == "function") {
+                        if(value.status == "added") {
+                            noteAddedCallback(value.value);
+                        }
+                    }
+                    
+                        
+
+                    });
+            }
             // add call to callback
         }, null, "arrayChange");
-        self.Connections = ko.observableArray([]);
         
 
         self.RetrieveDataFromServer = function() {
@@ -171,9 +189,10 @@
         };
         var options = {};
         var network = new vis.Network(container, data, options);
-        nodes.add({id: 1, label: 'Node 1'});
 
-        var viewModel = new ConnectedNotesViewModel();
+        var viewModel = new ConnectedNotesViewModel(function (added) {
+            nodes.add( {id: added.id, label: added.text()})
+        });
         ko.applyBindings(viewModel);
         viewModel.RetrieveDataFromServer();
 
@@ -214,18 +233,21 @@
         </span>
     </li>
 </script>
-<div class="row">
-    <div class="col-md-3">
-        <ul data-bind="template: {name: 'note-template', foreach: Notes} ">
-        </ul>
-        <br>
-        <button data-bind="click: $root.CreateNote">Create note</button>
-    </div>
-    <div class="col-md-8">
-        <div id="mygraph" style="height: 700px;">
+<div style="margin: 16px;">
+    <div class="row">
+        <div class="col-md-3">
+            <div style="overflow-y: scroll; height: 550px;">
+                <ul data-bind="template: {name: 'note-template', foreach: Notes} ">
+                </ul>
+            </div>
+            <button data-bind="click: $root.CreateNote">Create note</button>
+        </div>
+        <div class="col-md-9">
+            <div id="mygraph" style="height: 550px; width: 100%;">
+
+            </div>
 
         </div>
-
+            
     </div>
-        
 </div>

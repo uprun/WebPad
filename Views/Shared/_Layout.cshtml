@@ -34,21 +34,17 @@
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
                 </button>
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ConnectedNotes</a>
             </div>
         </div>
     </nav>
-    <div class="container body-content">
+    
         @RenderBody()
         <hr />
         <footer>
             <p>&copy; 2018 - ConnectedNotes</p>
         </footer>
-    </div>
 
     
     <environment exclude="Development">
