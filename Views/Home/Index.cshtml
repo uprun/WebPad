@@ -56,7 +56,7 @@
         return model;
     };
 
-    function ConnectedNotesViewModel(noteAddedCallback, noteConnectedCallback, noteUpdatedCallback, noteRemovedCallback)
+    function ConnectedNotesViewModel(noteAddedCallback, connectionAddedCallback, noteUpdatedCallback, noteRemovedCallback)
     {
         var self = this;
         
@@ -68,7 +68,6 @@
         self.Connections = ko.observableArray([]);
 
         self.Notes.subscribe(function(changes) {
-            console.log(changes);
             if(changes && changes.length > 0)
             {
                 $.each(changes, function(index, value) {
@@ -83,6 +82,22 @@
                     });
             }
             // add call to callback
+        }, null, "arrayChange");
+
+        self.Connections.subscribe(function(changes) {
+            if(changes && changes.length > 0)
+            {
+                $.each(changes, function(index, value) {
+                    if(connectionAddedCallback && typeof(connectionAddedCallback) == "function") {
+                        if(value.status == "added") {
+                            connectionAddedCallback(value.value);
+                        }
+                    }
+                    
+                        
+
+                    });
+            }
         }, null, "arrayChange");
         
 
@@ -191,7 +206,10 @@
         var network = new vis.Network(container, data, options);
 
         var viewModel = new ConnectedNotesViewModel(function (added) {
-            nodes.add( {id: added.id, label: added.text()})
+            nodes.add( {id: added.id, label: added.text()});
+        },
+        function(connectionAdded) {
+            edges.add( { from: connectionAdded.Source.id, to: connectionAdded.Destination.id });
         });
         ko.applyBindings(viewModel);
         viewModel.RetrieveDataFromServer();
