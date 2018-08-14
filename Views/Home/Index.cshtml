@@ -20,6 +20,9 @@
                     },
                     dataType: "json"
                 });
+                if(self.textChangesOccuredHandler && typeof(self.textChangesOccuredHandler) == "function") {
+                    self.textChangesOccuredHandler(toJsWithoutFunctions(self));
+                }
             });
 
         self.allConnections = allConnections;
@@ -27,13 +30,16 @@
         self.DataConnectedWith = data.connectedWith;
 
         self.MyComputedConnections = ko.pureComputed(function() {
-
-
                 return ko.utils.arrayFilter(self.allConnections(), function(conn) {
                     return conn.Source.id == self.id;
                 }); 
               
         });
+
+        self.textChangesOccuredHandler;
+        self.subscribeToTextChanges = function(callback) {
+            self.textChangesOccuredHandler = callback;
+        };
     };
 
     function ConnectedNotesModel(a, b)
@@ -112,7 +118,9 @@
                 success: function(data) {
                     var dictionary = {};
                     var toAdd = ko.utils.arrayMap(data, function(elem) {
-                        dictionary[elem.id] = new NoteModel(elem, self.Connections);
+                         var noteToAdd = new NoteModel(elem, self.Connections);
+                         noteToAdd.subscribeToTextChanges(noteUpdatedCallback);
+                         dictionary[elem.id] = noteToAdd;
                         return dictionary[elem.id];
                     });
                     ko.utils.arrayPushAll(self.Notes, toAdd);
@@ -140,6 +148,7 @@
                 url: "Home/CreateNote",
                 success: function(data) {
                     var toAdd = new NoteModel(data, self.Connections);
+                    toAdd.subscribeToTextChanges(noteUpdatedCallback);
                     self.Notes.push(toAdd);
 
                 },
@@ -206,12 +215,17 @@
         var options = {};
         var network = new vis.Network(container, data, options);
 
-        var viewModel = new ConnectedNotesViewModel(function (added) {
-            nodes.add( {id: added.id, label: added.text()});
-        },
-        function(connectionAdded) {
-            edges.add( { from: connectionAdded.Source.id, to: connectionAdded.Destination.id, arrows: 'to', label: 'label', font: {align: 'top'} });
-        });
+        var viewModel = new ConnectedNotesViewModel(
+            function (added) {
+                nodes.add( {id: added.id, label: added.text(), shape: 'box' });
+            },
+            function(connectionAdded) {
+                edges.add( { from: connectionAdded.Source.id, to: connectionAdded.Destination.id, arrows: 'to', label: 'label', font: {align: 'top'} });
+            },
+            function(changed) {
+                nodes.update({id: changed.id, label: changed.text}); 
+            }
+        );
         ko.applyBindings(viewModel);
         viewModel.RetrieveDataFromServer();
 
