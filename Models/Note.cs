@@ -9,7 +9,6 @@ namespace ConnectedNotes.Models
         public long Id {get ;set;}
         public string Text {get ; set;}
 
-        public List<Note> ConnectedWith {get; set;}
 
         public DateTime CreatedOn {get; set;}
 

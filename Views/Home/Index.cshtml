@@ -27,8 +27,6 @@
 
         self.allConnections = allConnections;
 
-        self.DataConnectedWith = data.connectedWith;
-
         self.MyComputedConnections = ko.pureComputed(function() {
                 return ko.utils.arrayFilter(self.allConnections(), function(conn) {
                     return conn.Source.id == self.id;
@@ -42,12 +40,25 @@
         };
     };
 
-    function ConnectedNotesModel(a, b)
+    function ConnectedNotesModel(id, a, b, label)
     {
         var self = this;
+        self.id = id;
         self.Source = a;
         self.Destination = b;
-        self.label = ko.observable("");
+        self.label = ko.observable(label);
+        self.labelUpdateCallback;
+        self.label
+            .subscribe(function() {
+                if(self.labelUpdateCallback && typeof(self.labelUpdateCallback) == "function") {
+                    self.labelUpdateCallback(toJsWithoutFunctions(self));
+                }
+            });
+        self.subscribeToLabelChanges = function(callback) {
+            self.labelUpdateCallback = callback;
+        };
+
+
     };
 
     function toJsWithoutFunctions(data) {
@@ -63,7 +74,7 @@
         return model;
     };
 
-    function ConnectedNotesViewModel(noteAddedCallback, connectionAddedCallback, noteUpdatedCallback, noteRemovedCallback)
+    function ConnectedNotesViewModel(noteAddedCallback, noteUpdatedCallback, connectionAddedCallback, connectionUpdatedCallback, noteRemovedCallback)
     {
         var self = this;
         
@@ -80,7 +91,7 @@
                 $.each(changes, function(index, value) {
                     if(noteAddedCallback && typeof(noteAddedCallback) == "function") {
                         if(value.status == "added") {
-                            noteAddedCallback(value.value);
+                            noteAddedCallback(toJsWithoutFunctions(value.value));
                         }
                     }
                     
@@ -117,22 +128,24 @@
                 },
                 success: function(data) {
                     var dictionary = {};
-                    var toAdd = ko.utils.arrayMap(data, function(elem) {
+                    var toAdd = ko.utils.arrayMap(data.notes, function(elem) {
                          var noteToAdd = new NoteModel(elem, self.Connections);
                          noteToAdd.subscribeToTextChanges(noteUpdatedCallback);
                          dictionary[elem.id] = noteToAdd;
-                        return dictionary[elem.id];
+                        return noteToAdd;
                     });
                     ko.utils.arrayPushAll(self.Notes, toAdd);
 
-                    $.each(self.Notes(), function(index, value) {
-                        var valueConnections = ko.utils.arrayMap(value.DataConnectedWith, function(elem) {
-                            var Destination = dictionary[elem.id];
-                            return new ConnectedNotesModel(value, Destination);
-                        });
-                        ko.utils.arrayPushAll(self.Connections, valueConnections );
-
+                    var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
+                        var Source = dictionary[elem.source.id];
+                        var Destination = dictionary[elem.destination.id];
+                        var connectionToAdd = new ConnectedNotesModel(elem.id, Source, Destination, elem.label);
+                        connectionToAdd.subscribeToLabelChanges(connectionUpdatedCallback);
+                        return connectionToAdd;
                     });
+
+                    ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
+
 
                 },
                 dataType: "json"
@@ -173,7 +186,9 @@
                     to: toJsWithoutFunctions(data)
                 },
                 success: function(response) {
-                    self.Connections.push(new ConnectedNotesModel(self.connectFrom(), data));
+                    var connectionToAdd = new ConnectedNotesModel(response.id, response.source, response.destination, response.label);
+                    connectionToAdd.subscribeToLabelChanges(connectionUpdatedCallback);
+                    self.Connections.push(connectionToAdd);
                     self.connectFrom(null);
 
                 },
@@ -217,13 +232,16 @@
 
         var viewModel = new ConnectedNotesViewModel(
             function (added) {
-                nodes.add( {id: added.id, label: added.text(), shape: 'box' });
-            },
-            function(connectionAdded) {
-                edges.add( { from: connectionAdded.Source.id, to: connectionAdded.Destination.id, arrows: 'to', label: 'label', font: {align: 'top'} });
+                nodes.add( {id: added.id, label: added.text, shape: 'box' });
             },
             function(changed) {
                 nodes.update({id: changed.id, label: changed.text}); 
+            },
+            function(connectionAdded) {
+                edges.add( {id: connectionAdded.id,  from: connectionAdded.Source.id, to: connectionAdded.Destination.id, arrows: 'to', label: connectionAdded.label, font: {align: 'top'} });
+            },
+            function(connectionUpdated) {
+                edges.update({id: connectionUpdated.id, label: connectionUpdated.label});
             }
         );
         ko.applyBindings(viewModel);

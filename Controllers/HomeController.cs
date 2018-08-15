@@ -20,7 +20,7 @@ namespace ConnectedNotes.Controllers
             return View();
         }
 
-        private NotesRepo retrieveNotes()
+        private NotesRepo retrieveNotesRepo()
         {
             byte[] value; 
             var retrieved = HttpContext.Session.TryGetValue(notesName, out value);
@@ -38,29 +38,20 @@ namespace ConnectedNotes.Controllers
         {
             BinaryFormatter formatter = new BinaryFormatter();
             MemoryStream ms = new MemoryStream();
-            try
-            {
-                formatter.Serialize(ms, repo);
-            }
-            catch(Exception e)
-            {
-
-            }
-            
-            
+            formatter.Serialize(ms, repo);
             HttpContext.Session.Set(notesName, ms.ToArray());
             ms.Close();
         }
 
         public JsonResult RetrieveAllNotes()
         {
-            List<Note> notes = retrieveNotes().Notes;
-            return new JsonResult(notes);
+            var repo = retrieveNotesRepo();
+            return new JsonResult(repo);
         }
 
         public JsonResult CreateNote()
         {
-            var repo = retrieveNotes();
+            var repo = retrieveNotesRepo();
             List<Note> notes = repo.Notes;
             var count = repo.FreeIndex;
             var date = DateTime.Now;
@@ -79,23 +70,28 @@ namespace ConnectedNotes.Controllers
             return new JsonResult(toAdd);
         }
 
-        public JsonResult ConnectNotes(Note from, Note to)
+        public JsonResult ConnectNotes(Note from, Note to, string label)
         {
-            var repo = retrieveNotes();
+            var repo = retrieveNotesRepo();
             List<Note> notes = repo.Notes;
             var foundTo = notes.FirstOrDefault(x => x.Id == to.Id);
             if(foundTo != null)
             {
                 var foundFrom = notes.FirstOrDefault(x => x.Id == from.Id);
+                
                 if(foundFrom != null)
                 {
-                    if(foundFrom.ConnectedWith == null)
-                    {
-                        foundFrom.ConnectedWith = new List<Note>();
-                    }
-                    foundFrom.ConnectedWith.Add(to);
+                    var toAdd = new Connection 
+                        {
+                            Source = from,
+                            Destination = to,
+                            Label = label,
+                            Id = repo.FreeIndex++
+                        };
+
+                    repo.Connections.Add(toAdd);
                     saveNotes(repo);
-                    return new JsonResult(foundFrom);
+                    return new JsonResult(toAdd);
                 }
             }
             throw new Exception("Not found prerequisites.");
@@ -103,7 +99,7 @@ namespace ConnectedNotes.Controllers
 
         public JsonResult UpdateNote(Note note)
         {
-            var repo = retrieveNotes();
+            var repo = retrieveNotesRepo();
             List<Note> notes = repo.Notes;
             var foundNote = notes.FirstOrDefault(x => x.Id == note.Id);
             foundNote.Text = note.Text;
