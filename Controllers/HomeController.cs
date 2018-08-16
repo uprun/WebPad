@@ -106,5 +106,14 @@ namespace ConnectedNotes.Controllers
             saveNotes(repo);
             return new JsonResult(foundNote);
         }
+
+        public JsonResult UpdateConnection(Connection connection)
+        {
+            var repo = retrieveNotesRepo();
+            var found = repo.Connections.FirstOrDefault(c => c.Id == connection.Id);
+            found.Label = connection.Label;
+            saveNotes(repo);
+            return new JsonResult(found);
+        }
     }
 }

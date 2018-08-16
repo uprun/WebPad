@@ -50,8 +50,19 @@
         self.labelUpdateCallback;
         self.label
             .subscribe(function() {
+                var temp = toJsWithoutFunctions(self);
+                $.ajax({
+                    type: "POST",
+                    url: "Home/UpdateConnection",
+                    data: {
+                        connection: temp
+                    },
+                    success: function(response) {
+                    },
+                    dataType: "json"
+                });
                 if(self.labelUpdateCallback && typeof(self.labelUpdateCallback) == "function") {
-                    self.labelUpdateCallback(toJsWithoutFunctions(self));
+                    self.labelUpdateCallback(temp);
                 }
             });
         self.subscribeToLabelChanges = function(callback) {
@@ -108,7 +119,7 @@
                 $.each(changes, function(index, value) {
                     if(connectionAddedCallback && typeof(connectionAddedCallback) == "function") {
                         if(value.status == "added") {
-                            connectionAddedCallback(value.value);
+                            connectionAddedCallback(toJsWithoutFunctions(value.value));
                         }
                     }
                     
