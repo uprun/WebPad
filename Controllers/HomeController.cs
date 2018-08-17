@@ -115,5 +115,30 @@ namespace ConnectedNotes.Controllers
             saveNotes(repo);
             return new JsonResult(found);
         }
+
+        public JsonResult RemoveNote(Note note)
+        {
+            var repo = retrieveNotesRepo();
+            var found = repo.Notes.FirstOrDefault(n => n.Id == note.Id);
+            if(found != null)
+            {
+                repo.Notes = repo.Notes.Where(n => n.Id != note.Id).ToList();
+                repo.Connections = repo.Connections.Where(c => !(c.Source.Id == note.Id || c.Destination.Id == note.Id)).ToList();
+            }
+            saveNotes(repo);
+            return new JsonResult(true);
+        }
+
+        public JsonResult RemoveConnection(long id)
+        {
+            var repo = retrieveNotesRepo();
+            var found = repo.Connections.FirstOrDefault(c => c.Id == id);
+            if(found != null)
+            {
+                repo.Connections = repo.Connections.Where(c => c.Id != id).ToList();
+            }
+            saveNotes(repo);
+            return new JsonResult(true);
+        }
     }
 }

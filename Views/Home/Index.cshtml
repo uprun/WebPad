@@ -85,47 +85,59 @@
         return model;
     };
 
-    function ConnectedNotesViewModel(noteAddedCallback, noteUpdatedCallback, connectionAddedCallback, connectionUpdatedCallback, noteRemovedCallback)
+    var storageForCallBacks = {
+        note: {
+            added: '',
+            updated: '',
+            removed: ''
+        },
+        connection: {
+            added: '',
+            updated: '',
+            removed: ''
+        }
+    };
+
+    function ConnectedNotesViewModel()
     {
         var self = this;
         
         self.Notes = ko.observableArray([]);
-        // self.Notes.subscribe(function(changes) {
-        //     console.log(changes);
-        //     // add call to callback
-        // }, null, "arrayChange");
         self.Connections = ko.observableArray([]);
 
         self.Notes.subscribe(function(changes) {
             if(changes && changes.length > 0)
             {
                 $.each(changes, function(index, value) {
-                    if(noteAddedCallback && typeof(noteAddedCallback) == "function") {
-                        if(value.status == "added") {
-                            noteAddedCallback(toJsWithoutFunctions(value.value));
+                    if(value.status == "added") {
+                        if(typeof(storageForCallBacks.note.added) == "function") {
+                            storageForCallBacks.note.added(toJsWithoutFunctions(value.value));
                         }
                     }
-                    
-                        
-
-                    });
+                    if(value.status == "deleted") {
+                        if(typeof(storageForCallBacks.note.removed) == "function") {
+                            storageForCallBacks.note.removed(toJsWithoutFunctions(value.value));
+                        }
+                    }
+                });
             }
-            // add call to callback
         }, null, "arrayChange");
 
         self.Connections.subscribe(function(changes) {
             if(changes && changes.length > 0)
             {
                 $.each(changes, function(index, value) {
-                    if(connectionAddedCallback && typeof(connectionAddedCallback) == "function") {
-                        if(value.status == "added") {
-                            connectionAddedCallback(toJsWithoutFunctions(value.value));
+                    if(value.status == "added") {
+                        if(typeof(storageForCallBacks.connection.added) == "function") {
+                            storageForCallBacks.connection.added(toJsWithoutFunctions(value.value));
                         }
                     }
-                    
-                        
-
-                    });
+                    if(value.status == "deleted") {
+                        if(typeof(storageForCallBacks.connection.removed) == "function") {
+                            storageForCallBacks.connection.removed(toJsWithoutFunctions(value.value));
+                        }
+                    }
+                });
             }
         }, null, "arrayChange");
         
@@ -135,13 +147,12 @@
                 type: "POST",
                 url: "Home/RetrieveAllNotes",
                 data: {
-                    
                 },
                 success: function(data) {
                     var dictionary = {};
                     var toAdd = ko.utils.arrayMap(data.notes, function(elem) {
                          var noteToAdd = new NoteModel(elem, self.Connections);
-                         noteToAdd.subscribeToTextChanges(noteUpdatedCallback);
+                         noteToAdd.subscribeToTextChanges(storageForCallBacks.note.updated);
                          dictionary[elem.id] = noteToAdd;
                         return noteToAdd;
                     });
@@ -151,7 +162,7 @@
                         var Source = dictionary[elem.source.id];
                         var Destination = dictionary[elem.destination.id];
                         var connectionToAdd = new ConnectedNotesModel(elem.id, Source, Destination, elem.label);
-                        connectionToAdd.subscribeToLabelChanges(connectionUpdatedCallback);
+                        connectionToAdd.subscribeToLabelChanges(storageForCallBacks.connection.updated);
                         return connectionToAdd;
                     });
 
@@ -172,7 +183,7 @@
                 url: "Home/CreateNote",
                 success: function(data) {
                     var toAdd = new NoteModel(data, self.Connections);
-                    toAdd.subscribeToTextChanges(noteUpdatedCallback);
+                    toAdd.subscribeToTextChanges(storageForCallBacks.note.updated);
                     self.Notes.push(toAdd);
 
                 },
@@ -198,13 +209,43 @@
                 },
                 success: function(response) {
                     var connectionToAdd = new ConnectedNotesModel(response.id, response.source, response.destination, response.label);
-                    connectionToAdd.subscribeToLabelChanges(connectionUpdatedCallback);
+                    connectionToAdd.subscribeToLabelChanges(storageForCallBacks.connection.updated);
                     self.Connections.push(connectionToAdd);
                     self.connectFrom(null);
 
                 },
                 dataType: "json"
             });
+        };
+
+        self.RemoveNote = function( note) {
+            $.ajax({
+                type: "POST",
+                url: "Home/RemoveNote",
+                data: {
+                    note: toJsWithoutFunctions(note)
+                },
+                success: function(response) {
+                    self.Notes.remove(note);
+                },
+                dataType: "json"
+            });
+        };
+
+        self.RemoveConnection = function(connection) {
+
+            $.ajax({
+                type: "POST",
+                url: "Home/RemoveConnection",
+                data: {
+                    id: connection.id
+                },
+                success: function(response) {
+                    self.Connections.remove(connection);
+                },
+                dataType: "json"
+            });
+            
         };
 
         
@@ -218,18 +259,11 @@
         var nodes = new vis.DataSet([
             // {id: 1, label: 'Node 1'},
             // {id: 2, label: 'Node 2'},
-            // {id: 3, label: 'Node 3'},
-            // {id: 4, label: 'Node 4'},
-            // {id: 5, label: 'Node 5'}
         ]);
 
         // create an array with edges
         var edges = new vis.DataSet([
-            // {from: 1, to: 3},
             // {from: 1, to: 2},
-            // {from: 2, to: 4},
-            // {from: 2, to: 5},
-            // {from: 3, to: 3}
         ]);
 
         // create a network
@@ -241,20 +275,41 @@
         var options = {};
         var network = new vis.Network(container, data, options);
 
-        var viewModel = new ConnectedNotesViewModel(
-            function (added) {
-                nodes.add( {id: added.id, label: added.text, shape: 'box' });
-            },
-            function(changed) {
-                nodes.update({id: changed.id, label: changed.text}); 
-            },
-            function(connectionAdded) {
-                edges.add( {id: connectionAdded.id,  from: connectionAdded.Source.id, to: connectionAdded.Destination.id, arrows: 'to', label: connectionAdded.label, font: {align: 'top'} });
-            },
-            function(connectionUpdated) {
-                edges.update({id: connectionUpdated.id, label: connectionUpdated.label});
-            }
-        );
+        storageForCallBacks.note.added = function (added) {
+            nodes.add( {id: added.id, label: added.text, shape: 'box' });
+        };
+
+        storageForCallBacks.note.updated = function(changed) {
+            nodes.update({id: changed.id, label: changed.text}); 
+        };
+
+        storageForCallBacks.note.removed = function(node) {
+            nodes.remove(node.id);
+        };
+
+        storageForCallBacks.connection.added = function(connectionAdded) {
+            edges.add( {
+                id: connectionAdded.id,
+                from: connectionAdded.Source.id,
+                to: connectionAdded.Destination.id,
+                arrows: 'to',
+                label: connectionAdded.label,
+                font: { align: 'top' } 
+            });
+        };
+
+        storageForCallBacks.connection.updated = function(connectionUpdated) {
+            edges.update({
+                id: connectionUpdated.id,
+                label: connectionUpdated.label
+            });
+        };
+
+        storageForCallBacks.connection.removed = function(connection) {
+            edges.remove(connection.id);
+        };
+        
+        var viewModel = new ConnectedNotesViewModel();
         ko.applyBindings(viewModel);
         viewModel.RetrieveDataFromServer();
 
@@ -272,13 +327,15 @@
             <span>From</span>
         </span>
         <span>
-            <input data-bind="value: text, valueUpdate: 'keypress keyup'"></input>
+            <input data-bind="value: text, valueUpdate: 'keypress keyup'"></input> 
+            <button data-bind="click: $root.RemoveNote">Remove</button>
             <ul>
                 <!-- ko foreach: MyComputedConnections -->
                     <li>
                         <input data-bind="value: label, valueUpdate: 'keypress keyup'" > </input>
                         <span> => </span>
                         <span data-bind="text: Destination.text"></span>
+                        <button data-bind="click: $root.RemoveConnection">Remove</button>
                     </li>
                 <!-- /ko -->
                 <li>
