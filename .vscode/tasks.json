@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/ConnectedNotes.csproj"
+                "${workspaceFolder}/WebPad.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

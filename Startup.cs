@@ -40,7 +40,11 @@ namespace ConnectedNotes
 
             app.UseStaticFiles();
             // IMPORTANT: This session call MUST go before UseMvc()
-            app.UseSession();
+            app.UseSession(new SessionOptions() 
+                {
+                    IdleTimeout = TimeSpan.FromMinutes(30),
+                    IOTimeout = TimeSpan.FromSeconds(15)
+                });
 
 
             app.UseMvc(routes =>
