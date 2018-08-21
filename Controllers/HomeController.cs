@@ -29,13 +29,29 @@ namespace ConnectedNotes.Controllers
             if(retrieved && value != null)
             {
                 var ms = new MemoryStream(value);
-                return formatter.Deserialize(ms) as NotesRepo;
+                var repo = formatter.Deserialize(ms) as NotesRepo;
+                return repo;
             } 
             return  new NotesRepo(); 
         }
 
         private void saveRepo(NotesRepo repo)
         {
+            long notesTextLength = repo.Notes.Sum(x => x.Text?.Length ?? 0);
+            long connectionsTextLength = repo.Connections.Sum(x => x.Label?.Length ?? 0);
+            long totalSum = notesTextLength + connectionsTextLength;
+            if(totalSum < 0 || totalSum > 200_000) 
+            {
+                throw new Exception("Free characters limit");
+            }
+            if(repo.Notes.Count > 10_000)
+            {
+                throw new Exception("Notes count limit");
+            }
+            if(repo.Connections.Count > 20_000)
+            {
+                throw new Exception("Connections count limit");
+            }
             BinaryFormatter formatter = new BinaryFormatter();
             MemoryStream ms = new MemoryStream();
             formatter.Serialize(ms, repo);
