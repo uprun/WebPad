@@ -34,7 +34,7 @@ namespace ConnectedNotes.Controllers
             return  new NotesRepo(); 
         }
 
-        private void saveNotes(NotesRepo repo)
+        private void saveRepo(NotesRepo repo)
         {
             BinaryFormatter formatter = new BinaryFormatter();
             MemoryStream ms = new MemoryStream();
@@ -43,12 +43,14 @@ namespace ConnectedNotes.Controllers
             ms.Close();
         }
 
+        [Throttle(Name = nameof(RetrieveAllNotes), Seconds = 20)]
         public JsonResult RetrieveAllNotes()
         {
             var repo = retrieveNotesRepo();
             return new JsonResult(repo);
         }
 
+        [Throttle(Name = nameof(CreateNote), Seconds = 1)]
         public JsonResult CreateNote()
         {
             var repo = retrieveNotesRepo();
@@ -66,10 +68,11 @@ namespace ConnectedNotes.Controllers
                 toAdd
             );
             repo.FreeIndex++;
-            saveNotes(repo);
+            saveRepo(repo);
             return new JsonResult(toAdd);
         }
 
+        [Throttle(Name = nameof(ConnectedNotes), Seconds = 1)]
         public JsonResult ConnectNotes(Note from, Note to, string label)
         {
             var repo = retrieveNotesRepo();
@@ -90,32 +93,35 @@ namespace ConnectedNotes.Controllers
                         };
 
                     repo.Connections.Add(toAdd);
-                    saveNotes(repo);
+                    saveRepo(repo);
                     return new JsonResult(toAdd);
                 }
             }
             throw new Exception("Not found prerequisites.");
         }
 
+        [Throttle(Name = nameof(UpdateNote), Seconds = 1)]
         public JsonResult UpdateNote(Note note)
         {
             var repo = retrieveNotesRepo();
             List<Note> notes = repo.Notes;
             var foundNote = notes.FirstOrDefault(x => x.Id == note.Id);
             foundNote.Text = note.Text;
-            saveNotes(repo);
+            saveRepo(repo);
             return new JsonResult(foundNote);
         }
 
+        [Throttle(Name = nameof(UpdateConnection), Seconds = 1)]
         public JsonResult UpdateConnection(Connection connection)
         {
             var repo = retrieveNotesRepo();
             var found = repo.Connections.FirstOrDefault(c => c.Id == connection.Id);
             found.Label = connection.Label;
-            saveNotes(repo);
+            saveRepo(repo);
             return new JsonResult(found);
         }
 
+        [Throttle(Name = nameof(RemoveNote), Seconds = 1)]
         public JsonResult RemoveNote(Note note)
         {
             var repo = retrieveNotesRepo();
@@ -125,10 +131,11 @@ namespace ConnectedNotes.Controllers
                 repo.Notes = repo.Notes.Where(n => n.Id != note.Id).ToList();
                 repo.Connections = repo.Connections.Where(c => !(c.Source.Id == note.Id || c.Destination.Id == note.Id)).ToList();
             }
-            saveNotes(repo);
+            saveRepo(repo);
             return new JsonResult(true);
         }
 
+        [Throttle(Name = nameof(RemoveConnection), Seconds = 1)]
         public JsonResult RemoveConnection(long id)
         {
             var repo = retrieveNotesRepo();
@@ -137,7 +144,7 @@ namespace ConnectedNotes.Controllers
             {
                 repo.Connections = repo.Connections.Where(c => c.Id != id).ToList();
             }
-            saveNotes(repo);
+            saveRepo(repo);
             return new JsonResult(true);
         }
     }

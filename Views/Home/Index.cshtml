@@ -7,6 +7,7 @@
         self.id = data.id;
         self.text = ko.observable(data.text);
         self.text
+            .extend({ rateLimit: 1200 })
             .subscribe(function() {
                 var temp = toJsWithoutFunctions(self);
                 $.ajax({
@@ -48,6 +49,7 @@
         self.label = ko.observable(label);
         self.labelUpdateCallback;
         self.label
+            .extend({ rateLimit: 1200 })
             .subscribe(function() {
                 var temp = toJsWithoutFunctions(self);
                 $.ajax({
