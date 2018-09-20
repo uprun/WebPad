@@ -59,7 +59,7 @@ namespace ConnectedNotes.Controllers
             ms.Close();
         }
 
-        [Throttle(Name = nameof(RetrieveAllNotes), Seconds = 20)]
+        [Throttle(Name = nameof(RetrieveAllNotes), Seconds = 5)]
         public JsonResult RetrieveAllNotes()
         {
             var repo = retrieveNotesRepo();
