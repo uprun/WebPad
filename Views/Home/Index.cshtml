@@ -104,6 +104,8 @@
         self.Notes = ko.observableArray([]);
         self.Connections = ko.observableArray([]);
 
+        self.SearchNotes = ko.observable();
+
         self.Notes.subscribe(function(changes) {
             if(changes && changes.length > 0)
             {
@@ -355,7 +357,10 @@
 <div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw;">
     <div style="text-align: center; width: 100%; margin-top: 10px;">
         WebPad 
-        <input placeholder="Find or create new note..." style="width: 30vw; min-width: 100px;"></input>
+        <input 
+            placeholder="Find or create new note..." 
+            style="width: 30vw; min-width: 100px;" 
+            data-bind="jqAuto: { value: $root.SearchNotes, source: $root.Notes, inputProp: 'text', labelProp: 'text', valueProp: 'id' }" />
         <button data-bind="click: $root.CreateNote">Create</button>
     </div>
     
