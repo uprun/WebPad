@@ -117,11 +117,6 @@
             });
         });
 
-        self.OpenAutocomplete = function (value, data, event) {
-            var element = $(event.target);
-            element.autocomplete("search", value);
-        };
-
         self.Notes.subscribe(function(changes) {
             if(changes && changes.length > 0)
             {
@@ -272,6 +267,18 @@
             
         };
 
+        self.NoteToEdit = ko.observable(null);
+
+        self.SelectNoteToEdit = function(id) {
+            var filtered = ko.utils.arrayFilter(self.Notes(), function(item){ return item.id == id;} );
+            
+            self.NoteToEdit(filtered.length > 0 ? filtered[0] : null );
+        };
+
+        self.DeselectNoteToEdit = function() {
+            self.NoteToEdit(null);
+        };
+
         
 
     };
@@ -281,13 +288,10 @@
         
         // create an array with nodes
         var nodes = new vis.DataSet([
-            // {id: 1, label: 'Node 1'},
-            // {id: 2, label: 'Node 2'},
         ]);
 
         // create an array with edges
         var edges = new vis.DataSet([
-            // {from: 1, to: 2},
         ]);
 
         // create a network
@@ -298,6 +302,15 @@
         };
         var options = {};
         var network = new vis.Network(container, data, options);
+
+        
+        network.on("selectEdge", function (params) {
+            console.log('selectEdge Event:', params);
+        });
+        
+        network.on("deselectEdge", function (params) {
+            console.log('deselectEdge Event:', params);
+        });
 
         storageForCallBacks.note.added = function (added) {
             nodes.add( {id: added.id, label: added.text, shape: 'box' });
@@ -337,6 +350,19 @@
         ko.applyBindings(viewModel);
         viewModel.RetrieveDataFromServer();
 
+
+        
+
+        network.on("selectNode", function (params) {
+            //console.log('selectNode Event:', params);
+            viewModel.SelectNoteToEdit(params.nodes[0]);
+        });
+
+        network.on("deselectNode", function (params) {
+            //console.log('deselectNode Event:', params);
+            viewModel.DeselectNoteToEdit();
+        });
+        
 
 
         
@@ -380,16 +406,28 @@
 <div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw;">
     <div style="text-align: center; width: 100%; margin-top: 10px;">
         WebPad 
-        <input 
-            placeholder="Find or create new note..." 
-            style="width: 30vw; min-width: 100px;" 
-            type="text" 
-            data-bind="
-                textInput: $root.SearchNotesQuery,
-                " />
-        <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
-            <button data-bind="click: $root.CreateNoteFromSearchQuery">Create</button>
-        </span>            
+        <span data-bind="ifnot: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
+            <input 
+                placeholder="Create or search note..." 
+                style="width: 30vw; min-width: 150px;" 
+                type="text" 
+                data-bind="
+                    textInput: $root.SearchNotesQuery,
+                    " />
+            <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
+                <button data-bind="click: $root.CreateNoteFromSearchQuery">Create</button>
+            </span>  
+        </span>
+        
+        <span data-bind="if: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
+            <input 
+                placeholder="Edit note..." 
+                style="width: 30vw; min-width: 150px;" 
+                type="text" 
+                data-bind="
+                    textInput: $root.NoteToEdit().text,
+                    " />
+        </span>                  
         
     </div>
     
