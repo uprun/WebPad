@@ -358,6 +358,10 @@
             viewModel.SelectNoteToEdit(params.nodes[0]);
         });
 
+        network.on("dragStart", function (params) {
+            viewModel.SelectNoteToEdit(params.nodes[0]);
+        });
+
         network.on("deselectNode", function (params) {
             //console.log('deselectNode Event:', params);
             viewModel.DeselectNoteToEdit();
