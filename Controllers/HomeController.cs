@@ -67,7 +67,7 @@ namespace ConnectedNotes.Controllers
         }
 
         [Throttle(Name = nameof(CreateNote), Seconds = 1)]
-        public JsonResult CreateNote()
+        public JsonResult CreateNote(string text)
         {
             var repo = retrieveNotesRepo();
             List<Note> notes = repo.Notes;
@@ -76,7 +76,7 @@ namespace ConnectedNotes.Controllers
             var toAdd = new Note
                 {
                     Id = count,
-                    Text = "",
+                    Text = text ?? "",
                     CreatedOn = date,
                     UpdatedOn = date
                 };

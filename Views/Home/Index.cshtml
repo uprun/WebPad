@@ -104,7 +104,18 @@
         self.Notes = ko.observableArray([]);
         self.Connections = ko.observableArray([]);
 
-        self.SearchNotes = ko.observable();
+        self.SearchNotesQuery = ko.observable("");
+        self.SearchFilter = function(item, searchTerm) {
+            searchTerm = searchTerm.trim().toLowerCase();
+            var searchString = item.text.toLowerCase();
+            return searchString.indexOf(searchTerm) > -1;
+        };
+
+        self.SearchableNotes = ko.computed(function() {
+            return ko.utils.arrayMap(self.Notes(), function(item) {
+                return {text: item.text(), id: item.id};
+            });
+        });
 
         self.Notes.subscribe(function(changes) {
             if(changes && changes.length > 0)
@@ -178,10 +189,13 @@
 
         self.connectFrom = ko.observable(null);
 
-        self.CreateNote = function() {
+        self.CreateNote = function(text) {
             $.ajax({
                 type: "POST",
                 url: "Home/CreateNote",
+                data: {
+                    text: text
+                },
                 success: function(data) {
                     var toAdd = new NoteModel(data, self.Connections);
                     toAdd.subscribeToTextChanges(storageForCallBacks.note.updated);
@@ -190,6 +204,10 @@
                 },
                 dataType: "json"
             });
+        };
+
+        self.CreateNoteFromSearchQuery = function() {
+            self.CreateNote(self.SearchNotesQuery());
         };
 
         self.SelectFrom = function(data) {
@@ -360,8 +378,9 @@
         <input 
             placeholder="Find or create new note..." 
             style="width: 30vw; min-width: 100px;" 
-            data-bind="jqAuto: { value: $root.SearchNotes, source: $root.Notes, inputProp: 'text', labelProp: 'text', valueProp: 'id' }" />
-        <button data-bind="click: $root.CreateNote">Create</button>
+            data-bind="jqAuto: { value: $root.SearchNotesQuery, filter: $root.SearchFilter,
+                    source: $root.SearchableNotes, inputProp: 'text', labelProp: 'text', valueProp: 'id' }" />
+        <button data-bind="click: $root.CreateNoteFromSearchQuery">Create</button>
     </div>
     
 </div>
