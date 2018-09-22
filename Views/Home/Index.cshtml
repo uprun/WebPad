@@ -117,6 +117,11 @@
             });
         });
 
+        self.OpenAutocomplete = function (value, data, event) {
+            var element = $(event.target);
+            element.autocomplete("search", value);
+        };
+
         self.Notes.subscribe(function(changes) {
             if(changes && changes.length > 0)
             {
@@ -207,7 +212,7 @@
         };
 
         self.CreateNoteFromSearchQuery = function() {
-            self.CreateNote(self.SearchNotesQuery());
+            self.CreateNote(self.SearchNotesQuery().trim());
         };
 
         self.SelectFrom = function(data) {
@@ -378,9 +383,14 @@
         <input 
             placeholder="Find or create new note..." 
             style="width: 30vw; min-width: 100px;" 
-            data-bind="jqAuto: { value: $root.SearchNotesQuery, filter: $root.SearchFilter,
-                    source: $root.SearchableNotes, inputProp: 'text', labelProp: 'text', valueProp: 'id' }" />
-        <button data-bind="click: $root.CreateNoteFromSearchQuery">Create</button>
+            type="text" 
+            data-bind="
+                textInput: $root.SearchNotesQuery,
+                " />
+        <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
+            <button data-bind="click: $root.CreateNoteFromSearchQuery">Create</button>
+        </span>            
+        
     </div>
     
 </div>

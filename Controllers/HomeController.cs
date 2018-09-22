@@ -76,7 +76,7 @@ namespace ConnectedNotes.Controllers
             var toAdd = new Note
                 {
                     Id = count,
-                    Text = text ?? "",
+                    Text = (text ?? "").Trim(),
                     CreatedOn = date,
                     UpdatedOn = date
                 };
