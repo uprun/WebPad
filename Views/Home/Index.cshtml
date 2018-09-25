@@ -111,6 +111,8 @@
             return searchString.indexOf(searchTerm) > -1;
         };
 
+        self.SearchDestinationNotesQuery = ko.observable("");
+
         self.SearchableNotes = ko.computed(function() {
             return ko.utils.arrayMap(self.Notes(), function(item) {
                 return {text: item.text(), id: item.id};
@@ -189,7 +191,7 @@
 
         self.connectFrom = ko.observable(null);
 
-        self.CreateNote = function(text) {
+        self.CreateNote = function(text, callback) {
             $.ajax({
                 type: "POST",
                 url: "Home/CreateNote",
@@ -200,6 +202,9 @@
                     var toAdd = new NoteModel(data, self.Connections);
                     toAdd.subscribeToTextChanges(storageForCallBacks.note.updated);
                     self.Notes.push(toAdd);
+                    if(callback && typeof(callback) === "function") {
+                        callback(toAdd);
+                    }
 
                 },
                 dataType: "json"
@@ -208,6 +213,10 @@
 
         self.CreateNoteFromSearchQuery = function() {
             self.CreateNote(self.SearchNotesQuery().trim());
+        };
+
+        self.CreateNoteFromDestinationSearchQuery = function() {
+            self.CreateNote(self.SearchDestinationNotesQuery().trim(), function(destination) { self.ConnectNotes(destination); });
         };
 
         self.SelectFrom = function(data) {
@@ -271,8 +280,10 @@
 
         self.SelectNoteToEdit = function(id) {
             var filtered = ko.utils.arrayFilter(self.Notes(), function(item){ return item.id == id;} );
+            var from = filtered.length > 0 ? filtered[0] : null;
             
-            self.NoteToEdit(filtered.length > 0 ? filtered[0] : null );
+            self.NoteToEdit( from );
+            self.SelectFrom( from )
         };
 
         self.DeselectNoteToEdit = function() {
@@ -431,6 +442,18 @@
                 data-bind="
                     textInput: $root.NoteToEdit().text,
                     " />
+            <br>
+            Connects to:
+            <input 
+                placeholder="Create or search note..." 
+                style="width: 30vw; min-width: 150px;" 
+                type="text" 
+                data-bind="
+                    textInput: $root.SearchDestinationNotesQuery,
+                    " />
+            <span data-bind="if: $root.SearchDestinationNotesQuery().trim().length > 0">
+                <button data-bind="click: $root.CreateNoteFromDestinationSearchQuery">Create connection</button>
+            </span> 
         </span>                  
         
     </div>
