@@ -6,11 +6,16 @@
     {
         var self = this;
         self.id = data.id;
-        self.remoteId = undefined;
         self.text = ko.observable(data.text);
+        self.ConvertToJs = function() {
+            return {
+                id: self.id,
+                text: self.text()
+            };
+        };
         self.text
             .subscribe(function() {
-                var temp = toJsWithoutFunctions(self);
+                var temp = self.ConvertToJs();
                 changes.push(
                     {
                         url: "Home/UpdateNote",
@@ -20,7 +25,7 @@
                     }
                 );
                 if(self.textChangesOccuredHandler && typeof(self.textChangesOccuredHandler) == "function") {
-                    self.textChangesOccuredHandler(toJsWithoutFunctions(self));
+                    self.textChangesOccuredHandler(temp);
                 }
             });
 
@@ -30,18 +35,25 @@
         };
     };
 
-    function ConnectedNotesModel(id, a, b, label)
+    function ConnectedNotesModel(id, sourceId, destinationId, label)
     {
         var self = this;
         self.id = id;
-        self.remoteId = undefined;
-        self.Source = a;
-        self.Destination = b;
+        self.SourceId = sourceId;
+        self.DestinationId = destinationId;
         self.label = ko.observable(label);
         self.labelUpdateCallback;
+        self.ConvertToJs = function() {
+            return {
+                id: self.id,
+                SourceId: self.SourceId,
+                DestinationId:  self.DestinationId,
+                label: self.label()
+            };
+        };
         self.label
             .subscribe(function() {
-                var temp = toJsWithoutFunctions(self);
+                var temp = self.ConvertToJs();
                 changes.push(
                     {
                         url: "Home/UpdateConnection",
@@ -59,19 +71,6 @@
         };
 
 
-    };
-
-    function toJsWithoutFunctions(data) {
-        var mapping = {
-            'ignore': ["allConnections", "RawViewIsEnabled", "DataConnectedWith", "MyComputedConnections"]
-        }
-        var model = ko.mapping.toJS(data, mapping);
-            for(var x in model) {
-                if(typeof(model[x]) === "function") {
-                    model[x] = null;
-                }
-            }
-        return model;
     };
 
     var storageForCallBacks = {
@@ -96,6 +95,10 @@
         self.Notes = ko.observableArray([]);
         self.Connections = ko.observableArray([]);
 
+        self.getLocalIndex = function() {
+            return ( self.localPrefix + (self.freeLocalIndex++) );
+        };
+
         self.SearchNotesQuery = ko.observable("");
         self.SearchFilter = function(item, searchTerm) {
             searchTerm = searchTerm.trim().toLowerCase();
@@ -117,12 +120,12 @@
                 $.each(changes, function(index, value) {
                     if(value.status == "added") {
                         if(typeof(storageForCallBacks.note.added) == "function") {
-                            storageForCallBacks.note.added(toJsWithoutFunctions(value.value));
+                            storageForCallBacks.note.added(value.value.ConvertToJs());
                         }
                     }
                     if(value.status == "deleted") {
                         if(typeof(storageForCallBacks.note.removed) == "function") {
-                            storageForCallBacks.note.removed(toJsWithoutFunctions(value.value));
+                            storageForCallBacks.note.removed(value.value.ConvertToJs());
                         }
                     }
                 });
@@ -135,12 +138,12 @@
                 $.each(changes, function(index, value) {
                     if(value.status == "added") {
                         if(typeof(storageForCallBacks.connection.added) == "function") {
-                            storageForCallBacks.connection.added(toJsWithoutFunctions(value.value));
+                            storageForCallBacks.connection.added(value.value.ConvertToJs());
                         }
                     }
                     if(value.status == "deleted") {
                         if(typeof(storageForCallBacks.connection.removed) == "function") {
-                            storageForCallBacks.connection.removed(toJsWithoutFunctions(value.value));
+                            storageForCallBacks.connection.removed(value.value.ConvertToJs());
                         }
                     }
                 });
@@ -165,9 +168,7 @@
                     ko.utils.arrayPushAll(self.Notes, toAdd);
 
                     var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
-                        var Source = dictionary[elem.source.id];
-                        var Destination = dictionary[elem.destination.id];
-                        var connectionToAdd = new ConnectedNotesModel(elem.id, Source, Destination, elem.label);
+                        var connectionToAdd = new ConnectedNotesModel(elem.id, elem.source.id, elem.destination.id, elem.label);
                         connectionToAdd.subscribeToLabelChanges(storageForCallBacks.connection.updated);
                         return connectionToAdd;
                     });
@@ -196,7 +197,7 @@
                 );
             var toAdd = new NoteModel(
                 {
-                    id:(self.localPrefix+(self.freeLocalIndex++))
+                    id: self.getLocalIndex(),
                     text: text
                 });
             toAdd.subscribeToTextChanges(storageForCallBacks.note.updated);
@@ -233,15 +234,15 @@
                 {
                     url: "Home/ConnectNotes",
                     data: {
-                        from: toJsWithoutFunctions(from),
-                        to: toJsWithoutFunctions(to)
+                        from: from.id, 
+                        to: to.id
                     }
                 }
             );
             var connectionToAdd = new ConnectedNotesModel(
-                self.localPrefix+(self.freeLocalIndex++),
-                from,
-                to,
+                self.getLocalIndex(),
+                from.id,
+                to.id,
                 ""
             );
             connectionToAdd.subscribeToLabelChanges(storageForCallBacks.connection.updated);
@@ -253,7 +254,7 @@
                 {
                     url: "Home/RemoveNote",
                     data: {
-                        note: toJsWithoutFunctions(note)
+                        note: note.ConvertToJs()
                     }
                 }
             );
@@ -334,8 +335,8 @@
         storageForCallBacks.connection.added = function(connectionAdded) {
             edges.add( {
                 id: connectionAdded.id,
-                from: connectionAdded.Source.id,
-                to: connectionAdded.Destination.id,
+                from: connectionAdded.SourceId,
+                to: connectionAdded.DestinationId,
                 arrows: 'to',
                 label: connectionAdded.label,
                 font: { align: 'top' } 
