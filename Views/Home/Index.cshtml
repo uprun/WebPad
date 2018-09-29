@@ -1,37 +1,28 @@
 ﻿@{
 }
 <script>
-    function NoteModel(data, allConnections)
+    var changes = [];
+    function NoteModel(data)
     {
         var self = this;
         self.id = data.id;
+        self.remoteId = undefined;
         self.text = ko.observable(data.text);
         self.text
             .subscribe(function() {
                 var temp = toJsWithoutFunctions(self);
-                $.ajax({
-                    type: "POST",
-                    url: "Home/UpdateNote",
-                    data: {
-                        note: temp
-                    },
-                    success: function(response) {
-                    },
-                    dataType: "json"
-                });
+                changes.push(
+                    {
+                        url: "Home/UpdateNote",
+                        data: {
+                            note: temp
+                        }
+                    }
+                );
                 if(self.textChangesOccuredHandler && typeof(self.textChangesOccuredHandler) == "function") {
                     self.textChangesOccuredHandler(toJsWithoutFunctions(self));
                 }
             });
-
-        self.allConnections = allConnections;
-
-        self.MyComputedConnections = ko.pureComputed(function() {
-                return ko.utils.arrayFilter(self.allConnections(), function(conn) {
-                    return conn.Source.id == self.id;
-                }); 
-              
-        });
 
         self.textChangesOccuredHandler;
         self.subscribeToTextChanges = function(callback) {
@@ -43,6 +34,7 @@
     {
         var self = this;
         self.id = id;
+        self.remoteId = undefined;
         self.Source = a;
         self.Destination = b;
         self.label = ko.observable(label);
@@ -50,16 +42,14 @@
         self.label
             .subscribe(function() {
                 var temp = toJsWithoutFunctions(self);
-                $.ajax({
-                    type: "POST",
-                    url: "Home/UpdateConnection",
-                    data: {
-                        connection: temp
-                    },
-                    success: function(response) {
-                    },
-                    dataType: "json"
-                });
+                changes.push(
+                    {
+                        url: "Home/UpdateConnection",
+                        data: {
+                            connection: temp
+                        }
+                    }
+                );
                 if(self.labelUpdateCallback && typeof(self.labelUpdateCallback) == "function") {
                     self.labelUpdateCallback(temp);
                 }
@@ -101,6 +91,8 @@
     {
         var self = this;
         
+        self.freeLocalIndex = 0;
+        self.localPrefix = 'local_';
         self.Notes = ko.observableArray([]);
         self.Connections = ko.observableArray([]);
 
@@ -193,23 +185,25 @@
         self.previousConnectFrom = ko.observable(null);
 
         self.CreateNote = function(text, callback) {
-            $.ajax({
-                type: "POST",
-                url: "Home/CreateNote",
-                data: {
-                    text: text
-                },
-                success: function(data) {
-                    var toAdd = new NoteModel(data, self.Connections);
-                    toAdd.subscribeToTextChanges(storageForCallBacks.note.updated);
-                    self.Notes.push(toAdd);
-                    if(callback && typeof(callback) === "function") {
-                        callback(toAdd);
-                    }
 
-                },
-                dataType: "json"
-            });
+            changes.push(
+                    {
+                        url: "Home/CreateNote",
+                        data: {
+                            text: text
+                        }
+                    }
+                );
+            var toAdd = new NoteModel(
+                {
+                    id:(self.localPrefix+(self.freeLocalIndex++))
+                    text: text
+                });
+            toAdd.subscribeToTextChanges(storageForCallBacks.note.updated);
+            self.Notes.push(toAdd);
+            if(callback && typeof(callback) === "function") {
+                callback(toAdd);
+            }
         };
 
         self.CreateNoteFromSearchQuery = function() {
@@ -226,10 +220,6 @@
 
         };
 
-        self.CancelSelectFrom = function() {
-            self.connectFrom(null);
-        };
-
         self.ConnectPreviousWithCurrent = function() {
             self.ConnectNotes(self.previousConnectFrom(), self.connectFrom() )
         };
@@ -238,50 +228,48 @@
         };
 
         self.ConnectNotes = function(from, to) {
-            $.ajax({
-                type: "POST",
-                url: "Home/ConnectNotes",
-                data: {
-                    from: toJsWithoutFunctions(from),
-                    to: toJsWithoutFunctions(to)
-                },
-                success: function(response) {
-                    var connectionToAdd = new ConnectedNotesModel(response.id, response.source, response.destination, response.label);
-                    connectionToAdd.subscribeToLabelChanges(storageForCallBacks.connection.updated);
-                    self.Connections.push(connectionToAdd);
-                },
-                dataType: "json"
-            });
+
+            changes.push(
+                {
+                    url: "Home/ConnectNotes",
+                    data: {
+                        from: toJsWithoutFunctions(from),
+                        to: toJsWithoutFunctions(to)
+                    }
+                }
+            );
+            var connectionToAdd = new ConnectedNotesModel(
+                self.localPrefix+(self.freeLocalIndex++),
+                from,
+                to,
+                ""
+            );
+            connectionToAdd.subscribeToLabelChanges(storageForCallBacks.connection.updated);
+            self.Connections.push(connectionToAdd);
         };
 
         self.RemoveNote = function( note) {
-            $.ajax({
-                type: "POST",
-                url: "Home/RemoveNote",
-                data: {
-                    note: toJsWithoutFunctions(note)
-                },
-                success: function(response) {
-                    self.Notes.remove(note);
-                },
-                dataType: "json"
-            });
+            changes.push(
+                {
+                    url: "Home/RemoveNote",
+                    data: {
+                        note: toJsWithoutFunctions(note)
+                    }
+                }
+            );
+            self.Notes.remove(note);
         };
 
         self.RemoveConnection = function(connection) {
-
-            $.ajax({
-                type: "POST",
-                url: "Home/RemoveConnection",
-                data: {
-                    id: connection.id
-                },
-                success: function(response) {
-                    self.Connections.remove(connection);
-                },
-                dataType: "json"
-            });
-            
+            changes.push(
+                {
+                    url: "Home/RemoveConnection",
+                    data: {
+                        id: connection.id
+                    }
+                }
+            );
+            self.Connections.remove(connection);
         };
 
         self.NoteToEdit = ko.observable(null);
@@ -391,41 +379,6 @@
         
     });
 </script>
-<script type="text/html" id="note-template">
-    <li>
-        <span data-bind="if: $root.connectFrom() != null && $root.connectFrom().id != id">
-            <button data-bind="click: $root.ConnectNotes" >To</button>
-        </span>
-        <span data-bind="if: $root.connectFrom() != null && $root.connectFrom().id == id">
-            <span>From</span>
-        </span>
-        <span>
-            <input data-bind="value: text, valueUpdate: 'keypress keyup'"></input> 
-            <button data-bind="click: $root.RemoveNote">Remove</button>
-            <ul>
-                <!-- ko foreach: MyComputedConnections -->
-                    <li>
-                        <input data-bind="value: label, valueUpdate: 'keypress keyup'" > </input>
-                        <span> => </span>
-                        <span data-bind="text: Destination.text"></span>
-                        <button data-bind="click: $root.RemoveConnection">Remove</button>
-                    </li>
-                <!-- /ko -->
-                <li>
-                    <span data-bind="if: $root.connectFrom() != null && $root.connectFrom().id == id">
-                        <button data-bind="click: $root.CancelSelectFrom">Cancel</button>    
-                    </span>
-                    <span data-bind="if: $root.connectFrom() == null">
-                        <button data-bind="click: $root.SelectFrom" >Connect</button>
-                    </span>
-                    <span data-bind="if: $root.connectFrom() != null && $root.connectFrom().id != id">
-                        <button data-bind="click: $root.SelectFrom" >Change From</button>
-                    </span>
-                </li>
-            </ul>
-        </span>
-    </li>
-</script>
 <div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw;">
     <div style="text-align: center; width: 100%; margin-top: 10px;">
         WebPad 
@@ -482,20 +435,4 @@
     
 </div>
 <div id="mygraph" style="height: 100vh; width: 100%; z-index: 9;">
-
-
-    <!-- <div class="row">
-         <div class="col-md-3">
-            <div style="overflow-y: scroll; height: 550px;">
-                <ul data-bind="template: {name: 'note-template', foreach: Notes} ">
-                </ul>
-            </div>
-            <button data-bind="click: $root.CreateNote">Create note</button>
-        </div>
-        <div class="col-md-12">
-            
-
-        </div>
-            
-    </div> -->
 </div>
