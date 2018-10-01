@@ -154,12 +154,22 @@
                 $.each(changes, function(index, value) {
                     if(value.status == "added") {
                         if(typeof(storageForCallBacks.note.added) == "function") {
-                            storageForCallBacks.note.added(value.value.ConvertToJs());
+                            var added = value.value.ConvertToJs();
+                            self.changes.push({
+                                action: 'NoteAdded',
+                                data: added
+                            });
+                            storageForCallBacks.note.added(added);
                         }
                     }
                     if(value.status == "deleted") {
                         if(typeof(storageForCallBacks.note.removed) == "function") {
-                            storageForCallBacks.note.removed(value.value.ConvertToJs());
+                            var deleted = value.value.ConvertToJs();
+                            self.changes.push({
+                                action: 'NoteDeleted',
+                                data: deleted
+                            });
+                            storageForCallBacks.note.removed(deleted);
                         }
                     }
                 });
@@ -172,12 +182,22 @@
                 $.each(changes, function(index, value) {
                     if(value.status == "added") {
                         if(typeof(storageForCallBacks.connection.added) == "function") {
-                            storageForCallBacks.connection.added(value.value.ConvertToJs());
+                            var added = value.value.ConvertToJs();
+                            self.changes.push({
+                                action: 'ConnectionAdded',
+                                data: added
+                            });
+                            storageForCallBacks.connection.added(added);
                         }
                     }
                     if(value.status == "deleted") {
                         if(typeof(storageForCallBacks.connection.removed) == "function") {
-                            storageForCallBacks.connection.removed(value.value.ConvertToJs());
+                            var deleted = value.value.ConvertToJs();
+                            self.changes.push({
+                                action: 'ConnectionDeleted',
+                                data: deleted
+                            });
+                            storageForCallBacks.connection.removed(deleted);
                         }
                     }
                 });
@@ -194,8 +214,15 @@
                 success: function(data) {
                     var dictionary = {};
                     var toAdd = ko.utils.arrayMap(data.notes, function(elem) {
-                         var noteToAdd = new NoteModel(elem, self.Connections);
-                         noteToAdd.subscribeToTextChanges(storageForCallBacks.note.updated);
+                         var noteToAdd = new NoteModel(elem);
+                         noteToAdd.subscribeToTextChanges(function(updated) {
+                             self.changes.push({
+                                    action: 'NoteUpdated',
+                                    data: updated
+                                }
+                             );
+                             storageForCallBacks.note.updated(updated);
+                         }  );
                          dictionary[elem.id] = noteToAdd;
                         return noteToAdd;
                     });
@@ -203,7 +230,13 @@
 
                     var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
                         var connectionToAdd = new ConnectedNotesModel(elem.id, elem.source.id, elem.destination.id, elem.label);
-                        connectionToAdd.subscribeToLabelChanges(storageForCallBacks.connection.updated);
+                        connectionToAdd.subscribeToLabelChanges(function(updated) {
+                            self.changes.push({
+                                action: 'ConnectionUpdated',
+                                data: updated
+                            });
+                            storageForCallBacks.connection.updated(updated);
+                        });
                         return connectionToAdd;
                     });
 
@@ -221,20 +254,27 @@
 
         self.CreateNote = function(text, callback) {
 
-            changes.push(
-                    {
-                        url: "Home/CreateNote",
-                        data: {
-                            text: text
-                        }
-                    }
-                );
+            
             var toAdd = new NoteModel(
                 {
                     id: self.getLocalIndex(),
                     text: text
                 });
-            toAdd.subscribeToTextChanges(storageForCallBacks.note.updated);
+            self.changes.push({
+                    action: "NoteCreate",
+                    data: toAdd.ConvertToJs()
+                }
+            );
+            toAdd.subscribeToTextChanges(
+                function(updated) {
+                    self.changes.push({
+                            action: 'NoteUpdated',
+                            data: updated
+                        }
+                    ); 
+                    storageForCallBacks.note.updated(updated);
+                }
+            );
             self.Notes.push(toAdd);
             if(callback && typeof(callback) === "function") {
                 callback(toAdd);
@@ -279,31 +319,21 @@
                 to.id,
                 ""
             );
-            connectionToAdd.subscribeToLabelChanges(storageForCallBacks.connection.updated);
+            connectionToAdd.subscribeToLabelChanges(function(updated) {
+                self.changes.push({
+                    action: 'ConnectionUpdated',
+                    data: updated
+                });
+                storageForCallBacks.connection.updated(updated);
+            });
             self.Connections.push(connectionToAdd);
         };
 
         self.RemoveNote = function( note) {
-            changes.push(
-                {
-                    url: "Home/RemoveNote",
-                    data: {
-                        note: note.ConvertToJs()
-                    }
-                }
-            );
             self.Notes.remove(note);
         };
 
         self.RemoveConnection = function(connection) {
-            changes.push(
-                {
-                    url: "Home/RemoveConnection",
-                    data: {
-                        id: connection.id
-                    }
-                }
-            );
             self.Connections.remove(connection);
         };
 
