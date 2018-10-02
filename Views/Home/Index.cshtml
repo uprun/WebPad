@@ -48,14 +48,6 @@
         self.text
             .subscribe(function() {
                 var temp = self.ConvertToJs();
-                changes.push(
-                    {
-                        url: "Home/UpdateNote",
-                        data: {
-                            note: temp
-                        }
-                    }
-                );
                 if(self.textChangesOccuredHandler && typeof(self.textChangesOccuredHandler) == "function") {
                     self.textChangesOccuredHandler(temp);
                 }
@@ -88,14 +80,6 @@
         self.label
             .subscribe(function() {
                 var temp = self.ConvertToJs();
-                changes.push(
-                    {
-                        url: "Home/UpdateConnection",
-                        data: {
-                            connection: temp
-                        }
-                    }
-                );
                 if(self.labelUpdateCallback && typeof(self.labelUpdateCallback) == "function") {
                     self.labelUpdateCallback(temp);
                 }
@@ -123,11 +107,31 @@
     function ConnectedNotesViewModel()
     {
         var self = this;
+
         
         self.freeLocalIndex = 0;
         self.localPrefix = 'local_';
         self.Notes = ko.observableArray([]);
         self.Connections = ko.observableArray([]);
+
+        self.changes = ko.observableArray([]);
+
+        self.changes.subscribe(function(changes) {
+            if(changes && changes.length > 0)
+            {
+                $.each(changes, function(index, value) {
+                    if(value.status == "added") {
+                    }
+                });
+                if(localStorage)
+                {
+                    //localStorage.
+
+                }
+                
+            }
+        }, null, "arrayChange");
+
 
         self.getLocalIndex = function() {
             return ( self.localPrefix + (self.freeLocalIndex++) );
@@ -260,11 +264,6 @@
                     id: self.getLocalIndex(),
                     text: text
                 });
-            self.changes.push({
-                    action: "NoteCreate",
-                    data: toAdd.ConvertToJs()
-                }
-            );
             toAdd.subscribeToTextChanges(
                 function(updated) {
                     self.changes.push({
@@ -303,16 +302,6 @@
         };
 
         self.ConnectNotes = function(from, to) {
-
-            changes.push(
-                {
-                    url: "Home/ConnectNotes",
-                    data: {
-                        from: from.id, 
-                        to: to.id
-                    }
-                }
-            );
             var connectionToAdd = new ConnectedNotesModel(
                 self.getLocalIndex(),
                 from.id,
