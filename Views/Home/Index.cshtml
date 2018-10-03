@@ -110,27 +110,84 @@
 
         
         self.freeLocalIndex = 0;
-        self.localPrefix = 'local_';
+        self.localPrefix = 'local_' + new Date().toUTCString().split(' ').join('_');
         self.Notes = ko.observableArray([]);
         self.Connections = ko.observableArray([]);
 
         self.changes = ko.observableArray([]);
 
-        self.changes.subscribe(function(changes) {
-            if(changes && changes.length > 0)
-            {
-                $.each(changes, function(index, value) {
-                    if(value.status == "added") {
-                    }
-                });
-                if(localStorage)
-                {
-                    //localStorage.
+        self.populate = function(data) {
+            var toAdd = ko.utils.arrayMap(data.notes, function(elem) {
+                    var noteToAdd = new NoteModel(elem);
+                    noteToAdd.subscribeToTextChanges(function(updated) {
+                        self.changes.push({
+                            action: 'NoteUpdated',
+                            data: updated
+                        }
+                        );
+                        storageForCallBacks.note.updated(updated);
+                    }  );
+                return noteToAdd;
+            });
+            ko.utils.arrayPushAll(self.Notes, toAdd);
 
+            var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
+                var connectionToAdd = new ConnectedNotesModel(elem.id, elem.SourceId, elem.DestinationId, elem.label);
+                connectionToAdd.subscribeToLabelChanges(function(updated) {
+                    self.changes.push({
+                        action: 'ConnectionUpdated',
+                        data: updated
+                    });
+                    storageForCallBacks.connection.updated(updated);
+                });
+                return connectionToAdd;
+            });
+            ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
+        };
+
+
+
+        self
+            .changes
+            .extend(
+                { 
+                    rateLimit: 1000 
                 }
-                
-            }
-        }, null, "arrayChange");
+            )
+            .subscribe(
+                function(changes) {
+                    if(changes && changes.length > 0)
+                    {
+                        if(changes[0].status == "added")
+                        {
+                            if(localStorage)
+                            {
+                                var toStoreNotes = ko.utils.arrayMap(self.Notes(), function(item) {
+                                    return item.ConvertToJs();
+                                });
+                                var toStoreConnections = ko.utils.arrayMap(self.Connections(), function(item) {
+                                    return item.ConvertToJs();
+                                });
+                                localStorage.setItem("Notes", JSON.stringify(toStoreNotes));
+                                localStorage.setItem("Connections", JSON.stringify(toStoreConnections));
+                            }
+                            self.changes.removeAll();
+
+                        }
+                        // $.each(changes, function(index, value) {
+                        //     if(value.status == "added") {
+                        //     }
+                        // });
+                        // if(localStorage)
+                        // {
+                        //     //localStorage.
+
+                        // }
+                    }
+                }
+                ,null
+                ,"arrayChange"
+            );
 
 
         self.getLocalIndex = function() {
@@ -215,43 +272,22 @@
                 url: "Home/RetrieveAllNotes",
                 data: {
                 },
-                success: function(data) {
-                    var dictionary = {};
-                    var toAdd = ko.utils.arrayMap(data.notes, function(elem) {
-                         var noteToAdd = new NoteModel(elem);
-                         noteToAdd.subscribeToTextChanges(function(updated) {
-                             self.changes.push({
-                                    action: 'NoteUpdated',
-                                    data: updated
-                                }
-                             );
-                             storageForCallBacks.note.updated(updated);
-                         }  );
-                         dictionary[elem.id] = noteToAdd;
-                        return noteToAdd;
-                    });
-                    ko.utils.arrayPushAll(self.Notes, toAdd);
-
-                    var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
-                        var connectionToAdd = new ConnectedNotesModel(elem.id, elem.source.id, elem.destination.id, elem.label);
-                        connectionToAdd.subscribeToLabelChanges(function(updated) {
-                            self.changes.push({
-                                action: 'ConnectionUpdated',
-                                data: updated
-                            });
-                            storageForCallBacks.connection.updated(updated);
-                        });
-                        return connectionToAdd;
-                    });
-
-                    ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
-
-
-                },
+                success: self.populate,
                 dataType: "json"
             });
 
         };
+
+        if(localStorage)
+        {
+            if(localStorage["Notes"]){
+                var data = {};
+                data.notes = JSON.parse(localStorage.getItem("Notes"));
+                data.connections = JSON.parse(localStorage.getItem("Connections"));
+                self.populate(data);
+            }
+            
+        }
 
         self.connectFrom = ko.observable(null);
         self.previousConnectFrom = ko.observable(null);
