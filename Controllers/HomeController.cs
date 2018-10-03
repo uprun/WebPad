@@ -75,10 +75,8 @@ namespace ConnectedNotes.Controllers
             var date = DateTime.Now;
             var toAdd = new Note
                 {
-                    Id = count,
-                    Text = (text ?? "").Trim(),
-                    CreatedOn = date,
-                    UpdatedOn = date
+                    Id = count.ToString(),
+                    Text = (text ?? "").Trim()
                 };
             notes.Add(
                 toAdd
