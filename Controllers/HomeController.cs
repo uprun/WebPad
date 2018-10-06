@@ -66,6 +66,10 @@ namespace ConnectedNotes.Controllers
             return new JsonResult(repo);
         }
 
+        //generate key-pair
+        // store private-part in local-web-storage or in file
+        // on login download from web-server changes prepared for you with someone public key to which you trust
+
     
     }
 }
