@@ -293,23 +293,52 @@
             return prefix;
         };
 
-        self.GetOneTimeSyncronizationToken = function() {
-            
-            self.publicCryptoKey = cryptico.publicKeyString(self.privateCryptoPair);
-            console.log(self.publicCryptoKey);
+        self.TokenToShare = ko.observable("");
+        self.SynchronizationToken = ko.observable("");
+
+
+        
+
+        self.publicCryptoKey = ko.observable();
+
+        self.PublicKeysToSendTo = [];
+
+        self.ReceivedPublicKey = ko.observable("");
+
+
+        self.GetOneTimeSynchronizationToken = function() {
+            self.TokenToShare("");
             $.ajax({
                 type: "POST",
-                url: "Home/GetOneTimeSyncronizationToken",
+                url: "Home/GetOneTimeSynchronizationToken",
                 data: {
-                    publicKey: self.publicCryptoKey
+                    publicKey: self.publicCryptoKey()
                 },
                 success: function(data){
-                    console.log(data);
+                    self.TokenToShare(data);
                 },
                 dataType: "json"
             });
 
         };
+
+
+        self.SynchronizeUsingToken = function() {
+            $.ajax({
+                type: "POST",
+                url: "Home/GetSyncPublicKey",
+                data: {
+                    token: self.SynchronizationToken()
+                },
+                success: function(data){
+                    self.ReceivedPublicKey(data);
+                },
+                dataType: "json"
+            });
+
+        };
+
+        
 
         self.restoreFieldsOfObject = function(objectInstance, savedFields) {
             for( var a in objectInstance) {
@@ -345,8 +374,7 @@
                 self.privateCryptoPair = cryptico.generateRSAKey(self.GeneratePassPhrase(), 2048);
                 localStorage.setItem("privateCryptoPair", JSON.stringify(self.privateCryptoPair));
             }
-
-            
+            self.publicCryptoKey(cryptico.publicKeyString(self.privateCryptoPair));
         }
 
         self.connectFrom = ko.observable(null);
@@ -532,7 +560,19 @@
 <div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw;">
     <div style="text-align: center; width: 100%; margin-top: 10px;">
         WebPad 
-        <button data-bind="click: $root.GetOneTimeSyncronizationToken"> Sync token</button>
+        <span data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
+        <button data-bind="click: $root.GetOneTimeSynchronizationToken"> Generate sync token</button>
+        <span data-bind="text: $root.TokenToShare"></span>
+        <input 
+                placeholder="Input sync token..." 
+                style="width: 30vw; min-width: 150px;" 
+                type="text" 
+                data-bind="
+                    textInput: $root.SynchronizationToken,
+                    " />
+        <button data-bind="click: $root.SynchronizeUsingToken"> Generate sync token</button>
+        <span data-bind="text: $root.ReceivedPublicKey().substring(0, 10) + '...' "></span>
+
         <span data-bind="ifnot: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
             <input 
                 placeholder="Create or search note..." 

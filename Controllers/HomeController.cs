@@ -35,8 +35,8 @@ namespace ConnectedNotes.Controllers
             return $"{firstPart}{toSelect[secondIndex]}{toSelect[secondIndex_2]}{thirdPart}{toSelect[fourthIndex]}{toSelect[fourthIndex_2]}";
         }
 
-        [Throttle(Name = nameof(GetOneTimeSyncronizationToken), Seconds = 60)]
-        public JsonResult GetOneTimeSyncronizationToken(string publicKey)
+        [Throttle(Name = nameof(GetOneTimeSynchronizationToken), Seconds = 60)]
+        public JsonResult GetOneTimeSynchronizationToken(string publicKey)
         {
             string token;
             lock(synchronization)
