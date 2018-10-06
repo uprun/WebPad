@@ -20,6 +20,70 @@ namespace ConnectedNotes.Controllers
             return View();
         }
 
+        private static Dictionary<string, string> synchronization = new Dictionary<string, string>();
+
+        private string GenerateToken()
+        {
+            char[] toSelect = new[] {'a', 'b', 'c', 'd', 'k', 'h', 'y', 'z', 'x', 's', 'f', 't'};
+            var rnd = new Random();
+            int firstPart = rnd.Next(100);
+            int secondIndex = rnd.Next(toSelect.Length);
+            int secondIndex_2 = rnd.Next(toSelect.Length);
+            int thirdPart = rnd.Next(100);
+            int fourthIndex = rnd.Next(toSelect.Length);
+            int fourthIndex_2 = rnd.Next(toSelect.Length);
+            return $"{firstPart}{toSelect[secondIndex]}{toSelect[secondIndex_2]}{thirdPart}{toSelect[fourthIndex]}{toSelect[fourthIndex_2]}";
+        }
+
+        [Throttle(Name = nameof(GetOneTimeSyncronizationToken), Seconds = 60)]
+        public JsonResult GetOneTimeSyncronizationToken(string publicKey)
+        {
+            string token;
+            lock(synchronization)
+            {
+                token = GenerateToken();
+                for(int k = 0; k < 10; k++)
+                {
+                    if(synchronization.ContainsKey(token))
+                    {
+                        token = GenerateToken();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                if(synchronization.ContainsKey(token))
+                {
+                    throw new Exception("Failed to obtain link token");
+                }
+                synchronization.Add(token, publicKey);
+            }
+
+            return new JsonResult(token);
+            
+        }
+        
+        [Throttle(Name = nameof(GetSyncPublicKey), Seconds = 60)]
+        public JsonResult GetSyncPublicKey(string token)
+        {
+            string publicKey;
+            lock(synchronization)
+            {
+                if(synchronization.ContainsKey(token))
+                {
+                    publicKey = synchronization[token];
+                    synchronization.Remove(token);
+                }
+                else
+                {
+                    throw new Exception("Syncronization token not found");
+                }
+            }
+            return new JsonResult(publicKey);
+
+        }
+
         private NotesRepo retrieveNotesRepo()
         {
             byte[] value; 
@@ -59,12 +123,12 @@ namespace ConnectedNotes.Controllers
             ms.Close();
         }
 
-        [Throttle(Name = nameof(RetrieveAllNotes), Seconds = 5)]
-        public JsonResult RetrieveAllNotes()
-        {
-            var repo = retrieveNotesRepo();
-            return new JsonResult(repo);
-        }
+        // [Throttle(Name = nameof(RetrieveAllNotes), Seconds = 5)]
+        // public JsonResult RetrieveAllNotes()
+        // {
+        //     var repo = retrieveNotesRepo();
+        //     return new JsonResult(repo);
+        // }
 
         //generate key-pair
         // store private-part in local-web-storage or in file

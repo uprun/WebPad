@@ -1,5 +1,12 @@
 ﻿@{
 }
+
+<script language="JavaScript" type="text/javascript" src="~/js/cryptico/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/cryptico/random.js"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/cryptico/hash.js"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/cryptico/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/cryptico/aes.js"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/cryptico/api.js"></script>
 <script>
 
     function storageAvailable(type) {
@@ -266,17 +273,60 @@
         }, null, "arrayChange");
         
 
-        self.RetrieveDataFromServer = function() {
+        // self.RetrieveDataFromServer = function() {
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "Home/RetrieveAllNotes",
+        //         data: {
+        //         },
+        //         success: self.populate,
+        //         dataType: "json"
+        //     });
+
+        // };
+
+        self.GeneratePassPhrase = function(initialPhrase) {
+            var prefix = "" + initialPhrase;
+            for(var k = 0; k < 20; k++) {
+                prefix = prefix + Math.random();
+            }
+            return prefix;
+        };
+
+        self.GetOneTimeSyncronizationToken = function() {
+            
+            self.publicCryptoKey = cryptico.publicKeyString(self.privateCryptoPair);
+            console.log(self.publicCryptoKey);
             $.ajax({
                 type: "POST",
-                url: "Home/RetrieveAllNotes",
+                url: "Home/GetOneTimeSyncronizationToken",
                 data: {
+                    publicKey: self.publicCryptoKey
                 },
-                success: self.populate,
+                success: function(data){
+                    console.log(data);
+                },
                 dataType: "json"
             });
 
         };
+
+        self.restoreFieldsOfObject = function(objectInstance, savedFields) {
+            for( var a in objectInstance) {
+                if(typeof(savedFields[a]) != "undefined") {
+                    if(typeof(objectInstance[a]) == "object"  ) {
+                        objectInstance[a] = self.restoreFieldsOfObject(objectInstance[a], savedFields[a]);
+                    }
+                    else {
+                        if(typeof(objectInstance[a]) != "function" ) {
+                            objectInstance[a] = savedFields[a];
+                        }
+                    }
+                }        
+            }
+            return objectInstance;
+        };
+
 
         if(localStorage)
         {
@@ -286,6 +336,16 @@
                 data.connections = JSON.parse(localStorage.getItem("Connections"));
                 self.populate(data);
             }
+            if(localStorage["privateCryptoPair"]){
+                self.privateCryptoPair = cryptico.generateRSAKey(self.GeneratePassPhrase(), 2048);
+                var saveOfKey = JSON.parse(localStorage.getItem("privateCryptoPair"));
+                self.privateCryptoPair = self.restoreFieldsOfObject(self.privateCryptoPair, saveOfKey);
+            }
+            else {
+                self.privateCryptoPair = cryptico.generateRSAKey(self.GeneratePassPhrase(), 2048);
+                localStorage.setItem("privateCryptoPair", JSON.stringify(self.privateCryptoPair));
+            }
+
             
         }
 
@@ -445,7 +505,7 @@
         
         var viewModel = new ConnectedNotesViewModel();
         ko.applyBindings(viewModel);
-        viewModel.RetrieveDataFromServer();
+        //viewModel.RetrieveDataFromServer();
 
 
         
@@ -472,6 +532,7 @@
 <div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw;">
     <div style="text-align: center; width: 100%; margin-top: 10px;">
         WebPad 
+        <button data-bind="click: $root.GetOneTimeSyncronizationToken"> Sync token</button>
         <span data-bind="ifnot: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
             <input 
                 placeholder="Create or search note..." 
