@@ -33,8 +33,18 @@ var restoreFieldsOfObject = function(objectInstance, savedFields) {
 };
 
 onmessage = function(e) {
-    rsaKey = restoreFieldsOfObject(rsaKey, e.data);
-    postMessage(rsaKey);
+    if(e.data.action == 'applySaveOfKey')
+    {
+        rsaKey = restoreFieldsOfObject(rsaKey, e.data.data);
+        postMessage({ action: 'saveOfKey', data: rsaKey});
+    }
+    if(e.data.action == 'getPublicKey')
+    {
+        var publicKey = cryptico.publicKeyString(rsaKey);
+        postMessage({ action: 'publicKey', data: publicKey});
+    }
+
+    
 };
 
 
