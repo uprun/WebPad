@@ -285,14 +285,6 @@
 
         // };
 
-        self.GeneratePassPhrase = function(initialPhrase) {
-            var prefix = "" + initialPhrase;
-            for(var k = 0; k < 20; k++) {
-                prefix = prefix + Math.random();
-            }
-            return prefix;
-        };
-
         self.TokenToShare = ko.observable("");
         self.SynchronizationToken = ko.observable("");
 
@@ -356,6 +348,7 @@
             return objectInstance;
         };
 
+        self.saveOfKey = {};
 
         if(localStorage)
         {
@@ -366,8 +359,8 @@
                 self.populate(data);
             }
             if(localStorage["privateCryptoPair"]){
-                self.privateCryptoPair = cryptico.generateRSAKey(self.GeneratePassPhrase(), 2048);
-                var saveOfKey = JSON.parse(localStorage.getItem("privateCryptoPair"));
+                self.privateCryptoPair = 
+                self.saveOfKey = JSON.parse(localStorage.getItem("privateCryptoPair"));
                 self.privateCryptoPair = self.restoreFieldsOfObject(self.privateCryptoPair, saveOfKey);
             }
             else {
@@ -375,6 +368,11 @@
                 localStorage.setItem("privateCryptoPair", JSON.stringify(self.privateCryptoPair));
             }
             self.publicCryptoKey(cryptico.publicKeyString(self.privateCryptoPair));
+        }
+
+        self.crypto_worker = undefined;
+        if(typeof(Worker) !== "undefined") {
+
         }
 
         self.connectFrom = ko.observable(null);
