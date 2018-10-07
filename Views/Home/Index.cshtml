@@ -332,23 +332,11 @@
 
         
 
-        self.restoreFieldsOfObject = function(objectInstance, savedFields) {
-            for( var a in objectInstance) {
-                if(typeof(savedFields[a]) != "undefined") {
-                    if(typeof(objectInstance[a]) == "object"  ) {
-                        objectInstance[a] = self.restoreFieldsOfObject(objectInstance[a], savedFields[a]);
-                    }
-                    else {
-                        if(typeof(objectInstance[a]) != "function" ) {
-                            objectInstance[a] = savedFields[a];
-                        }
-                    }
-                }        
-            }
-            return objectInstance;
-        };
+
 
         self.saveOfKey = {};
+
+        self.privateCryptoPair = ko.observable({});
 
         if(localStorage)
         {
@@ -359,20 +347,30 @@
                 self.populate(data);
             }
             if(localStorage["privateCryptoPair"]){
-                self.privateCryptoPair = 
                 self.saveOfKey = JSON.parse(localStorage.getItem("privateCryptoPair"));
-                self.privateCryptoPair = self.restoreFieldsOfObject(self.privateCryptoPair, saveOfKey);
             }
             else {
-                self.privateCryptoPair = cryptico.generateRSAKey(self.GeneratePassPhrase(), 2048);
-                localStorage.setItem("privateCryptoPair", JSON.stringify(self.privateCryptoPair));
+                
             }
-            self.publicCryptoKey(cryptico.publicKeyString(self.privateCryptoPair));
         }
+
+        self.publicCryptoKey("Calculating RSA key ...");
 
         self.crypto_worker = undefined;
         if(typeof(Worker) !== "undefined") {
-
+            self.crypto_worker = new Worker("/js/worker-crypto.js");
+            self.crypto_worker.onmessage = function(e) {
+                self.privateCryptoPair(e.data);
+                self.publicCryptoKey(cryptico.publicKeyString(self.privateCryptoPair()));
+                if(localStorage) {
+                    localStorage.setItem("privateCryptoPair", JSON.stringify(self.privateCryptoPair()));
+                }
+                self.crypto_worker.terminate();
+            };
+            self.crypto_worker.postMessage(self.saveOfKey);
+        }
+        else {
+            self.publicCryptoKey("Cannot start web-worker...");
         }
 
         self.connectFrom = ko.observable(null);
