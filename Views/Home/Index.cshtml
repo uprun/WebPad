@@ -293,7 +293,7 @@
 
         self.publicCryptoKey = ko.observable();
 
-        self.PublicKeysToSendTo = [];
+        self.TrustedPublicKeysToSendTo = [];
 
         self.ReceivedPublicKey = ko.observable("");
 
@@ -330,50 +330,72 @@
 
         };
 
+        self.AddPublicKeyToTrusted = function(keyToAdd) {
+            var filtered = ko.utils.arrayFilter(self.TrustedPublicKeysToSendTo, function(item){ return item == keyToAdd;} );
+            var foundMaybe = filtered.length > 0 ? filtered[0] : null;
+            if(foundMaybe == null) {
+                self.TrustedPublicKeysToSendTo.push(keyToAdd);
+                localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(self.TrustedPublicKeysToSendTo));
+            }
+        };
+
+        self.AddReceivedPublicKeyToTrusted = function() {
+            self.AddPublicKeyToTrusted(self.ReceivedPublicKey());
+            self.ReceivedPublicKey("");
+            self.SynchronizationToken("");
+        };
+
         
 
 
 
         self.saveOfKey = {};
 
-
-        if(localStorage)
-        {
-            if(localStorage["Notes"]){
-                var data = {};
-                data.notes = JSON.parse(localStorage.getItem("Notes"));
-                data.connections = JSON.parse(localStorage.getItem("Connections"));
-                self.populate(data);
-            }
-            if(localStorage["privateCryptoPair"]){
-                self.saveOfKey = JSON.parse(localStorage.getItem("privateCryptoPair"));
-            }
-            else {
-                
-            }
+        if(typeof(Worker) == "undefined") {
+            console.log("Failed to find Worker.");
         }
+        if(!localStorage) {
+            console.log("Local web-storage is unavailable.");
+        }
+
+        
+        if(localStorage["Notes"]){
+            var data = {};
+            data.notes = JSON.parse(localStorage.getItem("Notes"));
+            data.connections = JSON.parse(localStorage.getItem("Connections"));
+            self.populate(data);
+        }
+        if(localStorage["privateCryptoPair"]){
+            self.saveOfKey = JSON.parse(localStorage.getItem("privateCryptoPair"));
+        }
+
+        if(localStorage["TrustedPublicKeysToSendTo"]){ 
+            self.TrustedPublicKeysToSendTo = JSON.parse(localStorage.getItem("TrustedPublicKeysToSendTo"));
+        }
+        
 
         self.publicCryptoKey("Calculating RSA key ...");
 
         self.crypto_worker = undefined;
-        if(typeof(Worker) !== "undefined") {
+        
             self.crypto_worker = new Worker("/js/worker-crypto.js");
             self.crypto_worker.onmessage = function(e) {
                 if(e.data.action == "saveOfKey" ) {
-                    if(localStorage && typeof(self.saveOfKey.n) == "undefined") {
+                    if(typeof(self.saveOfKey.n) == "undefined") {
                         localStorage.setItem("privateCryptoPair", JSON.stringify(e.data.data));
                     }
                     self.crypto_worker.postMessage({action: 'getPublicKey', data: self.saveOfKey});
                 }
                 if(e.data.action == "publicKey") {
-                    self.publicCryptoKey(e.data.data);
+                    var keyToUse = e.data.data;
+                    self.publicCryptoKey(keyToUse);
+                    self.AddPublicKeyToTrusted(keyToUse);
+                    // start receiving outer world changes from here via timer
+                    
                 }
             };
             self.crypto_worker.postMessage({action: 'applySaveOfKey', data: self.saveOfKey});
-        }
-        else {
-            self.publicCryptoKey("Cannot start web-worker...");
-        }
+        
 
         self.connectFrom = ko.observable(null);
         self.previousConnectFrom = ko.observable(null);
@@ -562,9 +584,13 @@
 <div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw;">
     <div style="text-align: center; width: 100%; margin-top: 10px;">
         WebPad 
+        <br>
         <span data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
+        <br>
         <button data-bind="click: $root.GetOneTimeSynchronizationToken"> Generate sync token</button>
+        <br>
         <span data-bind="text: $root.TokenToShare"></span>
+        <br>
         <input 
                 placeholder="Input sync token..." 
                 style="width: 30vw; min-width: 150px;" 
@@ -572,8 +598,19 @@
                 data-bind="
                     textInput: $root.SynchronizationToken,
                     " />
-        <button data-bind="click: $root.SynchronizeUsingToken"> Generate sync token</button>
+        <br>
+        <button data-bind="click: $root.SynchronizeUsingToken"> Use sync token</button>
+        <br>
         <span data-bind="text: $root.ReceivedPublicKey().substring(0, 10) + '...' "></span>
+        <span data-bind="if: $root.ReceivedPublicKey() != null  &&
+                $root.ReceivedPublicKey() != undefined &&
+                $root.ReceivedPublicKey().trim() != '' " >
+                <br>
+                Do you trust to this ? 
+                <button data-bind="click: $root.AddReceivedPublicKeyToTrusted"> Trust</button>
+                <button data-bind="click: $root.RemoveReceivedPublicKey"> No-no-no</button>
+        </span>
+        <br>
 
         <span data-bind="ifnot: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
             <input 
