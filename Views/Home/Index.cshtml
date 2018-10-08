@@ -404,23 +404,26 @@
 
         self.CreateNoteFromSearchQuery = function() {
             self.CreateNote(self.SearchNotesQuery().trim());
+            self.SearchNotesQuery("");
         };
 
         self.CreateNoteFromDestinationSearchQuery = function() {
             self.CreateNote(self.SearchDestinationNotesQuery().trim(), function(destination) { self.ConnectNotes(self.connectFrom(), destination); });
+            self.SearchDestinationNotesQuery("");
         };
 
         self.SelectFrom = function(data) {
-            self.previousConnectFrom(self.connectFrom());
-            self.connectFrom(data);
+            // prevent self-selection, because self-loops are not allowed here
+            if(self.connectFrom() != data){
+                self.previousConnectFrom(self.connectFrom());
+                self.connectFrom(data);
+            }
+            
 
         };
 
         self.ConnectPreviousWithCurrent = function() {
             self.ConnectNotes(self.previousConnectFrom(), self.connectFrom() )
-        };
-        self.ConnectCurrentWithPrevious = function() {
-            self.ConnectNotes(self.connectFrom(), self.previousConnectFrom() )
         };
 
         self.ConnectNotes = function(from, to) {
@@ -453,9 +456,10 @@
         self.SelectNoteToEdit = function(id) {
             var filtered = ko.utils.arrayFilter(self.Notes(), function(item){ return item.id == id;} );
             var from = filtered.length > 0 ? filtered[0] : null;
-            
-            self.NoteToEdit( from );
-            self.SelectFrom( from )
+            if(from != null) {
+                self.NoteToEdit( from );
+                self.SelectFrom( from );
+            }
         };
 
         self.DeselectNoteToEdit = function() {
@@ -593,15 +597,9 @@
                     textInput: $root.NoteToEdit().text,
                     " />
             <span data-bind="if: $root.previousConnectFrom() != null && $root.previousConnectFrom() !=  undefined " >
-                <span data-bind="if: $root.previousConnectFrom() == $root.NoteToEdit()" >
-                    <br>
-                    <button data-bind="click: $root.ConnectPreviousWithCurrent, text: ('Loop this ' + $root.previousConnectFrom().text())"></button>
-                </span>
                 <span data-bind="ifnot: $root.previousConnectFrom() == $root.NoteToEdit()" >
                     <br>
                     <button data-bind="click: $root.ConnectPreviousWithCurrent, text: ('Connect ' + $root.previousConnectFrom().text() + ' => ' + $root.NoteToEdit().text())"></button>
-                    <br>
-                    <button data-bind="click: $root.ConnectCurrentWithPrevious, text: ('Connect ' + $root.NoteToEdit().text() + ' => ' + $root.previousConnectFrom().text())"></button>
                 </span>
                 
             </span>
