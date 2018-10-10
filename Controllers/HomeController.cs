@@ -22,6 +22,8 @@ namespace ConnectedNotes.Controllers
 
         private static Dictionary<string, string> synchronization = new Dictionary<string, string>();
 
+        private static Dictionary<string, List<string> > messageBox = new Dictionary<string, List<string> > ();
+
         private string GenerateToken()
         {
             char[] toSelect = new[] {'a', 'b', 'c', 'd', 'k', 'h', 'y', 'z', 'x', 's', 'f', 't'};
@@ -123,12 +125,6 @@ namespace ConnectedNotes.Controllers
             ms.Close();
         }
 
-        // [Throttle(Name = nameof(RetrieveAllNotes), Seconds = 5)]
-        // public JsonResult RetrieveAllNotes()
-        // {
-        //     var repo = retrieveNotesRepo();
-        //     return new JsonResult(repo);
-        // }
 
         //generate key-pair
         // store private-part in local-web-storage or in file
