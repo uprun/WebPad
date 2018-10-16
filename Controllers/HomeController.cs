@@ -11,6 +11,7 @@ using System.IO;
 
 namespace ConnectedNotes.Controllers
 {
+    [RequestSizeLimit(10_000)]// explicit restriction to 10 kilobytes
     public class HomeController : Controller
     {
 
@@ -63,6 +64,47 @@ namespace ConnectedNotes.Controllers
             }
 
             return new JsonResult(token);
+            
+        }
+        
+
+        [Throttle(Name = nameof(SendMessages), Seconds = 2)]
+        public JsonResult SendMessages(Message[] messages)
+        {
+            if(messages.Length > 10)
+            {
+                Request.HttpContext.Response.StatusCode = (int) System.Net.HttpStatusCode.Conflict;
+                return new JsonResult(false);
+            }
+            int sum = messages.Sum(x => x.Receiver.Length + x.Text.Length);
+            if(sum > 4000)
+            {
+                Request.HttpContext.Response.StatusCode = (int) System.Net.HttpStatusCode.Conflict;
+                return new JsonResult(false);
+            }
+            
+
+            foreach(var m in messages)
+            {
+                if(messageBox.ContainsKey(m.Receiver))
+                {
+                    var mailBoxOfReceiver = messageBox[m.Receiver];
+                    lock(mailBoxOfReceiver)
+                    {
+                        mailBoxOfReceiver.Add(m.Text);
+                    }
+
+                }
+                else
+                {
+                    lock(messageBox)
+                    {
+                        messageBox.Add(m.Receiver, new List<string>() { m.Text });
+                    }
+                }
+            }
+
+            return new JsonResult(true);
             
         }
         
