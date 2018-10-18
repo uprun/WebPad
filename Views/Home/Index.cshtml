@@ -475,6 +475,8 @@
 
         self.NoteToEdit = ko.observable(null);
 
+        self.EdgeToEdit = ko.observable(null);
+
         self.SelectNoteToEdit = function(id) {
             var filtered = ko.utils.arrayFilter(self.Notes(), function(item){ return item.id == id;} );
             var from = filtered.length > 0 ? filtered[0] : null;
@@ -486,6 +488,18 @@
 
         self.DeselectNoteToEdit = function() {
             self.NoteToEdit(null);
+        };
+
+        self.SelectEdgeToEdit = function(id) {
+            var filtered = ko.utils.arrayFilter(self.Connections(), function(item){ return item.id == id;} );
+            var from = filtered.length > 0 ? filtered[0] : null;
+            if(from != null) {
+                self.EdgeToEdit( from );
+            }
+        };
+
+        self.DeselectEdgeToEdit = function() {
+            self.EdgeToEdit(null);
         };
 
         
@@ -513,13 +527,7 @@
         var network = new vis.Network(container, data, options);
 
         
-        network.on("selectEdge", function (params) {
-            console.log('selectEdge Event:', params);
-        });
         
-        network.on("deselectEdge", function (params) {
-            console.log('deselectEdge Event:', params);
-        });
 
         storageForCallBacks.note.added = function (added) {
             nodes.add( {id: added.id, label: added.text, shape: 'box' });
@@ -562,18 +570,63 @@
 
         
 
+        network.on("selectEdge", function (params) {
+            console.log('selectEdge Event:', params);
+            if(params 
+                && params.edges 
+                && params.edges.length
+                && params.edges.length == 1
+                && params.nodes.length == 0 )
+            {
+                console.log('one edge');
+                viewModel.SelectEdgeToEdit(params.edges[0]);
+                viewModel.DeselectNoteToEdit();
+            }
+        });
+        
+        network.on("deselectEdge", function (params) {
+            console.log('deselectEdge Event:', params);
+            viewModel.DeselectEdgeToEdit();
+        });
+
+
         network.on("selectNode", function (params) {
             //console.log('selectNode Event:', params);
             viewModel.SelectNoteToEdit(params.nodes[0]);
+            viewModel.DeselectEdgeToEdit();
         });
 
         network.on("dragStart", function (params) {
-            viewModel.SelectNoteToEdit(params.nodes[0]);
+            if(params 
+                && params.edges 
+                && params.edges.length
+                && params.edges.length == 1
+                && params.nodes.length == 0 )
+            {
+                viewModel.SelectEdgeToEdit(params.edges[0]);
+                viewModel.DeselectNoteToEdit();
+            }
+
+            if(params 
+                && params.nodes.length == 1 )
+            {
+                viewModel.SelectNoteToEdit(params.nodes[0]);
+                viewModel.DeselectEdgeToEdit();
+            }
         });
 
         network.on("deselectNode", function (params) {
-            //console.log('deselectNode Event:', params);
+            console.log('deselectNode Event:', params);
             viewModel.DeselectNoteToEdit();
+            if(params 
+                && params.edges 
+                && params.edges.length
+                && params.edges.length == 1
+                && params.nodes.length == 0 )
+            {
+                console.log('one edge');
+                viewModel.SelectEdgeToEdit(params.edges[0]);
+            }
         });
         
 
@@ -612,7 +665,16 @@
         </span>
         <br> -->
 
-        <span data-bind="ifnot: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
+        <span data-bind="ifnot: 
+                (
+                    $root.NoteToEdit() != null 
+                    && $root.NoteToEdit() !=  undefined
+                )
+                ||
+                ( 
+                    $root.EdgeToEdit() != null 
+                    && $root.EdgeToEdit() != undefined
+                )" >
             <input 
                 placeholder="Create or search note..." 
                 style="width: 30vw; min-width: 150px;" 
@@ -653,7 +715,18 @@
             <span data-bind="if: $root.SearchDestinationNotesQuery().trim().length > 0">
                 <button data-bind="click: $root.CreateNoteFromDestinationSearchQuery">Create connection</button>
             </span> 
-        </span>                  
+        </span>   
+
+        <span data-bind="if: $root.EdgeToEdit() != null && $root.EdgeToEdit() != undefined">
+            <input 
+                placeholder="Edit edge..." 
+                style="width: 30vw; min-width: 150px;" 
+                type="text" 
+                data-bind="
+                    textInput: $root.EdgeToEdit().label,
+                    " />
+
+        </span>               
         
     </div>
     
