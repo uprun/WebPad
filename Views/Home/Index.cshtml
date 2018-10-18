@@ -101,12 +101,14 @@
         note: {
             added: '',
             updated: '',
-            removed: ''
+            removed: '',
+            applySelection: ''
         },
         connection: {
             added: '',
             updated: '',
-            removed: ''
+            removed: '',
+            applySelection: ''
         }
     };
 
@@ -429,8 +431,11 @@
         };
 
         self.CreateNoteFromDestinationSearchQuery = function() {
-            self.CreateNote(self.SearchDestinationNotesQuery().trim(), function(destination) { self.ConnectNotes(self.connectFrom(), destination); });
-            self.SearchDestinationNotesQuery("");
+            self.CreateNote("", function(destination) { 
+                self.ConnectNotes(self.connectFrom(), destination);  
+                self.SelectNoteToEdit(destination.id);
+                storageForCallBacks.note.applySelection(destination.id);
+            });
         };
 
         self.SelectFrom = function(data) {
@@ -547,6 +552,11 @@
 
         storageForCallBacks.note.removed = function(node) {
             nodes.remove(node.id);
+        };
+
+        storageForCallBacks.note.applySelection = function(id) {
+            network.selectNodes([id], true);
+
         };
 
         storageForCallBacks.connection.added = function(connectionAdded) {
@@ -713,17 +723,10 @@
             </span>
             
             <br>
-            Connects to:
-            <input 
-                placeholder="Create or search note..." 
-                style="width: 30vw; min-width: 150px;" 
-                type="text" 
-                data-bind="
-                    textInput: $root.SearchDestinationNotesQuery,
-                    " />
-            <span data-bind="if: $root.SearchDestinationNotesQuery().trim().length > 0">
-                <button data-bind="click: $root.CreateNoteFromDestinationSearchQuery">Create connection</button>
-            </span> 
+            
+            
+            <button data-bind="click: $root.CreateNoteFromDestinationSearchQuery">Add connection</button>
+            
         </span>   
 
         <span data-bind="if: $root.EdgeToEdit() != null && $root.EdgeToEdit() != undefined">
