@@ -473,6 +473,15 @@
             self.Connections.remove(connection);
         };
 
+        self.RemoveNoteUnderEdit = function() {
+
+            self.Notes.remove(self.NoteToEdit());
+        };
+
+        self.RemoveConnectionUnderEdit = function() {
+            self.Connections.remove(self.EdgeToEdit());
+        };
+
         self.NoteToEdit = ko.observable(null);
 
         self.EdgeToEdit = ko.observable(null);
@@ -688,6 +697,7 @@
         </span>
         
         <span data-bind="if: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
+            <button data-bind="click: $root.RemoveNoteUnderEdit, text: 'Remove note'"></button>
             <input 
                 placeholder="Edit note..." 
                 style="width: 30vw; min-width: 150px;" 
@@ -718,6 +728,7 @@
         </span>   
 
         <span data-bind="if: $root.EdgeToEdit() != null && $root.EdgeToEdit() != undefined">
+            <button data-bind="click: $root.RemoveConnectionUnderEdit, text: 'Remove connection'"></button>
             <input 
                 placeholder="Edit edge..." 
                 style="width: 30vw; min-width: 150px;" 
