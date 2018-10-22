@@ -38,11 +38,23 @@ onmessage = function(e) {
         rsaKey = restoreFieldsOfObject(rsaKey, e.data.data);
         postMessage({ action: 'saveOfKey', data: rsaKey});
     }
+
     if(e.data.action == 'getPublicKey')
     {
         var publicKey = cryptico.publicKeyString(rsaKey);
         postMessage({ action: 'publicKey', data: publicKey});
     }
+
+    if(e.data.action == 'encrypt')
+    {
+        var encryptedMessage = cryptico.encrypt(e.data.PlainText, e.data.ReceiverPublicKey, rsaKey);
+        postMessage({ 
+            action: 'encrypt.Result'
+            , encryptedText: encryptedMessage
+            , receiverPublicKey: e.data.ReceiverPublicKey
+            , id: e.data.Id });
+    }
+
 
     
 };

@@ -279,18 +279,34 @@
         
 
         self.SendMessage = function() {
+            self.crypto_worker.postMessage({
+                action: 'encrypt'
+                , PlainText: "HelloEncrypted"
+                , ReceiverPublicKey: self.TrustedPublicKeysToSendTo[0]
+                , Id: 1
+            });
+            
+
+        };
+
+        self.ActualSendMessage = function(receiver, text, id) {
             $.ajax({
                 type: "POST",
                 url: "Home/SendMessages",
                 data: {
                     messages: [
                         {
-                            Receiver: "HelloReceiver",
-                            Text: "HelloText"
+                            Receiver: receiver,
+                            Text: text
                         }
                     ]
                 },
-                success: self.populate,
+                success: function() {
+                    console.log("Home/SendMessages success");
+                },
+                error: function() {
+                    console.log("Home/SendMessages error");
+                },
                 dataType: "json"
             });
 
@@ -395,23 +411,30 @@
 
         self.crypto_worker = undefined;
         
-            self.crypto_worker = new Worker("/js/worker-crypto.js");
-            self.crypto_worker.onmessage = function(e) {
-                if(e.data.action == "saveOfKey" ) {
-                    if(typeof(self.saveOfKey.n) == "undefined") {
-                        localStorage.setItem("privateCryptoPair", JSON.stringify(e.data.data));
-                    }
-                    self.crypto_worker.postMessage({action: 'getPublicKey', data: self.saveOfKey});
+        self.crypto_worker = new Worker("/js/worker-crypto.js");
+        self.crypto_worker.onmessage = function(e) {
+            if(e.data.action == "saveOfKey" ) {
+                if(typeof(self.saveOfKey.n) == "undefined") {
+                    localStorage.setItem("privateCryptoPair", JSON.stringify(e.data.data));
                 }
-                if(e.data.action == "publicKey") {
-                    var keyToUse = e.data.data;
-                    self.publicCryptoKey(keyToUse);
-                    self.AddPublicKeyToTrusted(keyToUse);
-                    // start receiving outer world changes from here via timer
-                    
-                }
-            };
-            self.crypto_worker.postMessage({action: 'applySaveOfKey', data: self.saveOfKey});
+                self.crypto_worker.postMessage({action: 'getPublicKey', data: self.saveOfKey});
+            }
+            if(e.data.action == "publicKey") {
+                var keyToUse = e.data.data;
+                self.publicCryptoKey(keyToUse);
+                self.AddPublicKeyToTrusted(keyToUse);
+                // start receiving outer world changes from here via timer
+                
+            }
+            if(e.data.action == "encrypt.Result") {
+                var keyToUse = e.data.data;
+                self.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText, e.data.id)
+                
+            }
+            
+        };
+
+        self.crypto_worker.postMessage({action: 'applySaveOfKey', data: self.saveOfKey});
         
 
         self.connectFrom = ko.observable(null);
@@ -703,7 +726,7 @@
         <button data-bind="click: $root.SendMessage"> SendMessage</button>
         <br>
         
-        <!-- <br>
+        <br>
         <span data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
         <br>
         <button data-bind="click: $root.GetOneTimeSynchronizationToken"> Generate sync token</button>
@@ -729,7 +752,7 @@
                 <button data-bind="click: $root.AddReceivedPublicKeyToTrusted"> Trust</button>
                 <button data-bind="click: $root.RemoveReceivedPublicKey"> No-no-no</button>
         </span>
-        <br> -->
+        <br>
 
         <span data-bind="ifnot: 
                 (
