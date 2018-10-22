@@ -351,7 +351,13 @@
         };
 
         
-
+        self.CreateNoteFromDestinationSearchQuery = function() {
+            self.CreateNote("", function(destination) { 
+                self.ConnectNotes(self.connectFrom(), destination);  
+                self.SelectNoteToEdit(destination.id);
+                storageForCallBacks.note.applySelection(destination.id);
+            });
+        };
 
 
         self.saveOfKey = {};
