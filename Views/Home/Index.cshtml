@@ -428,7 +428,7 @@
             }
             if(e.data.action == "encrypt.Result") {
                 var keyToUse = e.data.data;
-                self.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText, e.data.id)
+                self.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText.cipher, e.data.id)
                 
             }
             
