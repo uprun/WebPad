@@ -46,10 +46,14 @@
         var self = this;
         self.id = data.id;
         self.text = ko.observable(data.text);
+        self.x = data.x;
+        self.y = data.y;
         self.ConvertToJs = function() {
             return {
                 id: self.id,
-                text: self.text()
+                text: self.text(),
+                x: self.x,
+                y: self.y
             };
         };
         self.text
@@ -430,14 +434,6 @@
             self.SearchNotesQuery("");
         };
 
-        self.CreateNoteFromDestinationSearchQuery = function() {
-            self.CreateNote("", function(destination) { 
-                self.ConnectNotes(self.connectFrom(), destination);  
-                self.SelectNoteToEdit(destination.id);
-                storageForCallBacks.note.applySelection(destination.id);
-            });
-        };
-
         self.SelectFrom = function(data) {
             // prevent self-selection, because self-loops are not allowed here
             if(self.connectFrom() != data){
@@ -515,6 +511,20 @@
             self.EdgeToEdit(null);
         };
 
+        self.UpdatePositionsOfNodes = function (positions){
+            ko.utils.arrayForEach(self.Notes(), function(note) {
+                var found = positions[note.id];
+                if(found) {
+                    note.x = found.x;
+                    note.y = found.y;
+                }
+            });
+            self.changes.push({
+                action: 'PositionsUpdated',
+                data: null
+            });
+        };
+
         
 
     };
@@ -543,7 +553,17 @@
         
 
         storageForCallBacks.note.added = function (added) {
-            nodes.add( {id: added.id, label: added.text, shape: 'box' });
+            var toAdd = {id: added.id, label: added.text, shape: 'box' };
+            if(added.x && typeof(added.x) != "undefined")
+            {
+                toAdd.x = added.x;
+            }
+
+            if(added.y && typeof(added.y) != "undefined")
+            {
+                toAdd.y = added.y;
+            }
+            nodes.add( toAdd );
         };
 
         storageForCallBacks.note.updated = function(changed) {
@@ -646,6 +666,18 @@
                 viewModel.SelectEdgeToEdit(params.edges[0]);
             }
         });
+
+        network.on("stabilizationIterationsDone", function(params) {
+            network.getPositions();
+        });
+
+        network.on("stabilized", function(params) {
+            var positions = network.getPositions();
+            viewModel.UpdatePositionsOfNodes(positions);
+            
+        });
+
+        
         
 
 
