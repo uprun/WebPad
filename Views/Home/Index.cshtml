@@ -102,6 +102,9 @@
     };
 
     var storageForCallBacks = {
+        view: {
+            getFocusCoordinates: ''
+        },
         note: {
             added: '',
             updated: '',
@@ -374,7 +377,12 @@
 
         
         self.CreateNoteFromDestinationSearchQuery = function() {
-            self.CreateNote("", function(destination) { 
+            var obj = {
+                text: ""
+                , x: self.connectFrom().x
+                , y: self.connectFrom().y
+            };
+            self.CreateNote(obj, function(destination) { 
                 self.ConnectNotes(self.connectFrom(), destination);  
                 self.SelectNoteToEdit(destination.id);
                 storageForCallBacks.note.applySelection(destination.id);
@@ -428,10 +436,8 @@
             }
             if(e.data.action == "encrypt.Result") {
                 var keyToUse = e.data.data;
-                self.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText.cipher, e.data.id)
-                
+                self.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText.cipher, e.data.id);   
             }
-            
         };
 
         self.crypto_worker.postMessage({action: 'applySaveOfKey', data: self.saveOfKey});
@@ -440,13 +446,15 @@
         self.connectFrom = ko.observable(null);
         self.previousConnectFrom = ko.observable(null);
 
-        self.CreateNote = function(text, callback) {
+        self.CreateNote = function(obj, callback) {
 
             
             var toAdd = new NoteModel(
                 {
                     id: self.getLocalIndex(),
-                    text: text
+                    text: obj.text,
+                    x: obj.x,
+                    y: obj.y
                 });
             toAdd.subscribeToTextChanges(
                 function(updated) {
@@ -465,7 +473,11 @@
         };
 
         self.CreateNoteFromSearchQuery = function() {
-            self.CreateNote(self.SearchNotesQuery().trim());
+            var obj = {
+                text: self.SearchNotesQuery().trim()
+                , x: 0
+                , y: 0 };
+            self.CreateNote(obj);
             self.SearchNotesQuery("");
         };
 
@@ -635,13 +647,13 @@
         storageForCallBacks.connection.removed = function(connection) {
             edges.remove(connection.id);
         };
+
+        storageForCallBacks.view.getFocusCoordinates = function() {
+            network.getViewPosition();
+        };
         
         var viewModel = new ConnectedNotesViewModel();
-        ko.applyBindings(viewModel);
-        //viewModel.RetrieveDataFromServer();
-
-
-        
+        ko.applyBindings(viewModel);        
 
         network.on("selectEdge", function (params) {
             console.log('selectEdge Event:', params);
@@ -704,12 +716,13 @@
 
         network.on("stabilizationIterationsDone", function(params) {
             network.getPositions();
+            console.log(network.getViewPosition());
         });
 
         network.on("stabilized", function(params) {
             var positions = network.getPositions();
             viewModel.UpdatePositionsOfNodes(positions);
-            
+            console.log(network.getViewPosition());
         });
 
         
@@ -722,7 +735,7 @@
 <div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw;">
     <div style="text-align: center; width: 100%; margin-top: 10px;">
         WebPad 
-        <br>
+        <!-- <br>
         <button data-bind="click: $root.SendMessage"> SendMessage</button>
         <br>
         
@@ -752,7 +765,7 @@
                 <button data-bind="click: $root.AddReceivedPublicKeyToTrusted"> Trust</button>
                 <button data-bind="click: $root.RemoveReceivedPublicKey"> No-no-no</button>
         </span>
-        <br>
+        <br> -->
 
         <span data-bind="ifnot: 
                 (

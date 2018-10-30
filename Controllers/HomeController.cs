@@ -11,7 +11,7 @@ using System.IO;
 
 namespace ConnectedNotes.Controllers
 {
-    [RequestSizeLimit(10_000)]// explicit restriction to 10 kilobytes
+    [RequestSizeLimit(100_000)]// explicit restriction to 100 kilobytes
     public class HomeController : Controller
     {
 
