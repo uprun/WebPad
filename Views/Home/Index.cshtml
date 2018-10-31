@@ -473,10 +473,11 @@
         };
 
         self.CreateNoteFromSearchQuery = function() {
+            var coord = storageForCallBacks.view.getFocusCoordinates();
             var obj = {
                 text: self.SearchNotesQuery().trim()
-                , x: 0
-                , y: 0 };
+                , x: coord.x
+                , y: coord.y };
             self.CreateNote(obj);
             self.SearchNotesQuery("");
         };
@@ -649,7 +650,7 @@
         };
 
         storageForCallBacks.view.getFocusCoordinates = function() {
-            network.getViewPosition();
+            return network.getViewPosition();
         };
         
         var viewModel = new ConnectedNotesViewModel();
@@ -716,13 +717,11 @@
 
         network.on("stabilizationIterationsDone", function(params) {
             network.getPositions();
-            console.log(network.getViewPosition());
         });
 
         network.on("stabilized", function(params) {
             var positions = network.getPositions();
             viewModel.UpdatePositionsOfNodes(positions);
-            console.log(network.getViewPosition());
         });
 
         
