@@ -125,7 +125,7 @@
 
         
         self.freeLocalIndex = 0;
-        self.localPrefix = 'local_' + new Date().toUTCString().split(' ').join('_');
+        self.localPrefix = new Date().toUTCString().split(' ').join('_');
         self.Notes = ko.observableArray([]);
         self.Connections = ko.observableArray([]);
 
@@ -413,6 +413,13 @@
         if(localStorage["TrustedPublicKeysToSendTo"]){ 
             self.TrustedPublicKeysToSendTo = JSON.parse(localStorage.getItem("TrustedPublicKeysToSendTo"));
         }
+
+        if(localStorage["localFreeIndex"]) {
+            self.freeLocalIndex = JSON.parse(localStorage.getItem("localFreeIndex"));
+        }
+        else {
+            self.freeLocalIndex = self.Notes().count + self.Connections().count + 1;
+        }
         
 
         self.publicCryptoKey("Calculating RSA key ...");
@@ -421,13 +428,13 @@
         
         self.crypto_worker = new Worker("/js/worker-crypto.js");
         self.crypto_worker.onmessage = function(e) {
-            if(e.data.action == "saveOfKey" ) {
+            if(e.data.action == "applySaveOfKey.Result" ) {
                 if(typeof(self.saveOfKey.n) == "undefined") {
                     localStorage.setItem("privateCryptoPair", JSON.stringify(e.data.data));
                 }
                 self.crypto_worker.postMessage({action: 'getPublicKey', data: self.saveOfKey});
             }
-            if(e.data.action == "publicKey") {
+            if(e.data.action == "getPublicKey.Result") {
                 var keyToUse = e.data.data;
                 self.publicCryptoKey(keyToUse);
                 self.AddPublicKeyToTrusted(keyToUse);
@@ -732,7 +739,7 @@
     });
 </script>
 <div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw;">
-    <div style="text-align: center; width: 100%; margin-top: 10px;">
+    <div style="text-align: center; width: 100%; margin-top: 60px;">
         WebPad 
         <!-- <br>
         <button data-bind="click: $root.SendMessage"> SendMessage</button>

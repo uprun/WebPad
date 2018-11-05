@@ -36,13 +36,13 @@ onmessage = function(e) {
     if(e.data.action == 'applySaveOfKey')
     {
         rsaKey = restoreFieldsOfObject(rsaKey, e.data.data);
-        postMessage({ action: 'saveOfKey', data: rsaKey});
+        postMessage({ action: 'applySaveOfKey.Result', data: rsaKey});
     }
 
     if(e.data.action == 'getPublicKey')
     {
         var publicKey = cryptico.publicKeyString(rsaKey);
-        postMessage({ action: 'publicKey', data: publicKey});
+        postMessage({ action: 'getPublicKey.Result', data: publicKey});
     }
 
     if(e.data.action == 'encrypt')
