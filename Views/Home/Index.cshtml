@@ -418,7 +418,7 @@
             self.freeLocalIndex = JSON.parse(localStorage.getItem("localFreeIndex"));
         }
         else {
-            self.freeLocalIndex = self.Notes().count + self.Connections().count + 1;
+            self.freeLocalIndex = self.Notes().length + self.Connections().length + 1;
         }
         
 
