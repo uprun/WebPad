@@ -125,17 +125,17 @@
 
         
         self.freeLocalIndex = 0;
-        self.localPrefix = new Date().toUTCString().split(' ').join('_');
+        self.localPrefix = '_local_';
         self.Notes = ko.observableArray([]);
         self.Connections = ko.observableArray([]);
 
-        self.changes = ko.observableArray([]);
+        self.history = ko.observableArray([]);
 
         self.populate = function(data) {
             var toAdd = ko.utils.arrayMap(data.notes, function(elem) {
                     var noteToAdd = new NoteModel(elem);
                     noteToAdd.subscribeToTextChanges(function(updated) {
-                        self.changes.push({
+                        self.pushToHistory({
                             action: 'NoteUpdated',
                             data: updated
                         }
@@ -149,7 +149,7 @@
             var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
                 var connectionToAdd = new ConnectedNotesModel(elem.id, elem.SourceId, elem.DestinationId, elem.label);
                 connectionToAdd.subscribeToLabelChanges(function(updated) {
-                    self.changes.push({
+                    self.pushToHistory({
                         action: 'ConnectionUpdated',
                         data: updated
                     });
@@ -160,10 +160,15 @@
             ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
         };
 
+        self.pushToHistory = function(item) {
+            item.historyIndex = self.freeLocalIndex++;
+            self.history.push(item);
+        };
+
 
 
         self
-            .changes
+            .history
             .extend(
                 { 
                     rateLimit: 1000 
@@ -173,31 +178,41 @@
                 function(changes) {
                     if(changes && changes.length > 0)
                     {
-                        if(changes[0].status == "added")
-                        {
-                            if(localStorage)
-                            {
-                                var toStoreNotes = ko.utils.arrayMap(self.Notes(), function(item) {
-                                    return item.ConvertToJs();
-                                });
-                                var toStoreConnections = ko.utils.arrayMap(self.Connections(), function(item) {
-                                    return item.ConvertToJs();
-                                });
-                                localStorage.setItem("Notes", JSON.stringify(toStoreNotes));
-                                localStorage.setItem("Connections", JSON.stringify(toStoreConnections));
-                            }
-                            self.changes.removeAll();
+
+                        var addedChanges = ko.utils.arrayFilter(changes, function(item){ 
+                                return item.status == "added";
+                            } 
+                        );
+
+                        if(addedChanges && addedChanges.length > 0 ) {
+
+                            var toStoreNotes = ko.utils.arrayMap(self.Notes(), function(item) {
+                                return item.ConvertToJs();
+                            });
+                            var toStoreConnections = ko.utils.arrayMap(self.Connections(), function(item) {
+                                return item.ConvertToJs();
+                            });
+                            localStorage.setItem("Notes", JSON.stringify(toStoreNotes));
+                            localStorage.setItem("Connections", JSON.stringify(toStoreConnections));
+                            localStorage.setItem("localFreeIndex", JSON.stringify(self.freeLocalIndex));
+
+                            var filteredChanges = ko.utils.arrayFilter(addedChanges, function(item){ 
+                                    return item.value.action != "PositionsUpdated";
+                                } 
+                            );
+
+                            var messagesToAdd = ko.utils.arrayMap(filteredChanges, function(item) {
+                                return item.value;
+                            });
+
+                            ko.utils.arrayForEach(self.TrustedPublicKeysToSendTo(), function(item) {
+                                item.messagesPrepared = item.messages.concat(messagesToAdd);
+                            });
+
+                            localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(self.TrustedPublicKeysToSendTo()));
+                        
 
                         }
-                        // $.each(changes, function(index, value) {
-                        //     if(value.status == "added") {
-                        //     }
-                        // });
-                        // if(localStorage)
-                        // {
-                        //     //localStorage.
-
-                        // }
                     }
                 }
                 ,null
@@ -231,7 +246,7 @@
                     if(value.status == "added") {
                         if(typeof(storageForCallBacks.note.added) == "function") {
                             var added = value.value.ConvertToJs();
-                            self.changes.push({
+                            self.pushToHistory({
                                 action: 'NoteAdded',
                                 data: added
                             });
@@ -241,7 +256,7 @@
                     if(value.status == "deleted") {
                         if(typeof(storageForCallBacks.note.removed) == "function") {
                             var deleted = value.value.ConvertToJs();
-                            self.changes.push({
+                            self.pushToHistory({
                                 action: 'NoteDeleted',
                                 data: deleted
                             });
@@ -259,7 +274,7 @@
                     if(value.status == "added") {
                         if(typeof(storageForCallBacks.connection.added) == "function") {
                             var added = value.value.ConvertToJs();
-                            self.changes.push({
+                            self.pushToHistory({
                                 action: 'ConnectionAdded',
                                 data: added
                             });
@@ -269,7 +284,7 @@
                     if(value.status == "deleted") {
                         if(typeof(storageForCallBacks.connection.removed) == "function") {
                             var deleted = value.value.ConvertToJs();
-                            self.changes.push({
+                            self.pushToHistory({
                                 action: 'ConnectionDeleted',
                                 data: deleted
                             });
@@ -321,9 +336,46 @@
 
         
 
-        self.publicCryptoKey = ko.observable();
+        self.publicCryptoKey = ko.observable(undefined);
 
-        self.TrustedPublicKeysToSendTo = [];
+        self.TrustedPublicKeysToSendTo = ko.observableArray([]);
+
+        self.TrustedPublicKeysToSendTo.subscribe(function(changes) {
+            if(changes && changes.length > 0)
+            {
+                $.each(changes, function(index, value) {
+                    if(value.status == "added") {
+                        if(value.value.status == "awaitingInitialSnapshot")
+                        {
+                            var notesChanges = ko.utils.arrayMap(self.Notes(), function(elem) {
+                                var result = {
+                                    action: "createNoteInitial",
+                                    data: elem.ConvertToJs()
+                                };
+                                return result;
+                            });
+
+                            var connectionsChanges = ko.utils.arrayMap(self.Connections(), function(elem) {
+                                var result = {
+                                    action: "createConnectionInitial",
+                                    data: elem.ConvertToJs()
+                                };
+                                return result;
+                            });
+
+                            if(!value.value.messagesPrepared ) {
+                                value.value.messagesPrepared = [];
+                            }
+                            value.value.messagesPrepared = value.value.messagesPrepared.concat(notesChanges);
+                            value.value.messagesPrepared = value.value.messagesPrepared.concat(connectionsChanges);
+
+                            value.value.status = 'readyToTrackHistory';
+                        }
+                    }
+                });
+                localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(self.TrustedPublicKeysToSendTo()));
+            }
+        }, null, "arrayChange");
 
         self.ReceivedPublicKey = ko.observable("");
 
@@ -361,11 +413,15 @@
         };
 
         self.AddPublicKeyToTrusted = function(keyToAdd) {
-            var filtered = ko.utils.arrayFilter(self.TrustedPublicKeysToSendTo, function(item){ return item == keyToAdd;} );
+            var filtered = ko.utils.arrayFilter(self.TrustedPublicKeysToSendTo(), function(item){ return item.publicKey == keyToAdd;} );
             var foundMaybe = filtered.length > 0 ? filtered[0] : null;
             if(foundMaybe == null) {
-                self.TrustedPublicKeysToSendTo.push(keyToAdd);
-                localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(self.TrustedPublicKeysToSendTo));
+                var toPush = {
+                    status: "awaitingInitialSnapshot",
+                    trackHistoryFrom: self.freeLocalIndex,
+                    publicKey: keyToAdd
+                };
+                self.TrustedPublicKeysToSendTo.push(toPush);
             }
         };
 
@@ -409,20 +465,41 @@
         if(localStorage["privateCryptoPair"]){
             self.saveOfKey = JSON.parse(localStorage.getItem("privateCryptoPair"));
         }
-
-        if(localStorage["TrustedPublicKeysToSendTo"]){ 
-            self.TrustedPublicKeysToSendTo = JSON.parse(localStorage.getItem("TrustedPublicKeysToSendTo"));
-        }
-
+        
         if(localStorage["localFreeIndex"]) {
             self.freeLocalIndex = JSON.parse(localStorage.getItem("localFreeIndex"));
         }
         else {
             self.freeLocalIndex = self.Notes().length + self.Connections().length + 1;
         }
-        
 
-        self.publicCryptoKey("Calculating RSA key ...");
+        if(localStorage["TrustedPublicKeysToSendTo"]){ 
+            self.TrustedPublicKeysToSendTo(JSON.parse(localStorage.getItem("TrustedPublicKeysToSendTo")));
+            if(
+                self.TrustedPublicKeysToSendTo().length > 0 
+                && typeof(self.TrustedPublicKeysToSendTo()[0].status) == "undefined"
+            )
+            {
+                var toAdd = ko.utils.arrayMap(self.TrustedPublicKeysToSendTo(), function(elem) {
+                    var result = {
+                        status: "awaitingInitialSnapshot",
+                        trackHistoryFrom: self.freeLocalIndex,
+                        publicKey: elem
+                    };
+                    return result;
+                });
+                self.TrustedPublicKeysToSendTo(toAdd);
+                localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(self.TrustedPublicKeysToSendTo()));
+
+            }
+        }
+
+
+
+        if(localStorage["publicCryptoKey"]) {
+            self.publicCryptoKey(JSON.parse(localStorage.getItem("publicCryptoKey")) );
+            self.AddPublicKeyToTrusted(self.publicCryptoKey());
+        }
 
         self.crypto_worker = undefined;
         
@@ -436,8 +513,16 @@
             }
             if(e.data.action == "getPublicKey.Result") {
                 var keyToUse = e.data.data;
-                self.publicCryptoKey(keyToUse);
-                self.AddPublicKeyToTrusted(keyToUse);
+                if(
+                    !self.publicCryptoKey() 
+                    || self.publicCryptoKey() == null 
+                    || typeof(self.publicCryptoKey()) == "undefined" 
+                )
+                {
+                    self.publicCryptoKey(keyToUse);
+                    self.AddPublicKeyToTrusted(keyToUse);
+                }
+                
                 // start receiving outer world changes from here via timer
                 
             }
@@ -465,7 +550,7 @@
                 });
             toAdd.subscribeToTextChanges(
                 function(updated) {
-                    self.changes.push({
+                    self.pushToHistory({
                             action: 'NoteUpdated',
                             data: updated
                         }
@@ -511,7 +596,7 @@
                 ""
             );
             connectionToAdd.subscribeToLabelChanges(function(updated) {
-                self.changes.push({
+                self.pushToHistory({
                     action: 'ConnectionUpdated',
                     data: updated
                 });
@@ -574,7 +659,7 @@
                     note.y = found.y;
                 }
             });
-            self.changes.push({
+            self.pushToHistory({
                 action: 'PositionsUpdated',
                 data: null
             });
