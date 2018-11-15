@@ -109,13 +109,16 @@
             added: '',
             updated: '',
             removed: '',
-            applySelection: ''
+            applySelection: '',
+            initialLoad: ''
         },
         connection: {
             added: '',
             updated: '',
             removed: '',
-            applySelection: ''
+            applySelection: '',
+            initialLoad: ''
+
         }
     };
 
@@ -131,7 +134,10 @@
 
         self.history = ko.observableArray([]);
 
+        self.propagateUpdates = false;
+
         self.populate = function(data) {
+            self.propagateUpdates = false;
             var toAdd = ko.utils.arrayMap(data.notes, function(elem) {
                     var noteToAdd = new NoteModel(elem);
                     noteToAdd.subscribeToTextChanges(function(updated) {
@@ -146,6 +152,8 @@
             });
             ko.utils.arrayPushAll(self.Notes, toAdd);
 
+            storageForCallBacks.note.initialLoad(data.notes);
+
             var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
                 var connectionToAdd = new ConnectedNotesModel(elem.id, elem.SourceId, elem.DestinationId, elem.label);
                 connectionToAdd.subscribeToLabelChanges(function(updated) {
@@ -158,6 +166,8 @@
                 return connectionToAdd;
             });
             ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
+            storageForCallBacks.connection.initialLoad(data.connections);
+            self.propagateUpdates = true;
         };
 
         self.pushToHistory = function(item) {
@@ -206,7 +216,7 @@
                             });
 
                             ko.utils.arrayForEach(self.TrustedPublicKeysToSendTo(), function(item) {
-                                item.messagesPrepared = item.messages.concat(messagesToAdd);
+                                item.messagesPrepared = item.messagesPrepared.concat(messagesToAdd);
                             });
 
                             localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(self.TrustedPublicKeysToSendTo()));
@@ -240,7 +250,7 @@
         });
 
         self.Notes.subscribe(function(changes) {
-            if(changes && changes.length > 0)
+            if(changes && changes.length > 0 && self.propagateUpdates)
             {
                 $.each(changes, function(index, value) {
                     if(value.status == "added") {
@@ -268,7 +278,7 @@
         }, null, "arrayChange");
 
         self.Connections.subscribe(function(changes) {
-            if(changes && changes.length > 0)
+            if(changes && changes.length > 0 && self.propagateUpdates)
             {
                 $.each(changes, function(index, value) {
                     if(value.status == "added") {
@@ -719,6 +729,24 @@
 
         };
 
+        storageForCallBacks.note.initialLoad = function (nodesList) {
+            var toAddNodes = ko.utils.arrayMap(nodesList, function(added) {
+                var toAdd = {id: added.id, label: added.text, shape: 'box' };
+                if(added.x && typeof(added.x) != "undefined")
+                {
+                    toAdd.x = added.x;
+                }
+
+                if(added.y && typeof(added.y) != "undefined")
+                {
+                    toAdd.y = added.y;
+                }
+                return toAdd;
+            });
+            
+            nodes.add( toAddNodes );
+        };
+
         storageForCallBacks.connection.added = function(connectionAdded) {
             edges.add( {
                 id: connectionAdded.id,
@@ -739,6 +767,10 @@
 
         storageForCallBacks.connection.removed = function(connection) {
             edges.remove(connection.id);
+        };
+
+        storageForCallBacks.connection.initialLoad = function(connectionsList) {
+
         };
 
         storageForCallBacks.view.getFocusCoordinates = function() {
