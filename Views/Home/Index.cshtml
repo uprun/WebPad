@@ -207,7 +207,7 @@
                             localStorage.setItem("localFreeIndex", JSON.stringify(self.freeLocalIndex));
 
                             var filteredChanges = ko.utils.arrayFilter(addedChanges, function(item){ 
-                                    return item.value.action != "PositionsUpdated";
+                                    return item.value.action != "PositionsUpdated" && item.value.action != "";
                                 } 
                             );
 
@@ -220,6 +220,7 @@
                             });
 
                             localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(self.TrustedPublicKeysToSendTo()));
+                            self.history.removeAll();
                         
 
                         }
@@ -508,7 +509,7 @@
 
         if(localStorage["publicCryptoKey"]) {
             self.publicCryptoKey(JSON.parse(localStorage.getItem("publicCryptoKey")) );
-            self.AddPublicKeyToTrusted(self.publicCryptoKey());
+            // trigger timer for sending changes
         }
 
         self.crypto_worker = undefined;
@@ -530,7 +531,7 @@
                 )
                 {
                     self.publicCryptoKey(keyToUse);
-                    self.AddPublicKeyToTrusted(keyToUse);
+                    localStorage.setItem("publicCryptoKey", keyToUse);
                 }
                 
                 // start receiving outer world changes from here via timer
@@ -770,6 +771,18 @@
         };
 
         storageForCallBacks.connection.initialLoad = function(connectionsList) {
+            var edgesToAdd = ko.utils.arrayMap(connectionsList, function(connectionAdded) {
+                return {
+                id: connectionAdded.id,
+                from: connectionAdded.SourceId,
+                to: connectionAdded.DestinationId,
+                arrows: 'to',
+                label: connectionAdded.label,
+                font: { align: 'top' }
+                };
+            });
+
+            edges.add(edgesToAdd);
 
         };
 
@@ -781,27 +794,23 @@
         ko.applyBindings(viewModel);        
 
         network.on("selectEdge", function (params) {
-            console.log('selectEdge Event:', params);
             if(params 
                 && params.edges 
                 && params.edges.length
                 && params.edges.length == 1
                 && params.nodes.length == 0 )
             {
-                console.log('one edge');
                 viewModel.SelectEdgeToEdit(params.edges[0]);
                 viewModel.DeselectNoteToEdit();
             }
         });
         
         network.on("deselectEdge", function (params) {
-            console.log('deselectEdge Event:', params);
             viewModel.DeselectEdgeToEdit();
         });
 
 
         network.on("selectNode", function (params) {
-            //console.log('selectNode Event:', params);
             viewModel.SelectNoteToEdit(params.nodes[0]);
             viewModel.DeselectEdgeToEdit();
         });
@@ -826,7 +835,6 @@
         });
 
         network.on("deselectNode", function (params) {
-            console.log('deselectNode Event:', params);
             viewModel.DeselectNoteToEdit();
             if(params 
                 && params.edges 
@@ -834,7 +842,6 @@
                 && params.edges.length == 1
                 && params.nodes.length == 0 )
             {
-                console.log('one edge');
                 viewModel.SelectEdgeToEdit(params.edges[0]);
             }
         });
