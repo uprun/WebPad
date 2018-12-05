@@ -54,6 +54,17 @@ onmessage = function(e) {
             , receiverPublicKey: e.data.ReceiverPublicKey
             , id: e.data.Id });
     }
+    if(e.data.action == 'decrypt')
+    {
+        var DecryptionResult = cryptico.decrypt(e.data.CipherText, rsaKey);
+        postMessage(
+            { 
+                action: 'decrypt.Result'
+                , decryptionResult: DecryptionResult
+            });
+
+
+    }
 
 
     

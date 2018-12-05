@@ -315,6 +315,16 @@ function ConnectedNotesViewModel()
 
     };
 
+    self.DecryptMessage = function(item) {
+        self.crypto_worker.postMessage(
+            {
+                action: 'decrypt'
+                , CipherText: item
+            });
+        
+
+    };
+
     self.ActualSendMessage = function(receiver, text, id) {
         $.ajax({
             type: "POST",
@@ -338,11 +348,38 @@ function ConnectedNotesViewModel()
 
     };
 
+    self.ReceiveMessages = function(publicKey) {
+        $.ajax({
+            type: "POST",
+            url: "Home/ReceiveMessages",
+            data: {
+                publicKey: publicKey
+            },
+            success: function(data) {
+                console.log("Home/ReceiveMessages success");
+                if(data && data.length > 0)
+                {
+                    ko.utils.arrayForEach(data, function(item) {
+                        self.DecryptMessage(item);
+                    });
+                }
+                
+            },
+            error: function() {
+                console.log("Home/ReceiveMessages error");
+            },
+            dataType: "json"
+        });
+
+    };
+
     self.TokenToShare = ko.observable("");
     self.SynchronizationToken = ko.observable("");
 
 
-    self.processMessages = function(ownPublicKey) {
+    self.processMessages = function() {
+        var ownPublicKey = self.publicCryptoKey();
+        var shrinkedOwnPublicKey = ownPublicKey.substring(0, 5) + '_' ;
         var messages = ko.utils.arrayMap(self.TrustedPublicKeysToSendTo(), function(item) 
             {
                 if(item.messagesPrepared && item.messagesPrepared.length > 0 ) 
@@ -357,21 +394,21 @@ function ConnectedNotesViewModel()
                         {
                             if(data.id.startsWith(self.localPrefix))
                             {
-                                data.id = ownPublicKey + data.id.substring(self.localPrefix.length);
+                                data.id = shrinkedOwnPublicKey + data.id.substring(self.localPrefix.length);
                             }
                         }
                         if(data.SourceId)
                         {
                             if(data.SourceId.startsWith(self.localPrefix))
                             {
-                                data.SourceId = ownPublicKey + data.SourceId.substring(self.localPrefix.length);
+                                data.SourceId = shrinkedOwnPublicKey + data.SourceId.substring(self.localPrefix.length);
                             }
                         }
                         if(data.DestinationId)
                         {
                             if(data.DestinationId.startsWith(self.localPrefix))
                             {
-                                data.DestinationId = ownPublicKey + data.DestinationId.substring(self.localPrefix.length);
+                                data.DestinationId = shrinkedOwnPublicKey + data.DestinationId.substring(self.localPrefix.length);
                             }
                         }
                     }
@@ -402,9 +439,8 @@ function ConnectedNotesViewModel()
                 self.SendMessage(item);
             });
         }
-        
-        //encrypt and send messages
-        // also read messages
+
+        self.ReceiveMessages(ownPublicKey);
         setTimeout(self.processMessages, 1000);
     };
 
@@ -603,8 +639,15 @@ function ConnectedNotesViewModel()
             
         }
         if(e.data.action == "encrypt.Result") {
-            var keyToUse = e.data.data;
             self.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText.cipher, e.data.id);   
+        }
+        if(e.data.action == "decrypt.Result") {
+            var decrypted = e.data.decryptionResult;
+            //var from = de
+            var plainText = decrypted.plaintext;
+            console.log(plainText);
+
+            //self.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText.cipher, e.data.id);   
         }
     };
 

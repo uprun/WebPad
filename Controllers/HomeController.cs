@@ -90,22 +90,38 @@ namespace ConnectedNotes.Controllers
                     if(messageBox.ContainsKey(m.Receiver))
                     {
                         var mailBoxOfReceiver = messageBox[m.Receiver];
-                        lock(mailBoxOfReceiver)
-                        {
-                            mailBoxOfReceiver.Add(m.Text);
-                        }
+                        
+                        mailBoxOfReceiver.Add(m.Text);
 
                     }
                     else
                     {
-                        
-                            messageBox.Add(m.Receiver, new List<string>() { m.Text });
-                        
+                        messageBox.Add(m.Receiver, new List<string>() { m.Text });
                     }
                 }
             }
 
             return new JsonResult(true);
+            
+        }
+
+        public JsonResult ReceiveMessages(string publicKey)
+        { // potential place for abuse, because anyone who nows my public key can receive messages for me, but on the other hand they are encrypted
+            var result = new List<string>();
+        
+            lock(messageBox)
+            {
+                if(messageBox.ContainsKey(publicKey))
+                {
+                    var mailBoxOfReceiver = messageBox[publicKey];
+                    result.AddRange(mailBoxOfReceiver.Take(5));
+                    messageBox[publicKey] = mailBoxOfReceiver.Skip(5).ToList();
+
+                }
+            }
+           
+
+            return new JsonResult(result);
             
         }
         
