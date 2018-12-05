@@ -121,6 +121,10 @@ function ConnectedNotesViewModel()
     self.Notes = ko.observableArray([]);
     self.Connections = ko.observableArray([]);
 
+    self.crypto_worker = undefined;
+    
+    self.crypto_worker = new Worker("js/worker-crypto.js");
+
     self.history = ko.observableArray([]);
 
     self.propagateUpdates = false;
@@ -300,11 +304,11 @@ function ConnectedNotesViewModel()
     }, null, "arrayChange");
     
 
-    self.SendMessage = function() {
+    self.SendMessage = function(item) {
         self.crypto_worker.postMessage({
             action: 'encrypt'
-            , PlainText: "HelloEncrypted"
-            , ReceiverPublicKey: self.TrustedPublicKeysToSendTo[0]
+            , PlainText: item.message
+            , ReceiverPublicKey: item.receiver
             , Id: 1
         });
         
@@ -338,14 +342,43 @@ function ConnectedNotesViewModel()
     self.SynchronizationToken = ko.observable("");
 
 
-    self.processMessages = function() {
+    self.processMessages = function(ownPublicKey) {
         var messages = ko.utils.arrayMap(self.TrustedPublicKeysToSendTo(), function(item) 
             {
                 if(item.messagesPrepared && item.messagesPrepared.length > 0 ) 
                 {
+                    var itemToSend = item.messagesPrepared.shift();
+                    // hope message will not be lost
+
+                    if(itemToSend.data)
+                    {
+                        var data = itemToSend.data;
+                        if(data.id)
+                        {
+                            if(data.id.startsWith(self.localPrefix))
+                            {
+                                data.id = ownPublicKey + data.id.substring(self.localPrefix.length);
+                            }
+                        }
+                        if(data.SourceId)
+                        {
+                            if(data.SourceId.startsWith(self.localPrefix))
+                            {
+                                data.SourceId = ownPublicKey + data.SourceId.substring(self.localPrefix.length);
+                            }
+                        }
+                        if(data.DestinationId)
+                        {
+                            if(data.DestinationId.startsWith(self.localPrefix))
+                            {
+                                data.DestinationId = ownPublicKey + data.DestinationId.substring(self.localPrefix.length);
+                            }
+                        }
+                    }
+
                     return {
                         receiver: item.publicKey,
-                        message: item.messagesPrepared[0]
+                        message: JSON.stringify(itemToSend)
                     }
                 }
                 else 
@@ -363,6 +396,12 @@ function ConnectedNotesViewModel()
                     return item != null;
                 }
             );
+        if(messages && messages.length > 0) 
+        {
+            ko.utils.arrayForEach(messages, function(item) {
+                self.SendMessage(item);
+            });
+        }
         
         //encrypt and send messages
         // also read messages
@@ -537,9 +576,7 @@ function ConnectedNotesViewModel()
 
     }
 
-    self.crypto_worker = undefined;
     
-    self.crypto_worker = new Worker("/js/worker-crypto.js");
     self.crypto_worker.onmessage = function(e) {
         if(e.data.action == "applySaveOfKey.Result" ) {
             if(typeof(self.saveOfKey.n) == "undefined") {

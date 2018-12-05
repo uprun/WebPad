@@ -38,7 +38,7 @@ namespace ConnectedNotes.Controllers
             return $"{firstPart}{toSelect[secondIndex]}{toSelect[secondIndex_2]}{thirdPart}{toSelect[fourthIndex]}{toSelect[fourthIndex_2]}";
         }
 
-        [Throttle(Name = nameof(GetOneTimeSynchronizationToken), Seconds = 60)]
+        //[Throttle(Name = nameof(GetOneTimeSynchronizationToken), Seconds = 60)]
         public JsonResult GetOneTimeSynchronizationToken(string publicKey)
         {
             string token;
@@ -68,7 +68,6 @@ namespace ConnectedNotes.Controllers
         }
         
 
-        [Throttle(Name = nameof(SendMessages), Seconds = 2)]
         public JsonResult SendMessages(Message[] messages)
         {
             if(messages.Length > 10)
@@ -86,20 +85,22 @@ namespace ConnectedNotes.Controllers
 
             foreach(var m in messages)
             {
-                if(messageBox.ContainsKey(m.Receiver))
+                lock(messageBox)
                 {
-                    var mailBoxOfReceiver = messageBox[m.Receiver];
-                    lock(mailBoxOfReceiver)
+                    if(messageBox.ContainsKey(m.Receiver))
                     {
-                        mailBoxOfReceiver.Add(m.Text);
-                    }
+                        var mailBoxOfReceiver = messageBox[m.Receiver];
+                        lock(mailBoxOfReceiver)
+                        {
+                            mailBoxOfReceiver.Add(m.Text);
+                        }
 
-                }
-                else
-                {
-                    lock(messageBox)
+                    }
+                    else
                     {
-                        messageBox.Add(m.Receiver, new List<string>() { m.Text });
+                        
+                            messageBox.Add(m.Receiver, new List<string>() { m.Text });
+                        
                     }
                 }
             }
@@ -108,7 +109,7 @@ namespace ConnectedNotes.Controllers
             
         }
         
-        [Throttle(Name = nameof(GetSyncPublicKey), Seconds = 60)]
+        //[Throttle(Name = nameof(GetSyncPublicKey), Seconds = 60)]
         public JsonResult GetSyncPublicKey(string token)
         {
             string publicKey;
