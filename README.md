@@ -1,6 +1,8 @@
 # ConnectedNotes
 Distributed crypto mindmap.
+
 Distributed crypto graph.
+
 Select any slogan above that fits your needs.
 
 Create a graph on the web-site and sync it among devices.
