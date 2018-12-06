@@ -338,7 +338,6 @@ function ConnectedNotesViewModel()
                 ]
             },
             success: function() {
-                console.log("Home/SendMessages success");
             },
             error: function() {
                 console.log("Home/SendMessages error");
@@ -356,7 +355,6 @@ function ConnectedNotesViewModel()
                 publicKey: publicKey
             },
             success: function(data) {
-                console.log("Home/ReceiveMessages success");
                 if(data && data.length > 0)
                 {
                     ko.utils.arrayForEach(data, function(item) {
