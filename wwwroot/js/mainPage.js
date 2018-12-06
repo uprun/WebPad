@@ -114,6 +114,16 @@ var storageForCallBacks = {
 function ConnectedNotesViewModel()
 {
     var self = this;
+    self.actions = 
+    {
+        NoteUpdated: 'NoteUpdated',
+        ConnectionUpdated: 'ConnectionUpdated',
+        NoteAdded: 'NoteAdded',
+        NoteDeleted: 'NoteDeleted',
+        ConnectionAdded: 'ConnectionAdded',
+        ConnectionDeleted: 'ConnectionDeleted',
+        PositionsUpdated: 'PositionsUpdated'
+    };
 
     
     self.freeLocalIndex = 0;
@@ -135,7 +145,7 @@ function ConnectedNotesViewModel()
                 var noteToAdd = new NoteModel(elem);
                 noteToAdd.subscribeToTextChanges(function(updated) {
                     self.pushToHistory({
-                        action: 'NoteUpdated',
+                        action: self.actions.NoteUpdated,
                         data: updated
                     }
                     );
@@ -151,7 +161,7 @@ function ConnectedNotesViewModel()
             var connectionToAdd = new ConnectedNotesModel(elem.id, elem.SourceId, elem.DestinationId, elem.label);
             connectionToAdd.subscribeToLabelChanges(function(updated) {
                 self.pushToHistory({
-                    action: 'ConnectionUpdated',
+                    action: self.actions.ConnectionUpdated,
                     data: updated
                 });
                 storageForCallBacks.connection.updated(updated);
@@ -204,7 +214,7 @@ function ConnectedNotesViewModel()
                         localStorage.setItem("localFreeIndex", JSON.stringify(self.freeLocalIndex));
 
                         var filteredChanges = ko.utils.arrayFilter(addedChanges, function(item){ 
-                                return item.value.action != "PositionsUpdated" && item.value.action != "";
+                                return item.value.action != self.actions.PositionsUpdated && item.value.action != "";
                             } 
                         );
 
@@ -255,7 +265,7 @@ function ConnectedNotesViewModel()
                     if(typeof(storageForCallBacks.note.added) == "function") {
                         var added = value.value.ConvertToJs();
                         self.pushToHistory({
-                            action: 'NoteAdded',
+                            action: self.actions.NoteAdded,
                             data: added
                         });
                         storageForCallBacks.note.added(added);
@@ -265,7 +275,7 @@ function ConnectedNotesViewModel()
                     if(typeof(storageForCallBacks.note.removed) == "function") {
                         var deleted = value.value.ConvertToJs();
                         self.pushToHistory({
-                            action: 'NoteDeleted',
+                            action: self.actions.NoteDeleted,
                             data: deleted
                         });
                         storageForCallBacks.note.removed(deleted);
@@ -283,7 +293,7 @@ function ConnectedNotesViewModel()
                     if(typeof(storageForCallBacks.connection.added) == "function") {
                         var added = value.value.ConvertToJs();
                         self.pushToHistory({
-                            action: 'ConnectionAdded',
+                            action: self.actions.ConnectionAdded,
                             data: added
                         });
                         storageForCallBacks.connection.added(added);
@@ -293,7 +303,7 @@ function ConnectedNotesViewModel()
                     if(typeof(storageForCallBacks.connection.removed) == "function") {
                         var deleted = value.value.ConvertToJs();
                         self.pushToHistory({
-                            action: 'ConnectionDeleted',
+                            action: self.actions.ConnectionDeleted,
                             data: deleted
                         });
                         storageForCallBacks.connection.removed(deleted);
@@ -668,7 +678,7 @@ function ConnectedNotesViewModel()
         toAdd.subscribeToTextChanges(
             function(updated) {
                 self.pushToHistory({
-                        action: 'NoteUpdated',
+                        action: self.actions.NoteUpdated,
                         data: updated
                     }
                 ); 
@@ -714,7 +724,7 @@ function ConnectedNotesViewModel()
         );
         connectionToAdd.subscribeToLabelChanges(function(updated) {
             self.pushToHistory({
-                action: 'ConnectionUpdated',
+                action: self.actions.ConnectionUpdated,
                 data: updated
             });
             storageForCallBacks.connection.updated(updated);
@@ -777,7 +787,7 @@ function ConnectedNotesViewModel()
             }
         });
         self.pushToHistory({
-            action: 'PositionsUpdated',
+            action: self.actions.PositionsUpdated,
             data: null
         });
     };
