@@ -149,7 +149,6 @@ function ConnectedNotesViewModel()
                         data: updated
                     }
                     );
-                    storageForCallBacks.note.updated(updated);
                 }  );
             return noteToAdd;
         });
@@ -164,7 +163,6 @@ function ConnectedNotesViewModel()
                     action: self.actions.ConnectionUpdated,
                     data: updated
                 });
-                storageForCallBacks.connection.updated(updated);
             });
             return connectionToAdd;
         });
@@ -218,6 +216,42 @@ function ConnectedNotesViewModel()
                             } 
                         );
 
+                        ko.utils.arrayForEach(filteredChanges, function(item) 
+                            {
+                                var current_action = item.value.action;
+                                var current_data = item.value.data;
+                                if(current_action == self.actions.NoteUpdated)
+                                {
+                                    storageForCallBacks.note.updated(current_data);
+                                }
+
+                                if(current_action == self.actions.ConnectionUpdated)
+                                {
+                                    storageForCallBacks.connection.updated(current_data);
+                                }
+
+                                if(current_action == self.actions.NoteAdded)
+                                {
+                                    storageForCallBacks.note.added(current_data);
+                                }
+
+                                if(current_action == self.actions.NoteDeleted)
+                                {
+                                    storageForCallBacks.note.removed(current_data);
+                                }
+
+                                if(current_action == self.actions.ConnectionAdded)
+                                {
+                                    storageForCallBacks.connection.added(current_data);
+                                }
+
+                                if(current_action == self.actions.ConnectionDeleted)
+                                {
+                                    storageForCallBacks.connection.removed(current_data);
+                                }
+
+                            });
+
                         var messagesToAdd = ko.utils.arrayMap(filteredChanges, function(item) {
                             return item.value;
                         });
@@ -268,7 +302,6 @@ function ConnectedNotesViewModel()
                             action: self.actions.NoteAdded,
                             data: added
                         });
-                        storageForCallBacks.note.added(added);
                     }
                 }
                 if(value.status == "deleted") {
@@ -278,7 +311,6 @@ function ConnectedNotesViewModel()
                             action: self.actions.NoteDeleted,
                             data: deleted
                         });
-                        storageForCallBacks.note.removed(deleted);
                     }
                 }
             });
@@ -296,7 +328,6 @@ function ConnectedNotesViewModel()
                             action: self.actions.ConnectionAdded,
                             data: added
                         });
-                        storageForCallBacks.connection.added(added);
                     }
                 }
                 if(value.status == "deleted") {
@@ -306,7 +337,6 @@ function ConnectedNotesViewModel()
                             action: self.actions.ConnectionDeleted,
                             data: deleted
                         });
-                        storageForCallBacks.connection.removed(deleted);
                     }
                 }
             });
@@ -682,7 +712,6 @@ function ConnectedNotesViewModel()
                         data: updated
                     }
                 ); 
-                storageForCallBacks.note.updated(updated);
             }
         );
         self.Notes.push(toAdd);
@@ -727,7 +756,6 @@ function ConnectedNotesViewModel()
                 action: self.actions.ConnectionUpdated,
                 data: updated
             });
-            storageForCallBacks.connection.updated(updated);
         });
         self.Connections.push(connectionToAdd);
     };
