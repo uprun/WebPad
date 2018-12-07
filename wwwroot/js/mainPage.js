@@ -171,8 +171,44 @@ function ConnectedNotesViewModel()
         self.propagateUpdates = true;
     };
 
+    self.processCallBacks = function(item)
+    {
+        var current_action = item.action;
+            var current_data = item.data;
+            if(current_action == self.actions.NoteUpdated)
+            {
+                storageForCallBacks.note.updated(current_data);
+            }
+
+            if(current_action == self.actions.ConnectionUpdated)
+            {
+                storageForCallBacks.connection.updated(current_data);
+            }
+
+            if(current_action == self.actions.NoteAdded)
+            {
+                storageForCallBacks.note.added(current_data);
+            }
+
+            if(current_action == self.actions.NoteDeleted)
+            {
+                storageForCallBacks.note.removed(current_data);
+            }
+
+            if(current_action == self.actions.ConnectionAdded)
+            {
+                storageForCallBacks.connection.added(current_data);
+            }
+
+            if(current_action == self.actions.ConnectionDeleted)
+            {
+                storageForCallBacks.connection.removed(current_data);
+            }
+    };
+
     self.pushToHistory = function(item) {
         item.historyIndex = self.freeLocalIndex++;
+        self.processCallBacks(item);        
         self.history.push(item);
     };
 
@@ -212,45 +248,13 @@ function ConnectedNotesViewModel()
                         localStorage.setItem("localFreeIndex", JSON.stringify(self.freeLocalIndex));
 
                         var filteredChanges = ko.utils.arrayFilter(addedChanges, function(item){ 
-                                return item.value.action != self.actions.PositionsUpdated && item.value.action != "";
+                                return item.value.action != self.actions.PositionsUpdated 
+                                    && item.value.action != ""
+                                    && !item.value.isFromOuterSpace;
                             } 
                         );
 
-                        ko.utils.arrayForEach(filteredChanges, function(item) 
-                            {
-                                var current_action = item.value.action;
-                                var current_data = item.value.data;
-                                if(current_action == self.actions.NoteUpdated)
-                                {
-                                    storageForCallBacks.note.updated(current_data);
-                                }
 
-                                if(current_action == self.actions.ConnectionUpdated)
-                                {
-                                    storageForCallBacks.connection.updated(current_data);
-                                }
-
-                                if(current_action == self.actions.NoteAdded)
-                                {
-                                    storageForCallBacks.note.added(current_data);
-                                }
-
-                                if(current_action == self.actions.NoteDeleted)
-                                {
-                                    storageForCallBacks.note.removed(current_data);
-                                }
-
-                                if(current_action == self.actions.ConnectionAdded)
-                                {
-                                    storageForCallBacks.connection.added(current_data);
-                                }
-
-                                if(current_action == self.actions.ConnectionDeleted)
-                                {
-                                    storageForCallBacks.connection.removed(current_data);
-                                }
-
-                            });
 
                         var messagesToAdd = ko.utils.arrayMap(filteredChanges, function(item) {
                             return item.value;
@@ -414,6 +418,50 @@ function ConnectedNotesViewModel()
     self.TokenToShare = ko.observable("");
     self.SynchronizationToken = ko.observable("");
 
+    self.ConvertToLocalId = function(itemToSend) 
+    {
+        var ownPublicKey = self.publicCryptoKey();
+        var shrinkedOwnPublicKey = ownPublicKey.substring(0, 5) + '_' ;
+       
+                
+                    
+
+                    if(itemToSend.data)
+                    {
+                        var data = itemToSend.data;
+                        if(data.id)
+                        {
+                            if(data.id.startsWith(shrinkedOwnPublicKey))
+                            {
+                                data.id = self.localPrefix + data.id.substring(shrinkedOwnPublicKey.length);
+                            }
+                        }
+                        if(data.SourceId)
+                        {
+                            if(data.SourceId.startsWith(shrinkedOwnPublicKey))
+                            {
+                                data.SourceId = self.localPrefix + data.SourceId.substring(shrinkedOwnPublicKey.length);
+                            }
+                        }
+                        if(data.DestinationId)
+                        {
+                            if(data.DestinationId.startsWith(shrinkedOwnPublicKey))
+                            {
+                                data.DestinationId = self.localPrefix + data.DestinationId.substring(shrinkedOwnPublicKey.length);
+                            }
+                        }
+                    }
+
+                    return {
+                        receiver: item.publicKey,
+                        message: JSON.stringify(itemToSend)
+                    }
+               
+
+            
+        
+    };
+
 
     self.processMessages = function() {
         var ownPublicKey = self.publicCryptoKey();
@@ -499,7 +547,7 @@ function ConnectedNotesViewModel()
                     {
                         var notesChanges = ko.utils.arrayMap(self.Notes(), function(elem) {
                             var result = {
-                                action: "createNoteInitial",
+                                action: self.actions.NoteAdded,
                                 data: elem.ConvertToJs()
                             };
                             return result;
@@ -507,7 +555,7 @@ function ConnectedNotesViewModel()
 
                         var connectionsChanges = ko.utils.arrayMap(self.Connections(), function(elem) {
                             var result = {
-                                action: "createConnectionInitial",
+                                action: self.actions.ConnectionAdded,
                                 data: elem.ConvertToJs()
                             };
                             return result;
@@ -681,9 +729,14 @@ function ConnectedNotesViewModel()
         }
         if(e.data.action == "decrypt.Result") {
             var decrypted = e.data.decryptionResult;
+            var publicKeyOfSender = decrypted.publicKeyString;
+            var signatureStatus = decrypted.signature;
             //var from = de
             var plainText = decrypted.plaintext;
             console.log(plainText);
+            var actionReceived = JSON.parse(plainText);
+            actionReceived.isFromOuterSpace = true;
+            self.pushToHistory(actionReceived);
 
             //self.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText.cipher, e.data.id);   
         }
