@@ -137,10 +137,7 @@ function ConnectedNotesViewModel()
 
     self.history = ko.observableArray([]);
 
-    self.propagateUpdates = false;
-
     self.populate = function(data) {
-        self.propagateUpdates = false;
         var toAdd = ko.utils.arrayMap(data.notes, function(elem) {
                 var noteToAdd = new NoteModel(elem);
                 noteToAdd.subscribeToTextChanges(function(updated) {
@@ -168,7 +165,6 @@ function ConnectedNotesViewModel()
         });
         ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
         storageForCallBacks.connection.initialLoad(data.connections);
-        self.propagateUpdates = true;
     };
 
     self.processCallBacks = function(item)
@@ -294,59 +290,6 @@ function ConnectedNotesViewModel()
             return {text: item.text(), id: item.id};
         });
     });
-
-    self.Notes.subscribe(function(changes) {
-        if(changes && changes.length > 0 && self.propagateUpdates)
-        {
-            $.each(changes, function(index, value) {
-                if(value.status == "added") {
-                    if(typeof(storageForCallBacks.note.added) == "function") {
-                        var added = value.value.ConvertToJs();
-                        self.pushToHistory({
-                            action: self.actions.NoteAdded,
-                            data: added
-                        });
-                    }
-                }
-                if(value.status == "deleted") {
-                    if(typeof(storageForCallBacks.note.removed) == "function") {
-                        var deleted = value.value.ConvertToJs();
-                        self.pushToHistory({
-                            action: self.actions.NoteDeleted,
-                            data: deleted
-                        });
-                    }
-                }
-            });
-        }
-    }, null, "arrayChange");
-
-    self.Connections.subscribe(function(changes) {
-        if(changes && changes.length > 0 && self.propagateUpdates)
-        {
-            $.each(changes, function(index, value) {
-                if(value.status == "added") {
-                    if(typeof(storageForCallBacks.connection.added) == "function") {
-                        var added = value.value.ConvertToJs();
-                        self.pushToHistory({
-                            action: self.actions.ConnectionAdded,
-                            data: added
-                        });
-                    }
-                }
-                if(value.status == "deleted") {
-                    if(typeof(storageForCallBacks.connection.removed) == "function") {
-                        var deleted = value.value.ConvertToJs();
-                        self.pushToHistory({
-                            action: self.actions.ConnectionDeleted,
-                            data: deleted
-                        });
-                    }
-                }
-            });
-        }
-    }, null, "arrayChange");
-    
 
     self.SendMessage = function(item) {
         self.crypto_worker.postMessage({
@@ -768,6 +711,11 @@ function ConnectedNotesViewModel()
             }
         );
         self.Notes.push(toAdd);
+        var added = toAdd.ConvertToJs();
+        self.pushToHistory({
+            action: self.actions.NoteAdded,
+            data: added
+        });
         if(callback && typeof(callback) === "function") {
             callback(toAdd);
         }
@@ -811,32 +759,56 @@ function ConnectedNotesViewModel()
             });
         });
         self.Connections.push(connectionToAdd);
-    };
-
-    self.RemoveNote = function( note) {
-        self.Notes.remove(note);
-    };
-
-    self.RemoveConnection = function(connection) {
-        self.Connections.remove(connection);
+        var added = connectionToAdd.ConvertToJs();
+        self.pushToHistory({
+            action: self.actions.ConnectionAdded,
+            data: added
+        });
     };
 
     self.RemoveNoteUnderEdit = function() {
+        var toRemove = self.NoteToEdit();
 
-        self.Notes.remove(self.NoteToEdit());
+        self.Notes.remove(toRemove);
+        var deleted = toRemove.ConvertToJs();
+        self.pushToHistory({
+            action: self.actions.NoteDeleted,
+            data: deleted
+        });
     };
 
     self.RemoveConnectionUnderEdit = function() {
-        self.Connections.remove(self.EdgeToEdit());
+        var toRemove = self.EdgeToEdit();
+        self.Connections.remove(toRemove);
+        var deleted = toRemove.ConvertToJs();
+        self.pushToHistory({
+            action: self.actions.ConnectionDeleted,
+            data: deleted
+        });
     };
 
     self.NoteToEdit = ko.observable(null);
 
     self.EdgeToEdit = ko.observable(null);
 
-    self.SelectNoteToEdit = function(id) {
+    self.findNodeById = function(id)
+    {
         var filtered = ko.utils.arrayFilter(self.Notes(), function(item){ return item.id == id;} );
-        var from = filtered.length > 0 ? filtered[0] : null;
+        var result = filtered.length > 0 ? filtered[0] : null;
+        return result;
+
+    };
+    self.findEdgeById = function(id)
+    {
+        var filtered = ko.utils.arrayFilter(self.Connections(), function(item){ return item.id == id;} );
+        var result = filtered.length > 0 ? filtered[0] : null;
+        return result;
+
+    }
+
+    self.SelectNoteToEdit = function(id) {
+        
+        var from = self.findNodeById(id);
         if(from != null) {
             self.NoteToEdit( from );
             self.SelectFrom( from );
@@ -848,8 +820,8 @@ function ConnectedNotesViewModel()
     };
 
     self.SelectEdgeToEdit = function(id) {
-        var filtered = ko.utils.arrayFilter(self.Connections(), function(item){ return item.id == id;} );
-        var from = filtered.length > 0 ? filtered[0] : null;
+        
+        var from = self.findEdgeById(id);
         if(from != null) {
             self.EdgeToEdit( from );
         }
