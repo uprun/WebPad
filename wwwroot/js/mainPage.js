@@ -137,6 +137,69 @@ function ConnectedNotesViewModel()
 
     self.history = ko.observableArray([]);
 
+    self.processMessageFromOuterSpace = function(item)
+    {
+        var current_action = item.action;
+        var current_data = item.data;
+        if(current_action == self.actions.NoteUpdated)
+        {
+            //storageForCallBacks.note.updated(current_data);
+        }
+
+        if(current_action == self.actions.ConnectionUpdated)
+        {
+            //storageForCallBacks.connection.updated(current_data);
+        }
+
+        if(current_action == self.actions.NoteAdded)
+        {
+            var noteToAdd = new NoteModel(current_data);
+            noteToAdd.subscribeToTextChanges
+            (
+                function(updated) 
+                {
+                    self.pushToHistory
+                    (
+                        {
+                            action: self.actions.NoteUpdated,
+                            data: updated
+                        }
+                    );
+                }  
+            );
+            self.Notes.push(noteToAdd);
+        }
+
+        if(current_action == self.actions.NoteDeleted)
+        {
+            //storageForCallBacks.note.removed(current_data);
+        }
+
+        if(current_action == self.actions.ConnectionAdded)
+        {
+            var connectionToAdd = new ConnectedNotesModel(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label);
+            connectionToAdd.subscribeToLabelChanges
+            (
+                function(updated) {
+                    self.pushToHistory
+                    (
+                        {
+                            action: self.actions.ConnectionUpdated,
+                            data: updated
+                        }
+                    );
+                }
+            );
+            self.Connections.push(connectionToAdd)
+        }
+
+        if(current_action == self.actions.ConnectionDeleted)
+        {
+            //storageForCallBacks.connection.removed(current_data);
+        }
+        self.pushToHistory(item);
+    };
+
     self.populate = function(data) {
         var toAdd = ko.utils.arrayMap(data.notes, function(elem) {
                 var noteToAdd = new NoteModel(elem);
@@ -170,36 +233,36 @@ function ConnectedNotesViewModel()
     self.processCallBacks = function(item)
     {
         var current_action = item.action;
-            var current_data = item.data;
-            if(current_action == self.actions.NoteUpdated)
-            {
-                storageForCallBacks.note.updated(current_data);
-            }
+        var current_data = item.data;
+        if(current_action == self.actions.NoteUpdated)
+        {
+            storageForCallBacks.note.updated(current_data);
+        }
 
-            if(current_action == self.actions.ConnectionUpdated)
-            {
-                storageForCallBacks.connection.updated(current_data);
-            }
+        if(current_action == self.actions.ConnectionUpdated)
+        {
+            storageForCallBacks.connection.updated(current_data);
+        }
 
-            if(current_action == self.actions.NoteAdded)
-            {
-                storageForCallBacks.note.added(current_data);
-            }
+        if(current_action == self.actions.NoteAdded)
+        {
+            storageForCallBacks.note.added(current_data);
+        }
 
-            if(current_action == self.actions.NoteDeleted)
-            {
-                storageForCallBacks.note.removed(current_data);
-            }
+        if(current_action == self.actions.NoteDeleted)
+        {
+            storageForCallBacks.note.removed(current_data);
+        }
 
-            if(current_action == self.actions.ConnectionAdded)
-            {
-                storageForCallBacks.connection.added(current_data);
-            }
+        if(current_action == self.actions.ConnectionAdded)
+        {
+            storageForCallBacks.connection.added(current_data);
+        }
 
-            if(current_action == self.actions.ConnectionDeleted)
-            {
-                storageForCallBacks.connection.removed(current_data);
-            }
+        if(current_action == self.actions.ConnectionDeleted)
+        {
+            storageForCallBacks.connection.removed(current_data);
+        }
     };
 
     self.pushToHistory = function(item) {
@@ -679,7 +742,7 @@ function ConnectedNotesViewModel()
             console.log(plainText);
             var actionReceived = JSON.parse(plainText);
             actionReceived.isFromOuterSpace = true;
-            self.pushToHistory(actionReceived);
+            self.processMessageFromOuterSpace(actionReceived);
 
             //self.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText.cipher, e.data.id);   
         }
