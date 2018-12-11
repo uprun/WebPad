@@ -45,18 +45,6 @@ function NoteModel(data)
             y: self.y
         };
     };
-    self.text
-        .subscribe(function() {
-            var temp = self.ConvertToJs();
-            if(self.textChangesOccuredHandler && typeof(self.textChangesOccuredHandler) == "function") {
-                self.textChangesOccuredHandler(temp);
-            }
-        });
-
-    self.textChangesOccuredHandler;
-    self.subscribeToTextChanges = function(callback) {
-        self.textChangesOccuredHandler = callback;
-    };
 };
 
 function ConnectedNotesModel(id, sourceId, destinationId, label)
@@ -76,18 +64,6 @@ function ConnectedNotesModel(id, sourceId, destinationId, label)
             label: self.label()
         };
     };
-    self.label
-        .subscribe(function() {
-            var temp = self.ConvertToJs();
-            if(self.labelUpdateCallback && typeof(self.labelUpdateCallback) == "function") {
-                self.labelUpdateCallback(temp);
-            }
-        });
-    self.subscribeToLabelChanges = function(callback) {
-        self.labelUpdateCallback = callback;
-    };
-
-
 };
 
 var storageForCallBacks = {
@@ -143,73 +119,57 @@ function ConnectedNotesViewModel()
         var current_data = item.data;
         if(current_action == self.actions.NoteUpdated)
         {
-            //storageForCallBacks.note.updated(current_data);
+            var found = self.findNodeById(current_data.id);
+            if(found)
+            {
+                found.text(current_data.text);
+            }
         }
 
         if(current_action == self.actions.ConnectionUpdated)
         {
-            //storageForCallBacks.connection.updated(current_data);
+            var found = self.findEdgeById(current_data.id);
+            if(found)
+            {
+                found.label(current_data.label);
+            }
         }
 
         if(current_action == self.actions.NoteAdded)
         {
             var noteToAdd = new NoteModel(current_data);
-            noteToAdd.subscribeToTextChanges
-            (
-                function(updated) 
-                {
-                    self.pushToHistory
-                    (
-                        {
-                            action: self.actions.NoteUpdated,
-                            data: updated
-                        }
-                    );
-                }  
-            );
             self.Notes.push(noteToAdd);
         }
 
         if(current_action == self.actions.NoteDeleted)
         {
-            //storageForCallBacks.note.removed(current_data);
+            var found = self.findNodeById(current_data.id);
+            if(found)
+            {
+                self.Notes.remove(found);
+            }
         }
 
         if(current_action == self.actions.ConnectionAdded)
         {
             var connectionToAdd = new ConnectedNotesModel(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label);
-            connectionToAdd.subscribeToLabelChanges
-            (
-                function(updated) {
-                    self.pushToHistory
-                    (
-                        {
-                            action: self.actions.ConnectionUpdated,
-                            data: updated
-                        }
-                    );
-                }
-            );
             self.Connections.push(connectionToAdd)
         }
 
         if(current_action == self.actions.ConnectionDeleted)
         {
-            //storageForCallBacks.connection.removed(current_data);
+            var found = self.findEdgeById(current_data.id);
+            if(found)
+            {
+                self.Connections.remove(found);
+            }
         }
-        self.pushToHistory(item);
     };
 
     self.populate = function(data) {
-        var toAdd = ko.utils.arrayMap(data.notes, function(elem) {
-                var noteToAdd = new NoteModel(elem);
-                noteToAdd.subscribeToTextChanges(function(updated) {
-                    self.pushToHistory({
-                        action: self.actions.NoteUpdated,
-                        data: updated
-                    }
-                    );
-                }  );
+        var toAdd = ko.utils.arrayMap(data.notes, function(elem) 
+        {
+            var noteToAdd = new NoteModel(elem);
             return noteToAdd;
         });
         ko.utils.arrayPushAll(self.Notes, toAdd);
@@ -218,12 +178,6 @@ function ConnectedNotesViewModel()
 
         var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
             var connectionToAdd = new ConnectedNotesModel(elem.id, elem.SourceId, elem.DestinationId, elem.label);
-            connectionToAdd.subscribeToLabelChanges(function(updated) {
-                self.pushToHistory({
-                    action: self.actions.ConnectionUpdated,
-                    data: updated
-                });
-            });
             return connectionToAdd;
         });
         ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
@@ -266,6 +220,7 @@ function ConnectedNotesViewModel()
     };
 
     self.pushToHistory = function(item) {
+        self.processMessageFromOuterSpace(item);
         item.historyIndex = self.freeLocalIndex++;
         self.processCallBacks(item);        
         self.history.push(item);
@@ -742,7 +697,7 @@ function ConnectedNotesViewModel()
             console.log(plainText);
             var actionReceived = JSON.parse(plainText);
             actionReceived.isFromOuterSpace = true;
-            self.processMessageFromOuterSpace(actionReceived);
+            self.pushToHistory(actionReceived);
 
             //self.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText.cipher, e.data.id);   
         }
@@ -764,15 +719,7 @@ function ConnectedNotesViewModel()
                 x: obj.x,
                 y: obj.y
             });
-        toAdd.subscribeToTextChanges(
-            function(updated) {
-                self.pushToHistory({
-                        action: self.actions.NoteUpdated,
-                        data: updated
-                    }
-                ); 
-            }
-        );
+        
         self.Notes.push(toAdd);
         var added = toAdd.ConvertToJs();
         self.pushToHistory({
@@ -815,12 +762,6 @@ function ConnectedNotesViewModel()
             to.id,
             ""
         );
-        connectionToAdd.subscribeToLabelChanges(function(updated) {
-            self.pushToHistory({
-                action: self.actions.ConnectionUpdated,
-                data: updated
-            });
-        });
         self.Connections.push(connectionToAdd);
         var added = connectionToAdd.ConvertToJs();
         self.pushToHistory({
@@ -868,12 +809,39 @@ function ConnectedNotesViewModel()
         return result;
 
     }
+    self.textToEdit = ko.observable("");
+
+    self.textToEdit
+        .subscribe(function(changes) {
+            if(changes && self.NoteToEdit() && changes != self.NoteToEdit().text())
+            {
+                var toSend = self.NoteToEdit().ConvertToJs();
+                toSend.text = changes;
+                
+                self.pushToHistory({
+                        action: self.actions.NoteUpdated,
+                        data: toSend
+                    }
+                );
+            }
+            if(changes && self.EdgeToEdit() && changes != self.EdgeToEdit().label())
+            {
+                var toSend = self.EdgeToEdit().ConvertToJs();
+                toSend.label = changes;
+                self.pushToHistory({
+                    action: self.actions.ConnectionUpdated,
+                    data: toSend
+                });
+            }
+        });
+
 
     self.SelectNoteToEdit = function(id) {
         
         var from = self.findNodeById(id);
         if(from != null) {
             self.NoteToEdit( from );
+            self.textToEdit(from.text());
             self.SelectFrom( from );
         }
     };
@@ -887,6 +855,7 @@ function ConnectedNotesViewModel()
         var from = self.findEdgeById(id);
         if(from != null) {
             self.EdgeToEdit( from );
+            self.textToEdit(from.label());
         }
     };
 
@@ -1032,8 +1001,8 @@ $(document).ready(function()
             && params.edges.length == 1
             && params.nodes.length == 0 )
         {
-            viewModel.SelectEdgeToEdit(params.edges[0]);
             viewModel.DeselectNoteToEdit();
+            viewModel.SelectEdgeToEdit(params.edges[0]);
         }
     });
     
@@ -1043,8 +1012,8 @@ $(document).ready(function()
 
 
     network.on("selectNode", function (params) {
-        viewModel.SelectNoteToEdit(params.nodes[0]);
         viewModel.DeselectEdgeToEdit();
+        viewModel.SelectNoteToEdit(params.nodes[0]);
     });
 
     network.on("dragStart", function (params) {
@@ -1054,15 +1023,15 @@ $(document).ready(function()
             && params.edges.length == 1
             && params.nodes.length == 0 )
         {
-            viewModel.SelectEdgeToEdit(params.edges[0]);
             viewModel.DeselectNoteToEdit();
+            viewModel.SelectEdgeToEdit(params.edges[0]);
         }
 
         if(params 
             && params.nodes.length == 1 )
         {
-            viewModel.SelectNoteToEdit(params.nodes[0]);
             viewModel.DeselectEdgeToEdit();
+            viewModel.SelectNoteToEdit(params.nodes[0]);
         }
     });
 
