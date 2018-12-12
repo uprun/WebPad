@@ -137,8 +137,13 @@ function ConnectedNotesViewModel()
 
         if(current_action == self.actions.NoteAdded)
         {
-            var noteToAdd = new NoteModel(current_data);
-            self.Notes.push(noteToAdd);
+            var found = self.findNodeById(current_data.id);
+            if(!found)
+            {
+                var noteToAdd = new NoteModel(current_data);
+                self.Notes.push(noteToAdd);
+            }
+            
         }
 
         if(current_action == self.actions.NoteDeleted)
@@ -152,8 +157,12 @@ function ConnectedNotesViewModel()
 
         if(current_action == self.actions.ConnectionAdded)
         {
-            var connectionToAdd = new ConnectedNotesModel(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label);
-            self.Connections.push(connectionToAdd)
+            var found = self.findEdgeById(current_data.id);
+            if(!found)
+            {
+                var connectionToAdd = new ConnectedNotesModel(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label);
+                self.Connections.push(connectionToAdd)
+            }            
         }
 
         if(current_action == self.actions.ConnectionDeleted)
