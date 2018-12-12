@@ -383,6 +383,10 @@ function ConnectedNotesViewModel()
     self.ConvertToLocalId = function(itemToSend) 
     {
         var ownPublicKey = self.publicCryptoKey();
+        if(ownPublicKey == null || typeof(ownPublicKey) == undefined ) 
+        {
+            return itemToSend;
+        }
         var shrinkedOwnPublicKey = ownPublicKey.substring(0, 5) + '_' ;
        
                 
