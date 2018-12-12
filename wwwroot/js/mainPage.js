@@ -220,6 +220,7 @@ function ConnectedNotesViewModel()
     };
 
     self.pushToHistory = function(item) {
+        item = self.ConvertToLocalId(item);
         self.processMessageFromOuterSpace(item);
         item.historyIndex = self.freeLocalIndex++;
         self.processCallBacks(item);        
@@ -387,36 +388,33 @@ function ConnectedNotesViewModel()
                 
                     
 
-                    if(itemToSend.data)
-                    {
-                        var data = itemToSend.data;
-                        if(data.id)
-                        {
-                            if(data.id.startsWith(shrinkedOwnPublicKey))
-                            {
-                                data.id = self.localPrefix + data.id.substring(shrinkedOwnPublicKey.length);
-                            }
-                        }
-                        if(data.SourceId)
-                        {
-                            if(data.SourceId.startsWith(shrinkedOwnPublicKey))
-                            {
-                                data.SourceId = self.localPrefix + data.SourceId.substring(shrinkedOwnPublicKey.length);
-                            }
-                        }
-                        if(data.DestinationId)
-                        {
-                            if(data.DestinationId.startsWith(shrinkedOwnPublicKey))
-                            {
-                                data.DestinationId = self.localPrefix + data.DestinationId.substring(shrinkedOwnPublicKey.length);
-                            }
-                        }
-                    }
+        if(itemToSend.data)
+        {
+            var data = itemToSend.data;
+            if(data.id)
+            {
+                if(data.id.startsWith(shrinkedOwnPublicKey))
+                {
+                    data.id = self.localPrefix + data.id.substring(shrinkedOwnPublicKey.length);
+                }
+            }
+            if(data.SourceId)
+            {
+                if(data.SourceId.startsWith(shrinkedOwnPublicKey))
+                {
+                    data.SourceId = self.localPrefix + data.SourceId.substring(shrinkedOwnPublicKey.length);
+                }
+            }
+            if(data.DestinationId)
+            {
+                if(data.DestinationId.startsWith(shrinkedOwnPublicKey))
+                {
+                    data.DestinationId = self.localPrefix + data.DestinationId.substring(shrinkedOwnPublicKey.length);
+                }
+            }
+        }
 
-                    return {
-                        receiver: item.publicKey,
-                        message: JSON.stringify(itemToSend)
-                    }
+        return itemToSend;
                
 
             
@@ -538,6 +536,16 @@ function ConnectedNotesViewModel()
 
     self.ReceivedPublicKey = ko.observable("");
 
+    self.SyncOptionsVisible = ko.observable(false);
+    self.OpenSyncOptions = function() 
+    {
+        self.SyncOptionsVisible(true);
+    };
+    self.HideSyncOptions = function() 
+    {
+        self.SyncOptionsVisible(false);
+    };
+
 
     self.GetOneTimeSynchronizationToken = function() {
         self.TokenToShare("");
@@ -571,9 +579,17 @@ function ConnectedNotesViewModel()
 
     };
 
-    self.AddPublicKeyToTrusted = function(keyToAdd) {
-        var filtered = ko.utils.arrayFilter(self.TrustedPublicKeysToSendTo(), function(item){ return item.publicKey == keyToAdd;} );
+    self.findPublicKey = function(key) 
+    {
+        var filtered = ko.utils.arrayFilter(self.TrustedPublicKeysToSendTo(), function(item){ return item.publicKey == key;} );
         var foundMaybe = filtered.length > 0 ? filtered[0] : null;
+        return foundMaybe;
+
+    };
+
+    self.AddPublicKeyToTrusted = function(keyToAdd) {
+        
+        var foundMaybe = self.findPublicKey(keyToAdd);
         if(foundMaybe == null) {
             var toPush = {
                 status: "awaitingInitialSnapshot",
@@ -691,6 +707,13 @@ function ConnectedNotesViewModel()
         if(e.data.action == "decrypt.Result") {
             var decrypted = e.data.decryptionResult;
             var publicKeyOfSender = decrypted.publicKeyString;
+            var foundMaybe = self.findPublicKey(publicKeyOfSender);
+            if(foundMaybe == null)
+            {
+                self.ReceivedPublicKey(publicKeyOfSender);
+            }
+            
+            // put public key to trusted -> ReceivedPublicKey
             var signatureStatus = decrypted.signature;
             //var from = de
             var plainText = decrypted.plaintext;
@@ -719,8 +742,6 @@ function ConnectedNotesViewModel()
                 x: obj.x,
                 y: obj.y
             });
-        
-        self.Notes.push(toAdd);
         var added = toAdd.ConvertToJs();
         self.pushToHistory({
             action: self.actions.NoteAdded,
@@ -762,7 +783,6 @@ function ConnectedNotesViewModel()
             to.id,
             ""
         );
-        self.Connections.push(connectionToAdd);
         var added = connectionToAdd.ConvertToJs();
         self.pushToHistory({
             action: self.actions.ConnectionAdded,
