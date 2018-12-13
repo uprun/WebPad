@@ -322,7 +322,7 @@ function ConnectedNotesViewModel()
     self.SendMessage = function(item) {
         self.crypto_worker.postMessage({
             action: 'encrypt'
-            , PlainText: item.message
+            , PlainText: unescape(encodeURIComponent(item.message))
             , ReceiverPublicKey: item.receiver
             , Id: 1
         });
@@ -729,7 +729,7 @@ function ConnectedNotesViewModel()
             // put public key to trusted -> ReceivedPublicKey
             var signatureStatus = decrypted.signature;
             //var from = de
-            var plainText = decrypted.plaintext;
+            var plainText = decodeURIComponent(escape(decrypted.plaintext));
             console.log(plainText);
             var actionReceived = JSON.parse(plainText);
             actionReceived.isFromOuterSpace = true;
