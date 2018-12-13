@@ -745,7 +745,8 @@ function ConnectedNotesViewModel()
             var signatureStatus = decrypted.signature;
 
             var plainText = decodeURIComponent(escape(decrypted.plaintext));
-            console.log(plainText);
+            // console.log(publicKeyOfSender);
+            // console.log(plainText);
             var actionReceived = JSON.parse(plainText);
             actionReceived.isFromOuterSpace = true;
             self.pushToHistory(actionReceived);
