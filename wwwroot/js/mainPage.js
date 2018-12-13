@@ -143,6 +143,13 @@ function ConnectedNotesViewModel()
                 var noteToAdd = new NoteModel(current_data);
                 self.Notes.push(noteToAdd);
             }
+            else
+            {
+                if(!found.id.startsWith(self.localPrefix))
+                {
+                    found.text(current_data.text);
+                }
+            }
             
         }
 
@@ -162,7 +169,14 @@ function ConnectedNotesViewModel()
             {
                 var connectionToAdd = new ConnectedNotesModel(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label);
                 self.Connections.push(connectionToAdd)
-            }            
+            }
+            else
+            {
+                if(!found.id.startsWith(self.localPrefix))
+                {
+                    found.label(current_data.label);
+                }
+            }
         }
 
         if(current_action == self.actions.ConnectionDeleted)
@@ -496,6 +510,7 @@ function ConnectedNotesViewModel()
             ko.utils.arrayForEach(messages, function(item) {
                 self.SendMessage(item);
             });
+            self.saveTrustedPublicKeys();
         }
 
         self.ReceiveMessages(ownPublicKey);
@@ -728,14 +743,13 @@ function ConnectedNotesViewModel()
             
             // put public key to trusted -> ReceivedPublicKey
             var signatureStatus = decrypted.signature;
-            //var from = de
+
             var plainText = decodeURIComponent(escape(decrypted.plaintext));
             console.log(plainText);
             var actionReceived = JSON.parse(plainText);
             actionReceived.isFromOuterSpace = true;
             self.pushToHistory(actionReceived);
 
-            //self.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText.cipher, e.data.id);   
         }
     };
 
