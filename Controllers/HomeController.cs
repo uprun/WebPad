@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ConnectedNotes.Models;
 using Newtonsoft.Json;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
 
 namespace ConnectedNotes.Controllers
 {
     [RequestSizeLimit(100_000)]// explicit restriction to 100 kilobytes
     public class HomeController : Controller
     {
-
-        string notesName = "notes";
         public IActionResult Index()
         {
             return View();

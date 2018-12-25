@@ -17,6 +17,8 @@ namespace ConnectedNotes.Controllers
 
         public override void OnActionExecuting(ActionExecutingContext c)
         {
+            //TODO: some one can abuse this by blocking access to some one else by changing RemoteIpAddress header frequently
+            // TODO: change on doing work first principle, before asking for some action client first need to encrypt some random phrase or get token for action
             var key = string.Concat(Name, "-", c.HttpContext.Request.HttpContext.Connection.RemoteIpAddress);
 
             if (!Cache.TryGetValue(key, out bool entry))
