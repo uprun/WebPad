@@ -597,7 +597,7 @@ function ConnectedNotesViewModel()
             type: "POST",
             url: "Home/GetSyncPublicKey",
             data: {
-                token: self.SynchronizationToken()
+                token: self.SynchronizationToken().trim()
             },
             success: function(data){
                 self.ReceivedPublicKey(data);
