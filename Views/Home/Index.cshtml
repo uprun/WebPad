@@ -12,43 +12,50 @@
 <div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw;">
     <div style="text-align: center; width: 100%; margin-top: 60px;">
         WebPad 
-        <div data-bind="ifnot: $root.SyncOptionsVisible" >
-            <button data-bind="click: $root.OpenSyncOptions">Open Sync</button>
-        </div>
-        <div data-bind="if: $root.SyncOptionsVisible" >
-            <button data-bind="click: $root.HideSyncOptions">Hide Sync</button>
-        </div>
-        <div data-bind="if: $root.SyncOptionsVisible" >
-            <span>Your check code:&nbsp;</span>
-            <span data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
-            <br>
-            <button data-bind="click: $root.GetOneTimeSynchronizationToken"> Generate sync token</button>
-            <br>
-            <span>Share this sync token:&nbsp;</span>
-            <span data-bind="text: $root.TokenToShare"></span>
-            <br>
-            <input 
-                    placeholder="Input sync token..." 
-                    style="width: 30vw; min-width: 150px;" 
-                    type="text" 
-                    data-bind="
-                        textInput: $root.SynchronizationToken,
-                        " />
-            <br>
-            <button data-bind="click: $root.SynchronizeUsingToken"> Use sync token</button>
-            <br>
-            <span>Received check code:&nbsp;</span>
-            <span data-bind="text: $root.ReceivedPublicKey().substring(0, 10) + '...' "></span>
-            <span data-bind="if: $root.ReceivedPublicKey() != null  &&
-                    $root.ReceivedPublicKey() != undefined &&
-                    $root.ReceivedPublicKey().trim() != '' " >
-                    <br>
-                    Do you trust to this ? 
-                    <button data-bind="click: $root.AddReceivedPublicKeyToTrusted"> Trust</button>
-                    <button data-bind="click: $root.RemoveReceivedPublicKey"> No-no-no</button>
-            </span>
-            <br>
-        </div>
+        <span data-bind="if: $root.publicCryptoKey() != null  &&
+                    $root.publicCryptoKey() != undefined &&
+                    $root.publicCryptoKey().trim() != '' ">
+
+                    <div data-bind="ifnot: $root.SyncOptionsVisible" >
+                        <button data-bind="click: $root.OpenSyncOptions">Open Sync</button>
+                    </div>
+                    <div data-bind="if: $root.SyncOptionsVisible" >
+                        <button data-bind="click: $root.HideSyncOptions">Hide Sync</button>
+                    </div>
+                    <div data-bind="if: $root.SyncOptionsVisible" >
+                        <span>Your check code:&nbsp;</span>
+                        <span data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
+                        <br>
+                        <button data-bind="click: $root.GetOneTimeSynchronizationToken"> Generate sync token</button>
+                        <br>
+                        <span>Share this sync token:&nbsp;</span>
+                        <span data-bind="text: $root.TokenToShare"></span>
+                        <br>
+                        <input 
+                                placeholder="Input sync token..." 
+                                style="width: 30vw; min-width: 150px;" 
+                                type="text" 
+                                data-bind="
+                                    textInput: $root.SynchronizationToken,
+                                    " />
+                        <br>
+                        <button data-bind="click: $root.SynchronizeUsingToken"> Use sync token</button>
+                        <br>
+                        <span>Received check code:&nbsp;</span>
+                        <span data-bind="text: $root.ReceivedPublicKey().substring(0, 10) + '...' "></span>
+                        <span data-bind="if: $root.ReceivedPublicKey() != null  &&
+                                $root.ReceivedPublicKey() != undefined &&
+                                $root.ReceivedPublicKey().trim() != '' " >
+                                <br>
+                                Do you trust to this ? 
+                                <button data-bind="click: $root.AddReceivedPublicKeyToTrusted"> Trust</button>
+                                <button data-bind="click: $root.RemoveReceivedPublicKey"> No-no-no</button>
+                        </span>
+                        <br>
+                    </div>
+
+        </span>
+        
         
 
         <br>
