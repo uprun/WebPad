@@ -520,6 +520,7 @@ function ConnectedNotesViewModel()
     self.publicCryptoKey = ko.observable(undefined);
     // No need to store publicCryptoKey in local storage because in order to receive and send messages we will need private key to be restored first
     self.publicCryptoKey.subscribe(function(changes) {
+        self.RemoveOwnPublicKeyFromTrusted();
         self.processMessages();
 
     });
@@ -625,6 +626,15 @@ function ConnectedNotesViewModel()
                 publicKey: keyToAdd
             };
             self.TrustedPublicKeysToSendTo.push(toPush);
+        }
+    };
+
+    self.RemoveOwnPublicKeyFromTrusted = function()
+    {
+        var foundMaybe = self.findPublicKey(self.publicCryptoKey());
+        if(foundMaybe != null)
+        {
+            self.TrustedPublicKeysToSendTo.remove(foundMaybe);
         }
     };
 
