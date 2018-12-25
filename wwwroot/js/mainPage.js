@@ -518,6 +518,7 @@ function ConnectedNotesViewModel()
     };
 
     self.publicCryptoKey = ko.observable(undefined);
+    // No need to store publicCryptoKey in local storage because in order to receive and send messages we will need private key to be restored first
     self.publicCryptoKey.subscribe(function(changes) {
         self.processMessages();
 
@@ -648,7 +649,7 @@ function ConnectedNotesViewModel()
     };
 
 
-    self.saveOfKey = {};
+    self.privateCryptoPair = {};
 
     if(typeof(Worker) == "undefined") {
         console.log("Failed to find Worker.");
@@ -665,7 +666,7 @@ function ConnectedNotesViewModel()
         self.populate(data);
     }
     if(localStorage["privateCryptoPair"]){
-        self.saveOfKey = JSON.parse(localStorage.getItem("privateCryptoPair"));
+        self.privateCryptoPair = JSON.parse(localStorage.getItem("privateCryptoPair"));
     }
     
     if(localStorage["localFreeIndex"]) {
@@ -695,21 +696,13 @@ function ConnectedNotesViewModel()
         }
     }
 
-
-
-    if(localStorage["publicCryptoKey"]) {
-        self.publicCryptoKey(localStorage.getItem("publicCryptoKey"));
-        // trigger timer for sending changes
-
-    }
-
     
     self.crypto_worker.onmessage = function(e) {
         if(e.data.action == "applySaveOfKey.Result" ) {
-            if(typeof(self.saveOfKey.n) == "undefined") {
+            if(typeof(self.privateCryptoPair.n) == "undefined") {
                 localStorage.setItem("privateCryptoPair", JSON.stringify(e.data.data));
             }
-            self.crypto_worker.postMessage({action: 'getPublicKey', data: self.saveOfKey});
+            self.crypto_worker.postMessage({action: 'getPublicKey', data: self.privateCryptoPair});
         }
         if(e.data.action == "getPublicKey.Result") {
             var keyToUse = e.data.data;
@@ -723,7 +716,6 @@ function ConnectedNotesViewModel()
                 // self.AddPublicKeyToTrusted(keyToUse); // we need to keep history for our self in order to store everything not only on local machine but on server also
                 // because local storage is limited to 10 MB
                 self.publicCryptoKey(keyToUse);
-                localStorage.setItem("publicCryptoKey", keyToUse);
             }
             
             // start receiving outer world changes from here via timer
@@ -754,7 +746,7 @@ function ConnectedNotesViewModel()
         }
     };
 
-    self.crypto_worker.postMessage({action: 'applySaveOfKey', data: self.saveOfKey});
+    self.crypto_worker.postMessage({action: 'applySaveOfKey', data: self.privateCryptoPair});
     
 
     self.connectFrom = ko.observable(null);
