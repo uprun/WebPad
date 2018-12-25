@@ -15,6 +15,11 @@ namespace ConnectedNotes.Controllers
             return View();
         }
 
+        public IActionResult About()
+        {
+            return View();
+        }
+
         private static Dictionary<string, string> synchronization = new Dictionary<string, string>();
 
         private static Dictionary<string, List<string> > messageBox = new Dictionary<string, List<string> > ();
