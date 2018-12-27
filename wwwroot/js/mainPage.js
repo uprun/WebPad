@@ -965,7 +965,21 @@ $(document).ready(function()
         nodes: nodes,
         edges: edges
     };
-    var options = {};
+    //#2b7ce9
+    var options = 
+    {
+        edges: 
+            {
+
+                font:
+                    {
+                        color: '#2b7ce9',
+                        background: 'none',
+                        strokeWidth: 0, //px
+                    }
+
+            }
+    };
     var network = new vis.Network(container, data, options);
 
     

@@ -9,7 +9,23 @@
 <script language="JavaScript" type="text/javascript" src="~/js/cryptico/api.js"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
 
-<div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw;">
+<style>
+    button
+    {
+        background: #97c2fc;
+    }
+    input
+    {
+        background: #97c2fc;
+    }
+    a 
+    {
+        color: orange;
+    }
+    
+</style>
+
+<div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw; color: #2b7ce9;">
     <div style="text-align: center; width: 100%; margin-top: 60px;">
         WebPad <a href="~/home/about">about</a>
         <span data-bind="if: $root.publicCryptoKey() != null  &&
@@ -120,5 +136,5 @@
     </div>
     
 </div>
-<div id="mygraph" style="height: 100vh; width: 100%; z-index: 9;">
+<div id="mygraph" style="height: 100vh; width: 100%; z-index: 9; background-color:#333333;">
 </div>
