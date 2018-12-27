@@ -936,6 +936,14 @@ function ConnectedNotesViewModel()
         });
     };
 
+    self.ViewPortUpdated = function()
+    {
+        self.pushToHistory({
+            action: self.actions.PositionsUpdated,
+            data: null
+        });
+    }
+
     
 
 };
@@ -1127,12 +1135,19 @@ $(document).ready(function()
     });
 
     network.on("stabilizationIterationsDone", function(params) {
-        network.getPositions();
+        //network.getPositions();
     });
 
     network.on("stabilized", function(params) {
         var positions = network.getPositions();
         viewModel.UpdatePositionsOfNodes(positions);
+    });
+
+    network.on("release", function(params) {
+        viewModel.ViewPortUpdated();
+    });
+    network.on("zoom", function(params) {
+        viewModel.ViewPortUpdated();
     });
 
     
