@@ -68,7 +68,8 @@ function ConnectedNotesModel(id, sourceId, destinationId, label)
 
 var storageForCallBacks = {
     view: {
-        getFocusCoordinates: ''
+        getFocusCoordinates: '',
+        setFocusCoordinates: ''
     },
     note: {
         added: '',
@@ -284,6 +285,7 @@ function ConnectedNotesViewModel()
                         localStorage.setItem("Notes", JSON.stringify(toStoreNotes));
                         localStorage.setItem("Connections", JSON.stringify(toStoreConnections));
                         localStorage.setItem("localFreeIndex", JSON.stringify(self.freeLocalIndex));
+                        localStorage.setItem("viewPosition", JSON.stringify(storageForCallBacks.view.getFocusCoordinates()))
 
                         var filteredChanges = ko.utils.arrayFilter(addedChanges, function(item){ 
                                 return item.value.action != self.actions.PositionsUpdated 
@@ -685,6 +687,13 @@ function ConnectedNotesViewModel()
     else {
         self.freeLocalIndex = self.Notes().length + self.Connections().length + 1;
     }
+    //localStorage.setItem("viewPosition", JSON.stringify(storageForCallBacks.view.getFocusCoordinates()))
+
+    if(localStorage["viewPosition"])
+    {
+         var parsedViewPosition = JSON.parse(localStorage.getItem("viewPosition"));
+         storageForCallBacks.view.setFocusCoordinates(parsedViewPosition);
+    }
 
     if(localStorage["TrustedPublicKeysToSendTo"]){ 
         self.TrustedPublicKeysToSendTo(JSON.parse(localStorage.getItem("TrustedPublicKeysToSendTo")));
@@ -1038,11 +1047,31 @@ $(document).ready(function()
     };
 
     storageForCallBacks.view.getFocusCoordinates = function() {
-        return network.getViewPosition();
+        var result = network.getViewPosition();
+        result.scale = network.getScale();
+        return result;
+    };
+
+    storageForCallBacks.view.setFocusCoordinates = function(viewPosition) {
+        return network.moveTo(
+            {
+                position: 
+                    {
+                        x: viewPosition.x,
+                        y: viewPosition.y
+                    },
+                scale: viewPosition.scale,
+                animation: 
+                    {
+                        duration: 500,
+                        easingFunction: 'easeOutCubic'
+                    }
+            }
+        );
     };
     
     var viewModel = new ConnectedNotesViewModel();
-    ko.applyBindings(viewModel);        
+    ko.applyBindings(viewModel);
 
     network.on("selectEdge", function (params) {
         if(params 
