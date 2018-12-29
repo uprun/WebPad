@@ -12,11 +12,31 @@ namespace ConnectedNotes.Controllers
     {
         public IActionResult Index()
         {
+            Console.WriteLine($"main ip: {HttpContext.Connection.RemoteIpAddress.ToString()}");
+            foreach(var header in Request.Headers)
+            {
+                if(header.Key == "User-Agent")
+                {
+                    Console.WriteLine($"main User-Agent: {header}");
+                }
+                
+            }
+            Console.WriteLine("===============================================");
             return View();
         }
 
         public IActionResult About()
         {
+            Console.WriteLine($"About ip: {HttpContext.Connection.RemoteIpAddress.ToString()}");
+            foreach(var header in Request.Headers)
+            {
+                if(header.Key == "User-Agent")
+                {
+                    Console.WriteLine($"About User-Agent: {header}");
+                }
+                
+            }
+            Console.WriteLine("===============================================");
             return View();
         }
 
