@@ -261,7 +261,7 @@ function ConnectedNotesViewModel()
         .history
         .extend(
             { 
-                rateLimit: 1000 
+                rateLimit: 10000 
             }
         )
         .subscribe(
@@ -282,6 +282,8 @@ function ConnectedNotesViewModel()
                         var toStoreConnections = ko.utils.arrayMap(self.Connections(), function(item) {
                             return item.ConvertToJs();
                         });
+                       
+                        
                         localStorage.setItem("Notes", JSON.stringify(toStoreNotes));
                         localStorage.setItem("Connections", JSON.stringify(toStoreConnections));
                         localStorage.setItem("localFreeIndex", JSON.stringify(self.freeLocalIndex));
@@ -293,6 +295,33 @@ function ConnectedNotesViewModel()
                                     && !item.value.isFromOuterSpace;
                             } 
                         );
+
+                        console.log("before filter: " + filteredChanges.length);
+
+                         // filter changes here by same id
+                         var filter = {};
+                         // if foreach is sequential filter will keep latest index available for id
+                         ko.utils.arrayForEach(filteredChanges,
+                             function(item, index)
+                             {
+                                 if(item.value.data && item.value.data.id)
+                                 {
+                                     filter[item.value.data.id] = index;
+                                 }
+                             }
+                         );
+                         // therefore need to keep only latest item with same id, because there is rateLimit not all values will be published to other devices
+                         filteredChanges = ko.utils.arrayFilter(filteredChanges,
+                             function(item, index)
+                             {
+                                 if(item.value.data && item.value.data.id)
+                                 {
+                                     return filter[item.value.data.id] == index;
+                                 }
+                             }
+                         );
+
+                         console.log("after filter: " + filteredChanges.length);
 
 
 
