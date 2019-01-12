@@ -261,7 +261,7 @@ function ConnectedNotesViewModel()
         .history
         .extend(
             { 
-                rateLimit: 10000 
+                rateLimit: 3000 
             }
         )
         .subscribe(
@@ -306,7 +306,7 @@ function ConnectedNotesViewModel()
                              {
                                  if(item.value.data && item.value.data.id)
                                  {
-                                     filter[item.value.data.id] = index;
+                                     filter[item.value.action + item.value.data.id] = index;
                                  }
                              }
                          );
@@ -316,7 +316,7 @@ function ConnectedNotesViewModel()
                              {
                                  if(item.value.data && item.value.data.id)
                                  {
-                                     return filter[item.value.data.id] == index;
+                                     return filter[item.value.action + item.value.data.id] == index;
                                  }
                              }
                          );
@@ -545,7 +545,7 @@ function ConnectedNotesViewModel()
         }
 
         self.ReceiveMessages(ownPublicKey);
-        setTimeout(self.processMessages, 1000);
+        setTimeout(self.processMessages, 19000);
     };
 
     self.publicCryptoKey = ko.observable(undefined);
