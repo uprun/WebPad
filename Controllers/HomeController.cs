@@ -42,7 +42,7 @@ namespace ConnectedNotes.Controllers
 
         private static Dictionary<string, string> synchronization = new Dictionary<string, string>();
 
-        private static Dictionary<string, List<string> > messageBox = new Dictionary<string, List<string> > ();
+        private static Dictionary<(string Receiver, string Sender), List<string> > messageBox = new Dictionary<(string Receiver, string Sender), List<string> > ();
 
         private string GenerateToken()
         {
@@ -87,7 +87,7 @@ namespace ConnectedNotes.Controllers
         }
         
 
-        public JsonResult SendMessages(Message[] messages)
+        public JsonResult SendMessages(Message[] messages, string senderPublicKey)
         {
             if(messages.Length > 10)
             {
@@ -106,16 +106,17 @@ namespace ConnectedNotes.Controllers
             {
                 lock(messageBox)
                 {
-                    if(messageBox.ContainsKey(m.Receiver))
+                    var searchKey = ( Receiver: m.Receiver, Sender: senderPublicKey);
+                    if(messageBox.ContainsKey( searchKey ))
                     {
-                        var mailBoxOfReceiver = messageBox[m.Receiver];
+                        var mailBoxOfReceiver = messageBox[searchKey];
                         
                         mailBoxOfReceiver.Add(m.Text);
 
                     }
                     else
                     {
-                        messageBox.Add(m.Receiver, new List<string>() { m.Text });
+                        messageBox.Add(searchKey, new List<string>() { m.Text });
                     }
                 }
             }
@@ -130,13 +131,14 @@ namespace ConnectedNotes.Controllers
         
             lock(messageBox)
             {
-                if(messageBox.ContainsKey(publicKey))
-                {
-                    var mailBoxOfReceiver = messageBox[publicKey];
-                    result.AddRange(mailBoxOfReceiver.Take(5));
-                    messageBox[publicKey] = mailBoxOfReceiver.Skip(5).ToList();
-
-                }
+                messageBox.Keys.ToList()
+                .Where(x => x.Receiver == publicKey)
+                .ToList()
+                .ForEach(key => {
+                    var mailBoxOfReceiver = messageBox[key];
+                    result.AddRange(mailBoxOfReceiver.Take(2));
+                    messageBox[key] = mailBoxOfReceiver.Skip(2).ToList();
+                });
             }
            
 

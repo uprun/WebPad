@@ -395,7 +395,8 @@ function ConnectedNotesViewModel()
                         Receiver: receiver,
                         Text: text
                     }
-                ]
+                ],
+                senderPublicKey: self.publicCryptoKey()
             },
             success: function() {
             },
