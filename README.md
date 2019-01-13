@@ -1,10 +1,6 @@
-# ConnectedNotes
-Distributed crypto mindmap.
+# WebPad
+Personal, distributed, decentralized and encrypted web of semantic knowledge.
 
-Distributed crypto graph.
-
-Select any slogan above that fits your needs.
-
-Create a graph on the web-site and sync it among devices.
+Use it for mindmap, knowledge graph, family tree, semantic web, project management, task dependencies, groceries list - applications are limitless.
 
 Data is never exposed to server in plain-text, user owns his data, this is achived by user-side ecnryption.
