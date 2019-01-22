@@ -113,7 +113,7 @@
             <span data-bind="if: $root.previousConnectFrom() != null && $root.previousConnectFrom() !=  undefined " >
                 <span data-bind="ifnot: $root.previousConnectFrom() == $root.NoteToEdit()" >
                     <br>
-                    <button data-bind="click: $root.ConnectPreviousWithCurrent, text: ('Connect ' + $root.previousConnectFrom().text() + ' => ' + $root.NoteToEdit().text())"></button>
+                    <button data-bind="click: $root.ConnectPreviousWithCurrent, text: ('Connect from: ' + $root.previousConnectFrom().text() )"></button>
                 </span>
                 
             </span>

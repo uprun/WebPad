@@ -99,7 +99,8 @@ function ConnectedNotesViewModel()
         NoteDeleted: 'NoteDeleted',
         ConnectionAdded: 'ConnectionAdded',
         ConnectionDeleted: 'ConnectionDeleted',
-        PositionsUpdated: 'PositionsUpdated'
+        PositionsUpdated: 'PositionsUpdated',
+        HealthCheckRequest: 'HealthCheckRequest'
     };
 
     
@@ -544,6 +545,44 @@ function ConnectedNotesViewModel()
             });
             self.saveTrustedPublicKeys();
         }
+        var needToSavePublicKeys = false;
+        ko.utils.arrayForEach(self.TrustedPublicKeysToSendTo(), function(publicKey) {
+            var time_now = new Date();
+            var conditionApplies = false;
+            if(publicKey.lastTimeHealthChecked)
+            {
+                var hours_26_check_ms = 26 * 60 * 60 * 1000; // value of 26 hours in milliseconds
+                
+                var diff_ms = time_now - publicKey.lastTimeHealthChecked;
+                if(diff_ms < 0 || diff_ms > hours_26_check_ms)
+                {
+                    conditionApplies = true;
+                }
+            }
+            else
+            {
+                conditionApplies = true;
+            }
+            if(conditionApplies)
+            {
+                publicKey.lastTimeHealthChecked = time_now;
+                needToSavePublicKeys = true;
+                self.pushToHistory({
+                    action: self.actions.HealthCheckRequest,
+                    data: { 
+                        checkedIndex: undefined,
+                        publicKey: publicKey.publicKey 
+                    }
+                });
+            }
+        });
+        
+        if(needToSavePublicKeys)
+        {
+            self.saveTrustedPublicKeys();
+        }
+
+        self.TrustedPublicKeysToSendTo()
 
         self.ReceiveMessages(ownPublicKey);
         setTimeout(self.processMessages, 19000);
