@@ -891,7 +891,7 @@ function ConnectedNotesViewModel()
             {
                 id: self.getLocalIndex(),
                 text: obj.text,
-                x: obj.x,
+                x: obj.x + 100,
                 y: obj.y
             });
         var added = toAdd.ConvertToJs();
