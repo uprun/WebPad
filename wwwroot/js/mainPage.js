@@ -100,7 +100,9 @@ function ConnectedNotesViewModel()
         ConnectionAdded: 'ConnectionAdded',
         ConnectionDeleted: 'ConnectionDeleted',
         PositionsUpdated: 'PositionsUpdated',
-        HealthCheckRequest: 'HealthCheckRequest'
+        HealthCheckRequest: 'HealthCheckRequest',
+        HealthCheckIdsProposal: 'HealthCheckIdsProposal'
+
     };
 
     
@@ -114,6 +116,24 @@ function ConnectedNotesViewModel()
     self.crypto_worker = new Worker("js/worker-crypto.js");
 
     self.history = ko.observableArray([]);
+
+    /**
+     * Define the chunk method in the prototype of an array
+     * that returns an array with arrays of the given size.
+     *
+     * @param chunkSize {Integer} Size of every group
+     */
+    Object.defineProperty(Array.prototype, 'chunk', {
+        value: function(chunkSize){
+            var temporal = [];
+            
+            for (var i = 0; i < this.length; i+= chunkSize){
+                temporal.push(this.slice(i,i+chunkSize));
+            }
+                    
+            return temporal;
+        }
+    });
 
     self.processMessageFromOuterSpace = function(item)
     {
@@ -189,6 +209,30 @@ function ConnectedNotesViewModel()
                 self.Connections.remove(found);
             }
         }
+
+        // if(current_action == self.actions.HealthCheckRequest)
+        // {
+        //     var toStoreNotes = ko.utils.arrayMap(self.Notes(), function(item) {
+        //         return item.id;
+        //     });
+        //     var toStoreConnections = ko.utils.arrayMap(self.Connections(), function(item) {
+        //         return item.id;
+        //     });
+        //     var all_available_ids = toStoreNotes.concat(toStoreConnections);
+        //     var chunked_ids = all_available_ids.chunk(40);
+
+        //     ko.utils.arrayForEach(chunked_ids, function(item, id) {
+        //         self.pushToHistory({
+        //             action: self.actions.HealthCheckIdsProposal,
+        //             data: { 
+        //                 checkedIndex: undefined,
+        //                 publicKey: publicKey.publicKey 
+        //             }
+        //         });
+        //     });
+
+
+        // }
     };
 
     self.populate = function(data) {
@@ -1039,7 +1083,10 @@ $(document).ready(function()
     {
         edges: 
             {
-
+                "smooth": {
+                    "type": "continuous",
+                    "forceDirection": "none"
+                  },
                 font:
                     {
                         color: '#2b7ce9',
@@ -1047,12 +1094,15 @@ $(document).ready(function()
                         strokeWidth: 0, //px
                     }
 
-            }
-    };
-    var network = new vis.Network(container, data, options);
+            },
+        "physics": {
+            "enabled": false,
+            "minVelocity": 0.75
+        }
 
-    
-    
+    };
+
+    var network = new vis.Network(container, data, options);
 
     storageForCallBacks.note.added = function (added) {
         var toAdd = {id: added.id, label: added.text, shape: 'box' };
