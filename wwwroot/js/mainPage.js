@@ -1276,6 +1276,11 @@ $(document).ready(function()
         viewModel.UpdatePositionsOfNodes(positions);
     });
 
+    network.on("dragEnd", function (params) {
+        var positions = network.getPositions();
+        viewModel.UpdatePositionsOfNodes(positions);
+    });
+
     network.on("release", function(params) {
         viewModel.ViewPortUpdated();
     });
