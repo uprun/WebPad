@@ -10,7 +10,7 @@ namespace ConnectedNotes.Controllers
     [RequestSizeLimit(100_000)]// explicit restriction to 100 kilobytes
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string source)
         {
             Console.WriteLine($"main ip: {HttpContext.Connection.RemoteIpAddress.ToString()}");
             foreach(var header in Request.Headers)
@@ -21,6 +21,7 @@ namespace ConnectedNotes.Controllers
                 }
                 
             }
+            Console.WriteLine($"Source: {source ?? "undefined"}");
             Console.WriteLine("===============================================");
             return View();
         }
