@@ -30,42 +30,6 @@ else {
     // Too bad, no localStorage for us
 }
 
-function NoteModel(data)
-{
-    var self = this;
-    self.id = data.id;
-    self.text = ko.observable(data.text);
-    self.x = data.x;
-    self.y = data.y;
-    self.ConvertToJs = function() {
-        return {
-            id: self.id,
-            text: self.text(),
-            x: self.x,
-            y: self.y
-        };
-    };
-};
-
-function ConnectedNotesModel(id, sourceId, destinationId, label)
-{
-
-    var self = this;
-    self.id = id;
-    self.SourceId = sourceId;
-    self.DestinationId = destinationId;
-    self.label = ko.observable(label);
-    self.labelUpdateCallback;
-    self.ConvertToJs = function() {
-        return {
-            id: self.id,
-            SourceId: self.SourceId,
-            DestinationId:  self.DestinationId,
-            label: self.label()
-        };
-    };
-};
-
 var storageForCallBacks = {
     view: {
         getFocusCoordinates: '',
@@ -162,7 +126,7 @@ function ConnectedNotesViewModel()
             var found = self.findNodeById(current_data.id);
             if(!found)
             {
-                var noteToAdd = new NoteModel(current_data);
+                var noteToAdd = new model_Node(current_data);
                 self.Notes.push(noteToAdd);
             }
             else
@@ -189,7 +153,7 @@ function ConnectedNotesViewModel()
             var found = self.findEdgeById(current_data.id);
             if(!found)
             {
-                var connectionToAdd = new ConnectedNotesModel(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label);
+                var connectionToAdd = new model_Connection(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label);
                 self.Connections.push(connectionToAdd)
             }
             else
@@ -238,7 +202,7 @@ function ConnectedNotesViewModel()
     self.populate = function(data) {
         var toAdd = ko.utils.arrayMap(data.notes, function(elem) 
         {
-            var noteToAdd = new NoteModel(elem);
+            var noteToAdd = new model_Node(elem);
             return noteToAdd;
         });
         ko.utils.arrayPushAll(self.Notes, toAdd);
@@ -246,7 +210,7 @@ function ConnectedNotesViewModel()
         storageForCallBacks.note.initialLoad(data.notes);
 
         var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
-            var connectionToAdd = new ConnectedNotesModel(elem.id, elem.SourceId, elem.DestinationId, elem.label);
+            var connectionToAdd = new model_Connection(elem.id, elem.SourceId, elem.DestinationId, elem.label);
             return connectionToAdd;
         });
         ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
@@ -395,13 +359,31 @@ function ConnectedNotesViewModel()
     };
 
     self.SearchNotesQuery = ko.observable("");
+
+    self.MaxSearchResults = ko.observable(4);
+
+    self.FilteredNodes = ko.computed(function() {
+        return ko.utils.arrayFilter
+        (
+            self.Notes(), 
+            function(item, index)
+                { 
+                    var result =item.text().toLowerCase().indexOf(self.SearchNotesQuery().trim().toLowerCase()) >= 0;
+                    return result;
+                }
+        );
+    });
+
+    self.FilteredNodesFirstElements = ko.computed(function()
+    {
+        return self.FilteredNodes().slice(0, self.MaxSearchResults());
+    });
+
     self.SearchFilter = function(item, searchTerm) {
         searchTerm = searchTerm.trim().toLowerCase();
         var searchString = item.text.toLowerCase();
         return searchString.indexOf(searchTerm) > -1;
     };
-
-    self.SearchDestinationNotesQuery = ko.observable("");
 
     self.SearchableNotes = ko.computed(function() {
         return ko.utils.arrayMap(self.Notes(), function(item) {
@@ -887,7 +869,7 @@ function ConnectedNotesViewModel()
     self.CreateNote = function(obj, callback) {
 
         
-        var toAdd = new NoteModel(
+        var toAdd = new model_Node(
             {
                 id: self.getLocalIndex(),
                 text: obj.text,
@@ -929,7 +911,7 @@ function ConnectedNotesViewModel()
     };
 
     self.ConnectNotes = function(from, to) {
-        var connectionToAdd = new ConnectedNotesModel(
+        var connectionToAdd = new model_Connection(
             self.getLocalIndex(),
             from.id,
             to.id,

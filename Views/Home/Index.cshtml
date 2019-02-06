@@ -7,6 +7,8 @@
 <script language="JavaScript" type="text/javascript" src="~/js/cryptico/rsa.js"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/cryptico/aes.js"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/cryptico/api.js"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/model_Connection.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/model_Node.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
 
 <style>
@@ -98,7 +100,19 @@
                     " />
             <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
                 <button data-bind="click: $root.CreateNoteFromSearchQuery">Create</button>
-            </span>  
+                <br>
+                <br>
+                <span data-bind="foreach: FilteredNodesFirstElements">
+                    <button data-bind="text: 'goto: ' + text().substring(0, 10) + ' ...'"></button>
+                </span>
+                <span data-bind="if: (FilteredNodes().length - FilteredNodesFirstElements().length) > 0">
+                    <span data-bind="text: (FilteredNodes().length - FilteredNodesFirstElements().length) + 'more'"></span>
+                </span>
+                
+            </span>
+            
+            
+            
         </span>
         
         <span data-bind="if: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
