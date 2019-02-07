@@ -40,7 +40,8 @@ var storageForCallBacks = {
         updated: '',
         removed: '',
         applySelection: '',
-        initialLoad: ''
+        initialLoad: '',
+        highlight: ''
     },
     connection: {
         added: '',
@@ -362,7 +363,7 @@ function ConnectedNotesViewModel()
 
     self.MaxSearchResults = ko.observable(4);
 
-    self.FilteredNodes = ko.computed(function() {
+    self.FilteredNodes = ko.pureComputed(function() {
         return ko.utils.arrayFilter
         (
             self.Notes(), 
@@ -374,10 +375,44 @@ function ConnectedNotesViewModel()
         );
     });
 
-    self.FilteredNodesFirstElements = ko.computed(function()
-    {
-        return self.FilteredNodes().slice(0, self.MaxSearchResults());
-    });
+    self.FilteredNodesFirstElements = ko.pureComputed(function()
+        {
+            return self.FilteredNodes().slice(0, self.MaxSearchResults());
+        });
+
+    self.previousHighlighted = [];
+    self.FilteredNodesFirstElements
+        .subscribe(
+            function(changes) {
+                var addedChanges = ko.utils.arrayMap(changes, function(item){ 
+                        return item.ConvertToJs();
+                    } 
+                );
+                var hash = {};
+                if(self.SearchNotesQuery().trim().length > 0)
+                {
+
+                    ko.utils.arrayForEach(addedChanges, function(item)
+                        {
+                            storageForCallBacks.note.highlight(item, 2);
+                            hash[item.id] = true;
+                        }
+                    );
+
+                }
+
+                ko.utils.arrayForEach(self.previousHighlighted, function(item)
+                    {
+                        if(!hash[item.id])
+                        {
+                            storageForCallBacks.note.highlight(item, 0);
+                        }
+                    }
+                );
+                self.previousHighlighted = addedChanges.slice(0);
+
+            }
+        );
 
     self.SearchFilter = function(item, searchTerm) {
         searchTerm = searchTerm.trim().toLowerCase();
@@ -1102,6 +1137,40 @@ $(document).ready(function()
 
     storageForCallBacks.note.updated = function(changed) {
         nodes.update({id: changed.id, label: changed.text}); 
+    };
+
+    storageForCallBacks.note.highlight = function(node, level) {
+        if(level == 0)  
+        {
+            nodes.update(
+                {
+                    id: node.id,
+                    color: 
+                        {
+                            background:'#97c2fc',
+                            border:'#4385de'
+                        } 
+                }
+            );
+        }
+        if(level == 1)  
+        {
+            nodes.update({id: node.id, color: 'rgb(255,168,7)'});
+        }
+        if(level == 2)
+        {
+            nodes.update(
+                {
+                    id: node.id,
+                    color:
+                        {
+                            background: 'rgb(255,168,7)',
+                            border:'#4385de'
+                        }
+                }
+            );
+        }
+        
     };
 
     storageForCallBacks.note.removed = function(node) {
