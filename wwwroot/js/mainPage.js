@@ -33,7 +33,8 @@ else {
 var storageForCallBacks = {
     view: {
         getFocusCoordinates: '',
-        setFocusCoordinates: ''
+        setFocusCoordinates: '',
+        setFocusOnNode: ''
     },
     note: {
         added: '',
@@ -413,18 +414,11 @@ function ConnectedNotesViewModel()
 
             }
         );
-
-    self.SearchFilter = function(item, searchTerm) {
-        searchTerm = searchTerm.trim().toLowerCase();
-        var searchString = item.text.toLowerCase();
-        return searchString.indexOf(searchTerm) > -1;
+    
+    self.focusOnNode = function(item)
+    {
+        storageForCallBacks.view.setFocusOnNode(item.id);
     };
-
-    self.SearchableNotes = ko.computed(function() {
-        return ko.utils.arrayMap(self.Notes(), function(item) {
-            return {text: item.text(), id: item.id};
-        });
-    });
 
     self.SendMessage = function(item) {
         self.crypto_worker.postMessage({
@@ -1261,6 +1255,21 @@ $(document).ready(function()
             }
         );
     };
+
+    storageForCallBacks.view.setFocusOnNode = function(id) {
+        var nodesPositions = network.getPositions([id]);
+        return network.moveTo(
+            {
+                position: nodesPositions[id],
+                scale: 1.2,
+                animation: 
+                    {
+                        duration: 500,
+                        easingFunction: 'easeOutCubic'
+                    }
+            }
+        );
+    };
     
     var viewModel = new ConnectedNotesViewModel();
     ko.applyBindings(viewModel);
@@ -1336,6 +1345,10 @@ $(document).ready(function()
         viewModel.ViewPortUpdated();
     });
     network.on("zoom", function(params) {
+        viewModel.ViewPortUpdated();
+    });
+
+    network.on("animationFinished", function(params) {
         viewModel.ViewPortUpdated();
     });
 

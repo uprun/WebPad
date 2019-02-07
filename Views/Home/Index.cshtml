@@ -103,7 +103,7 @@
                 <br>
                 <br>
                 <span data-bind="foreach: FilteredNodesFirstElements">
-                    <button data-bind="text: 'goto: ' + text().substring(0, 10) + ' ...'"></button>
+                    <button data-bind="click: $root.focusOnNode, text: 'goto: ' + text().substring(0, 10) + ' ...'"></button>
                 </span>
                 <span data-bind="if: (FilteredNodes().length - FilteredNodesFirstElements().length) > 0">
                     <span data-bind="text: (FilteredNodes().length - FilteredNodesFirstElements().length) + 'more'"></span>
