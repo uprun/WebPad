@@ -383,6 +383,11 @@ function ConnectedNotesViewModel()
 
     self.previousHighlighted = [];
     self.FilteredNodesFirstElements
+        .extend(
+            { 
+                rateLimit: 1500 
+            }
+        )
         .subscribe(
             function(changes) {
                 var addedChanges = ko.utils.arrayMap(changes, function(item){ 
