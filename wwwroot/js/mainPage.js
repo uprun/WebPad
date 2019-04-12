@@ -969,6 +969,17 @@ function ConnectedNotesViewModel()
         });
     };
 
+    self.ColorNode = function() {
+        var toWorkWith = self.NoteToEdit();
+        toWorkWith.color = "#e93e0c";
+
+        var info = toWorkWith.ConvertToJs();
+        self.pushToHistory({
+            action: self.actions.NoteUpdated,
+            data: info
+        });
+    };
+
     self.RemoveConnectionUnderEdit = function() {
         var toRemove = self.EdgeToEdit();
         self.Connections.remove(toRemove);
@@ -1111,6 +1122,15 @@ $(document).ready(function()
                     }
 
             },
+        nodes: 
+            {
+                chosen:
+                {
+                    node: false
+                },
+
+            },
+        
         "physics": {
             "enabled": false,
             "minVelocity": 0.75
@@ -1121,7 +1141,23 @@ $(document).ready(function()
     var network = new vis.Network(container, data, options);
 
     storageForCallBacks.note.added = function (added) {
-        var toAdd = {id: added.id, label: added.text, shape: 'box' };
+        
+        var color_to_apply = added.color;
+        if(typeof(color_to_apply) == "undefined" || color_to_apply == null)
+        {
+            color_to_apply = '#97c2fc';
+        }
+
+        var toAdd = {
+            id: added.id,
+            label: added.text,
+            shape: 'box',
+            color: 
+            {
+                background: color_to_apply,
+                border:'#4385de'
+            } 
+         };
         if(added.x && typeof(added.x) != "undefined")
         {
             toAdd.x = added.x;
@@ -1135,7 +1171,22 @@ $(document).ready(function()
     };
 
     storageForCallBacks.note.updated = function(changed) {
-        nodes.update({id: changed.id, label: changed.text}); 
+        var color_to_apply = changed.color;
+        if(typeof(color_to_apply) == "undefined" || color_to_apply == null)
+        {
+            color_to_apply = '#97c2fc';
+        }
+        nodes.update(
+            {
+                id: changed.id, 
+                label: changed.text,
+                color: 
+                    {
+                        background: color_to_apply,
+                        border:'#4385de'
+                    }
+            }
+        ); 
     };
 
     storageForCallBacks.note.highlight = function(node, level) {
@@ -1172,6 +1223,8 @@ $(document).ready(function()
         
     };
 
+    
+
     storageForCallBacks.note.removed = function(node) {
         nodes.remove(node.id);
     };
@@ -1183,7 +1236,21 @@ $(document).ready(function()
 
     storageForCallBacks.note.initialLoad = function (nodesList) {
         var toAddNodes = ko.utils.arrayMap(nodesList, function(added) {
-            var toAdd = {id: added.id, label: added.text, shape: 'box' };
+            var color_to_apply = added.color;
+            if(typeof(color_to_apply) == "undefined" || color_to_apply == null)
+            {
+                color_to_apply = '#97c2fc';
+            }
+            var toAdd = {
+                id: added.id, 
+                label: added.text, 
+                shape: 'box',
+                color: 
+                    {
+                        background: color_to_apply,
+                        border:'#4385de'
+                    }
+             };
             if(added.x && typeof(added.x) != "undefined")
             {
                 toAdd.x = added.x;
