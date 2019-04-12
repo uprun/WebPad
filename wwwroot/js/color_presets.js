@@ -1,1 +1,0 @@
-var color_presets = [ "#e93e0c", "#e009f2", "#13f209", "#f8df00", "#97c2fc" ];

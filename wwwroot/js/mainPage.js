@@ -75,6 +75,7 @@ function ConnectedNotesViewModel()
     self.freeLocalIndex = 0;
     self.localPrefix = '_local_';
     self.Notes = ko.observableArray([]);
+    self.ColorPresets = ko.observableArray([]);
     self.Connections = ko.observableArray([]);
 
     self.crypto_worker = undefined;
@@ -201,6 +202,8 @@ function ConnectedNotesViewModel()
         // }
     };
 
+    var color_presets = [ "#e93e0c", "#e009f2", "#13f209", "#f8df00", "#97c2fc" ];
+
     self.populate = function(data) {
         var toAdd = ko.utils.arrayMap(data.notes, function(elem) 
         {
@@ -217,6 +220,13 @@ function ConnectedNotesViewModel()
         });
         ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
         storageForCallBacks.connection.initialLoad(data.connections);
+
+        var toAddColors = ko.utils.arrayMap(color_presets, function(elem) 
+        {
+            var toReturn = new model_ColorPreset(elem);
+            return toReturn;
+        });
+        ko.utils.arrayPushAll(self.ColorPresets, toAddColors);
     };
 
     self.processCallBacks = function(item)
@@ -969,9 +979,9 @@ function ConnectedNotesViewModel()
         });
     };
 
-    self.ColorNode = function() {
+    self.ColorNode = function(colorToApply) {
         var toWorkWith = self.NoteToEdit();
-        toWorkWith.color = "#e93e0c";
+        toWorkWith.color = colorToApply.Color;
 
         var info = toWorkWith.ConvertToJs();
         self.pushToHistory({
