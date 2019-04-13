@@ -1,11 +1,13 @@
-function model_ColorPreset(color)
+function model_ColorPreset(data)
 {
 
     var self = this;
-    self.Color = color;
+    self.Background = ko.observable(data.background);
+    self.Color = ko.observable(data.color);
     self.ConvertToJs = function() {
         return {
-            Color: self.color
+            Color: self.Color(),
+            Background: self.Background()
         };
     };
 };

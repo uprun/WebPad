@@ -112,6 +112,8 @@ function ConnectedNotesViewModel()
             if(found)
             {
                 found.text(current_data.text);
+                found.color = current_data.color;
+                found.background = current_data.background;
             }
         }
 
@@ -202,7 +204,27 @@ function ConnectedNotesViewModel()
         // }
     };
 
-    var color_presets = [ "#e93e0c", "#e009f2", "#13f209", "#f8df00", "#97c2fc" ];
+    var color_presets = [ 
+        { 
+            background: "#ff5e00",
+            color: "#000000" 
+        },
+        { 
+            background: "#6a1b9a",
+            color: "#ffffff" 
+        },
+        { 
+            background: "#13f209",
+            color: "#000000" 
+        },
+        { 
+            background: "#f8df00",
+            color: "#000000" 
+        },
+        { 
+            background: "#97c2fc",
+            color: "#000000" 
+        }];
 
     self.populate = function(data) {
         var toAdd = ko.utils.arrayMap(data.notes, function(elem) 
@@ -981,7 +1003,8 @@ function ConnectedNotesViewModel()
 
     self.ColorNode = function(colorToApply) {
         var toWorkWith = self.NoteToEdit();
-        toWorkWith.color = colorToApply.Color;
+        toWorkWith.color = colorToApply.Color();
+        toWorkWith.background = colorToApply.Background();
 
         var info = toWorkWith.ConvertToJs();
         self.pushToHistory({
@@ -1152,10 +1175,15 @@ $(document).ready(function()
 
     storageForCallBacks.note.added = function (added) {
         
-        var color_to_apply = added.color;
-        if(typeof(color_to_apply) == "undefined" || color_to_apply == null)
+        var color_to_apply_background = added.background;
+        if(typeof(color_to_apply_background) == "undefined" || color_to_apply_background == null)
         {
-            color_to_apply = '#97c2fc';
+            color_to_apply_background = '#97c2fc';
+        }
+        var color_to_apply_font = added.color;
+        if(typeof(color_to_apply_font) == "undefined" || color_to_apply_font == null)
+        {
+            color_to_apply_font = '#333333';
         }
 
         var toAdd = {
@@ -1164,9 +1192,13 @@ $(document).ready(function()
             shape: 'box',
             color: 
             {
-                background: color_to_apply,
+                background: color_to_apply_background,
                 border:'#4385de'
-            } 
+            },
+            font:
+                {
+                    color: color_to_apply_font
+                } 
          };
         if(added.x && typeof(added.x) != "undefined")
         {
@@ -1181,10 +1213,15 @@ $(document).ready(function()
     };
 
     storageForCallBacks.note.updated = function(changed) {
-        var color_to_apply = changed.color;
-        if(typeof(color_to_apply) == "undefined" || color_to_apply == null)
+        var color_to_apply_background = changed.background;
+        if(typeof(color_to_apply_background) == "undefined" || color_to_apply_background == null)
         {
-            color_to_apply = '#97c2fc';
+            color_to_apply_background = '#97c2fc';
+        }
+        var color_to_apply_font = changed.color;
+        if(typeof(color_to_apply_font) == "undefined" || color_to_apply_font == null)
+        {
+            color_to_apply_font = '#333333';
         }
         nodes.update(
             {
@@ -1192,8 +1229,12 @@ $(document).ready(function()
                 label: changed.text,
                 color: 
                     {
-                        background: color_to_apply,
+                        background: color_to_apply_background,
                         border:'#4385de'
+                    },
+                font:
+                    {
+                        color: color_to_apply_font
                     }
             }
         ); 
@@ -1202,14 +1243,28 @@ $(document).ready(function()
     storageForCallBacks.note.highlight = function(node, level) {
         if(level == 0)  
         {
+            var color_to_apply_background = node.background;
+            if(typeof(color_to_apply_background) == "undefined" || color_to_apply_background == null)
+            {
+                color_to_apply_background = '#97c2fc';
+            }
+            var color_to_apply_font = node.color;
+            if(typeof(color_to_apply_font) == "undefined" || color_to_apply_font == null)
+            {
+                color_to_apply_font = '#333333';
+            }
             nodes.update(
                 {
                     id: node.id,
                     color: 
+                    {
+                        background: color_to_apply_background,
+                        border:'#4385de'
+                    },
+                    font:
                         {
-                            background:'#97c2fc',
-                            border:'#4385de'
-                        } 
+                            color: color_to_apply_font
+                        }
                 }
             );
         }
@@ -1246,10 +1301,15 @@ $(document).ready(function()
 
     storageForCallBacks.note.initialLoad = function (nodesList) {
         var toAddNodes = ko.utils.arrayMap(nodesList, function(added) {
-            var color_to_apply = added.color;
-            if(typeof(color_to_apply) == "undefined" || color_to_apply == null)
+            var color_to_apply_background = added.background;
+            if(typeof(color_to_apply_background) == "undefined" || color_to_apply_background == null)
             {
-                color_to_apply = '#97c2fc';
+                color_to_apply_background = '#97c2fc';
+            }
+            var color_to_apply_font = added.color;
+            if(typeof(color_to_apply_font) == "undefined" || color_to_apply_font == null)
+            {
+                color_to_apply_font = '#333333';
             }
             var toAdd = {
                 id: added.id, 
@@ -1257,8 +1317,12 @@ $(document).ready(function()
                 shape: 'box',
                 color: 
                     {
-                        background: color_to_apply,
+                        background: color_to_apply_background,
                         border:'#4385de'
+                    },
+                font:
+                    {
+                        color: color_to_apply_font
                     }
              };
             if(added.x && typeof(added.x) != "undefined")

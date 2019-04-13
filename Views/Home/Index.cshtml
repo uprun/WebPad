@@ -138,7 +138,7 @@
             
             <button data-bind="click: $root.CreateNoteFromDestinationSearchQuery">Add connection</button>
             <span data-bind="foreach: $root.ColorPresets">
-                <button data-bind="click: $root.ColorNode, css: {text: Color}">Highlight</button>
+                <button data-bind="click: $root.ColorNode, style: { 'background' : $data.Background(), color: $data.Color() }">Highlight</button>
             </span>
             
             
