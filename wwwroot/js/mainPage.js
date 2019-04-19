@@ -214,7 +214,7 @@ function ConnectedNotesViewModel()
             color: "#ffffff" 
         },
         { 
-            background: "#13f209",
+            background: "#19bd11",
             color: "#000000" 
         },
         { 
