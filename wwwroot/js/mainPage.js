@@ -226,6 +226,15 @@ function ConnectedNotesViewModel()
             color: "#000000" 
         }];
 
+    // populate colors immediately
+    var toAddColors = ko.utils.arrayMap(color_presets, function(elem) 
+    {
+        var toReturn = new model_ColorPreset(elem);
+        return toReturn;
+    });
+
+    ko.utils.arrayPushAll(self.ColorPresets, toAddColors);
+
     self.populate = function(data) {
         var toAdd = ko.utils.arrayMap(data.notes, function(elem) 
         {
@@ -243,12 +252,8 @@ function ConnectedNotesViewModel()
         ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
         storageForCallBacks.connection.initialLoad(data.connections);
 
-        var toAddColors = ko.utils.arrayMap(color_presets, function(elem) 
-        {
-            var toReturn = new model_ColorPreset(elem);
-            return toReturn;
-        });
-        ko.utils.arrayPushAll(self.ColorPresets, toAddColors);
+        
+        
     };
 
     self.processCallBacks = function(item)
