@@ -407,8 +407,16 @@ function ConnectedNotesViewModel()
             self.Notes(), 
             function(item, index)
                 { 
-                    var result =item.text().toLowerCase().indexOf(self.SearchNotesQuery().trim().toLowerCase()) >= 0;
-                    return result;
+                    if(self.SearchNotesQuery() && self.SearchNotesQuery().trim().length > 0)
+                    {
+                        var result = item.text().toLowerCase().indexOf(self.SearchNotesQuery().trim().toLowerCase()) >= 0;
+                        return result;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    
                 }
         );
     });
@@ -1179,7 +1187,7 @@ $(document).ready(function()
     var network = new vis.Network(container, data, options);
 
     storageForCallBacks.note.added = function (added) {
-        
+        console.log('storageForCallBacks.note.added');
         var color_to_apply_background = added.background;
         if(typeof(color_to_apply_background) == "undefined" || color_to_apply_background == null)
         {
@@ -1218,6 +1226,7 @@ $(document).ready(function()
     };
 
     storageForCallBacks.note.updated = function(changed) {
+        console.log('storageForCallBacks.note.updated');
         var color_to_apply_background = changed.background;
         if(typeof(color_to_apply_background) == "undefined" || color_to_apply_background == null)
         {
@@ -1246,6 +1255,7 @@ $(document).ready(function()
     };
 
     storageForCallBacks.note.highlight = function(node, level) {
+        console.log('storageForCallBacks.note.highlight');
         if(level == 0)  
         {
             var color_to_apply_background = node.background;
@@ -1275,17 +1285,34 @@ $(document).ready(function()
         }
         if(level == 1)  
         {
-            nodes.update({id: node.id, color: 'rgb(255,168,7)'});
+            nodes.update(
+                {
+                    id: node.id,
+                    color: 
+                    {
+                        background: 'rgb(255,168,7)',
+                        border:'#4385de'
+                    },
+                    font:
+                        {
+                            color: '#333333'
+                        }
+                }
+            );
         }
         if(level == 2)
         {
             nodes.update(
                 {
                     id: node.id,
-                    color:
+                    color: 
+                    {
+                        background: 'rgb(255,168,7)',
+                        border:'#4385de'
+                    },
+                    font:
                         {
-                            background: 'rgb(255,168,7)',
-                            border:'#4385de'
+                            color: '#333333'
                         }
                 }
             );
@@ -1296,15 +1323,18 @@ $(document).ready(function()
     
 
     storageForCallBacks.note.removed = function(node) {
+        console.log('storageForCallBacks.note.removed');
         nodes.remove(node.id);
     };
 
     storageForCallBacks.note.applySelection = function(id) {
+        console.log('storageForCallBacks.note.applySelection');
         network.selectNodes([id], true);
 
     };
 
     storageForCallBacks.note.initialLoad = function (nodesList) {
+        console.log('storageForCallBacks.note.initialLoad');
         var toAddNodes = ko.utils.arrayMap(nodesList, function(added) {
             var color_to_apply_background = added.background;
             if(typeof(color_to_apply_background) == "undefined" || color_to_apply_background == null)
