@@ -546,7 +546,7 @@ function ConnectedNotesViewModel()
     self.ConvertToLocalId = function(itemToSend) 
     {
         var ownPublicKey = self.publicCryptoKey();
-        if(ownPublicKey == null || typeof(ownPublicKey) == undefined ) 
+        if(typeof(ownPublicKey) == "undefined" || ownPublicKey == null) 
         {
             return itemToSend;
         }
@@ -1230,12 +1230,12 @@ $(document).ready(function()
                     color: color_to_apply_font
                 } 
          };
-        if(added.x && typeof(added.x) != "undefined")
+        if(typeof(added.x) != "undefined")
         {
             toAdd.x = added.x;
         }
 
-        if(added.y && typeof(added.y) != "undefined")
+        if(typeof(added.y) != "undefined")
         {
             toAdd.y = added.y;
         }
@@ -1379,12 +1379,12 @@ $(document).ready(function()
                         color: color_to_apply_font
                     }
              };
-            if(added.x && typeof(added.x) != "undefined")
+            if(typeof(added.x) != "undefined")
             {
                 toAdd.x = added.x;
             }
 
-            if(added.y && typeof(added.y) != "undefined")
+            if(typeof(added.y) != "undefined")
             {
                 toAdd.y = added.y;
             }
