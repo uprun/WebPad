@@ -114,6 +114,8 @@ function ConnectedNotesViewModel()
                 found.text(current_data.text);
                 found.color = current_data.color;
                 found.background = current_data.background;
+                found.x = current_data.x;
+                found.y = current_data.y;
             }
         }
 
@@ -690,7 +692,7 @@ function ConnectedNotesViewModel()
         self.TrustedPublicKeysToSendTo()
 
         self.ReceiveMessages(ownPublicKey);
-        setTimeout(self.processMessages, 19000);
+        setTimeout(self.processMessages, 3000);
     };
 
     self.publicCryptoKey = ko.observable(undefined);
@@ -1109,12 +1111,27 @@ function ConnectedNotesViewModel()
     };
 
     self.UpdatePositionsOfNodes = function (positions){
-        ko.utils.arrayForEach(self.Notes(), function(note) {
-            var found = positions[note.id];
-            if(found) {
-                note.x = found.x;
-                note.y = found.y;
+        for(var key in positions)
+        {
+            var elem = positions[key];
+            if(typeof(elem) != "function")
+            {
+                var nodeFound = self.findNodeById(key);
+                if(nodeFound) {
+                    nodeFound.x = elem.x;
+                    nodeFound.y = elem.y;
+                    var toSend = nodeFound.ConvertToJs();
+                    self.pushToHistory({
+                            action: self.actions.NoteUpdated,
+                            data: toSend
+                        }
+                    );
+                }
+
             }
+        }
+        ko.utils.arrayForEach(positions, function(position) {
+            
         });
         self.pushToHistory({
             action: self.actions.PositionsUpdated,
@@ -1249,7 +1266,9 @@ $(document).ready(function()
                 font:
                     {
                         color: color_to_apply_font
-                    }
+                    },
+                x: changed.x,
+                y: changed.y
             }
         ); 
     };
@@ -1513,16 +1532,20 @@ $(document).ready(function()
     });
 
     network.on("stabilized", function(params) {
-        var positions = network.getPositions();
-        viewModel.UpdatePositionsOfNodes(positions);
+        //var positions = network.getPositions();
+        //viewModel.UpdatePositionsOfNodes(positions);
     });
 
     network.on("dragEnd", function (params) {
-        var positions = network.getPositions();
-        viewModel.UpdatePositionsOfNodes(positions);
+        if(params.nodes.length > 0)
+        {
+            var positions = network.getPositions(params.nodes);
+            viewModel.UpdatePositionsOfNodes(positions);
+        }
     });
 
     network.on("release", function(params) {
+        
         viewModel.ViewPortUpdated();
     });
     network.on("zoom", function(params) {
