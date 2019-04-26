@@ -117,6 +117,11 @@ function ConnectedNotesViewModel()
                 found.x = current_data.x;
                 found.y = current_data.y;
             }
+            else
+            {
+                var noteToAdd = new model_Node(current_data);
+                self.Notes.push(noteToAdd);
+            }
         }
 
         if(current_action == self.actions.ConnectionUpdated)
@@ -125,6 +130,11 @@ function ConnectedNotesViewModel()
             if(found)
             {
                 found.label(current_data.label);
+            }
+            else
+            {
+                var connectionToAdd = new model_Connection(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label);
+                self.Connections.push(connectionToAdd)
             }
         }
 
