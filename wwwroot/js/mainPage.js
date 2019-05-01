@@ -247,6 +247,8 @@ function ConnectedNotesViewModel()
 
     ko.utils.arrayPushAll(self.ColorPresets, toAddColors);
 
+    self.colorFreeIndex = 0;
+
     self.populate = function(data) {
         var toAdd = ko.utils.arrayMap(data.notes, function(elem) 
         {
@@ -708,6 +710,7 @@ function ConnectedNotesViewModel()
     self.publicCryptoKey = ko.observable(undefined);
     // No need to store publicCryptoKey in local storage because in order to receive and send messages we will need private key to be restored first
     self.publicCryptoKey.subscribe(function(changes) {
+        self.StatisticsOnLoad();
         self.RemoveOwnPublicKeyFromTrusted();
         self.processMessages();
 
@@ -775,6 +778,20 @@ function ConnectedNotesViewModel()
             },
             success: function(data){
                 self.TokenToShare(data);
+            },
+            dataType: "json"
+        });
+
+    };
+
+    self.StatisticsOnLoad = function() {
+        $.ajax({
+            type: "POST",
+            url: "Home/StatisticsOnLoad",
+            data: {
+                publicKey: self.publicCryptoKey()
+            },
+            success: function(data){
             },
             dataType: "json"
         });

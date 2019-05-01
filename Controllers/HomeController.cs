@@ -146,6 +146,23 @@ namespace ConnectedNotes.Controllers
             return new JsonResult(result);
             
         }
+
+        public JsonResult StatisticsOnLoad(string publicKey)
+        {
+            Console.WriteLine($"StatisticsOnLoad ip: {HttpContext.Connection.RemoteIpAddress.ToString()}");
+            foreach(var header in Request.Headers)
+            {
+                if(header.Key == "User-Agent")
+                {
+                    Console.WriteLine($"About User-Agent: {header}");
+                }
+                
+            }
+            Console.WriteLine($"PublicKey: {publicKey}");
+            Console.WriteLine("===============================================");
+
+            return new JsonResult(true);
+        }
         
         [Throttle(Name = nameof(GetSyncPublicKey), Seconds = 5)]
         public JsonResult GetSyncPublicKey(string token)
