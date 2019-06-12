@@ -232,11 +232,13 @@ function ConnectedNotesViewModel()
         { 
             background: "#f8df00",
             color: "#000000" 
-        },
-        { 
-            background: "#97c2fc",
-            color: "#000000" 
-        }];
+        }
+        // ,
+        // { 
+        //     background: "#97c2fc",
+        //     color: "#000000" 
+        // }
+    ];
 
     // populate colors immediately
     var toAddColors = ko.utils.arrayMap(color_presets, function(elem) 
@@ -315,6 +317,21 @@ function ConnectedNotesViewModel()
 
     self.saveTrustedPublicKeys = function() {
         localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(self.TrustedPublicKeysToSendTo()));
+    };
+
+    self.GenerateConnection = function(A, Z)
+    {
+        if(A.label() == "is")
+        {
+            if(A.DestinationId == Z.SourceId)
+            {
+                if(Z.label() == "is")
+                {
+
+                }
+            }
+        }
+
     };
 
 
@@ -976,13 +993,16 @@ function ConnectedNotesViewModel()
 
     self.CreateNote = function(obj, callback) {
 
-        
+        var selectedColorIndex = Math.floor(Math.random() * color_presets.length);
+        var selectedColor = color_presets[selectedColorIndex];
         var toAdd = new model_Node(
             {
                 id: self.getLocalIndex(),
                 text: obj.text,
                 x: obj.x + 100,
-                y: obj.y
+                y: obj.y,
+                color: selectedColor.color,
+                background: selectedColor.background
             });
         var added = toAdd.ConvertToJs();
         self.pushToHistory({
@@ -1018,12 +1038,12 @@ function ConnectedNotesViewModel()
         self.ConnectNotes(self.previousConnectFrom(), self.connectFrom() )
     };
 
-    self.ConnectNotes = function(from, to) {
+    self.ConnectNotes = function(from, to, label) {
         var connectionToAdd = new model_Connection(
             self.getLocalIndex(),
             from.id,
             to.id,
-            ""
+            label ? label : ""
         );
         var added = connectionToAdd.ConvertToJs();
         self.pushToHistory({
