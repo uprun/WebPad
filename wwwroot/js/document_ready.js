@@ -26,7 +26,7 @@ $(document).ready(function()
                   },
                 font:
                     {
-                        color: '#2b7ce9',
+                        color: '#ffa500',
                         background: 'none',
                         strokeWidth: 0, //px
                     }
