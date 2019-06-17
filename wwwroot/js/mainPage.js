@@ -335,6 +335,26 @@ function ConnectedNotesViewModel()
 
     };
 
+    self.ActualGenerateConnections = function()
+    {
+        ko.utils.arrayForEach(
+            self.Connections(), 
+            function(itemA, indexA)
+                { 
+                    ko.utils.arrayForEach(
+                        self.Connections(), 
+                        function(itemB, indexB)
+                            { 
+                                if(indexA !== indexB)
+                                {
+                                    self.GenerateConnection(itemA, itemB);
+                                }
+                            } 
+                        );
+                } 
+            );
+    };
+
 
 
     self
@@ -1031,8 +1051,6 @@ function ConnectedNotesViewModel()
             self.previousConnectFrom(self.connectFrom());
             self.connectFrom(data);
         }
-        
-
     };
 
     self.ConnectPreviousWithCurrent = function() {
@@ -1047,10 +1065,26 @@ function ConnectedNotesViewModel()
             label ? label : ""
         );
         var added = connectionToAdd.ConvertToJs();
-        self.pushToHistory({
-            action: self.actions.ConnectionAdded,
-            data: added
-        });
+        var filtered = ko.utils.arrayFilter(
+            self.Connections(), 
+            function(item)
+                { 
+                    return item.SourceId == connectionToAdd.SourceId &&
+                        item.DestinationId == connectionToAdd.DestinationId &&
+                        item.label() == connectionToAdd.label();
+                } 
+            );
+        var searchResult = filtered.length > 0 ? filtered[0] : null;
+        // don't allow to create duplicate connections
+        if(!searchResult)
+        {
+            
+            self.pushToHistory({
+                action: self.actions.ConnectionAdded,
+                data: added
+            });
+        }
+        
     };
 
     self.RemoveNoteUnderEdit = function() {
