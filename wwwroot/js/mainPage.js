@@ -233,11 +233,6 @@ function ConnectedNotesViewModel()
             background: "#f8df00",
             color: "#000000" 
         }
-        // ,
-        // { 
-        //     background: "#97c2fc",
-        //     color: "#000000" 
-        // }
     ];
 
     // populate colors immediately
@@ -321,12 +316,18 @@ function ConnectedNotesViewModel()
 
     self.GenerateConnection = function(A, Z)
     {
+        //   A    Z         R
+        // X is Y is D => X is D
         if(A.label() == "is")
         {
             if(A.DestinationId == Z.SourceId)
             {
                 if(Z.label() == "is")
                 {
+                    var from = self.findNodeById(A.SourceId);
+                    var to = self.findNodeById(Z.DestinationId);
+                    self.ConnectNotes(from, to, "is");
+
 
                 }
             }
@@ -1089,17 +1090,56 @@ function ConnectedNotesViewModel()
 
     self.EdgeToEdit = ko.observable(null);
 
+    self.buffer_findNodeById = undefined;
     self.findNodeById = function(id)
     {
-        var filtered = ko.utils.arrayFilter(self.Notes(), function(item){ return item.id == id;} );
-        var result = filtered.length > 0 ? filtered[0] : null;
+        if(typeof(self.buffer_findNodeById) == "undefined")
+        {
+            self.buffer_findNodeById = {};
+            ko.utils.arrayForEach
+            (
+                self.Notes(), 
+                function(item) 
+                    {
+                        self.buffer_findNodeById[item.id] = item;
+                    }
+            );
+        }
+
+        var result = self.buffer_findNodeById[id];
+        if(typeof(result) == "undefined")
+        {
+            var filtered = ko.utils.arrayFilter(self.Notes(), function(item){ return item.id == id;} );
+            result = filtered.length > 0 ? filtered[0] : null;
+        }
+
         return result;
 
     };
+
+    self.buffer_findEdgeById = undefined;
     self.findEdgeById = function(id)
     {
-        var filtered = ko.utils.arrayFilter(self.Connections(), function(item){ return item.id == id;} );
-        var result = filtered.length > 0 ? filtered[0] : null;
+        if(typeof(self.buffer_findEdgeById) == "undefined")
+        {
+            self.buffer_findEdgeById = {};
+            ko.utils.arrayForEach
+            (
+                self.Connections(), 
+                function(item) 
+                    {
+                        self.buffer_findEdgeById[item.id] = item;
+                    }
+            );
+        }
+        var result = self.buffer_findEdgeById[id];
+        if(typeof(result) == "undefined")
+        {
+            var filtered = ko.utils.arrayFilter(self.Connections(), function(item){ return item.id == id;} );
+            result = filtered.length > 0 ? filtered[0] : null;
+        }
+
+        
         return result;
 
     }
