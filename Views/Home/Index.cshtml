@@ -11,6 +11,7 @@
 <script language="JavaScript" type="text/javascript" src="~/js/model_Node.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/model_ColorPreset.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/document_ready.js" asp-append-version="true"></script>
 
 <style>
     button
@@ -37,6 +38,9 @@
 <div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw; color: #2b7ce9;">
     <div style="text-align: center; width: 100%; margin-top: 60px;">
         WebPad <a href="~/home/about">about</a>
+        <div data-bind="ifnot: $root.SyncOptionsVisible" >
+            <button data-bind="click: $root.ActualGenerateConnections">Generate Connections</button>
+        </div>
         <span data-bind="if: $root.publicCryptoKey() != null  &&
                     $root.publicCryptoKey() != undefined &&
                     $root.publicCryptoKey().trim() != '' ">

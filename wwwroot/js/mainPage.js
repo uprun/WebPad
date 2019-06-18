@@ -133,7 +133,11 @@ function ConnectedNotesViewModel()
             }
             else
             {
-                var connectionToAdd = new model_Connection(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label);
+                var connectionToAdd = new model_Connection(current_data.id,
+                    current_data.SourceId,
+                    current_data.DestinationId,
+                    current_data.label,
+                    current_data.generated);
                 self.Connections.push(connectionToAdd)
             }
         }
@@ -170,7 +174,7 @@ function ConnectedNotesViewModel()
             var found = self.findEdgeById(current_data.id);
             if(!found)
             {
-                var connectionToAdd = new model_Connection(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label);
+                var connectionToAdd = new model_Connection(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label, current_data.generated);
                 self.Connections.push(connectionToAdd)
             }
             else
@@ -233,11 +237,6 @@ function ConnectedNotesViewModel()
             background: "#f8df00",
             color: "#000000" 
         }
-        // ,
-        // { 
-        //     background: "#97c2fc",
-        //     color: "#000000" 
-        // }
     ];
 
     // populate colors immediately
@@ -262,7 +261,7 @@ function ConnectedNotesViewModel()
         storageForCallBacks.note.initialLoad(data.notes);
 
         var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
-            var connectionToAdd = new model_Connection(elem.id, elem.SourceId, elem.DestinationId, elem.label);
+            var connectionToAdd = new model_Connection(elem.id, elem.SourceId, elem.DestinationId, elem.label, elem.generated);
             return connectionToAdd;
         });
         ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
@@ -321,17 +320,43 @@ function ConnectedNotesViewModel()
 
     self.GenerateConnection = function(A, Z)
     {
+        //   A    Z         R
+        // X is Y is D => X is D
         if(A.label() == "is")
         {
             if(A.DestinationId == Z.SourceId)
             {
                 if(Z.label() == "is")
                 {
+                    var from = self.findNodeById(A.SourceId);
+                    var to = self.findNodeById(Z.DestinationId);
+                    self.ConnectNotes(from, to, "is", true);
+
 
                 }
             }
         }
 
+    };
+
+    self.ActualGenerateConnections = function()
+    {
+        ko.utils.arrayForEach(
+            self.Connections(), 
+            function(itemA, indexA)
+                { 
+                    ko.utils.arrayForEach(
+                        self.Connections(), 
+                        function(itemB, indexB)
+                            { 
+                                if(indexA !== indexB)
+                                {
+                                    self.GenerateConnection(itemA, itemB);
+                                }
+                            } 
+                        );
+                } 
+            );
     };
 
 
@@ -1030,26 +1055,41 @@ function ConnectedNotesViewModel()
             self.previousConnectFrom(self.connectFrom());
             self.connectFrom(data);
         }
-        
-
     };
 
     self.ConnectPreviousWithCurrent = function() {
         self.ConnectNotes(self.previousConnectFrom(), self.connectFrom() )
     };
 
-    self.ConnectNotes = function(from, to, label) {
+    self.ConnectNotes = function(from, to, label, generated) {
         var connectionToAdd = new model_Connection(
             self.getLocalIndex(),
             from.id,
             to.id,
-            label ? label : ""
+            label ? label : "", 
+            generated
         );
         var added = connectionToAdd.ConvertToJs();
-        self.pushToHistory({
-            action: self.actions.ConnectionAdded,
-            data: added
-        });
+        var filtered = ko.utils.arrayFilter(
+            self.Connections(), 
+            function(item)
+                { 
+                    return item.SourceId == connectionToAdd.SourceId &&
+                        item.DestinationId == connectionToAdd.DestinationId &&
+                        item.label() == connectionToAdd.label();
+                } 
+            );
+        var searchResult = filtered.length > 0 ? filtered[0] : null;
+        // don't allow to create duplicate connections
+        if(!searchResult)
+        {
+            
+            self.pushToHistory({
+                action: self.actions.ConnectionAdded,
+                data: added
+            });
+        }
+        
     };
 
     self.RemoveNoteUnderEdit = function() {
@@ -1089,17 +1129,56 @@ function ConnectedNotesViewModel()
 
     self.EdgeToEdit = ko.observable(null);
 
+    self.buffer_findNodeById = undefined;
     self.findNodeById = function(id)
     {
-        var filtered = ko.utils.arrayFilter(self.Notes(), function(item){ return item.id == id;} );
-        var result = filtered.length > 0 ? filtered[0] : null;
+        if(typeof(self.buffer_findNodeById) == "undefined")
+        {
+            self.buffer_findNodeById = {};
+            ko.utils.arrayForEach
+            (
+                self.Notes(), 
+                function(item) 
+                    {
+                        self.buffer_findNodeById[item.id] = item;
+                    }
+            );
+        }
+
+        var result = self.buffer_findNodeById[id];
+        if(typeof(result) == "undefined")
+        {
+            var filtered = ko.utils.arrayFilter(self.Notes(), function(item){ return item.id == id;} );
+            result = filtered.length > 0 ? filtered[0] : null;
+        }
+
         return result;
 
     };
+
+    self.buffer_findEdgeById = undefined;
     self.findEdgeById = function(id)
     {
-        var filtered = ko.utils.arrayFilter(self.Connections(), function(item){ return item.id == id;} );
-        var result = filtered.length > 0 ? filtered[0] : null;
+        if(typeof(self.buffer_findEdgeById) == "undefined")
+        {
+            self.buffer_findEdgeById = {};
+            ko.utils.arrayForEach
+            (
+                self.Connections(), 
+                function(item) 
+                    {
+                        self.buffer_findEdgeById[item.id] = item;
+                    }
+            );
+        }
+        var result = self.buffer_findEdgeById[id];
+        if(typeof(result) == "undefined")
+        {
+            var filtered = ko.utils.arrayFilter(self.Connections(), function(item){ return item.id == id;} );
+            result = filtered.length > 0 ? filtered[0] : null;
+        }
+
+        
         return result;
 
     }
@@ -1198,414 +1277,3 @@ function ConnectedNotesViewModel()
 
 };
 
-$(document).ready(function()
-{
-    
-    // create an array with nodes
-    var nodes = new vis.DataSet([
-    ]);
-
-    // create an array with edges
-    var edges = new vis.DataSet([
-    ]);
-
-    // create a network
-    var container = document.getElementById('mygraph');
-    var data = {
-        nodes: nodes,
-        edges: edges
-    };
-    //#2b7ce9
-    var options = 
-    {
-        edges: 
-            {
-                "smooth": {
-                    "type": "continuous",
-                    "forceDirection": "none"
-                  },
-                font:
-                    {
-                        color: '#2b7ce9',
-                        background: 'none',
-                        strokeWidth: 0, //px
-                    }
-
-            },
-        nodes: 
-            {
-                chosen:
-                {
-                    node: false
-                },
-
-            },
-        
-        "physics": {
-            "enabled": false,
-            "minVelocity": 0.75
-        }
-
-    };
-
-    var network = new vis.Network(container, data, options);
-
-    storageForCallBacks.note.added = function (added) {
-        console.log('storageForCallBacks.note.added');
-        var color_to_apply_background = added.background;
-        if(typeof(color_to_apply_background) == "undefined" || color_to_apply_background == null)
-        {
-            color_to_apply_background = '#97c2fc';
-        }
-        var color_to_apply_font = added.color;
-        if(typeof(color_to_apply_font) == "undefined" || color_to_apply_font == null)
-        {
-            color_to_apply_font = '#333333';
-        }
-
-        var toAdd = {
-            id: added.id,
-            label: added.text,
-            shape: 'box',
-            color: 
-            {
-                background: color_to_apply_background,
-                border:'#4385de'
-            },
-            font:
-                {
-                    color: color_to_apply_font
-                } 
-         };
-        if(typeof(added.x) != "undefined")
-        {
-            toAdd.x = added.x;
-        }
-
-        if(typeof(added.y) != "undefined")
-        {
-            toAdd.y = added.y;
-        }
-        nodes.add( toAdd );
-    };
-
-    storageForCallBacks.note.updated = function(changed) {
-        console.log('storageForCallBacks.note.updated');
-        var color_to_apply_background = changed.background;
-        if(typeof(color_to_apply_background) == "undefined" || color_to_apply_background == null)
-        {
-            color_to_apply_background = '#97c2fc';
-        }
-        var color_to_apply_font = changed.color;
-        if(typeof(color_to_apply_font) == "undefined" || color_to_apply_font == null)
-        {
-            color_to_apply_font = '#333333';
-        }
-        nodes.update(
-            {
-                id: changed.id, 
-                label: changed.text,
-                color: 
-                    {
-                        background: color_to_apply_background,
-                        border:'#4385de'
-                    },
-                font:
-                    {
-                        color: color_to_apply_font
-                    },
-                x: changed.x,
-                y: changed.y
-            }
-        ); 
-    };
-
-    storageForCallBacks.note.highlight = function(node, level) {
-        console.log('storageForCallBacks.note.highlight');
-        if(level == 0)  
-        {
-            var color_to_apply_background = node.background;
-            if(typeof(color_to_apply_background) == "undefined" || color_to_apply_background == null)
-            {
-                color_to_apply_background = '#97c2fc';
-            }
-            var color_to_apply_font = node.color;
-            if(typeof(color_to_apply_font) == "undefined" || color_to_apply_font == null)
-            {
-                color_to_apply_font = '#333333';
-            }
-            nodes.update(
-                {
-                    id: node.id,
-                    color: 
-                    {
-                        background: color_to_apply_background,
-                        border:'#4385de'
-                    },
-                    font:
-                        {
-                            color: color_to_apply_font
-                        }
-                }
-            );
-        }
-        if(level == 1)  
-        {
-            nodes.update(
-                {
-                    id: node.id,
-                    color: 
-                    {
-                        background: 'rgb(255,168,7)',
-                        border:'#4385de'
-                    },
-                    font:
-                        {
-                            color: '#333333'
-                        }
-                }
-            );
-        }
-        if(level == 2)
-        {
-            nodes.update(
-                {
-                    id: node.id,
-                    color: 
-                    {
-                        background: 'rgb(255,168,7)',
-                        border:'#4385de'
-                    },
-                    font:
-                        {
-                            color: '#333333'
-                        }
-                }
-            );
-        }
-        
-    };
-
-    
-
-    storageForCallBacks.note.removed = function(node) {
-        console.log('storageForCallBacks.note.removed');
-        nodes.remove(node.id);
-    };
-
-    storageForCallBacks.note.applySelection = function(id) {
-        console.log('storageForCallBacks.note.applySelection');
-        network.selectNodes([id], true);
-
-    };
-
-    storageForCallBacks.note.initialLoad = function (nodesList) {
-        console.log('storageForCallBacks.note.initialLoad');
-        var toAddNodes = ko.utils.arrayMap(nodesList, function(added) {
-            var color_to_apply_background = added.background;
-            if(typeof(color_to_apply_background) == "undefined" || color_to_apply_background == null)
-            {
-                color_to_apply_background = '#97c2fc';
-            }
-            var color_to_apply_font = added.color;
-            if(typeof(color_to_apply_font) == "undefined" || color_to_apply_font == null)
-            {
-                color_to_apply_font = '#333333';
-            }
-            var toAdd = {
-                id: added.id, 
-                label: added.text, 
-                shape: 'box',
-                color: 
-                    {
-                        background: color_to_apply_background,
-                        border:'#4385de'
-                    },
-                font:
-                    {
-                        color: color_to_apply_font
-                    }
-             };
-            if(typeof(added.x) != "undefined")
-            {
-                toAdd.x = added.x;
-            }
-
-            if(typeof(added.y) != "undefined")
-            {
-                toAdd.y = added.y;
-            }
-            return toAdd;
-        });
-        
-        nodes.add( toAddNodes );
-    };
-
-    storageForCallBacks.connection.added = function(connectionAdded) {
-        edges.add( {
-            id: connectionAdded.id,
-            from: connectionAdded.SourceId,
-            to: connectionAdded.DestinationId,
-            arrows: 'to',
-            label: connectionAdded.label,
-            font: { align: 'top' } 
-        });
-    };
-
-    storageForCallBacks.connection.updated = function(connectionUpdated) {
-        edges.update({
-            id: connectionUpdated.id,
-            label: connectionUpdated.label
-        });
-    };
-
-    storageForCallBacks.connection.removed = function(connection) {
-        edges.remove(connection.id);
-    };
-
-    storageForCallBacks.connection.initialLoad = function(connectionsList) {
-        var edgesToAdd = ko.utils.arrayMap(connectionsList, function(connectionAdded) {
-            return {
-            id: connectionAdded.id,
-            from: connectionAdded.SourceId,
-            to: connectionAdded.DestinationId,
-            arrows: 'to',
-            label: connectionAdded.label,
-            font: { align: 'top' }
-            };
-        });
-
-        edges.add(edgesToAdd);
-
-    };
-
-    storageForCallBacks.view.getFocusCoordinates = function() {
-        var result = network.getViewPosition();
-        result.scale = network.getScale();
-        return result;
-    };
-
-    storageForCallBacks.view.setFocusCoordinates = function(viewPosition) {
-        return network.moveTo(
-            {
-                position: 
-                    {
-                        x: viewPosition.x,
-                        y: viewPosition.y
-                    },
-                scale: viewPosition.scale,
-                animation: 
-                    {
-                        duration: 500,
-                        easingFunction: 'easeOutCubic'
-                    }
-            }
-        );
-    };
-
-    storageForCallBacks.view.setFocusOnNode = function(id) {
-        var nodesPositions = network.getPositions([id]);
-        return network.moveTo(
-            {
-                position: nodesPositions[id],
-                scale: 1.2,
-                animation: 
-                    {
-                        duration: 500,
-                        easingFunction: 'easeOutCubic'
-                    }
-            }
-        );
-    };
-    
-    var viewModel = new ConnectedNotesViewModel();
-    ko.applyBindings(viewModel);
-
-    network.on("selectEdge", function (params) {
-        if(params 
-            && params.edges 
-            && params.edges.length
-            && params.edges.length == 1
-            && params.nodes.length == 0 )
-        {
-            viewModel.DeselectNoteToEdit();
-            viewModel.SelectEdgeToEdit(params.edges[0]);
-        }
-    });
-    
-    network.on("deselectEdge", function (params) {
-        viewModel.DeselectEdgeToEdit();
-    });
-
-
-    network.on("selectNode", function (params) {
-        viewModel.DeselectEdgeToEdit();
-        viewModel.SelectNoteToEdit(params.nodes[0]);
-    });
-
-    network.on("dragStart", function (params) {
-        if(params 
-            && params.edges 
-            && params.edges.length
-            && params.edges.length == 1
-            && params.nodes.length == 0 )
-        {
-            viewModel.DeselectNoteToEdit();
-            viewModel.SelectEdgeToEdit(params.edges[0]);
-        }
-
-        if(params 
-            && params.nodes.length == 1 )
-        {
-            viewModel.DeselectEdgeToEdit();
-            viewModel.SelectNoteToEdit(params.nodes[0]);
-        }
-    });
-
-    network.on("deselectNode", function (params) {
-        viewModel.DeselectNoteToEdit();
-        if(params 
-            && params.edges 
-            && params.edges.length
-            && params.edges.length == 1
-            && params.nodes.length == 0 )
-        {
-            viewModel.SelectEdgeToEdit(params.edges[0]);
-        }
-    });
-
-    network.on("stabilizationIterationsDone", function(params) {
-        //network.getPositions();
-    });
-
-    network.on("stabilized", function(params) {
-        //var positions = network.getPositions();
-        //viewModel.UpdatePositionsOfNodes(positions);
-    });
-
-    network.on("dragEnd", function (params) {
-        if(params.nodes.length > 0)
-        {
-            var positions = network.getPositions(params.nodes);
-            viewModel.UpdatePositionsOfNodes(positions);
-        }
-    });
-
-    network.on("release", function(params) {
-        
-        viewModel.ViewPortUpdated();
-    });
-    network.on("zoom", function(params) {
-        viewModel.ViewPortUpdated();
-    });
-
-    network.on("animationFinished", function(params) {
-        viewModel.ViewPortUpdated();
-    });
-
-    
-    
-
-
-    
-});
