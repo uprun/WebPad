@@ -357,6 +357,7 @@ function ConnectedNotesViewModel()
                         );
                 } 
             );
+        setTimeout(self.ActualGenerateConnections, 3000);
     };
 
 
