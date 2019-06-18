@@ -133,7 +133,11 @@ function ConnectedNotesViewModel()
             }
             else
             {
-                var connectionToAdd = new model_Connection(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label);
+                var connectionToAdd = new model_Connection(current_data.id,
+                    current_data.SourceId,
+                    current_data.DestinationId,
+                    current_data.label,
+                    current_data.generated);
                 self.Connections.push(connectionToAdd)
             }
         }
@@ -170,7 +174,7 @@ function ConnectedNotesViewModel()
             var found = self.findEdgeById(current_data.id);
             if(!found)
             {
-                var connectionToAdd = new model_Connection(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label);
+                var connectionToAdd = new model_Connection(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label, current_data.generated);
                 self.Connections.push(connectionToAdd)
             }
             else
@@ -257,7 +261,7 @@ function ConnectedNotesViewModel()
         storageForCallBacks.note.initialLoad(data.notes);
 
         var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
-            var connectionToAdd = new model_Connection(elem.id, elem.SourceId, elem.DestinationId, elem.label);
+            var connectionToAdd = new model_Connection(elem.id, elem.SourceId, elem.DestinationId, elem.label, elem.generated);
             return connectionToAdd;
         });
         ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
@@ -326,7 +330,7 @@ function ConnectedNotesViewModel()
                 {
                     var from = self.findNodeById(A.SourceId);
                     var to = self.findNodeById(Z.DestinationId);
-                    self.ConnectNotes(from, to, "is");
+                    self.ConnectNotes(from, to, "is", true);
 
 
                 }
@@ -1057,12 +1061,13 @@ function ConnectedNotesViewModel()
         self.ConnectNotes(self.previousConnectFrom(), self.connectFrom() )
     };
 
-    self.ConnectNotes = function(from, to, label) {
+    self.ConnectNotes = function(from, to, label, generated) {
         var connectionToAdd = new model_Connection(
             self.getLocalIndex(),
             from.id,
             to.id,
-            label ? label : ""
+            label ? label : "", 
+            generated
         );
         var added = connectionToAdd.ConvertToJs();
         var filtered = ko.utils.arrayFilter(

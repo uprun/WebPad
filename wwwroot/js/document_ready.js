@@ -242,14 +242,19 @@ $(document).ready(function()
     };
 
     storageForCallBacks.connection.added = function(connectionAdded) {
-        edges.add( {
+        var config = {
             id: connectionAdded.id,
             from: connectionAdded.SourceId,
             to: connectionAdded.DestinationId,
             arrows: 'to',
             label: connectionAdded.label,
             font: { align: 'top' } 
-        });
+        };
+        if(connectionAdded.generated)
+        {
+            config.font.color = '#19bd11';
+        }
+        edges.add(config);
     };
 
     storageForCallBacks.connection.updated = function(connectionUpdated) {
@@ -265,14 +270,19 @@ $(document).ready(function()
 
     storageForCallBacks.connection.initialLoad = function(connectionsList) {
         var edgesToAdd = ko.utils.arrayMap(connectionsList, function(connectionAdded) {
-            return {
-            id: connectionAdded.id,
-            from: connectionAdded.SourceId,
-            to: connectionAdded.DestinationId,
-            arrows: 'to',
-            label: connectionAdded.label,
-            font: { align: 'top' }
-            };
+            var config = {
+                id: connectionAdded.id,
+                from: connectionAdded.SourceId,
+                to: connectionAdded.DestinationId,
+                arrows: 'to',
+                label: connectionAdded.label,
+                font: { align: 'top' }
+                };
+            if(connectionAdded.generated)
+            {
+                config.font.color = '#19bd11';
+            }
+            return config;
         });
 
         edges.add(edgesToAdd);
