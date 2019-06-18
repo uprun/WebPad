@@ -413,7 +413,7 @@ $(document).ready(function()
         viewModel.ViewPortUpdated();
     });
 
-    
+    setTimeout(viewModel.ActualGenerateConnections, 3000);
     
 
 
