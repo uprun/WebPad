@@ -102,6 +102,60 @@ function ConnectedNotesViewModel()
         }
     });
 
+    self.buffer_findNodeById = undefined;
+    self.findNodeById = function(id)
+    {
+        if(typeof(self.buffer_findNodeById) == "undefined")
+        {
+            self.buffer_findNodeById = {};
+            ko.utils.arrayForEach
+            (
+                self.Notes(), 
+                function(item) 
+                    {
+                        self.buffer_findNodeById[item.id] = item;
+                    }
+            );
+        }
+
+        var result = self.buffer_findNodeById[id];
+        if(typeof(result) == "undefined")
+        {
+            var filtered = ko.utils.arrayFilter(self.Notes(), function(item){ return item.id == id;} );
+            result = filtered.length > 0 ? filtered[0] : null;
+        }
+
+        return result;
+
+    };
+
+    self.buffer_findEdgeById = undefined;
+    self.findEdgeById = function(id)
+    {
+        if(typeof(self.buffer_findEdgeById) == "undefined")
+        {
+            self.buffer_findEdgeById = {};
+            ko.utils.arrayForEach
+            (
+                self.Connections(), 
+                function(item) 
+                    {
+                        self.buffer_findEdgeById[item.id] = item;
+                    }
+            );
+        }
+        var result = self.buffer_findEdgeById[id];
+        if(typeof(result) == "undefined")
+        {
+            var filtered = ko.utils.arrayFilter(self.Connections(), function(item){ return item.id == id;} );
+            result = filtered.length > 0 ? filtered[0] : null;
+        }
+
+        
+        return result;
+
+    }
+
     self.processMessageFromOuterSpace = function(item)
     {
         var current_action = item.action;
@@ -248,6 +302,49 @@ function ConnectedNotesViewModel()
 
     ko.utils.arrayPushAll(self.ColorPresets, toAddColors);
 
+
+    self.ColorNode = function(colorToApply, toWorkWith) {
+        if(typeof(toWorkWith) === "undefined")
+        {
+            toWorkWith = self.NoteToEdit();
+        }
+        
+        toWorkWith.color = colorToApply.Color();
+        toWorkWith.background = colorToApply.Background();
+
+        var info = toWorkWith.ConvertToJs();
+        self.pushToHistory({
+            action: self.actions.NoteUpdated,
+            data: info
+        });
+    };
+
+
+    self.CheckIfEveryNodeHasColor = function()
+    {
+        var filtered = ko.utils.arrayFilter(
+            self.Notes(),
+            function(item) 
+            {
+                if(typeof(item.color) === "undefined" )
+                {
+                    return true;
+                }
+                return false;
+            }
+        );
+        if(filtered.length > 0)
+        {
+            var colors =  self.ColorPresets();
+
+            ko.utils.arrayForEach(filtered, function(item) {
+                var selectedColorIndex = Math.floor(Math.random() * colors.length);
+                var selectedColor = colors[selectedColorIndex];
+                self.ColorNode(selectedColor, item);
+            });
+        }
+    };
+
     self.colorFreeIndex = 0;
 
     self.populate = function(data) {
@@ -266,6 +363,8 @@ function ConnectedNotesViewModel()
         });
         ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
         storageForCallBacks.connection.initialLoad(data.connections);
+
+        self.CheckIfEveryNodeHasColor();
 
         
         
@@ -1108,17 +1207,9 @@ function ConnectedNotesViewModel()
         });
     };
 
-    self.ColorNode = function(colorToApply) {
-        var toWorkWith = self.NoteToEdit();
-        toWorkWith.color = colorToApply.Color();
-        toWorkWith.background = colorToApply.Background();
+    
 
-        var info = toWorkWith.ConvertToJs();
-        self.pushToHistory({
-            action: self.actions.NoteUpdated,
-            data: info
-        });
-    };
+    
 
     self.RemoveConnectionUnderEdit = function() {
         var toRemove = self.EdgeToEdit();
@@ -1134,59 +1225,9 @@ function ConnectedNotesViewModel()
 
     self.EdgeToEdit = ko.observable(null);
 
-    self.buffer_findNodeById = undefined;
-    self.findNodeById = function(id)
-    {
-        if(typeof(self.buffer_findNodeById) == "undefined")
-        {
-            self.buffer_findNodeById = {};
-            ko.utils.arrayForEach
-            (
-                self.Notes(), 
-                function(item) 
-                    {
-                        self.buffer_findNodeById[item.id] = item;
-                    }
-            );
-        }
+    
 
-        var result = self.buffer_findNodeById[id];
-        if(typeof(result) == "undefined")
-        {
-            var filtered = ko.utils.arrayFilter(self.Notes(), function(item){ return item.id == id;} );
-            result = filtered.length > 0 ? filtered[0] : null;
-        }
-
-        return result;
-
-    };
-
-    self.buffer_findEdgeById = undefined;
-    self.findEdgeById = function(id)
-    {
-        if(typeof(self.buffer_findEdgeById) == "undefined")
-        {
-            self.buffer_findEdgeById = {};
-            ko.utils.arrayForEach
-            (
-                self.Connections(), 
-                function(item) 
-                    {
-                        self.buffer_findEdgeById[item.id] = item;
-                    }
-            );
-        }
-        var result = self.buffer_findEdgeById[id];
-        if(typeof(result) == "undefined")
-        {
-            var filtered = ko.utils.arrayFilter(self.Connections(), function(item){ return item.id == id;} );
-            result = filtered.length > 0 ? filtered[0] : null;
-        }
-
-        
-        return result;
-
-    }
+   
     self.textToEdit = ko.observable("");
 
     self.textToEdit
