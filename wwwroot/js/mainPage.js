@@ -336,6 +336,10 @@ function ConnectedNotesViewModel()
         if(filtered.length > 0)
         {
             var colors =  self.ColorPresets();
+            filtered = ko.utils.arrayFilter(filtered, function(item, index)
+            {
+                return index < 50;
+            });
 
             ko.utils.arrayForEach(filtered, function(item) {
                 var selectedColorIndex = Math.floor(Math.random() * colors.length);
