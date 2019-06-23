@@ -330,7 +330,11 @@ function ConnectedNotesViewModel()
                 {
                     var from = self.findNodeById(A.SourceId);
                     var to = self.findNodeById(Z.DestinationId);
-                    self.ConnectNotes(from, to, "is", true);
+                    if(from != null && to != null)
+                    {
+                        self.ConnectNotes(from, to, "is", true);
+                    }
+                    
 
 
                 }
