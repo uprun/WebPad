@@ -303,11 +303,10 @@ function ConnectedNotesViewModel()
     ko.utils.arrayPushAll(self.ColorPresets, toAddColors);
 
 
-    self.ColorNode = function(colorToApply, toWorkWith) {
-        if(typeof(toWorkWith) === "undefined")
-        {
-            toWorkWith = self.NoteToEdit();
-        }
+    self.ColorNode = function(colorToApply) {
+        
+        var toWorkWith = self.NoteToEdit();
+        
         
         toWorkWith.color = colorToApply.Color();
         toWorkWith.background = colorToApply.Background();
@@ -319,6 +318,17 @@ function ConnectedNotesViewModel()
         });
     };
 
+    self.ColorNodeFromCode = function(colorToApply, toWorkWith) {
+                
+        toWorkWith.color = colorToApply.Color();
+        toWorkWith.background = colorToApply.Background();
+
+        var info = toWorkWith.ConvertToJs();
+        self.pushToHistory({
+            action: self.actions.NoteUpdated,
+            data: info
+        });
+    };
 
     self.CheckIfEveryNodeHasColor = function()
     {
@@ -344,7 +354,7 @@ function ConnectedNotesViewModel()
             ko.utils.arrayForEach(filtered, function(item) {
                 var selectedColorIndex = Math.floor(Math.random() * colors.length);
                 var selectedColor = colors[selectedColorIndex];
-                self.ColorNode(selectedColor, item);
+                self.ColorNodeFromCode(selectedColor, item);
             });
         }
     };
