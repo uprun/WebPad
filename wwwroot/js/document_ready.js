@@ -65,6 +65,8 @@ $(document).ready(function()
 
         var toAdd = {
             id: added.id,
+            borderWidth: 0,
+            borderWidthSelected: 0,
             label: added.text,
             shape: 'box',
             color: 
@@ -214,7 +216,9 @@ $(document).ready(function()
             }
             var toAdd = {
                 id: added.id, 
-                label: added.text, 
+                label: added.text,
+                borderWidth: 0,
+                borderWidthSelected: 0, 
                 shape: 'box',
                 color: 
                     {
