@@ -431,21 +431,71 @@ function ConnectedNotesViewModel()
         localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(self.TrustedPublicKeysToSendTo()));
     };
 
-    self.GenerateConnection = function(A, Z)
+    self.GenerateConnectionIsA = function(A, Z)
     {
         //   A    Z         R
         // X is Y is D => X is D
-        if(A.label() == "is")
+        if(A.label() == "is a")
         {
             if(A.DestinationId == Z.SourceId)
             {
-                if(Z.label() == "is")
+                if(Z.label() == "is a")
                 {
                     var from = self.findNodeById(A.SourceId);
                     var to = self.findNodeById(Z.DestinationId);
                     if(from != null && to != null)
                     {
-                        self.ConnectNotes(from, to, "is", true);
+                        self.ConnectNotes(from, to, "is a", true);
+                    }
+                    
+
+
+                }
+            }
+        }
+
+    };
+
+    self.GenerateConnectionHasProperty = function(A, Z)
+    {
+        //   A    Z         R
+        // X is Y is D => X is D
+        if(A.label() == "is a")
+        {
+            if(A.DestinationId == Z.SourceId)
+            {
+                if(Z.label() == "has property")
+                {
+                    var from = self.findNodeById(A.SourceId);
+                    var to = self.findNodeById(Z.DestinationId);
+                    if(from != null && to != null)
+                    {
+                        self.ConnectNotes(from, to, "has property", true);
+                    }
+                    
+
+
+                }
+            }
+        }
+
+    };
+
+    self.GenerateConnectionHasPart = function(A, Z)
+    {
+        //   A    Z         R
+        // X is Y is D => X is D
+        if(A.label() == "is a")
+        {
+            if(A.DestinationId == Z.SourceId)
+            {
+                if(Z.label() == "has part")
+                {
+                    var from = self.findNodeById(A.SourceId);
+                    var to = self.findNodeById(Z.DestinationId);
+                    if(from != null && to != null)
+                    {
+                        self.ConnectNotes(from, to, "has part", true);
                     }
                     
 
@@ -468,7 +518,9 @@ function ConnectedNotesViewModel()
                             { 
                                 if(indexA !== indexB)
                                 {
-                                    self.GenerateConnection(itemA, itemB);
+                                    self.GenerateConnectionIsA(itemA, itemB);
+                                    self.GenerateConnectionHasProperty(itemA, itemB);
+                                    self.GenerateConnectionHasPart(itemA, itemB);
                                 }
                             } 
                         );
