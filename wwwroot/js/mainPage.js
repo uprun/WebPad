@@ -378,7 +378,7 @@ function ConnectedNotesViewModel()
         ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
         storageForCallBacks.connection.initialLoad(data.connections);
 
-        self.CheckIfEveryNodeHasColor();
+        //self.CheckIfEveryNodeHasColor();
 
         
         
