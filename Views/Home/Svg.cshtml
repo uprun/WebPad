@@ -1,0 +1,221 @@
+﻿@{
+}
+
+<script language="JavaScript" type="text/javascript" src="~/js/cryptico/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/cryptico/random.js"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/cryptico/hash.js"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/cryptico/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/cryptico/aes.js"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/cryptico/api.js"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/model_Connection.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/model_Node.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/model_ColorPreset.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/document_ready_svg.js" asp-append-version="true"></script>
+
+<style>
+    button
+    {
+        background: #97c2fc;
+        color: black;
+    }
+    input
+    {
+        background: #97c2fc;
+        color: black;
+    }
+    a 
+    {
+        color: orange;
+    }
+    body 
+    {
+        background-color:#333333;
+    }
+    
+</style>
+
+<div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw; color: #2b7ce9;">
+    <div style="text-align: center; width: 100%; margin-top: 60px;">
+        WebPad <a href="~/home/about">about</a>
+        <span data-bind="if: $root.publicCryptoKey() != null  &&
+                    $root.publicCryptoKey() != undefined &&
+                    $root.publicCryptoKey().trim() != '' ">
+
+                    <div data-bind="ifnot: $root.SyncOptionsVisible" >
+                        <button data-bind="click: $root.OpenSyncOptions">Open Sync</button>
+                    </div>
+                    <div data-bind="if: $root.SyncOptionsVisible" >
+                        <button data-bind="click: $root.HideSyncOptions">Hide Sync</button>
+                    </div>
+                    <div data-bind="if: $root.SyncOptionsVisible" >
+                        <span>Your check code:&nbsp;</span>
+                        <span data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
+                        <br>
+                        <button data-bind="click: $root.GetOneTimeSynchronizationToken"> Generate sync token</button>
+                        <br>
+                        <span>Share this sync token:&nbsp;</span>
+                        <span data-bind="text: $root.TokenToShare"></span>
+                        <br>
+                        <input 
+                                placeholder="Input sync token..." 
+                                style="width: 30vw; min-width: 150px;" 
+                                type="text" 
+                                data-bind="
+                                    textInput: $root.SynchronizationToken,
+                                    " />
+                        <br>
+                        <button data-bind="click: $root.SynchronizeUsingToken"> Use sync token</button>
+                        <br>
+                        <span>Received check code:&nbsp;</span>
+                        <span data-bind="text: $root.ReceivedPublicKey().substring(0, 10) + '...' "></span>
+                        <span data-bind="if: $root.ReceivedPublicKey() != null  &&
+                                $root.ReceivedPublicKey() != undefined &&
+                                $root.ReceivedPublicKey().trim() != '' " >
+                                <br>
+                                Do you trust to this ? 
+                                <button data-bind="click: $root.AddReceivedPublicKeyToTrusted"> Trust</button>
+                                <button data-bind="click: $root.RemoveReceivedPublicKey"> No-no-no</button>
+                        </span>
+                        <br>
+                    </div>
+
+        </span>
+        
+        
+
+        <br>
+        <span data-bind="ifnot: 
+                (
+                    $root.NoteToEdit() != null 
+                    && $root.NoteToEdit() !=  undefined
+                )
+                ||
+                ( 
+                    $root.EdgeToEdit() != null 
+                    && $root.EdgeToEdit() != undefined
+                )" >
+            <input 
+                placeholder="Create or search note..." 
+                style="width: 30vw; min-width: 150px;" 
+                type="text" 
+                data-bind="
+                    textInput: $root.SearchNotesQuery,
+                    " />
+            <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
+                <button data-bind="click: $root.CreateNoteFromSearchQuery">Create</button>
+                <br>
+                <br>
+                <span data-bind="foreach: FilteredNodesFirstElements">
+                    <button data-bind="click: $root.focusOnNode, text: 'goto: ' + text().substring(0, 10) + ' ...'"></button>
+                </span>
+                <span data-bind="if: (FilteredNodes().length - FilteredNodesFirstElements().length) > 0">
+                    <span data-bind="text: (FilteredNodes().length - FilteredNodesFirstElements().length) + 'more'"></span>
+                </span>
+                
+            </span>
+            
+            
+            
+        </span>
+        
+        <span data-bind="if: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
+            <button data-bind="click: $root.RemoveNoteUnderEdit, text: 'Remove note'"></button>
+            <input 
+                placeholder="Edit note..." 
+                style="width: 30vw; min-width: 150px;" 
+                type="text" 
+                data-bind="
+                    textInput: $root.textToEdit,
+                    " />
+            <span data-bind="if: $root.previousConnectFrom() != null && $root.previousConnectFrom() !=  undefined " >
+                <span data-bind="ifnot: $root.previousConnectFrom() == $root.NoteToEdit()" >
+                    <br>
+                    <button data-bind="click: $root.ConnectPreviousWithCurrent, text: ('Connect from: ' + $root.previousConnectFrom().text() )"></button>
+                </span>
+                
+            </span>
+            
+            <br>
+            
+            
+            <button data-bind="click: $root.CreateNoteFromDestinationSearchQuery">Add connection</button>
+            <span data-bind="foreach: $root.ColorPresets">
+                <button data-bind="click: $root.ColorNode, style: { 'background' : $data.Background(), color: $data.Color() }">Highlight</button>
+            </span>
+            
+            
+        </span>   
+
+        <span data-bind="if: $root.EdgeToEdit() != null && $root.EdgeToEdit() != undefined">
+            <button data-bind="click: $root.RemoveConnectionUnderEdit, text: 'Remove connection'"></button>
+            <input 
+                placeholder="Edit edge..." 
+                style="width: 30vw; min-width: 150px;" 
+                type="text" 
+                data-bind="
+                    textInput: $root.textToEdit,
+                    " />
+
+        </span>               
+        
+    </div>
+    
+</div>
+<div
+    style="position: absolute; height: 100vh; width: 100vw; z-index: 9; background-color: #333333; top: 0px; left: 0px; overflow-x: hidden; overflow-y: hidden;"
+    data-bind="foreach: Notes"
+    >
+    <div data-bind=
+        "style:
+            { 
+                left: $data.x + 'px',
+                top: $data.y + 'px',
+                position: 'absolute',
+                color: $data.color,
+                background: $data.background,
+                'border-radius': '1vw',
+                'padding-left': '1vw',
+                'padding-right': '1vw',
+                'padding-top': '1vh',
+                'padding-bottom': '1vh',
+            }, text: $data.text()">hello</div>
+     
+</div>
+<!-- <svg 
+    style="position: fixed; height: 100vh; width: 100vw; z-index: 9; background-color:#333333;" 
+    xmlns="http://www.w3.org/2000/svg" 
+    version="1.1"
+    data-bind="foreach: Notes">
+    <g data-bind="attr: {transform: 'translate(' + $data.x + ',' + $data.y + ')' }">
+        <rect x="0" y="0" width="100" height="100" fill="green" data-bind="attr: { fill: $data.background, id: $data.id }" ></rect>
+        <text x="0" y="50" fill="yellow" data-bind="
+                    text: $data.text(),
+                    attr: 
+                        {
+                            fill: $data.color 
+                        }
+                    ">
+        </text>
+
+    </g>
+    
+  
+</svg> -->
+
+<!-- <text x="150" y="70" fill="yellow" data-bind="
+                    text: $root.SearchNotesQuery,
+                    ">I love SVG!
+    <animate attributeType="XML" attributeName="x" from="150" to="300"
+        dur="3s" repeatCount="indefinite"/>
+  </text>
+  <rect x="50" y="20" rx="20" ry="20" width="150" height="150"
+  style="fill:red;stroke:black;stroke-width:5;opacity:0.5">
+    <animate attributeType="XML" attributeName="x" from="150" to="300"
+        dur="3s" repeatCount="indefinite"/>
+  </rect>
+
+  <g transform="translate(100,100)">
+    <rect x="0" y="0" width="100" height="100" fill="red"></rect>
+    <text x="0" y="50" font-family="Verdana" font-size="35" fill="blue">Hello2222</text>
+  </g> -->

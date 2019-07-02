@@ -26,6 +26,22 @@ namespace ConnectedNotes.Controllers
             return View();
         }
 
+        public IActionResult Svg(string source)
+        {
+            Console.WriteLine($"main ip: {HttpContext.Connection.RemoteIpAddress.ToString()}");
+            foreach(var header in Request.Headers)
+            {
+                if(header.Key == "User-Agent")
+                {
+                    Console.WriteLine($"main User-Agent: {header}");
+                }
+                
+            }
+            Console.WriteLine($"Source: {source ?? "undefined"}");
+            Console.WriteLine("===============================================");
+            return View();
+        }
+
         public IActionResult About()
         {
             Console.WriteLine($"About ip: {HttpContext.Connection.RemoteIpAddress.ToString()}");
