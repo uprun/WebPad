@@ -307,6 +307,64 @@ $(document).ready(function()
     var viewModel = new ConnectedNotesViewModel();
     ko.applyBindings(viewModel);
 
+    var viewportWidth = $(window).width();
+    var viewportHeight = $(window).height();
+
+    viewModel.ViewPortWidth(viewportWidth);
+    viewModel.ViewPortHeight(viewportHeight);
+
+    $(window).resize(function() {
+        var viewportWidth = $(window).width();
+        var viewportHeight = $(window).height();
+    
+        viewModel.ViewPortWidth(viewportWidth);
+        viewModel.ViewPortHeight(viewportHeight);
+    });
+
+    window.onload = function()
+    {
+        //adding the event listerner for Mozilla
+        if(window.addEventListener)
+            document.addEventListener('DOMMouseScroll', moveObject, false);
+
+        //for IE/OPERA etc
+        document.onmousewheel = moveObject;
+    }
+    function moveObject(event)
+    {
+        var delta = 0;
+
+        if (!event) event = window.event;
+
+        // normalize the delta
+        if (event.wheelDelta) {
+
+            // IE and Opera
+            delta = event.wheelDelta / 60;
+
+        } else if (event.detail) {
+
+            // W3C
+            delta = -event.detail / 2;
+        }
+        var rateOfScaleChange = 0.1;
+        var currentScale = viewModel.Scale();
+
+            if(delta > 0)
+            {
+               
+                    viewModel.Scale(currentScale + rateOfScaleChange);
+               
+            }
+            if(delta < 0)
+            {
+                if(currentScale > 0)
+                {
+                    viewModel.Scale(currentScale - rateOfScaleChange);
+                }
+            }
+    }
+
     // network.on("selectEdge", function (params) {
     //     if(params 
     //         && params.edges 

@@ -32,8 +32,21 @@
     {
         background-color:#333333;
     }
+    .disable-selection {
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer */
+        -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+        -webkit-user-select: none; /* Chrome, Safari, and Opera */
+        -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+    }
     
 </style>
+<script>
+    var myFunction = function ()
+    {
+        console.log("scroll");
+    };
+</script>
 
 <div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw; color: #2b7ce9;">
     <div style="text-align: center; width: 100%; margin-top: 60px;">
@@ -157,28 +170,35 @@
                     textInput: $root.textToEdit,
                     " />
 
-        </span>               
+        </span>
         
     </div>
     
 </div>
 <div
-    style="position: absolute; height: 100vh; width: 100vw; z-index: 9; background-color: #333333; top: 0px; left: 0px; overflow-x: hidden; overflow-y: hidden;"
+    onscroll="myFunction()"
+    style="position: absolute; height: 100vh; width: 100vw; z-index: 9; background-color: #333333; top: 0px; left: 0px; overflow-x: hidden; overflow-y: hidden; 
+                "
     data-bind="foreach: Notes"
     >
-    <div data-bind=
+    <div class="disable-selection" data-bind=
         "style:
             { 
-                left: $data.x + 'px',
-                top: $data.y + 'px',
+                left: $data.x * $root.Scale()  + 'px',
+                top: $data.y * $root.Scale() + 'px',
                 position: 'absolute',
                 color: $data.color,
                 background: $data.background,
-                'border-radius': '1vw',
-                'padding-left': '1vw',
-                'padding-right': '1vw',
-                'padding-top': '1vh',
-                'padding-bottom': '1vh',
+                'border-radius': '3mm',
+                'padding-left': '2mm',
+                'padding-right': '2mm',
+                'padding-top': '2mm',
+                'padding-bottom': '2mm',
+                'min-height': '5mm',
+                'min-width': '5mm',
+                'font-size': '5mm',
+                transform: 'scale(' + $root.Scale() + ', ' + $root.Scale() + ')'
+                
             }, text: $data.text()">hello</div>
      
 </div>

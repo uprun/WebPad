@@ -74,6 +74,9 @@ function ConnectedNotesViewModel()
     
     self.freeLocalIndex = 0;
     self.localPrefix = '_local_';
+    self.Scale = ko.observable(2.0);
+    self.ViewPortWidth = ko.observable(2560); // ultra wide 1080p
+    self.ViewPortHeight = ko.observable(1080);// ultra wide 1080p
     self.Notes = ko.observableArray([]);
     self.ColorPresets = ko.observableArray([]);
     self.Connections = ko.observableArray([]);
