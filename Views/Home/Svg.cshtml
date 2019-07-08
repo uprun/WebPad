@@ -184,8 +184,8 @@
     <div class="disable-selection" data-bind=
         "style:
             { 
-                left: $data.x * $root.Scale()  + 'px',
-                top: $data.y * $root.Scale() + 'px',
+                left: ($data.x * $root.Scale() + $root.ViewPortWidth()/2 ) + 'px',
+                top: ($data.y * $root.Scale() + $root.ViewPortHeight()/2 ) + 'px',
                 position: 'absolute',
                 color: $data.color,
                 background: $data.background,
