@@ -723,7 +723,7 @@ function ConnectedNotesViewModel()
     self.ActualSendMessage = function(receiver, text, id) {
         $.ajax({
             type: "POST",
-            url: "Home/SendMessages",
+            url: "SendMessages",
             data: {
                 messages: [
                     {
@@ -736,7 +736,7 @@ function ConnectedNotesViewModel()
             success: function() {
             },
             error: function() {
-                console.log("Home/SendMessages error");
+                console.log("SendMessages error");
             },
             dataType: "json"
         });
@@ -746,7 +746,7 @@ function ConnectedNotesViewModel()
     self.ReceiveMessages = function(publicKey) {
         $.ajax({
             type: "POST",
-            url: "Home/ReceiveMessages",
+            url: "ReceiveMessages",
             data: {
                 publicKey: publicKey
             },
@@ -760,7 +760,7 @@ function ConnectedNotesViewModel()
                 
             },
             error: function() {
-                console.log("Home/ReceiveMessages error");
+                console.log("ReceiveMessages error");
             },
             dataType: "json"
         });
@@ -987,7 +987,7 @@ function ConnectedNotesViewModel()
         self.TokenToShare("");
         $.ajax({
             type: "POST",
-            url: "Home/GetOneTimeSynchronizationToken",
+            url: "GetOneTimeSynchronizationToken",
             data: {
                 publicKey: self.publicCryptoKey()
             },
@@ -1002,7 +1002,7 @@ function ConnectedNotesViewModel()
     self.StatisticsOnLoad = function() {
         $.ajax({
             type: "POST",
-            url: "Home/StatisticsOnLoad",
+            url: "StatisticsOnLoad",
             data: {
                 publicKey: self.publicCryptoKey()
             },
@@ -1017,7 +1017,7 @@ function ConnectedNotesViewModel()
     self.SynchronizeUsingToken = function() {
         $.ajax({
             type: "POST",
-            url: "Home/GetSyncPublicKey",
+            url: "GetSyncPublicKey",
             data: {
                 token: self.SynchronizationToken().trim()
             },

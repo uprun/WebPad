@@ -10,7 +10,7 @@ namespace ConnectedNotes.Controllers
     [RequestSizeLimit(100_000)]// explicit restriction to 100 kilobytes
     public class HomeController : Controller
     {
-        public IActionResult Index(string source)
+        public IActionResult Studio(string source)
         {
             Console.WriteLine($"main ip: {HttpContext.Connection.RemoteIpAddress.ToString()}");
             foreach(var header in Request.Headers)
@@ -18,6 +18,21 @@ namespace ConnectedNotes.Controllers
                 if(header.Key == "User-Agent")
                 {
                     Console.WriteLine($"main User-Agent: {header}");
+                }
+                
+            }
+            Console.WriteLine($"Source: {source ?? "undefined"}");
+            Console.WriteLine("===============================================");
+            return View();
+        }
+        public IActionResult Welcome(string source)
+        {
+            Console.WriteLine($"Welcome ip: {HttpContext.Connection.RemoteIpAddress.ToString()}");
+            foreach(var header in Request.Headers)
+            {
+                if(header.Key == "User-Agent")
+                {
+                    Console.WriteLine($"Welcome User-Agent: {header}");
                 }
                 
             }
