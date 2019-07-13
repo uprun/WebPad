@@ -30,30 +30,6 @@ else {
     // Too bad, no localStorage for us
 }
 
-var storageForCallBacks = {
-    view: {
-        getFocusCoordinates: '',
-        setFocusCoordinates: '',
-        setFocusOnNode: ''
-    },
-    note: {
-        added: '',
-        updated: '',
-        removed: '',
-        applySelection: '',
-        initialLoad: '',
-        highlight: ''
-    },
-    connection: {
-        added: '',
-        updated: '',
-        removed: '',
-        applySelection: '',
-        initialLoad: ''
-
-    }
-};
-
 function ConnectedNotesViewModel()
 {
     var self = this;
@@ -372,14 +348,14 @@ function ConnectedNotesViewModel()
         });
         ko.utils.arrayPushAll(self.Notes, toAdd);
 
-        storageForCallBacks.note.initialLoad(data.notes);
+        
 
         var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
             var connectionToAdd = new model_Connection(elem.id, elem.SourceId, elem.DestinationId, elem.label, elem.generated);
             return connectionToAdd;
         });
         ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
-        storageForCallBacks.connection.initialLoad(data.connections);
+        
 
         //self.CheckIfEveryNodeHasColor();
 
@@ -389,37 +365,7 @@ function ConnectedNotesViewModel()
 
     self.processCallBacks = function(item)
     {
-        var current_action = item.action;
-        var current_data = item.data;
-        if(current_action == self.actions.NoteUpdated)
-        {
-            storageForCallBacks.note.updated(current_data);
-        }
-
-        if(current_action == self.actions.ConnectionUpdated)
-        {
-            storageForCallBacks.connection.updated(current_data);
-        }
-
-        if(current_action == self.actions.NoteAdded)
-        {
-            storageForCallBacks.note.added(current_data);
-        }
-
-        if(current_action == self.actions.NoteDeleted)
-        {
-            storageForCallBacks.note.removed(current_data);
-        }
-
-        if(current_action == self.actions.ConnectionAdded)
-        {
-            storageForCallBacks.connection.added(current_data);
-        }
-
-        if(current_action == self.actions.ConnectionDeleted)
-        {
-            storageForCallBacks.connection.removed(current_data);
-        }
+        
     };
 
     self.pushToHistory = function(item) {
@@ -564,7 +510,7 @@ function ConnectedNotesViewModel()
                         localStorage.setItem("Notes", JSON.stringify(toStoreNotes));
                         localStorage.setItem("Connections", JSON.stringify(toStoreConnections));
                         localStorage.setItem("localFreeIndex", JSON.stringify(self.freeLocalIndex));
-                        localStorage.setItem("viewPosition", JSON.stringify(storageForCallBacks.view.getFocusCoordinates()))
+                        localStorage.setItem("viewPosition", JSON.stringify({}))
 
                         var filteredChanges = ko.utils.arrayFilter(addedChanges, function(item){ 
                                 return item.value.action != self.actions.PositionsUpdated 
@@ -674,7 +620,7 @@ function ConnectedNotesViewModel()
 
                     ko.utils.arrayForEach(addedChanges, function(item)
                         {
-                            storageForCallBacks.note.highlight(item, 2);
+                            
                             hash[item.id] = true;
                         }
                     );
@@ -685,7 +631,7 @@ function ConnectedNotesViewModel()
                     {
                         if(!hash[item.id])
                         {
-                            storageForCallBacks.note.highlight(item, 0);
+                            
                         }
                     }
                 );
@@ -696,7 +642,7 @@ function ConnectedNotesViewModel()
     
     self.focusOnNode = function(item)
     {
-        storageForCallBacks.view.setFocusOnNode(item.id);
+        
     };
 
     self.SendMessage = function(item) {
@@ -1074,7 +1020,6 @@ function ConnectedNotesViewModel()
         self.CreateNote(obj, function(destination) { 
             self.ConnectNotes(self.connectFrom(), destination);  
             self.SelectNoteToEdit(destination.id);
-            storageForCallBacks.note.applySelection(destination.id);
         });
     };
 
@@ -1105,12 +1050,10 @@ function ConnectedNotesViewModel()
     else {
         self.freeLocalIndex = self.Notes().length + self.Connections().length + 1;
     }
-    //localStorage.setItem("viewPosition", JSON.stringify(storageForCallBacks.view.getFocusCoordinates()))
 
     if(localStorage["viewPosition"])
     {
          var parsedViewPosition = JSON.parse(localStorage.getItem("viewPosition"));
-         storageForCallBacks.view.setFocusCoordinates(parsedViewPosition);
     }
 
     if(localStorage["TrustedPublicKeysToSendTo"]){ 
@@ -1213,7 +1156,6 @@ function ConnectedNotesViewModel()
     };
 
     self.CreateNoteFromSearchQuery = function() {
-        var coord = storageForCallBacks.view.getFocusCoordinates();
         var obj = {
             text: self.SearchNotesQuery().trim()
             , x: coord.x

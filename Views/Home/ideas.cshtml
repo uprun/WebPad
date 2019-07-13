@@ -1,6 +1,10 @@
 ﻿@{
 }
 
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
 <script language="JavaScript" type="text/javascript" src="~/js/cryptico/jsbn.js"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/cryptico/random.js"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/cryptico/hash.js"></script>
@@ -11,55 +15,21 @@
 <script language="JavaScript" type="text/javascript" src="~/js/model_Node.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/model_ColorPreset.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="~/js/document_ready_svg.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/document_ready_ideas.js" asp-append-version="true"></script>
 
-<style>
-    button
-    {
-        background: #97c2fc;
-        color: black;
-    }
-    input
-    {
-        background: #97c2fc;
-        color: black;
-    }
-    a 
-    {
-        color: orange;
-    }
-    body 
-    {
-        background-color:#333333;
-    }
-    .disable-selection {
-        -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer */
-        -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
-        -webkit-user-select: none; /* Chrome, Safari, and Opera */
-        -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
-    }
-    
-</style>
-<script>
-    var myFunction = function ()
-    {
-        console.log("scroll");
-    };
-</script>
 
-<div style="position: absolute; top:0px; left: 0px; z-index: 10; width: 100vw; color: #2b7ce9;">
-    <div style="text-align: center; width: 100%; margin-top: 60px;">
-        WebPad <a href="~/home/about">about</a>
+
+    <div  style="text-align: center; width: 100%; margin-top: 20mm; display: inline-block;">
+        <span class="webpad-node webpad-green">WebPad</span> <span class="webpad-node webpad-orange"><a href="~/about">about</a></span>
         <span data-bind="if: $root.publicCryptoKey() != null  &&
                     $root.publicCryptoKey() != undefined &&
                     $root.publicCryptoKey().trim() != '' ">
 
                     <div data-bind="ifnot: $root.SyncOptionsVisible" >
-                        <button data-bind="click: $root.OpenSyncOptions">Open Sync</button>
+                        <button class="webpad-node webpad-green" data-bind="click: $root.OpenSyncOptions">Open Sync</button>
                     </div>
                     <div data-bind="if: $root.SyncOptionsVisible" >
-                        <button data-bind="click: $root.HideSyncOptions">Hide Sync</button>
+                        <button class="webpad-node webpad-orange" data-bind="click: $root.HideSyncOptions">Hide Sync</button>
                     </div>
                     <div data-bind="if: $root.SyncOptionsVisible" >
                         <span>Your check code:&nbsp;</span>
@@ -108,13 +78,18 @@
                     $root.EdgeToEdit() != null 
                     && $root.EdgeToEdit() != undefined
                 )" >
-            <input 
-                placeholder="Create or search note..." 
-                style="width: 30vw; min-width: 150px;" 
-                type="text" 
-                data-bind="
-                    textInput: $root.SearchNotesQuery,
-                    " />
+            <span class="webpad-node webpad-yellow">
+                <input 
+                    placeholder="Create or search note..." 
+                    style="width: 30vw; min-width: 150px;" 
+                    type="text" 
+                    data-bind="
+                        textInput: $root.SearchNotesQuery,
+                        " 
+                />
+
+            </span>
+            
             <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
                 <button data-bind="click: $root.CreateNoteFromSearchQuery">Create</button>
                 <br>
@@ -173,69 +148,37 @@
         </span>
         
     </div>
-    
-</div>
-<div
-    onscroll="myFunction()"
-    style="position: absolute; height: 100vh; width: 100vw; z-index: 9; background-color: #333333; top: 0px; left: 0px; overflow-x: hidden; overflow-y: hidden; 
-                "
+<!-- <div
+    style="position: relative; height: auto; width: 100%;"
     data-bind="foreach: Notes"
     >
-    <div class="disable-selection" data-bind=
-        "style:
-            { 
-                left: ($data.x * $root.Scale() + $root.ViewPortWidth()/2 ) + 'px',
-                top: ($data.y * $root.Scale() + $root.ViewPortHeight()/2 ) + 'px',
-                position: 'absolute',
-                color: $data.color,
-                background: $data.background,
-                'border-radius': '3mm',
-                'padding-left': '2mm',
-                'padding-right': '2mm',
-                'padding-top': '2mm',
-                'padding-bottom': '2mm',
-                'min-height': '5mm',
-                'min-width': '5mm',
-                'font-size': '5mm',
-                transform: 'scale(' + $root.Scale() + ', ' + $root.Scale() + ')'
-                
-            }, text: $data.text()">hello</div>
-     
+        <div class="disable-selection webpad-node" data-bind=
+            "style:
+                { 
+                    position: 'relative',
+                    color: $data.color,
+                    background: $data.background,
+                    
+                }, text: $data.text()">
+        </div>
+</div> -->
+
+<div class="container">
+    <div 
+        class="row justify-content-md-center" 
+        data-bind="foreach: Notes">
+
+        <div class="col-md-auto">
+            <div class="disable-selection webpad-node" data-bind=
+                "style:
+                    { 
+                        position: 'relative',
+                        color: $data.color,
+                        background: $data.background,
+                        
+                    }, text: $data.text()">
+            </div>
+        </div>
+
+    </div>
 </div>
-<!-- <svg 
-    style="position: fixed; height: 100vh; width: 100vw; z-index: 9; background-color:#333333;" 
-    xmlns="http://www.w3.org/2000/svg" 
-    version="1.1"
-    data-bind="foreach: Notes">
-    <g data-bind="attr: {transform: 'translate(' + $data.x + ',' + $data.y + ')' }">
-        <rect x="0" y="0" width="100" height="100" fill="green" data-bind="attr: { fill: $data.background, id: $data.id }" ></rect>
-        <text x="0" y="50" fill="yellow" data-bind="
-                    text: $data.text(),
-                    attr: 
-                        {
-                            fill: $data.color 
-                        }
-                    ">
-        </text>
-
-    </g>
-    
-  
-</svg> -->
-
-<!-- <text x="150" y="70" fill="yellow" data-bind="
-                    text: $root.SearchNotesQuery,
-                    ">I love SVG!
-    <animate attributeType="XML" attributeName="x" from="150" to="300"
-        dur="3s" repeatCount="indefinite"/>
-  </text>
-  <rect x="50" y="20" rx="20" ry="20" width="150" height="150"
-  style="fill:red;stroke:black;stroke-width:5;opacity:0.5">
-    <animate attributeType="XML" attributeName="x" from="150" to="300"
-        dur="3s" repeatCount="indefinite"/>
-  </rect>
-
-  <g transform="translate(100,100)">
-    <rect x="0" y="0" width="100" height="100" fill="red"></rect>
-    <text x="0" y="50" font-family="Verdana" font-size="35" fill="blue">Hello2222</text>
-  </g> -->

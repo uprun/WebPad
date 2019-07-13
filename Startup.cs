@@ -53,7 +53,7 @@ namespace ConnectedNotes
                     (
                         name: "default",
                         template: "{action}",
-                        defaults: new { controller = "Home", action = "Welcome" }
+                        defaults: new { controller = "Home", action = "ideas" }
                     );
                 
             });

@@ -41,7 +41,7 @@ namespace ConnectedNotes.Controllers
             return View();
         }
 
-        public IActionResult Svg(string source)
+        public IActionResult ideas(string source)
         {
             Console.WriteLine($"main ip: {HttpContext.Connection.RemoteIpAddress.ToString()}");
             foreach(var header in Request.Headers)
