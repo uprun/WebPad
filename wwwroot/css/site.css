@@ -36,10 +36,11 @@ body {
     padding-right: 2mm;
     padding-top: 2mm;
     padding-bottom: 2mm;
-    min-height: 5mm;
+    min-height: 9mm;
     min-width: 9mm;
     font-size: 5mm;
     width: max-content;
+    box-sizing: content-box;
 }
 
 button
@@ -56,6 +57,7 @@ a
 {
     color: inherit;
     background: inherit;
+    text-decoration: underline;
 }
 .disable-selection {
     -moz-user-select: none; /* Firefox */

@@ -166,17 +166,12 @@
 <div class="container">
     <div 
         class="row justify-content-md-center" 
-        data-bind="foreach: Notes">
+        data-bind="foreach: Connections">
 
         <div class="col-md-auto">
-            <div class="disable-selection webpad-node" data-bind=
-                "style:
-                    { 
-                        position: 'relative',
-                        color: $data.color,
-                        background: $data.background,
-                        
-                    }, text: $data.text()">
+            <div 
+                class="disable-selection webpad-node webpad-yellow" 
+                data-bind="text: $data.label()">
             </div>
         </div>
 
