@@ -169,10 +169,21 @@
         data-bind="foreach: Connections">
 
         <div class="col-md-auto">
-            <div 
-                class="disable-selection webpad-node webpad-yellow" 
-                data-bind="text: $data.label()">
+            <div class="row">
+                <div 
+                    class="col-md-auto disable-selection webpad-node webpad-green" 
+                    data-bind="text: $data.SourceId">
+                </div>
+                <div 
+                    class="col-md-auto disable-selection webpad-node webpad-yellow" 
+                    data-bind="text: $data.label()">
+                </div>
+                <div 
+                    class="col-md-auto disable-selection webpad-node webpad-purple" 
+                    data-bind="text: $data.DestinationId">
+                </div>
             </div>
+
         </div>
 
     </div>
