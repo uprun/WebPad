@@ -170,18 +170,53 @@
 
         <div class="col-md-auto">
             <div class="row">
-                <div 
-                    class="col-md-auto disable-selection webpad-node webpad-green" 
-                    data-bind="text: $data.SourceId">
-                </div>
+                <span data-bind="if: $data.Source">
+                    <div 
+                        class="col-md-auto disable-selection webpad-node webpad-green" 
+                        data-bind="
+                            text: $data.Source.text(),
+                            style:
+                            { 
+                                color: $data.Source.color,
+                                background: $data.Source.background,
+                            }
+                            "
+                        >
+                    </div>
+
+                </span>
+                <span data-bind="ifnot: $data.Source">
+                    <div 
+                        class="col-md-auto disable-selection webpad-node webpad-green" 
+                        >
+                        not found
+                    </div>
+                </span>
                 <div 
                     class="col-md-auto disable-selection webpad-node webpad-yellow" 
                     data-bind="text: $data.label()">
                 </div>
-                <div 
-                    class="col-md-auto disable-selection webpad-node webpad-purple" 
-                    data-bind="text: $data.DestinationId">
-                </div>
+                <span data-bind="if: $data.Destination">
+                    <div 
+                        class="col-md-auto disable-selection webpad-node webpad-green" 
+                        data-bind="
+                            text: $data.Destination.text(),
+                            style:
+                            { 
+                                color: $data.Destination.color,
+                                background: $data.Destination.background,
+                            }
+                            "
+                        >
+                    </div>
+                </span>
+                <span data-bind="ifnot: $data.Destination">
+                    <div 
+                        class="col-md-auto disable-selection webpad-node webpad-green" 
+                        >
+                        not found
+                    </div>
+                </span>
             </div>
 
         </div>

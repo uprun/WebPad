@@ -166,11 +166,16 @@ function ConnectedNotesViewModel()
             }
             else
             {
-                var connectionToAdd = new model_Connection(current_data.id,
+                var connectionToAdd = 
+                new model_Connection
+                    (
+                    current_data.id,
                     current_data.SourceId,
                     current_data.DestinationId,
                     current_data.label,
-                    current_data.generated);
+                    current_data.generated,
+                    self.findNodeById
+                    );
                 self.Connections.push(connectionToAdd)
             }
         }
@@ -207,7 +212,16 @@ function ConnectedNotesViewModel()
             var found = self.findEdgeById(current_data.id);
             if(!found)
             {
-                var connectionToAdd = new model_Connection(current_data.id, current_data.SourceId, current_data.DestinationId, current_data.label, current_data.generated);
+                var connectionToAdd = 
+                    new model_Connection
+                    (
+                        current_data.id,
+                        current_data.SourceId,
+                        current_data.DestinationId, 
+                        current_data.label, 
+                        current_data.generated,
+                        self.findNodeById
+                    );
                 self.Connections.push(connectionToAdd)
             }
             else
@@ -351,7 +365,7 @@ function ConnectedNotesViewModel()
         
 
         var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
-            var connectionToAdd = new model_Connection(elem.id, elem.SourceId, elem.DestinationId, elem.label, elem.generated);
+            var connectionToAdd = new model_Connection(elem.id, elem.SourceId, elem.DestinationId, elem.label, elem.generated, self.findNodeById);
             return connectionToAdd;
         });
         ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
@@ -1182,7 +1196,8 @@ function ConnectedNotesViewModel()
             from.id,
             to.id,
             label ? label : "", 
-            generated
+            generated,
+            self.findNodeById
         );
         var added = connectionToAdd.ConvertToJs();
         var filtered = ko.utils.arrayFilter(
