@@ -1,9 +1,11 @@
 # WebPad
-Personal, distributed, decentralized and encrypted web of semantic knowledge.
+Linked data, semantic web, semantic knowledge, knowledge graph.
 
-Use it for mindmap, knowledge graph, family tree, semantic web, project management, task dependencies, groceries list - applications are limitless.
+Personal and secure.
 
-Data is never exposed to server in plain-text, user owns his data, this is achived by user-side ecnryption.
+Try it now at https://webpad.com.ua
+
+#RDF #LinkedData #SemanticWeb #JSON-ld #OWL
 
 ## Building
 
