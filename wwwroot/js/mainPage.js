@@ -82,6 +82,7 @@ function ConnectedNotesViewModel()
     });
 
     self.buffer_findNodeById = undefined;
+    self.notFoundNode = new model_Node({id: -1, text: 'not found'});
     self.findNodeById = function(id)
     {
         if(typeof(self.buffer_findNodeById) == "undefined")
@@ -102,6 +103,10 @@ function ConnectedNotesViewModel()
         {
             var filtered = ko.utils.arrayFilter(self.Notes(), function(item){ return item.id == id;} );
             result = filtered.length > 0 ? filtered[0] : null;
+        }
+        if(result == null)
+        {
+            result = self.notFoundNode;
         }
 
         return result;

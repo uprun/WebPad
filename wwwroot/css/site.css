@@ -36,11 +36,29 @@ body {
     padding-right: 2mm;
     padding-top: 2mm;
     padding-bottom: 2mm;
-    min-height: 9mm;
+    min-height: 15mm;
     min-width: 9mm;
-    font-size: 5mm;
-    width: max-content;
-    box-sizing: content-box;
+    box-sizing: border-box;
+    display: inline-block;
+    font-size: 7mm;
+}
+
+.webpad-card
+{
+    width: 70mm;
+    min-height: 70mm;
+    border-width: 2mm;
+    border-color: #ff5e00;
+}
+
+.webpad-inline
+{
+    display: inline;
+}
+
+.webpad-inline-flex
+{
+    display: inline-flex;
 }
 
 button
