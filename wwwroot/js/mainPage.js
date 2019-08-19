@@ -42,32 +42,7 @@ function ConnectedNotesViewModel()
 
     
 
-    self.buffer_findEdgeById = undefined;
-    self.findEdgeById = function(id)
-    {
-        if(typeof(self.buffer_findEdgeById) == "undefined")
-        {
-            self.buffer_findEdgeById = {};
-            ko.utils.arrayForEach
-            (
-                lookup.Connections(), 
-                function(item) 
-                    {
-                        self.buffer_findEdgeById[item.id] = item;
-                    }
-            );
-        }
-        var result = self.buffer_findEdgeById[id];
-        if(typeof(result) == "undefined")
-        {
-            var filtered = ko.utils.arrayFilter(lookup.Connections(), function(item){ return item.id == id;} );
-            result = filtered.length > 0 ? filtered[0] : null;
-        }
 
-        
-        return result;
-
-    }
 
     self.processMessageFromOuterSpace = function(item)
     {
@@ -93,7 +68,7 @@ function ConnectedNotesViewModel()
 
         if(current_action == self.actions.ConnectionUpdated)
         {
-            var found = self.findEdgeById(current_data.id);
+            var found = lookup.findEdgeById(current_data.id);
             if(found)
             {
                 found.label(current_data.label);
@@ -143,7 +118,7 @@ function ConnectedNotesViewModel()
 
         if(current_action == self.actions.ConnectionAdded)
         {
-            var found = self.findEdgeById(current_data.id);
+            var found = lookup.findEdgeById(current_data.id);
             if(!found)
             {
                 var connectionToAdd = 
@@ -169,7 +144,7 @@ function ConnectedNotesViewModel()
 
         if(current_action == self.actions.ConnectionDeleted)
         {
-            var found = self.findEdgeById(current_data.id);
+            var found = lookup.findEdgeById(current_data.id);
             if(found)
             {
                 lookup.Connections.remove(found);
@@ -1231,7 +1206,7 @@ function ConnectedNotesViewModel()
 
     self.SelectEdgeToEdit = function(id) {
         
-        var from = self.findEdgeById(id);
+        var from = lookup.findEdgeById(id);
         if(from != null) {
             self.EdgeToEdit( from );
             self.textToEdit(from.label());
