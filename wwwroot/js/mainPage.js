@@ -1,34 +1,4 @@
-﻿function storageAvailable(type) {
-    try {
-        var storage = window[type],
-            x = '__storage_test__';
-        storage.setItem(x, x);
-        storage.removeItem(x);
-        return true;
-    }
-    catch(e) {
-        return e instanceof DOMException && (
-            // everything except Firefox
-            e.code === 22 ||
-            // Firefox
-            e.code === 1014 ||
-            // test name field too, because code might not be present
-            // everything except Firefox
-            e.name === 'QuotaExceededError' ||
-            // Firefox
-            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
-            // acknowledge QuotaExceededError only if there's something already stored
-            storage.length !== 0;
-    }
-}
-
-var localStorage = undefined;
-if (storageAvailable('localStorage')) {
-    localStorage = window['localStorage'];
-}
-else {
-    // Too bad, no localStorage for us
-}
+﻿
 
 function ConnectedNotesViewModel()
 {
@@ -47,71 +17,30 @@ function ConnectedNotesViewModel()
 
     };
 
+    lookup.defineLocalStorage();
+
     
-    self.freeLocalIndex = 0;
-    self.localPrefix = '_local_';
-    self.Scale = ko.observable(2.0);
-    self.ViewPortWidth = ko.observable(2560); // ultra wide 1080p
-    self.ViewPortHeight = ko.observable(1080);// ultra wide 1080p
-    self.Notes = ko.observableArray([]);
-    self.ColorPresets = ko.observableArray([]);
-    self.Connections = ko.observableArray([]);
+    lookup.freeLocalIndex = 0;
+    lookup.localPrefix = '_local_';
 
-    self.crypto_worker = undefined;
+    lookup.Notes = ko.observableArray([]);
+    self.Notes = lookup.Notes;
+
+    lookup.ColorPresets = ko.observableArray([]);
+    self.ColorPresets = lookup.ColorPresets;
+
+    lookup.Connections = ko.observableArray([]);
+    self.Connections = lookup.Connections;
+
+    lookup.crypto_worker = undefined;
     
-    self.crypto_worker = new Worker("js/worker-crypto.js");
+    lookup.crypto_worker = new Worker("js/worker-crypto.js");
 
-    self.history = ko.observableArray([]);
+    lookup.history = ko.observableArray([]);
 
-    /**
-     * Define the chunk method in the prototype of an array
-     * that returns an array with arrays of the given size.
-     *
-     * @param chunkSize {Integer} Size of every group
-     */
-    Object.defineProperty(Array.prototype, 'chunk', {
-        value: function(chunkSize){
-            var temporal = [];
-            
-            for (var i = 0; i < this.length; i+= chunkSize){
-                temporal.push(this.slice(i,i+chunkSize));
-            }
-                    
-            return temporal;
-        }
-    });
+    self.history = lookup.history; 
 
-    self.buffer_findNodeById = undefined;
-    self.notFoundNode = new model_Node({id: -1, text: 'not found'});
-    self.findNodeById = function(id)
-    {
-        if(typeof(self.buffer_findNodeById) == "undefined")
-        {
-            self.buffer_findNodeById = {};
-            ko.utils.arrayForEach
-            (
-                self.Notes(), 
-                function(item) 
-                    {
-                        self.buffer_findNodeById[item.id] = item;
-                    }
-            );
-        }
-
-        var result = self.buffer_findNodeById[id];
-        if(typeof(result) == "undefined")
-        {
-            var filtered = ko.utils.arrayFilter(self.Notes(), function(item){ return item.id == id;} );
-            result = filtered.length > 0 ? filtered[0] : null;
-        }
-        if(result == null)
-        {
-            result = self.notFoundNode;
-        }
-
-        return result;
-
-    };
+    
 
     self.buffer_findEdgeById = undefined;
     self.findEdgeById = function(id)
@@ -121,7 +50,7 @@ function ConnectedNotesViewModel()
             self.buffer_findEdgeById = {};
             ko.utils.arrayForEach
             (
-                self.Connections(), 
+                lookup.Connections(), 
                 function(item) 
                     {
                         self.buffer_findEdgeById[item.id] = item;
@@ -131,7 +60,7 @@ function ConnectedNotesViewModel()
         var result = self.buffer_findEdgeById[id];
         if(typeof(result) == "undefined")
         {
-            var filtered = ko.utils.arrayFilter(self.Connections(), function(item){ return item.id == id;} );
+            var filtered = ko.utils.arrayFilter(lookup.Connections(), function(item){ return item.id == id;} );
             result = filtered.length > 0 ? filtered[0] : null;
         }
 
@@ -146,7 +75,7 @@ function ConnectedNotesViewModel()
         var current_data = item.data;
         if(current_action == self.actions.NoteUpdated)
         {
-            var found = self.findNodeById(current_data.id);
+            var found = lookup.findNodeById(current_data.id);
             if(found)
             {
                 found.text(current_data.text);
@@ -158,7 +87,7 @@ function ConnectedNotesViewModel()
             else
             {
                 var noteToAdd = new model_Node(current_data);
-                self.Notes.push(noteToAdd);
+                lookup.Notes.push(noteToAdd);
             }
         }
 
@@ -179,23 +108,23 @@ function ConnectedNotesViewModel()
                     current_data.DestinationId,
                     current_data.label,
                     current_data.generated,
-                    self.findNodeById
+                    lookup.findNodeById
                     );
-                self.Connections.push(connectionToAdd)
+                lookup.Connections.push(connectionToAdd)
             }
         }
 
         if(current_action == self.actions.NoteAdded)
         {
-            var found = self.findNodeById(current_data.id);
+            var found = lookup.findNodeById(current_data.id);
             if(!found)
             {
                 var noteToAdd = new model_Node(current_data);
-                self.Notes.push(noteToAdd);
+                lookup.Notes.push(noteToAdd);
             }
             else
             {
-                if(!found.id.startsWith(self.localPrefix))
+                if(!found.id.startsWith(lookup.localPrefix))
                 {
                     found.text(current_data.text);
                 }
@@ -205,10 +134,10 @@ function ConnectedNotesViewModel()
 
         if(current_action == self.actions.NoteDeleted)
         {
-            var found = self.findNodeById(current_data.id);
+            var found = lookup.findNodeById(current_data.id);
             if(found)
             {
-                self.Notes.remove(found);
+                lookup.Notes.remove(found);
             }
         }
 
@@ -225,13 +154,13 @@ function ConnectedNotesViewModel()
                         current_data.DestinationId, 
                         current_data.label, 
                         current_data.generated,
-                        self.findNodeById
+                        lookup.findNodeById
                     );
-                self.Connections.push(connectionToAdd)
+                lookup.Connections.push(connectionToAdd)
             }
             else
             {
-                if(!found.id.startsWith(self.localPrefix))
+                if(!found.id.startsWith(lookup.localPrefix))
                 {
                     found.label(current_data.label);
                 }
@@ -243,16 +172,16 @@ function ConnectedNotesViewModel()
             var found = self.findEdgeById(current_data.id);
             if(found)
             {
-                self.Connections.remove(found);
+                lookup.Connections.remove(found);
             }
         }
 
         // if(current_action == self.actions.HealthCheckRequest)
         // {
-        //     var toStoreNotes = ko.utils.arrayMap(self.Notes(), function(item) {
+        //     var toStoreNotes = ko.utils.arrayMap(lookup.Notes(), function(item) {
         //         return item.id;
         //     });
-        //     var toStoreConnections = ko.utils.arrayMap(self.Connections(), function(item) {
+        //     var toStoreConnections = ko.utils.arrayMap(lookup.Connections(), function(item) {
         //         return item.id;
         //     });
         //     var all_available_ids = toStoreNotes.concat(toStoreConnections);
@@ -298,7 +227,7 @@ function ConnectedNotesViewModel()
         return toReturn;
     });
 
-    ko.utils.arrayPushAll(self.ColorPresets, toAddColors);
+    ko.utils.arrayPushAll(lookup.ColorPresets, toAddColors);
 
 
     self.ColorNode = function(colorToApply) {
@@ -331,7 +260,7 @@ function ConnectedNotesViewModel()
     self.CheckIfEveryNodeHasColor = function()
     {
         var filtered = ko.utils.arrayFilter(
-            self.Notes(),
+            lookup.Notes(),
             function(item) 
             {
                 if(typeof(item.color) === "undefined" )
@@ -343,7 +272,7 @@ function ConnectedNotesViewModel()
         );
         if(filtered.length > 0)
         {
-            var colors =  self.ColorPresets();
+            var colors =  lookup.ColorPresets();
             filtered = ko.utils.arrayFilter(filtered, function(item, index)
             {
                 return index < 50;
@@ -365,15 +294,15 @@ function ConnectedNotesViewModel()
             var noteToAdd = new model_Node(elem);
             return noteToAdd;
         });
-        ko.utils.arrayPushAll(self.Notes, toAdd);
+        ko.utils.arrayPushAll(lookup.Notes, toAdd);
 
         
 
         var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
-            var connectionToAdd = new model_Connection(elem.id, elem.SourceId, elem.DestinationId, elem.label, elem.generated, self.findNodeById);
+            var connectionToAdd = new model_Connection(elem.id, elem.SourceId, elem.DestinationId, elem.label, elem.generated, lookup.findNodeById);
             return connectionToAdd;
         });
-        ko.utils.arrayPushAll(self.Connections, connectionsToAdd);
+        ko.utils.arrayPushAll(lookup.Connections, connectionsToAdd);
         
 
         //self.CheckIfEveryNodeHasColor();
@@ -390,13 +319,13 @@ function ConnectedNotesViewModel()
     self.pushToHistory = function(item) {
         item = self.ConvertToLocalId(item);
         self.processMessageFromOuterSpace(item);
-        item.historyIndex = self.freeLocalIndex++;
+        item.historyIndex = lookup.freeLocalIndex++;
         self.processCallBacks(item);        
-        self.history.push(item);
+        lookup.history.push(item);
     };
 
     self.saveTrustedPublicKeys = function() {
-        localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(self.TrustedPublicKeysToSendTo()));
+        lookup.localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(self.TrustedPublicKeysToSendTo()));
     };
 
     self.GenerateConnectionIsA = function(A, Z)
@@ -409,8 +338,8 @@ function ConnectedNotesViewModel()
             {
                 if(Z.label() == "is a")
                 {
-                    var from = self.findNodeById(A.SourceId);
-                    var to = self.findNodeById(Z.DestinationId);
+                    var from = lookup.findNodeById(A.SourceId);
+                    var to = lookup.findNodeById(Z.DestinationId);
                     if(from != null && to != null)
                     {
                         self.ConnectNotes(from, to, "is a", true);
@@ -434,8 +363,8 @@ function ConnectedNotesViewModel()
             {
                 if(Z.label() == "has property")
                 {
-                    var from = self.findNodeById(A.SourceId);
-                    var to = self.findNodeById(Z.DestinationId);
+                    var from = lookup.findNodeById(A.SourceId);
+                    var to = lookup.findNodeById(Z.DestinationId);
                     if(from != null && to != null)
                     {
                         self.ConnectNotes(from, to, "has property", true);
@@ -459,8 +388,8 @@ function ConnectedNotesViewModel()
             {
                 if(Z.label() == "has part")
                 {
-                    var from = self.findNodeById(A.SourceId);
-                    var to = self.findNodeById(Z.DestinationId);
+                    var from = lookup.findNodeById(A.SourceId);
+                    var to = lookup.findNodeById(Z.DestinationId);
                     if(from != null && to != null)
                     {
                         self.ConnectNotes(from, to, "has part", true);
@@ -477,11 +406,11 @@ function ConnectedNotesViewModel()
     self.ActualGenerateConnections = function()
     {
         ko.utils.arrayForEach(
-            self.Connections(), 
+            lookup.Connections(), 
             function(itemA, indexA)
                 { 
                     ko.utils.arrayForEach(
-                        self.Connections(), 
+                        lookup.Connections(), 
                         function(itemB, indexB)
                             { 
                                 if(indexA !== indexB)
@@ -518,18 +447,18 @@ function ConnectedNotesViewModel()
 
                     if(addedChanges && addedChanges.length > 0 ) {
 
-                        var toStoreNotes = ko.utils.arrayMap(self.Notes(), function(item) {
+                        var toStoreNotes = ko.utils.arrayMap(lookup.Notes(), function(item) {
                             return item.ConvertToJs();
                         });
-                        var toStoreConnections = ko.utils.arrayMap(self.Connections(), function(item) {
+                        var toStoreConnections = ko.utils.arrayMap(lookup.Connections(), function(item) {
                             return item.ConvertToJs();
                         });
                        
                         
-                        localStorage.setItem("Notes", JSON.stringify(toStoreNotes));
-                        localStorage.setItem("Connections", JSON.stringify(toStoreConnections));
-                        localStorage.setItem("localFreeIndex", JSON.stringify(self.freeLocalIndex));
-                        localStorage.setItem("viewPosition", JSON.stringify({}))
+                        lookup.localStorage.setItem("Notes", JSON.stringify(toStoreNotes));
+                        lookup.localStorage.setItem("Connections", JSON.stringify(toStoreConnections));
+                        lookup.localStorage.setItem("localFreeIndex", JSON.stringify(lookup.freeLocalIndex));
+                        lookup.localStorage.setItem("viewPosition", JSON.stringify({}))
 
                         var filteredChanges = ko.utils.arrayFilter(addedChanges, function(item){ 
                                 return item.value.action != self.actions.PositionsUpdated 
@@ -576,7 +505,7 @@ function ConnectedNotesViewModel()
                         });
 
                         self.saveTrustedPublicKeys();
-                        self.history.removeAll();
+                        lookup.history.removeAll();
                     
 
                     }
@@ -588,7 +517,7 @@ function ConnectedNotesViewModel()
 
 
     self.getLocalIndex = function() {
-        return ( self.localPrefix + (self.freeLocalIndex++) );
+        return ( lookup.localPrefix + (lookup.freeLocalIndex++) );
     };
 
     self.SearchNotesQuery = ko.observable("");
@@ -598,7 +527,7 @@ function ConnectedNotesViewModel()
     self.FilteredNodes = ko.pureComputed(function() {
         return ko.utils.arrayFilter
         (
-            self.Notes(), 
+            lookup.Notes(), 
             function(item, index)
                 { 
                     if(self.SearchNotesQuery() && self.SearchNotesQuery().trim().length > 0)
@@ -665,7 +594,7 @@ function ConnectedNotesViewModel()
     };
 
     self.SendMessage = function(item) {
-        self.crypto_worker.postMessage({
+        lookup.crypto_worker.postMessage({
             action: 'encrypt'
             , PlainText: unescape(encodeURIComponent(item.message))
             , ReceiverPublicKey: item.receiver
@@ -676,7 +605,7 @@ function ConnectedNotesViewModel()
     };
 
     self.DecryptMessage = function(item) {
-        self.crypto_worker.postMessage(
+        lookup.crypto_worker.postMessage(
             {
                 action: 'decrypt'
                 , CipherText: item
@@ -754,21 +683,21 @@ function ConnectedNotesViewModel()
             {
                 if(data.id.startsWith(shrinkedOwnPublicKey))
                 {
-                    data.id = self.localPrefix + data.id.substring(shrinkedOwnPublicKey.length);
+                    data.id = lookup.localPrefix + data.id.substring(shrinkedOwnPublicKey.length);
                 }
             }
             if(data.SourceId)
             {
                 if(data.SourceId.startsWith(shrinkedOwnPublicKey))
                 {
-                    data.SourceId = self.localPrefix + data.SourceId.substring(shrinkedOwnPublicKey.length);
+                    data.SourceId = lookup.localPrefix + data.SourceId.substring(shrinkedOwnPublicKey.length);
                 }
             }
             if(data.DestinationId)
             {
                 if(data.DestinationId.startsWith(shrinkedOwnPublicKey))
                 {
-                    data.DestinationId = self.localPrefix + data.DestinationId.substring(shrinkedOwnPublicKey.length);
+                    data.DestinationId = lookup.localPrefix + data.DestinationId.substring(shrinkedOwnPublicKey.length);
                 }
             }
         }
@@ -796,23 +725,23 @@ function ConnectedNotesViewModel()
                         var data = itemToSend.data;
                         if(data.id)
                         {
-                            if(data.id.startsWith(self.localPrefix))
+                            if(data.id.startsWith(lookup.localPrefix))
                             {
-                                data.id = shrinkedOwnPublicKey + data.id.substring(self.localPrefix.length);
+                                data.id = shrinkedOwnPublicKey + data.id.substring(lookup.localPrefix.length);
                             }
                         }
                         if(data.SourceId)
                         {
-                            if(data.SourceId.startsWith(self.localPrefix))
+                            if(data.SourceId.startsWith(lookup.localPrefix))
                             {
-                                data.SourceId = shrinkedOwnPublicKey + data.SourceId.substring(self.localPrefix.length);
+                                data.SourceId = shrinkedOwnPublicKey + data.SourceId.substring(lookup.localPrefix.length);
                             }
                         }
                         if(data.DestinationId)
                         {
-                            if(data.DestinationId.startsWith(self.localPrefix))
+                            if(data.DestinationId.startsWith(lookup.localPrefix))
                             {
-                                data.DestinationId = shrinkedOwnPublicKey + data.DestinationId.substring(self.localPrefix.length);
+                                data.DestinationId = shrinkedOwnPublicKey + data.DestinationId.substring(lookup.localPrefix.length);
                             }
                         }
                     }
@@ -905,7 +834,7 @@ function ConnectedNotesViewModel()
                 if(value.status == "added") {
                     if(value.value.status == "awaitingInitialSnapshot")
                     {
-                        var notesChanges = ko.utils.arrayMap(self.Notes(), function(elem) {
+                        var notesChanges = ko.utils.arrayMap(lookup.Notes(), function(elem) {
                             var result = {
                                 action: self.actions.NoteAdded,
                                 data: elem.ConvertToJs()
@@ -913,7 +842,7 @@ function ConnectedNotesViewModel()
                             return result;
                         });
 
-                        var connectionsChanges = ko.utils.arrayMap(self.Connections(), function(elem) {
+                        var connectionsChanges = ko.utils.arrayMap(lookup.Connections(), function(elem) {
                             var result = {
                                 action: self.actions.ConnectionAdded,
                                 data: elem.ConvertToJs()
@@ -1055,28 +984,28 @@ function ConnectedNotesViewModel()
     
     if(localStorage["Notes"]){
         var data = {};
-        data.notes = JSON.parse(localStorage.getItem("Notes"));
-        data.connections = JSON.parse(localStorage.getItem("Connections"));
+        data.notes = JSON.parse(lookup.localStorage.getItem("Notes"));
+        data.connections = JSON.parse(lookup.localStorage.getItem("Connections"));
         self.populate(data);
     }
     if(localStorage["privateCryptoPair"]){
-        self.privateCryptoPair = JSON.parse(localStorage.getItem("privateCryptoPair"));
+        self.privateCryptoPair = JSON.parse(lookup.localStorage.getItem("privateCryptoPair"));
     }
     
     if(localStorage["localFreeIndex"]) {
-        self.freeLocalIndex = JSON.parse(localStorage.getItem("localFreeIndex"));
+        lookup.freeLocalIndex = JSON.parse(lookup.localStorage.getItem("localFreeIndex"));
     }
     else {
-        self.freeLocalIndex = self.Notes().length + self.Connections().length + 1;
+        lookup.freeLocalIndex = lookup.Notes().length + lookup.Connections().length + 1;
     }
 
     if(localStorage["viewPosition"])
     {
-         var parsedViewPosition = JSON.parse(localStorage.getItem("viewPosition"));
+         var parsedViewPosition = JSON.parse(lookup.localStorage.getItem("viewPosition"));
     }
 
     if(localStorage["TrustedPublicKeysToSendTo"]){ 
-        self.TrustedPublicKeysToSendTo(JSON.parse(localStorage.getItem("TrustedPublicKeysToSendTo")));
+        self.TrustedPublicKeysToSendTo(JSON.parse(lookup.localStorage.getItem("TrustedPublicKeysToSendTo")));
         if(
             self.TrustedPublicKeysToSendTo().length > 0 
             && typeof(self.TrustedPublicKeysToSendTo()[0].status) == "undefined"
@@ -1096,12 +1025,12 @@ function ConnectedNotesViewModel()
     }
 
     
-    self.crypto_worker.onmessage = function(e) {
+    lookup.crypto_worker.onmessage = function(e) {
         if(e.data.action == "applySaveOfKey.Result" ) {
             if(typeof(self.privateCryptoPair.n) == "undefined") {
-                localStorage.setItem("privateCryptoPair", JSON.stringify(e.data.data));
+                lookup.localStorage.setItem("privateCryptoPair", JSON.stringify(e.data.data));
             }
-            self.crypto_worker.postMessage({action: 'getPublicKey', data: self.privateCryptoPair});
+            lookup.crypto_worker.postMessage({action: 'getPublicKey', data: self.privateCryptoPair});
         }
         if(e.data.action == "getPublicKey.Result") {
             var keyToUse = e.data.data;
@@ -1145,7 +1074,7 @@ function ConnectedNotesViewModel()
         }
     };
 
-    self.crypto_worker.postMessage({action: 'applySaveOfKey', data: self.privateCryptoPair});
+    lookup.crypto_worker.postMessage({action: 'applySaveOfKey', data: self.privateCryptoPair});
     
 
     self.connectFrom = ko.observable(null);
@@ -1202,11 +1131,11 @@ function ConnectedNotesViewModel()
             to.id,
             label ? label : "", 
             generated,
-            self.findNodeById
+            lookup.findNodeById
         );
         var added = connectionToAdd.ConvertToJs();
         var filtered = ko.utils.arrayFilter(
-            self.Connections(), 
+            lookup.Connections(), 
             function(item)
                 { 
                     return item.SourceId == connectionToAdd.SourceId &&
@@ -1230,7 +1159,7 @@ function ConnectedNotesViewModel()
     self.RemoveNoteUnderEdit = function() {
         var toRemove = self.NoteToEdit();
 
-        self.Notes.remove(toRemove);
+        lookup.Notes.remove(toRemove);
         var deleted = toRemove.ConvertToJs();
         self.pushToHistory({
             action: self.actions.NoteDeleted,
@@ -1244,7 +1173,7 @@ function ConnectedNotesViewModel()
 
     self.RemoveConnectionUnderEdit = function() {
         var toRemove = self.EdgeToEdit();
-        self.Connections.remove(toRemove);
+        lookup.Connections.remove(toRemove);
         var deleted = toRemove.ConvertToJs();
         self.pushToHistory({
             action: self.actions.ConnectionDeleted,
@@ -1288,7 +1217,7 @@ function ConnectedNotesViewModel()
 
     self.SelectNoteToEdit = function(id) {
         
-        var from = self.findNodeById(id);
+        var from = lookup.findNodeById(id);
         if(from != null) {
             self.NoteToEdit( from );
             self.textToEdit(from.text());
@@ -1319,7 +1248,7 @@ function ConnectedNotesViewModel()
             var elem = positions[key];
             if(typeof(elem) != "function")
             {
-                var nodeFound = self.findNodeById(key);
+                var nodeFound = lookup.findNodeById(key);
                 if(nodeFound) {
                     nodeFound.x = elem.x;
                     nodeFound.y = elem.y;
