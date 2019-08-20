@@ -3,4 +3,6 @@ var lookup = {
     Notes: function(){},
     defineLocalStorage: function(){},
     localStorage: undefined,
+    actions: {},
+    processMessageFromOuterSpace: function(item) {}
 };

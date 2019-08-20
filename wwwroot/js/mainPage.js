@@ -3,7 +3,7 @@
 function ConnectedNotesViewModel()
 {
     var self = this;
-    self.actions = 
+    lookup.actions = 
     {
         NoteUpdated: 'NoteUpdated',
         ConnectionUpdated: 'ConnectionUpdated',
@@ -44,137 +44,7 @@ function ConnectedNotesViewModel()
 
 
 
-    self.processMessageFromOuterSpace = function(item)
-    {
-        var current_action = item.action;
-        var current_data = item.data;
-        if(current_action == self.actions.NoteUpdated)
-        {
-            var found = lookup.findNodeById(current_data.id);
-            if(found)
-            {
-                found.text(current_data.text);
-                found.color = current_data.color;
-                found.background = current_data.background;
-                found.x = current_data.x;
-                found.y = current_data.y;
-            }
-            else
-            {
-                var noteToAdd = new model_Node(current_data);
-                lookup.Notes.push(noteToAdd);
-            }
-        }
-
-        if(current_action == self.actions.ConnectionUpdated)
-        {
-            var found = lookup.findEdgeById(current_data.id);
-            if(found)
-            {
-                found.label(current_data.label);
-            }
-            else
-            {
-                var connectionToAdd = 
-                new model_Connection
-                    (
-                    current_data.id,
-                    current_data.SourceId,
-                    current_data.DestinationId,
-                    current_data.label,
-                    current_data.generated,
-                    lookup.findNodeById
-                    );
-                lookup.Connections.push(connectionToAdd)
-            }
-        }
-
-        if(current_action == self.actions.NoteAdded)
-        {
-            var found = lookup.findNodeById(current_data.id);
-            if(!found)
-            {
-                var noteToAdd = new model_Node(current_data);
-                lookup.Notes.push(noteToAdd);
-            }
-            else
-            {
-                if(!found.id.startsWith(lookup.localPrefix))
-                {
-                    found.text(current_data.text);
-                }
-            }
-            
-        }
-
-        if(current_action == self.actions.NoteDeleted)
-        {
-            var found = lookup.findNodeById(current_data.id);
-            if(found)
-            {
-                lookup.Notes.remove(found);
-            }
-        }
-
-        if(current_action == self.actions.ConnectionAdded)
-        {
-            var found = lookup.findEdgeById(current_data.id);
-            if(!found)
-            {
-                var connectionToAdd = 
-                    new model_Connection
-                    (
-                        current_data.id,
-                        current_data.SourceId,
-                        current_data.DestinationId, 
-                        current_data.label, 
-                        current_data.generated,
-                        lookup.findNodeById
-                    );
-                lookup.Connections.push(connectionToAdd)
-            }
-            else
-            {
-                if(!found.id.startsWith(lookup.localPrefix))
-                {
-                    found.label(current_data.label);
-                }
-            }
-        }
-
-        if(current_action == self.actions.ConnectionDeleted)
-        {
-            var found = lookup.findEdgeById(current_data.id);
-            if(found)
-            {
-                lookup.Connections.remove(found);
-            }
-        }
-
-        // if(current_action == self.actions.HealthCheckRequest)
-        // {
-        //     var toStoreNotes = ko.utils.arrayMap(lookup.Notes(), function(item) {
-        //         return item.id;
-        //     });
-        //     var toStoreConnections = ko.utils.arrayMap(lookup.Connections(), function(item) {
-        //         return item.id;
-        //     });
-        //     var all_available_ids = toStoreNotes.concat(toStoreConnections);
-        //     var chunked_ids = all_available_ids.chunk(40);
-
-        //     ko.utils.arrayForEach(chunked_ids, function(item, id) {
-        //         self.pushToHistory({
-        //             action: self.actions.HealthCheckIdsProposal,
-        //             data: { 
-        //                 checkedIndex: undefined,
-        //                 publicKey: publicKey.publicKey 
-        //             }
-        //         });
-        //     });
-
-
-        // }
-    };
+    
 
     var color_presets = [ 
         { 
@@ -215,7 +85,7 @@ function ConnectedNotesViewModel()
 
         var info = toWorkWith.ConvertToJs();
         self.pushToHistory({
-            action: self.actions.NoteUpdated,
+            action: lookup.actions.NoteUpdated,
             data: info
         });
     };
@@ -227,7 +97,7 @@ function ConnectedNotesViewModel()
 
         var info = toWorkWith.ConvertToJs();
         self.pushToHistory({
-            action: self.actions.NoteUpdated,
+            action: lookup.actions.NoteUpdated,
             data: info
         });
     };
@@ -293,7 +163,7 @@ function ConnectedNotesViewModel()
 
     self.pushToHistory = function(item) {
         item = self.ConvertToLocalId(item);
-        self.processMessageFromOuterSpace(item);
+        lookup.processMessageFromOuterSpace(item);
         item.historyIndex = lookup.freeLocalIndex++;
         self.processCallBacks(item);        
         lookup.history.push(item);
@@ -436,7 +306,7 @@ function ConnectedNotesViewModel()
                         lookup.localStorage.setItem("viewPosition", JSON.stringify({}))
 
                         var filteredChanges = ko.utils.arrayFilter(addedChanges, function(item){ 
-                                return item.value.action != self.actions.PositionsUpdated 
+                                return item.value.action != lookup.actions.PositionsUpdated 
                                     && item.value.action != ""
                                     && !item.value.isFromOuterSpace;
                             } 
@@ -771,7 +641,7 @@ function ConnectedNotesViewModel()
                 publicKey.lastTimeHealthChecked = time_now;
                 needToSavePublicKeys = true;
                 self.pushToHistory({
-                    action: self.actions.HealthCheckRequest,
+                    action: lookup.actions.HealthCheckRequest,
                     data: { 
                         checkedIndex: undefined,
                         publicKey: publicKey.publicKey 
@@ -811,7 +681,7 @@ function ConnectedNotesViewModel()
                     {
                         var notesChanges = ko.utils.arrayMap(lookup.Notes(), function(elem) {
                             var result = {
-                                action: self.actions.NoteAdded,
+                                action: lookup.actions.NoteAdded,
                                 data: elem.ConvertToJs()
                             };
                             return result;
@@ -819,7 +689,7 @@ function ConnectedNotesViewModel()
 
                         var connectionsChanges = ko.utils.arrayMap(lookup.Connections(), function(elem) {
                             var result = {
-                                action: self.actions.ConnectionAdded,
+                                action: lookup.actions.ConnectionAdded,
                                 data: elem.ConvertToJs()
                             };
                             return result;
@@ -1070,7 +940,7 @@ function ConnectedNotesViewModel()
             });
         var added = toAdd.ConvertToJs();
         self.pushToHistory({
-            action: self.actions.NoteAdded,
+            action: lookup.actions.NoteAdded,
             data: added
         });
         if(callback && typeof(callback) === "function") {
@@ -1124,7 +994,7 @@ function ConnectedNotesViewModel()
         {
             
             self.pushToHistory({
-                action: self.actions.ConnectionAdded,
+                action: lookup.actions.ConnectionAdded,
                 data: added
             });
         }
@@ -1137,7 +1007,7 @@ function ConnectedNotesViewModel()
         lookup.Notes.remove(toRemove);
         var deleted = toRemove.ConvertToJs();
         self.pushToHistory({
-            action: self.actions.NoteDeleted,
+            action: lookup.actions.NoteDeleted,
             data: deleted
         });
     };
@@ -1151,7 +1021,7 @@ function ConnectedNotesViewModel()
         lookup.Connections.remove(toRemove);
         var deleted = toRemove.ConvertToJs();
         self.pushToHistory({
-            action: self.actions.ConnectionDeleted,
+            action: lookup.actions.ConnectionDeleted,
             data: deleted
         });
     };
@@ -1173,7 +1043,7 @@ function ConnectedNotesViewModel()
                 toSend.text = changes;
                 
                 self.pushToHistory({
-                        action: self.actions.NoteUpdated,
+                        action: lookup.actions.NoteUpdated,
                         data: toSend
                     }
                 );
@@ -1183,7 +1053,7 @@ function ConnectedNotesViewModel()
                 var toSend = self.EdgeToEdit().ConvertToJs();
                 toSend.label = changes;
                 self.pushToHistory({
-                    action: self.actions.ConnectionUpdated,
+                    action: lookup.actions.ConnectionUpdated,
                     data: toSend
                 });
             }
@@ -1229,7 +1099,7 @@ function ConnectedNotesViewModel()
                     nodeFound.y = elem.y;
                     var toSend = nodeFound.ConvertToJs();
                     self.pushToHistory({
-                            action: self.actions.NoteUpdated,
+                            action: lookup.actions.NoteUpdated,
                             data: toSend
                         }
                     );
@@ -1241,7 +1111,7 @@ function ConnectedNotesViewModel()
             
         });
         self.pushToHistory({
-            action: self.actions.PositionsUpdated,
+            action: lookup.actions.PositionsUpdated,
             data: null
         });
     };
@@ -1249,7 +1119,7 @@ function ConnectedNotesViewModel()
     self.ViewPortUpdated = function()
     {
         self.pushToHistory({
-            action: self.actions.PositionsUpdated,
+            action: lookup.actions.PositionsUpdated,
             data: null
         });
     }
