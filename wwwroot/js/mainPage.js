@@ -24,23 +24,30 @@ function ConnectedNotesViewModel()
     lookup.localPrefix = '_local_';
 
     lookup.Notes = ko.observableArray([]);
-    self.Notes = lookup.Notes;
 
     lookup.ColorPresets = ko.observableArray([]);
-    self.ColorPresets = lookup.ColorPresets;
 
     lookup.Connections = ko.observableArray([]);
-    self.Connections = lookup.Connections;
 
     lookup.crypto_worker = undefined;
     
     lookup.crypto_worker = new Worker("js/worker-crypto.js");
 
-    lookup.history = ko.observableArray([]);
+    lookup.history = ko.observableArray([]); 
 
-    self.history = lookup.history; 
+    lookup.publicCryptoKey = ko.observable(undefined);
 
+    lookup.SyncOptionsVisible = ko.observable(false);
+
+    lookup.OpenSyncOptions = function() 
+    {
+        lookup.SyncOptionsVisible(true);
+    };
     
+    lookup.HideSyncOptions = function() 
+    {
+        lookup.SyncOptionsVisible(false);
+    };
 
 
 
@@ -75,34 +82,34 @@ function ConnectedNotesViewModel()
     ko.utils.arrayPushAll(lookup.ColorPresets, toAddColors);
 
 
-    self.ColorNode = function(colorToApply) {
+    lookup.ColorNode = function(colorToApply) {
         
-        var toWorkWith = self.NoteToEdit();
+        var toWorkWith = lookup.NoteToEdit();
         
         
         toWorkWith.color = colorToApply.Color();
         toWorkWith.background = colorToApply.Background();
 
         var info = toWorkWith.ConvertToJs();
-        self.pushToHistory({
+        lookup.pushToHistory({
             action: lookup.actions.NoteUpdated,
             data: info
         });
     };
 
-    self.ColorNodeFromCode = function(colorToApply, toWorkWith) {
+    lookup.ColorNodeFromCode = function(colorToApply, toWorkWith) {
                 
         toWorkWith.color = colorToApply.Color();
         toWorkWith.background = colorToApply.Background();
 
         var info = toWorkWith.ConvertToJs();
-        self.pushToHistory({
+        lookup.pushToHistory({
             action: lookup.actions.NoteUpdated,
             data: info
         });
     };
 
-    self.CheckIfEveryNodeHasColor = function()
+    lookup.CheckIfEveryNodeHasColor = function()
     {
         var filtered = ko.utils.arrayFilter(
             lookup.Notes(),
@@ -126,14 +133,12 @@ function ConnectedNotesViewModel()
             ko.utils.arrayForEach(filtered, function(item) {
                 var selectedColorIndex = Math.floor(Math.random() * colors.length);
                 var selectedColor = colors[selectedColorIndex];
-                self.ColorNodeFromCode(selectedColor, item);
+                lookup.ColorNodeFromCode(selectedColor, item);
             });
         }
     };
 
-    self.colorFreeIndex = 0;
-
-    self.populate = function(data) {
+    lookup.populate = function(data) {
         var toAdd = ko.utils.arrayMap(data.notes, function(elem) 
         {
             var noteToAdd = new model_Node(elem);
@@ -150,30 +155,30 @@ function ConnectedNotesViewModel()
         ko.utils.arrayPushAll(lookup.Connections, connectionsToAdd);
         
 
-        //self.CheckIfEveryNodeHasColor();
+        //lookup.CheckIfEveryNodeHasColor();
 
         
         
     };
 
-    self.processCallBacks = function(item)
+    lookup.processCallBacks = function(item)
     {
         
     };
 
-    self.pushToHistory = function(item) {
-        item = self.ConvertToLocalId(item);
+    lookup.pushToHistory = function(item) {
+        item = lookup.ConvertToLocalId(item);
         lookup.processMessageFromOuterSpace(item);
         item.historyIndex = lookup.freeLocalIndex++;
-        self.processCallBacks(item);        
+        lookup.processCallBacks(item);        
         lookup.history.push(item);
     };
 
-    self.saveTrustedPublicKeys = function() {
-        lookup.localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(self.TrustedPublicKeysToSendTo()));
+    lookup.saveTrustedPublicKeys = function() {
+        lookup.localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(lookup.TrustedPublicKeysToSendTo()));
     };
 
-    self.GenerateConnectionIsA = function(A, Z)
+    lookup.GenerateConnectionIsA = function(A, Z)
     {
         //   A    Z         R
         // X is Y is D => X is D
@@ -187,7 +192,7 @@ function ConnectedNotesViewModel()
                     var to = lookup.findNodeById(Z.DestinationId);
                     if(from != null && to != null)
                     {
-                        self.ConnectNotes(from, to, "is a", true);
+                        lookup.ConnectNotes(from, to, "is a", true);
                     }
                     
 
@@ -198,7 +203,7 @@ function ConnectedNotesViewModel()
 
     };
 
-    self.GenerateConnectionHasProperty = function(A, Z)
+    lookup.GenerateConnectionHasProperty = function(A, Z)
     {
         //   A    Z         R
         // X is Y is D => X is D
@@ -212,7 +217,7 @@ function ConnectedNotesViewModel()
                     var to = lookup.findNodeById(Z.DestinationId);
                     if(from != null && to != null)
                     {
-                        self.ConnectNotes(from, to, "has property", true);
+                        lookup.ConnectNotes(from, to, "has property", true);
                     }
                     
 
@@ -223,7 +228,7 @@ function ConnectedNotesViewModel()
 
     };
 
-    self.GenerateConnectionHasPart = function(A, Z)
+    lookup.GenerateConnectionHasPart = function(A, Z)
     {
         //   A    Z         R
         // X is Y is D => X is D
@@ -237,7 +242,7 @@ function ConnectedNotesViewModel()
                     var to = lookup.findNodeById(Z.DestinationId);
                     if(from != null && to != null)
                     {
-                        self.ConnectNotes(from, to, "has part", true);
+                        lookup.ConnectNotes(from, to, "has part", true);
                     }
                     
 
@@ -248,7 +253,7 @@ function ConnectedNotesViewModel()
 
     };
 
-    self.ActualGenerateConnections = function()
+    lookup.ActualGenerateConnections = function()
     {
         ko.utils.arrayForEach(
             lookup.Connections(), 
@@ -260,20 +265,20 @@ function ConnectedNotesViewModel()
                             { 
                                 if(indexA !== indexB)
                                 {
-                                    self.GenerateConnectionIsA(itemA, itemB);
-                                    self.GenerateConnectionHasProperty(itemA, itemB);
-                                    self.GenerateConnectionHasPart(itemA, itemB);
+                                    lookup.GenerateConnectionIsA(itemA, itemB);
+                                    lookup.GenerateConnectionHasProperty(itemA, itemB);
+                                    lookup.GenerateConnectionHasPart(itemA, itemB);
                                 }
                             } 
                         );
                 } 
             );
-        setTimeout(self.ActualGenerateConnections, 3000);
+        setTimeout(lookup.ActualGenerateConnections, 3000);
     };
 
 
 
-    self
+    lookup
         .history
         .extend(
             { 
@@ -345,11 +350,11 @@ function ConnectedNotesViewModel()
                             return item.value;
                         });
 
-                        ko.utils.arrayForEach(self.TrustedPublicKeysToSendTo(), function(item) {
+                        ko.utils.arrayForEach(lookup.TrustedPublicKeysToSendTo(), function(item) {
                             item.messagesPrepared = item.messagesPrepared.concat(messagesToAdd);
                         });
 
-                        self.saveTrustedPublicKeys();
+                        lookup.saveTrustedPublicKeys();
                         lookup.history.removeAll();
                     
 
@@ -361,23 +366,23 @@ function ConnectedNotesViewModel()
         );
 
 
-    self.getLocalIndex = function() {
+    lookup.getLocalIndex = function() {
         return ( lookup.localPrefix + (lookup.freeLocalIndex++) );
     };
 
-    self.SearchNotesQuery = ko.observable("");
+    lookup.SearchNotesQuery = ko.observable("");
 
-    self.MaxSearchResults = ko.observable(4);
+    lookup.MaxSearchResults = ko.observable(4);
 
-    self.FilteredNodes = ko.pureComputed(function() {
+    lookup.FilteredNodes = ko.pureComputed(function() {
         return ko.utils.arrayFilter
         (
             lookup.Notes(), 
             function(item, index)
                 { 
-                    if(self.SearchNotesQuery() && self.SearchNotesQuery().trim().length > 0)
+                    if(lookup.SearchNotesQuery() && lookup.SearchNotesQuery().trim().length > 0)
                     {
-                        var result = item.text().toLowerCase().indexOf(self.SearchNotesQuery().trim().toLowerCase()) >= 0;
+                        var result = item.text().toLowerCase().indexOf(lookup.SearchNotesQuery().trim().toLowerCase()) >= 0;
                         return result;
                     }
                     else
@@ -389,13 +394,13 @@ function ConnectedNotesViewModel()
         );
     });
 
-    self.FilteredNodesFirstElements = ko.pureComputed(function()
+    lookup.FilteredNodesFirstElements = ko.pureComputed(function()
         {
-            return self.FilteredNodes().slice(0, self.MaxSearchResults());
+            return lookup.FilteredNodes().slice(0, lookup.MaxSearchResults());
         });
 
-    self.previousHighlighted = [];
-    self.FilteredNodesFirstElements
+    lookup.previousHighlighted = [];
+    lookup.FilteredNodesFirstElements
         .extend(
             { 
                 rateLimit: 1500 
@@ -408,7 +413,7 @@ function ConnectedNotesViewModel()
                     } 
                 );
                 var hash = {};
-                if(self.SearchNotesQuery().trim().length > 0)
+                if(lookup.SearchNotesQuery().trim().length > 0)
                 {
 
                     ko.utils.arrayForEach(addedChanges, function(item)
@@ -420,7 +425,7 @@ function ConnectedNotesViewModel()
 
                 }
 
-                ko.utils.arrayForEach(self.previousHighlighted, function(item)
+                ko.utils.arrayForEach(lookup.previousHighlighted, function(item)
                     {
                         if(!hash[item.id])
                         {
@@ -428,17 +433,17 @@ function ConnectedNotesViewModel()
                         }
                     }
                 );
-                self.previousHighlighted = addedChanges.slice(0);
+                lookup.previousHighlighted = addedChanges.slice(0);
 
             }
         );
     
-    self.focusOnNode = function(item)
+    lookup.focusOnNode = function(item)
     {
         
     };
 
-    self.SendMessage = function(item) {
+    lookup.SendMessage = function(item) {
         lookup.crypto_worker.postMessage({
             action: 'encrypt'
             , PlainText: unescape(encodeURIComponent(item.message))
@@ -449,7 +454,7 @@ function ConnectedNotesViewModel()
 
     };
 
-    self.DecryptMessage = function(item) {
+    lookup.DecryptMessage = function(item) {
         lookup.crypto_worker.postMessage(
             {
                 action: 'decrypt'
@@ -459,7 +464,7 @@ function ConnectedNotesViewModel()
 
     };
 
-    self.ActualSendMessage = function(receiver, text, id) {
+    lookup.ActualSendMessage = function(receiver, text, id) {
         $.ajax({
             type: "POST",
             url: "SendMessages",
@@ -470,7 +475,7 @@ function ConnectedNotesViewModel()
                         Text: text
                     }
                 ],
-                senderPublicKey: self.publicCryptoKey()
+                senderPublicKey: lookup.publicCryptoKey()
             },
             success: function() {
             },
@@ -482,7 +487,7 @@ function ConnectedNotesViewModel()
 
     };
 
-    self.ReceiveMessages = function(publicKey) {
+    lookup.ReceiveMessages = function(publicKey) {
         $.ajax({
             type: "POST",
             url: "ReceiveMessages",
@@ -493,7 +498,7 @@ function ConnectedNotesViewModel()
                 if(data && data.length > 0)
                 {
                     ko.utils.arrayForEach(data, function(item) {
-                        self.DecryptMessage(item);
+                        lookup.DecryptMessage(item);
                     });
                 }
                 
@@ -506,12 +511,12 @@ function ConnectedNotesViewModel()
 
     };
 
-    self.TokenToShare = ko.observable("");
-    self.SynchronizationToken = ko.observable("");
+    lookup.TokenToShare = ko.observable("");
+    lookup.SynchronizationToken = ko.observable("");
 
-    self.ConvertToLocalId = function(itemToSend) 
+    lookup.ConvertToLocalId = function(itemToSend) 
     {
-        var ownPublicKey = self.publicCryptoKey();
+        var ownPublicKey = lookup.publicCryptoKey();
         if(typeof(ownPublicKey) == "undefined" || ownPublicKey == null) 
         {
             return itemToSend;
@@ -555,10 +560,10 @@ function ConnectedNotesViewModel()
     };
 
 
-    self.processMessages = function() {
-        var ownPublicKey = self.publicCryptoKey();
+    lookup.processMessages = function() {
+        var ownPublicKey = lookup.publicCryptoKey();
         var shrinkedOwnPublicKey = ownPublicKey.substring(0, 5) + '_' ;
-        var messages = ko.utils.arrayMap(self.TrustedPublicKeysToSendTo(), function(item) 
+        var messages = ko.utils.arrayMap(lookup.TrustedPublicKeysToSendTo(), function(item) 
             {
                 if(item.messagesPrepared && item.messagesPrepared.length > 0 ) 
                 {
@@ -614,12 +619,12 @@ function ConnectedNotesViewModel()
         if(messages && messages.length > 0) 
         {
             ko.utils.arrayForEach(messages, function(item) {
-                self.SendMessage(item);
+                lookup.SendMessage(item);
             });
-            self.saveTrustedPublicKeys();
+            lookup.saveTrustedPublicKeys();
         }
         var needToSavePublicKeys = false;
-        ko.utils.arrayForEach(self.TrustedPublicKeysToSendTo(), function(publicKey) {
+        ko.utils.arrayForEach(lookup.TrustedPublicKeysToSendTo(), function(publicKey) {
             var time_now = new Date();
             var conditionApplies = false;
             if(publicKey.lastTimeHealthChecked)
@@ -640,7 +645,7 @@ function ConnectedNotesViewModel()
             {
                 publicKey.lastTimeHealthChecked = time_now;
                 needToSavePublicKeys = true;
-                self.pushToHistory({
+                lookup.pushToHistory({
                     action: lookup.actions.HealthCheckRequest,
                     data: { 
                         checkedIndex: undefined,
@@ -652,27 +657,27 @@ function ConnectedNotesViewModel()
         
         if(needToSavePublicKeys)
         {
-            self.saveTrustedPublicKeys();
+            lookup.saveTrustedPublicKeys();
         }
 
-        self.TrustedPublicKeysToSendTo()
+        lookup.TrustedPublicKeysToSendTo()
 
-        self.ReceiveMessages(ownPublicKey);
-        setTimeout(self.processMessages, 3000);
+        lookup.ReceiveMessages(ownPublicKey);
+        setTimeout(lookup.processMessages, 3000);
     };
 
-    self.publicCryptoKey = ko.observable(undefined);
+    
     // No need to store publicCryptoKey in local storage because in order to receive and send messages we will need private key to be restored first
-    self.publicCryptoKey.subscribe(function(changes) {
-        self.StatisticsOnLoad();
-        self.RemoveOwnPublicKeyFromTrusted();
-        self.processMessages();
+    lookup.publicCryptoKey.subscribe(function(changes) {
+        lookup.StatisticsOnLoad();
+        lookup.RemoveOwnPublicKeyFromTrusted();
+        lookup.processMessages();
 
     });
 
-    self.TrustedPublicKeysToSendTo = ko.observableArray([]);
+    lookup.TrustedPublicKeysToSendTo = ko.observableArray([]);
 
-    self.TrustedPublicKeysToSendTo.subscribe(function(changes) {
+    lookup.TrustedPublicKeysToSendTo.subscribe(function(changes) {
         if(changes && changes.length > 0)
         {
             $.each(changes, function(index, value) {
@@ -705,45 +710,39 @@ function ConnectedNotesViewModel()
                     }
                 }
             });
-            self.saveTrustedPublicKeys();
+            lookup.saveTrustedPublicKeys();
         }
     }, null, "arrayChange");
 
-    self.ReceivedPublicKey = ko.observable("");
+    lookup.ReceivedPublicKey = ko.observable("");
 
-    self.SyncOptionsVisible = ko.observable(false);
-    self.OpenSyncOptions = function() 
-    {
-        self.SyncOptionsVisible(true);
-    };
-    self.HideSyncOptions = function() 
-    {
-        self.SyncOptionsVisible(false);
-    };
+    
+    
+    
 
 
-    self.GetOneTimeSynchronizationToken = function() {
-        self.TokenToShare("");
+    lookup.GetOneTimeSynchronizationToken = function() {
+        lookup.TokenToShare("");
         $.ajax({
             type: "POST",
             url: "GetOneTimeSynchronizationToken",
             data: {
-                publicKey: self.publicCryptoKey()
+                publicKey: lookup.publicCryptoKey()
             },
             success: function(data){
-                self.TokenToShare(data);
+                lookup.TokenToShare(data);
             },
             dataType: "json"
         });
 
     };
 
-    self.StatisticsOnLoad = function() {
+    lookup.StatisticsOnLoad = function() {
         $.ajax({
             type: "POST",
             url: "StatisticsOnLoad",
             data: {
-                publicKey: self.publicCryptoKey()
+                publicKey: lookup.publicCryptoKey()
             },
             success: function(data){
             },
@@ -753,71 +752,71 @@ function ConnectedNotesViewModel()
     };
 
 
-    self.SynchronizeUsingToken = function() {
+    lookup.SynchronizeUsingToken = function() {
         $.ajax({
             type: "POST",
             url: "GetSyncPublicKey",
             data: {
-                token: self.SynchronizationToken().trim()
+                token: lookup.SynchronizationToken().trim()
             },
             success: function(data){
-                self.ReceivedPublicKey(data);
+                lookup.ReceivedPublicKey(data);
             },
             dataType: "json"
         });
 
     };
 
-    self.findPublicKey = function(key) 
+    lookup.findPublicKey = function(key) 
     {
-        var filtered = ko.utils.arrayFilter(self.TrustedPublicKeysToSendTo(), function(item){ return item.publicKey == key;} );
+        var filtered = ko.utils.arrayFilter(lookup.TrustedPublicKeysToSendTo(), function(item){ return item.publicKey == key;} );
         var foundMaybe = filtered.length > 0 ? filtered[0] : null;
         return foundMaybe;
 
     };
 
-    self.AddPublicKeyToTrusted = function(keyToAdd) {
+    lookup.AddPublicKeyToTrusted = function(keyToAdd) {
         
-        var foundMaybe = self.findPublicKey(keyToAdd);
+        var foundMaybe = lookup.findPublicKey(keyToAdd);
         if(foundMaybe == null) {
             var toPush = {
                 status: "awaitingInitialSnapshot",
                 publicKey: keyToAdd
             };
-            self.TrustedPublicKeysToSendTo.push(toPush);
+            lookup.TrustedPublicKeysToSendTo.push(toPush);
         }
     };
 
-    self.RemoveOwnPublicKeyFromTrusted = function()
+    lookup.RemoveOwnPublicKeyFromTrusted = function()
     {
-        var foundMaybe = self.findPublicKey(self.publicCryptoKey());
+        var foundMaybe = lookup.findPublicKey(lookup.publicCryptoKey());
         if(foundMaybe != null)
         {
-            self.TrustedPublicKeysToSendTo.remove(foundMaybe);
+            lookup.TrustedPublicKeysToSendTo.remove(foundMaybe);
         }
     };
 
-    self.AddReceivedPublicKeyToTrusted = function() {
-        self.AddPublicKeyToTrusted(self.ReceivedPublicKey());
-        self.ReceivedPublicKey("");
-        self.SynchronizationToken("");
+    lookup.AddReceivedPublicKeyToTrusted = function() {
+        lookup.AddPublicKeyToTrusted(lookup.ReceivedPublicKey());
+        lookup.ReceivedPublicKey("");
+        lookup.SynchronizationToken("");
     };
 
     
-    self.CreateNoteFromDestinationSearchQuery = function() {
+    lookup.CreateNoteFromDestinationSearchQuery = function() {
         var obj = {
             text: ""
-            , x: self.connectFrom().x
-            , y: self.connectFrom().y
+            , x: lookup.connectFrom().x
+            , y: lookup.connectFrom().y
         };
-        self.CreateNote(obj, function(destination) { 
-            self.ConnectNotes(self.connectFrom(), destination);  
-            self.SelectNoteToEdit(destination.id);
+        lookup.CreateNote(obj, function(destination) { 
+            lookup.ConnectNotes(lookup.connectFrom(), destination);  
+            lookup.SelectNoteToEdit(destination.id);
         });
     };
 
 
-    self.privateCryptoPair = {};
+    lookup.privateCryptoPair = {};
 
     if(typeof(Worker) == "undefined") {
         console.log("Failed to find Worker.");
@@ -831,10 +830,10 @@ function ConnectedNotesViewModel()
         var data = {};
         data.notes = JSON.parse(lookup.localStorage.getItem("Notes"));
         data.connections = JSON.parse(lookup.localStorage.getItem("Connections"));
-        self.populate(data);
+        lookup.populate(data);
     }
     if(localStorage["privateCryptoPair"]){
-        self.privateCryptoPair = JSON.parse(lookup.localStorage.getItem("privateCryptoPair"));
+        lookup.privateCryptoPair = JSON.parse(lookup.localStorage.getItem("privateCryptoPair"));
     }
     
     if(localStorage["localFreeIndex"]) {
@@ -850,13 +849,13 @@ function ConnectedNotesViewModel()
     }
 
     if(localStorage["TrustedPublicKeysToSendTo"]){ 
-        self.TrustedPublicKeysToSendTo(JSON.parse(lookup.localStorage.getItem("TrustedPublicKeysToSendTo")));
+        lookup.TrustedPublicKeysToSendTo(JSON.parse(lookup.localStorage.getItem("TrustedPublicKeysToSendTo")));
         if(
-            self.TrustedPublicKeysToSendTo().length > 0 
-            && typeof(self.TrustedPublicKeysToSendTo()[0].status) == "undefined"
+            lookup.TrustedPublicKeysToSendTo().length > 0 
+            && typeof(lookup.TrustedPublicKeysToSendTo()[0].status) == "undefined"
         )
         {
-            var toAdd = ko.utils.arrayMap(self.TrustedPublicKeysToSendTo(), function(elem) {
+            var toAdd = ko.utils.arrayMap(lookup.TrustedPublicKeysToSendTo(), function(elem) {
                 var result = {
                     status: "awaitingInitialSnapshot",
                     
@@ -864,46 +863,46 @@ function ConnectedNotesViewModel()
                 };
                 return result;
             });
-            self.TrustedPublicKeysToSendTo(toAdd);
-            self.saveTrustedPublicKeys();
+            lookup.TrustedPublicKeysToSendTo(toAdd);
+            lookup.saveTrustedPublicKeys();
         }
     }
 
     
     lookup.crypto_worker.onmessage = function(e) {
         if(e.data.action == "applySaveOfKey.Result" ) {
-            if(typeof(self.privateCryptoPair.n) == "undefined") {
+            if(typeof(lookup.privateCryptoPair.n) == "undefined") {
                 lookup.localStorage.setItem("privateCryptoPair", JSON.stringify(e.data.data));
             }
-            lookup.crypto_worker.postMessage({action: 'getPublicKey', data: self.privateCryptoPair});
+            lookup.crypto_worker.postMessage({action: 'getPublicKey', data: lookup.privateCryptoPair});
         }
         if(e.data.action == "getPublicKey.Result") {
             var keyToUse = e.data.data;
             if(
-                !self.publicCryptoKey() 
-                || self.publicCryptoKey() == null 
-                || typeof(self.publicCryptoKey()) == "undefined" 
+                !lookup.publicCryptoKey() 
+                || lookup.publicCryptoKey() == null 
+                || typeof(lookup.publicCryptoKey()) == "undefined" 
             )
             {
                 // will see maybe 10 MB is enough 
-                // self.AddPublicKeyToTrusted(keyToUse); // we need to keep history for our self in order to store everything not only on local machine but on server also
+                // lookup.AddPublicKeyToTrusted(keyToUse); // we need to keep history for our self in order to store everything not only on local machine but on server also
                 // because local storage is limited to 10 MB
-                self.publicCryptoKey(keyToUse);
+                lookup.publicCryptoKey(keyToUse);
             }
             
             // start receiving outer world changes from here via timer
             
         }
         if(e.data.action == "encrypt.Result") {
-            self.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText.cipher, e.data.id);   
+            lookup.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText.cipher, e.data.id);   
         }
         if(e.data.action == "decrypt.Result") {
             var decrypted = e.data.decryptionResult;
             var publicKeyOfSender = decrypted.publicKeyString;
-            var foundMaybe = self.findPublicKey(publicKeyOfSender);
+            var foundMaybe = lookup.findPublicKey(publicKeyOfSender);
             if(foundMaybe == null)
             {
-                self.ReceivedPublicKey(publicKeyOfSender);
+                lookup.ReceivedPublicKey(publicKeyOfSender);
             }
             
             // put public key to trusted -> ReceivedPublicKey
@@ -914,24 +913,24 @@ function ConnectedNotesViewModel()
             // console.log(plainText);
             var actionReceived = JSON.parse(plainText);
             actionReceived.isFromOuterSpace = true;
-            self.pushToHistory(actionReceived);
+            lookup.pushToHistory(actionReceived);
 
         }
     };
 
-    lookup.crypto_worker.postMessage({action: 'applySaveOfKey', data: self.privateCryptoPair});
+    lookup.crypto_worker.postMessage({action: 'applySaveOfKey', data: lookup.privateCryptoPair});
     
 
-    self.connectFrom = ko.observable(null);
-    self.previousConnectFrom = ko.observable(null);
+    lookup.connectFrom = ko.observable(null);
+    lookup.previousConnectFrom = ko.observable(null);
 
-    self.CreateNote = function(obj, callback) {
+    lookup.CreateNote = function(obj, callback) {
 
         var selectedColorIndex = Math.floor(Math.random() * color_presets.length);
         var selectedColor = color_presets[selectedColorIndex];
         var toAdd = new model_Node(
             {
-                id: self.getLocalIndex(),
+                id: lookup.getLocalIndex(),
                 text: obj.text,
                 x: obj.x + 100,
                 y: obj.y,
@@ -939,7 +938,7 @@ function ConnectedNotesViewModel()
                 background: selectedColor.background
             });
         var added = toAdd.ConvertToJs();
-        self.pushToHistory({
+        lookup.pushToHistory({
             action: lookup.actions.NoteAdded,
             data: added
         });
@@ -948,30 +947,30 @@ function ConnectedNotesViewModel()
         }
     };
 
-    self.CreateNoteFromSearchQuery = function() {
+    lookup.CreateNoteFromSearchQuery = function() {
         var obj = {
-            text: self.SearchNotesQuery().trim()
+            text: lookup.SearchNotesQuery().trim()
             , x: coord.x
             , y: coord.y };
-        self.CreateNote(obj);
-        self.SearchNotesQuery("");
+        lookup.CreateNote(obj);
+        lookup.SearchNotesQuery("");
     };
 
-    self.SelectFrom = function(data) {
+    lookup.SelectFrom = function(data) {
         // prevent self-selection, because self-loops are not allowed here
-        if(self.connectFrom() != data){
-            self.previousConnectFrom(self.connectFrom());
-            self.connectFrom(data);
+        if(lookup.connectFrom() != data){
+            lookup.previousConnectFrom(lookup.connectFrom());
+            lookup.connectFrom(data);
         }
     };
 
-    self.ConnectPreviousWithCurrent = function() {
-        self.ConnectNotes(self.previousConnectFrom(), self.connectFrom() )
+    lookup.ConnectPreviousWithCurrent = function() {
+        lookup.ConnectNotes(lookup.previousConnectFrom(), lookup.connectFrom() )
     };
 
-    self.ConnectNotes = function(from, to, label, generated) {
+    lookup.ConnectNotes = function(from, to, label, generated) {
         var connectionToAdd = new model_Connection(
-            self.getLocalIndex(),
+            lookup.getLocalIndex(),
             from.id,
             to.id,
             label ? label : "", 
@@ -993,7 +992,7 @@ function ConnectedNotesViewModel()
         if(!searchResult)
         {
             
-            self.pushToHistory({
+            lookup.pushToHistory({
                 action: lookup.actions.ConnectionAdded,
                 data: added
             });
@@ -1001,12 +1000,12 @@ function ConnectedNotesViewModel()
         
     };
 
-    self.RemoveNoteUnderEdit = function() {
-        var toRemove = self.NoteToEdit();
+    lookup.RemoveNoteUnderEdit = function() {
+        var toRemove = lookup.NoteToEdit();
 
         lookup.Notes.remove(toRemove);
         var deleted = toRemove.ConvertToJs();
-        self.pushToHistory({
+        lookup.pushToHistory({
             action: lookup.actions.NoteDeleted,
             data: deleted
         });
@@ -1016,43 +1015,43 @@ function ConnectedNotesViewModel()
 
     
 
-    self.RemoveConnectionUnderEdit = function() {
-        var toRemove = self.EdgeToEdit();
+    lookup.RemoveConnectionUnderEdit = function() {
+        var toRemove = lookup.EdgeToEdit();
         lookup.Connections.remove(toRemove);
         var deleted = toRemove.ConvertToJs();
-        self.pushToHistory({
+        lookup.pushToHistory({
             action: lookup.actions.ConnectionDeleted,
             data: deleted
         });
     };
 
-    self.NoteToEdit = ko.observable(null);
+    lookup.NoteToEdit = ko.observable(null);
 
-    self.EdgeToEdit = ko.observable(null);
+    lookup.EdgeToEdit = ko.observable(null);
 
     
 
    
-    self.textToEdit = ko.observable("");
+    lookup.textToEdit = ko.observable("");
 
-    self.textToEdit
+    lookup.textToEdit
         .subscribe(function(changes) {
-            if(changes && self.NoteToEdit() && changes != self.NoteToEdit().text())
+            if(changes && lookup.NoteToEdit() && changes != lookup.NoteToEdit().text())
             {
-                var toSend = self.NoteToEdit().ConvertToJs();
+                var toSend = lookup.NoteToEdit().ConvertToJs();
                 toSend.text = changes;
                 
-                self.pushToHistory({
+                lookup.pushToHistory({
                         action: lookup.actions.NoteUpdated,
                         data: toSend
                     }
                 );
             }
-            if(changes && self.EdgeToEdit() && changes != self.EdgeToEdit().label())
+            if(changes && lookup.EdgeToEdit() && changes != lookup.EdgeToEdit().label())
             {
-                var toSend = self.EdgeToEdit().ConvertToJs();
+                var toSend = lookup.EdgeToEdit().ConvertToJs();
                 toSend.label = changes;
-                self.pushToHistory({
+                lookup.pushToHistory({
                     action: lookup.actions.ConnectionUpdated,
                     data: toSend
                 });
@@ -1060,34 +1059,34 @@ function ConnectedNotesViewModel()
         });
 
 
-    self.SelectNoteToEdit = function(id) {
+    lookup.SelectNoteToEdit = function(id) {
         
         var from = lookup.findNodeById(id);
         if(from != null) {
-            self.NoteToEdit( from );
-            self.textToEdit(from.text());
-            self.SelectFrom( from );
+            lookup.NoteToEdit( from );
+            lookup.textToEdit(from.text());
+            lookup.SelectFrom( from );
         }
     };
 
-    self.DeselectNoteToEdit = function() {
-        self.NoteToEdit(null);
+    lookup.DeselectNoteToEdit = function() {
+        lookup.NoteToEdit(null);
     };
 
-    self.SelectEdgeToEdit = function(id) {
+    lookup.SelectEdgeToEdit = function(id) {
         
         var from = lookup.findEdgeById(id);
         if(from != null) {
-            self.EdgeToEdit( from );
-            self.textToEdit(from.label());
+            lookup.EdgeToEdit( from );
+            lookup.textToEdit(from.label());
         }
     };
 
-    self.DeselectEdgeToEdit = function() {
-        self.EdgeToEdit(null);
+    lookup.DeselectEdgeToEdit = function() {
+        lookup.EdgeToEdit(null);
     };
 
-    self.UpdatePositionsOfNodes = function (positions){
+    lookup.UpdatePositionsOfNodes = function (positions){
         for(var key in positions)
         {
             var elem = positions[key];
@@ -1098,7 +1097,7 @@ function ConnectedNotesViewModel()
                     nodeFound.x = elem.x;
                     nodeFound.y = elem.y;
                     var toSend = nodeFound.ConvertToJs();
-                    self.pushToHistory({
+                    lookup.pushToHistory({
                             action: lookup.actions.NoteUpdated,
                             data: toSend
                         }
@@ -1110,19 +1109,28 @@ function ConnectedNotesViewModel()
         ko.utils.arrayForEach(positions, function(position) {
             
         });
-        self.pushToHistory({
+        lookup.pushToHistory({
             action: lookup.actions.PositionsUpdated,
             data: null
         });
     };
 
-    self.ViewPortUpdated = function()
+    lookup.ViewPortUpdated = function()
     {
-        self.pushToHistory({
+        lookup.pushToHistory({
             action: lookup.actions.PositionsUpdated,
             data: null
         });
     }
+
+
+    self.ApplyLookupToSelf = function()
+    {
+        for(var x in lookup)
+        {
+            self[x] = lookup[x];
+        }
+    };
 
     
 
