@@ -69,6 +69,10 @@ function ConnectedNotesViewModel()
         { 
             background: "#f8df00",
             color: "#000000" 
+        },
+        { 
+            background: "#1a65b7",
+            color: "#ffffff" 
         }
     ];
 
@@ -161,16 +165,12 @@ function ConnectedNotesViewModel()
         
     };
 
-    lookup.processCallBacks = function(item)
-    {
-        
-    };
+    
 
     lookup.pushToHistory = function(item) {
         item = lookup.ConvertToLocalId(item);
         lookup.processMessageFromOuterSpace(item);
         item.historyIndex = lookup.freeLocalIndex++;
-        lookup.processCallBacks(item);        
         lookup.history.push(item);
     };
 
@@ -393,55 +393,7 @@ function ConnectedNotesViewModel()
                 }
         );
     });
-
-    lookup.FilteredNodesFirstElements = ko.pureComputed(function()
-        {
-            return lookup.FilteredNodes().slice(0, lookup.MaxSearchResults());
-        });
-
-    lookup.previousHighlighted = [];
-    lookup.FilteredNodesFirstElements
-        .extend(
-            { 
-                rateLimit: 1500 
-            }
-        )
-        .subscribe(
-            function(changes) {
-                var addedChanges = ko.utils.arrayMap(changes, function(item){ 
-                        return item.ConvertToJs();
-                    } 
-                );
-                var hash = {};
-                if(lookup.SearchNotesQuery().trim().length > 0)
-                {
-
-                    ko.utils.arrayForEach(addedChanges, function(item)
-                        {
-                            
-                            hash[item.id] = true;
-                        }
-                    );
-
-                }
-
-                ko.utils.arrayForEach(lookup.previousHighlighted, function(item)
-                    {
-                        if(!hash[item.id])
-                        {
-                            
-                        }
-                    }
-                );
-                lookup.previousHighlighted = addedChanges.slice(0);
-
-            }
-        );
     
-    lookup.focusOnNode = function(item)
-    {
-        
-    };
 
     lookup.SendMessage = function(item) {
         lookup.crypto_worker.postMessage({

@@ -97,15 +97,6 @@
             
             <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
                 <button data-bind="click: $root.CreateNoteFromSearchQuery">Create</button>
-                <br>
-                <br>
-                <span data-bind="foreach: FilteredNodesFirstElements">
-                    <button data-bind="click: $root.focusOnNode, text: 'goto: ' + text().substring(0, 10) + ' ...'"></button>
-                </span>
-                <span data-bind="if: (FilteredNodes().length - FilteredNodesFirstElements().length) > 0">
-                    <span data-bind="text: (FilteredNodes().length - FilteredNodesFirstElements().length) + 'more'"></span>
-                </span>
-                
             </span>
             
             
@@ -113,24 +104,8 @@
         </span>
         
         <span data-bind="if: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
-            <button data-bind="click: $root.RemoveNoteUnderEdit, text: 'Remove note'"></button>
-            <input 
-                placeholder="Edit note..." 
-                style="width: 30vw; min-width: 150px;" 
-                type="text" 
-                data-bind="
-                    textInput: $root.textToEdit,
-                    " />
-            <span data-bind="if: $root.previousConnectFrom() != null && $root.previousConnectFrom() !=  undefined " >
-                <span data-bind="ifnot: $root.previousConnectFrom() == $root.NoteToEdit()" >
-                    <br>
-                    <button data-bind="click: $root.ConnectPreviousWithCurrent, text: ('Connect from: ' + $root.previousConnectFrom().text() )"></button>
-                </span>
-                
-            </span>
-            
-            <br>
-            
+           
+           
             
             <button data-bind="click: $root.CreateNoteFromDestinationSearchQuery">Add connection</button>
             <span data-bind="foreach: $root.ColorPresets">
@@ -140,17 +115,7 @@
             
         </span>   
 
-        <span data-bind="if: $root.EdgeToEdit() != null && $root.EdgeToEdit() != undefined">
-            <button data-bind="click: $root.RemoveConnectionUnderEdit, text: 'Remove connection'"></button>
-            <input 
-                placeholder="Edit edge..." 
-                style="width: 30vw; min-width: 150px;" 
-                type="text" 
-                data-bind="
-                    textInput: $root.textToEdit,
-                    " />
-
-        </span>
+        
         
     </div>
 
