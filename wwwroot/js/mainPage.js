@@ -49,6 +49,18 @@ function ConnectedNotesViewModel()
         lookup.SyncOptionsVisible(false);
     };
 
+    lookup.PromoVisible = ko.observable(true);
+
+    lookup.HidePromo = function() 
+    {
+        lookup.PromoVisible(false);
+    };
+
+    lookup.ShowPromo = function() 
+    {
+        lookup.PromoVisible(true);
+    };
+
 
 
     

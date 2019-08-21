@@ -22,10 +22,106 @@
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/document_ready_ideas.js" asp-append-version="true"></script>
 
-
+<div class="w3-container" data-bind="if: $root.PromoVisible">
+    <div class="w3-row">
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-blue-print webpad-left">do not panic</span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-orange webpad-right">i have</span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-yellow webpad-left">#tags</span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-purple webpad-right">i solo-develop this</span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-green webpad-left">note taking app</span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-blue-print webpad-right">where</span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-purple webpad-left">privacy is a priority</span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-green webpad-right">where</span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-yellow webpad-left">you can link your notes</span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-orange webpad-right">by the way</span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-yellow webpad-left">did i mention that</span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-blue-print webpad-right">no-login required</span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <button class="webpad-node webpad-green webpad-left" data-bind="click: $root.HidePromo">
+                        <a href="#">try the WebPad now</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <div  style="text-align: center; width: 100%; margin-top: 20mm; display: inline-block;">
-        <span class="webpad-node webpad-green">WebPad</span> <span class="webpad-node webpad-orange"><a href="~/about">about</a></span>
+        <span class="webpad-node webpad-green">WebPad</span> <span class="webpad-node webpad-orange" data-bind="click: $root.ShowPromo"><a href="#">about</a></span>
         <span data-bind="if: $root.publicCryptoKey() != null  &&
                     $root.publicCryptoKey() != undefined &&
                     $root.publicCryptoKey().trim() != '' ">
