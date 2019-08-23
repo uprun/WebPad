@@ -14,6 +14,7 @@
 <script language="JavaScript" type="text/javascript" src="~/js/model_Connection.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/model_Node.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/model_ColorPreset.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/model_Card.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/lookup.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/findNodeById.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/findEdgeById.js" asp-append-version="true"></script>
@@ -22,7 +23,7 @@
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/document_ready_ideas.js" asp-append-version="true"></script>
 
-<div class="w3-container" data-bind="if: $root.PromoVisible">
+<div class="w3-container" data-bind="visible: $root.PromoVisible">
     <div class="w3-row">
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
@@ -90,6 +91,22 @@
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-blue-print webpad-right">where code</span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
+                    <span class="webpad-node webpad-purple webpad-left">
+                        <a href="https://github.com/uprun/WebPad" target="blank">is open source</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="text-align: center; width: 100%;">
+                <div class="webpad-inline-flex">
                     <span class="webpad-node webpad-orange webpad-right">by the way</span>
                 </div>
             </div>
@@ -120,7 +137,7 @@
     </div>
 </div>
 
-    <div  style="text-align: center; width: 100%; margin-top: 20mm; display: inline-block;">
+<div  style="text-align: center; width: 100%; margin-top: 20mm; display: inline-block; visible: none;" data-bind="visible: !$root.PromoVisible()">
         <span class="webpad-node webpad-green">WebPad</span> <span class="webpad-node webpad-orange" data-bind="click: $root.ShowPromo"><a href="#">about</a></span>
         <span data-bind="if: $root.publicCryptoKey() != null  &&
                     $root.publicCryptoKey() != undefined &&
@@ -216,8 +233,8 @@
     </div>
 
 
-<div class="w3-container" >
-    <div class="w3-row" data-bind="foreach: Connections">
+<div class="w3-container" style="visible: none;" data-bind="visible: !$root.PromoVisible()">
+    <div class="w3-row" data-bind="foreach: composedCards">
         <div class="w3-col w3-container s12 m6 l4">
             <h2>
                 <span
@@ -225,22 +242,25 @@
             "
                 style:
                 {
-                    color: $data.Source.color,
-                    background: $data.Source.background,
+                    color: $data.Note.color,
+                    background: $data.Note.background,
                 },
-                text:$data.Source.text()">
+                text:$data.Note.text()">
                 </span>
-                </h2>
-            <div class="webpad-inline-flex">
-                <span class="webpad-node webpad-orange" data-bind="text: $data.label()"> </span>
-                <span class="webpad-node" data-bind="
-            style:
-                {
-                    color: $data.Destination.color,
-                    background: $data.Destination.background,
-                },text: $data.Destination.text()">
-                </span>
-            </div>
+            </h2>
+                <div data-bind="foreach: $data.Tags">
+                    <div class="webpad-inline-flex">
+                        <span class="webpad-node webpad-orange" data-bind="text: $data.label()"> </span>
+                        <span class="webpad-node" data-bind="
+                    style:
+                        {
+                            color: $data.Destination.color,
+                            background: $data.Destination.background,
+                        },text: $data.Destination.text()">
+                        </span>
+                    </div>
+                </div>
+            
         </div>
     </div>
 </div>
