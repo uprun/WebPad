@@ -23,12 +23,14 @@
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/document_ready_ideas.js" asp-append-version="true"></script>
 
-<div class="w3-container" data-bind="visible: $root.PromoVisible" style="margin-top: 20mm;">
+<div class="w3-container" data-bind="visible: $root.PromoVisible" style="margin-top: 20mm;" 
+    vocab="https://schema.org/"
+    typeof="WebApplication" >
     <div class="w3-row">
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-blue-print webpad-right">WebPad</span>
+                    <span class="webpad-node webpad-blue-print webpad-right" property="name">WebPad</span>
                 </div>
             </div>
         </div>
@@ -42,7 +44,7 @@
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-yellow webpad-left-2x">note taking app</span>
+                    <span class="webpad-node webpad-yellow webpad-left-2x" property="description">note taking app</span>
                 </div>
             </div>
         </div>
