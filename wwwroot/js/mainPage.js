@@ -54,11 +54,13 @@ function ConnectedNotesViewModel()
     lookup.HidePromo = function() 
     {
         lookup.PromoVisible(false);
+        lookup.localStorage.setItem("PromoVisible", JSON.stringify(false));
     };
 
     lookup.ShowPromo = function() 
     {
         lookup.PromoVisible(true);
+        lookup.localStorage.setItem("PromoVisible", JSON.stringify(true));
     };
 
 
@@ -798,31 +800,35 @@ function ConnectedNotesViewModel()
     if(typeof(Worker) == "undefined") {
         console.log("Failed to find Worker.");
     }
-    if(!localStorage) {
+    if(!lookup.localStorage) {
         console.log("Local web-storage is unavailable.");
     }
 
     
-    if(localStorage["Notes"]){
+    if(lookup.localStorage["Notes"]){
         var data = {};
         data.notes = JSON.parse(lookup.localStorage.getItem("Notes"));
         data.connections = JSON.parse(lookup.localStorage.getItem("Connections"));
         lookup.populate(data);
     }
-    if(localStorage["privateCryptoPair"]){
+    if(lookup.localStorage["privateCryptoPair"]){
         lookup.privateCryptoPair = JSON.parse(lookup.localStorage.getItem("privateCryptoPair"));
     }
     
-    if(localStorage["localFreeIndex"]) {
+    if(lookup.localStorage["localFreeIndex"]) {
         lookup.freeLocalIndex = JSON.parse(lookup.localStorage.getItem("localFreeIndex"));
     }
     else {
         lookup.freeLocalIndex = lookup.Notes().length + lookup.Connections().length + 1;
     }
 
-    if(localStorage["viewPosition"])
+    if(lookup.localStorage["viewPosition"])
     {
          var parsedViewPosition = JSON.parse(lookup.localStorage.getItem("viewPosition"));
+    }
+    if(typeof(lookup.localStorage["PromoVisible"]) != "undefined")
+    {
+        lookup.PromoVisible(JSON.parse(lookup.localStorage.getItem("PromoVisible")) );
     }
 
     if(localStorage["TrustedPublicKeysToSendTo"]){ 

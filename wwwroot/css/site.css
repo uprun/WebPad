@@ -94,8 +94,16 @@ a
 {
     margin-left: 7mm;
 }
+.webpad-left-2x
+{
+    margin-left: 14mm;
+}
 
 .webpad-right
 {
     margin-right: 7mm;
+}
+.webpad-right-2x
+{
+    margin-right: 14mm;
 }

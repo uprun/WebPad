@@ -23,40 +23,40 @@
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/document_ready_ideas.js" asp-append-version="true"></script>
 
-<div class="w3-container" data-bind="visible: $root.PromoVisible">
+<div class="w3-container" data-bind="visible: $root.PromoVisible" style="margin-top: 20mm;">
     <div class="w3-row">
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-blue-print webpad-left">do not panic</span>
+                    <span class="webpad-node webpad-blue-print webpad-right">WebPad</span>
                 </div>
             </div>
         </div>
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-orange webpad-right">i have</span>
+                    <span class="webpad-node webpad-orange webpad-right">is a solo-developed</span>
                 </div>
             </div>
         </div>
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-yellow webpad-left">#tags</span>
+                    <span class="webpad-node webpad-yellow webpad-left-2x">note taking app</span>
                 </div>
             </div>
         </div>
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-purple webpad-right">i solo-develop this</span>
+                    <span class="webpad-node webpad-purple webpad-right">with unlimited</span>
                 </div>
             </div>
         </div>
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-green webpad-left">note taking app</span>
+                    <span class="webpad-node webpad-green webpad-left">#tags</span>
                 </div>
             </div>
         </div>
@@ -77,14 +77,14 @@
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-green webpad-right">where</span>
+                    <span class="webpad-node webpad-green webpad-left-2x">where you can</span>
                 </div>
             </div>
         </div>
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-yellow webpad-left">you can link your notes</span>
+                    <span class="webpad-node webpad-yellow webpad-right">link your notes</span>
                 </div>
             </div>
         </div>
@@ -98,7 +98,7 @@
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-purple webpad-left">
+                    <span class="webpad-node webpad-purple webpad-left-2x">
                         <a href="https://github.com/uprun/WebPad" target="blank">is open source</a>
                     </span>
                 </div>
@@ -107,21 +107,21 @@
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-orange webpad-right">by the way</span>
+                    <span class="webpad-node webpad-orange webpad-right-2x">by the way</span>
                 </div>
             </div>
         </div>
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-yellow webpad-left">did i mention that</span>
+                    <span class="webpad-node webpad-yellow webpad-left-2x">did i mention that</span>
                 </div>
             </div>
         </div>
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-blue-print webpad-right">no-login required</span>
+                    <span class="webpad-node webpad-blue-print webpad-right-2x">no-login required</span>
                 </div>
             </div>
         </div>
@@ -185,38 +185,37 @@
         
         
 
-        <br>
-        <span data-bind="ifnot: 
-                (
-                    $root.NoteToEdit() != null 
-                    && $root.NoteToEdit() !=  undefined
-                )
-                ||
-                ( 
-                    $root.EdgeToEdit() != null 
-                    && $root.EdgeToEdit() != undefined
-                )" >
-            <span class="webpad-node webpad-yellow">
-                <input 
-                    placeholder="Create or search note..." 
-                    style="width: 30vw; min-width: 150px;" 
-                    type="text" 
-                    data-bind="
-                        textInput: $root.SearchNotesQuery,
-                        " 
-                />
+       <div class="w3-row">
+           <div class="w3-col w3-container s0 m2 l3">
 
-            </span>
-            
-            <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
-                <button data-bind="click: $root.CreateNoteFromSearchQuery">Create</button>
-            </span>
-            
-            
-            
-        </span>
+           </div>
+           <div class="w3-col w3-container s12 m8 l6">
+               <span>
+                    <span style="width: 100%;" class="webpad-node webpad-yellow">
+                        <input 
+                            placeholder="Create or search note..." 
+                            style="width: 100%; min-width: 150px;" 
+                            type="text" 
+                            data-bind="
+                                textInput: $root.SearchNotesQuery,
+                                " 
+                        />
+
+                    </span>
+                    
+                    <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
+                        <button data-bind="click: $root.CreateNoteFromSearchQuery">Create</button>
+                    </span>
+                    
+                    
+                    
+                </span>
+           </div>
+
+       </div>
         
-        <span data-bind="if: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
+        
+        <!-- <span data-bind="if: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
            
            
             
@@ -226,7 +225,7 @@
             </span>
             
             
-        </span>   
+        </span>    -->
 
         
         
@@ -249,16 +248,20 @@
                 </span>
             </h2>
                 <div data-bind="foreach: $data.Tags">
-                    <div class="webpad-inline-flex">
-                        <span class="webpad-node webpad-orange" data-bind="text: $data.label()"> </span>
-                        <span class="webpad-node" data-bind="
-                    style:
-                        {
-                            color: $data.Destination.color,
-                            background: $data.Destination.background,
-                        },text: $data.Destination.text()">
-                        </span>
+                    <div>
+                        <div class="webpad-inline-flex">
+                            <span class="webpad-node webpad-orange" data-bind="text: $data.label()"> </span>
+                            <span class="webpad-node" data-bind="
+                        style:
+                            {
+                                color: $data.Destination.color,
+                                background: $data.Destination.background,
+                            },text: $data.Destination.text()">
+                            </span>
+                        </div>
+
                     </div>
+                    
                 </div>
             
         </div>
