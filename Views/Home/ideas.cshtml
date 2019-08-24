@@ -23,14 +23,44 @@
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/document_ready_ideas.js" asp-append-version="true"></script>
 
+<div vocab="https://schema.org/"
+    typeof="WebApplication" style="display: none;">
+    <span property="name" >WebPad</span>
+    <span property="description">is a note taking app, which is solo-developed, with unlimited #tags, where privacy is a priority, where you can link your notes,
+        where code is open-source, where no-login required to try.</span>
+    <span property="accessMode">textual</span>
+    <div property="offers" typeof="Offer">
+        Price: $<span property="price">0.00</span>
+        <meta property="priceCurrency" content="USD" />
+        <span property="description">first 5 thousand of symbols to store</span>
+    </div>
+    <div property="offers" typeof="Offer">
+        Price: $<span property="price">3.00</span>
+        <meta property="priceCurrency" content="USD" />
+        <span property="description">ongoing 20 thousand of symbols to store</span>
+    </div>
+    <span property="operatingSystem">Windows</span>
+    <span property="operatingSystem">Linux</span>
+    <span property="operatingSystem">MacOs</span>
+    <span property="operatingSystem">iOs</span>
+    <span property="operatingSystem">Android</span>
+    <span property="image">https://webpad.com.ua/WebPad_logo_500.png</span>
+
+</div>
+
+<div vocab="https://schema.org/"
+    typeof="Organization" style="display: none;">
+    <span property="url" >https://webpad.com.ua</span>
+    <span property="logo">https://webpad.com.ua/WebPad_logo_500.png</span>
+</div>
+
 <div class="w3-container" data-bind="visible: $root.PromoVisible" style="margin-top: 20mm;" 
-    vocab="https://schema.org/"
-    typeof="WebApplication" >
+    >
     <div class="w3-row">
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-blue-print webpad-right" property="name">WebPad</span>
+                    <span class="webpad-node webpad-blue-print webpad-right" >WebPad</span>
                 </div>
             </div>
         </div>
@@ -44,7 +74,7 @@
         <div class="w3-col w3-container s12 m12 l12">
             <div style="text-align: center; width: 100%;">
                 <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-yellow webpad-left-2x" property="description">note taking app</span>
+                    <span class="webpad-node webpad-yellow webpad-left-2x">note taking app</span>
                 </div>
             </div>
         </div>
@@ -139,7 +169,7 @@
     </div>
 </div>
 
-<div  style="text-align: center; width: 100%; margin-top: 20mm; display: inline-block; visible: none;" data-bind="visible: !$root.PromoVisible()">
+<div  style="text-align: center; width: 100%; margin-top: 20mm; display: inline-block; display: none;" data-bind="visible: !$root.PromoVisible()">
         <span class="webpad-node webpad-green">WebPad</span> <span class="webpad-node webpad-orange" data-bind="click: $root.ShowPromo"><a href="#">about</a></span>
         <span data-bind="if: $root.publicCryptoKey() != null  &&
                     $root.publicCryptoKey() != undefined &&
