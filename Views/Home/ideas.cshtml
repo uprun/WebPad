@@ -37,7 +37,7 @@
     <div property="offers" typeof="Offer">
         Price: $<span property="price">3.00</span>
         <meta property="priceCurrency" content="USD" />
-        <span property="description">ongoing 20 thousand of symbols to store</span>
+        <span property="description">REDO: ongoing 20 thousand of symbols to store</span>
     </div>
     <span property="operatingSystem">Windows</span>
     <span property="operatingSystem">Linux</span>
@@ -263,22 +263,38 @@
         
     </div>
 
+<!-- background-image: linear-gradient(to bottom right, #3900d9, #d6920b); -->
+
+<!-- border-color: aliceblue;
+border-width: 5px;
+border-style: dashed; -->
+
+<!-- border-width: 5px;
+    border-style: dashed;
+    border-image: linear-gradient(to bottom right, #3900d9, #d6920b) 1;
+
+} -->
 
 <div class="w3-container" style="visible: none;" data-bind="visible: !$root.PromoVisible()">
     <div class="w3-row" data-bind="foreach: composedCards">
         <div class="w3-col w3-container s12 m6 l4">
-            <h2>
-                <span
-                     class="webpad-node" data-bind=
-            "
-                style:
-                {
-                    color: $data.Note.color,
-                    background: $data.Note.background,
-                },
-                text:$data.Note.text()">
-                </span>
-            </h2>
+            <div style="max-width: 120mm; margin: 5mm; border-color: aliceblue;
+border-width: 2mm;
+border-style: dashed;" >
+                <h2>
+                    <div class="webpad-inline-flex">
+                        <span
+                            class="webpad-node" data-bind=
+                        "
+                            style:
+                            {
+                                color: $data.Note.color,
+                                background: $data.Note.background,
+                            },
+                            text:$data.Note.text()">
+                        </span>
+                    </div>
+                </h2>
                 <div data-bind="foreach: $data.Tags">
                     <div>
                         <div class="webpad-inline-flex">
@@ -295,6 +311,8 @@
                     </div>
                     
                 </div>
+            </div>
+            
             
         </div>
     </div>
