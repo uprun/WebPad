@@ -46,10 +46,13 @@ lookup.processMessageFromOuterSpace = function(item)
         if(current_action == lookup.actions.NoteAdded)
         {
             var found = lookup.findNodeById(current_data.id);
-            if(!found)
+            if( !found || found.id == -1 )
             {
                 var noteToAdd = new model_Node(current_data);
                 lookup.Notes.push(noteToAdd);
+                var cardToAdd = new model_Card({ Note: noteToAdd});
+                lookup.hashCards[noteToAdd.id] = cardToAdd;
+                lookup.composedCards.push(cardToAdd);
             }
             else
             {
@@ -86,6 +89,11 @@ lookup.processMessageFromOuterSpace = function(item)
                         lookup.findNodeById
                     );
                 lookup.Connections.push(connectionToAdd)
+                var found = lookup.hashCards[connectionToAdd.SourceId];
+                if(found)
+                {
+                    found.Tags.push(connectionToAdd);
+                }
             }
             else
             {

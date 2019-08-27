@@ -159,20 +159,18 @@ function ConnectedNotesViewModel()
     lookup.composedCards = ko.observableArray([]);
 
     lookup.populate = function(data) {
-        var hash = {};
+        lookup.hashCards = {};
         var toAdd = ko.utils.arrayMap(data.notes, function(elem) 
         {
             var noteToAdd = new model_Node(elem);
-            hash[noteToAdd.id] = new model_Card({ Note: noteToAdd});
+            lookup.hashCards[noteToAdd.id] = new model_Card({ Note: noteToAdd});
             return noteToAdd;
         });
         ko.utils.arrayPushAll(lookup.Notes, toAdd);
 
-        
-
         var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
             var connectionToAdd = new model_Connection(elem.id, elem.SourceId, elem.DestinationId, elem.label, elem.generated, lookup.findNodeById);
-            var found = hash[connectionToAdd.SourceId];
+            var found = lookup.hashCards[connectionToAdd.SourceId];
             if(found)
             {
                 found.Tags.push(connectionToAdd);
@@ -181,9 +179,9 @@ function ConnectedNotesViewModel()
             return connectionToAdd;
         });
         ko.utils.arrayPushAll(lookup.Connections, connectionsToAdd);
-        for(var key in hash)
+        for(var key in lookup.hashCards)
         {
-            lookup.composedCards.push(hash[key]);
+            lookup.composedCards.push(lookup.hashCards[key]);
         }
 
         //lookup.CheckIfEveryNodeHasColor();
@@ -782,15 +780,12 @@ function ConnectedNotesViewModel()
     };
 
     
-    lookup.CreateNoteFromDestinationSearchQuery = function() {
+    lookup.AddNoteToExistingOne = function(existing) {
         var obj = {
             text: ""
-            , x: lookup.connectFrom().x
-            , y: lookup.connectFrom().y
         };
         lookup.CreateNote(obj, function(destination) { 
-            lookup.ConnectNotes(lookup.connectFrom(), destination);  
-            lookup.SelectNoteToEdit(destination.id);
+            lookup.ConnectNotes(existing.Note, destination);  
         });
     };
 
@@ -906,17 +901,19 @@ function ConnectedNotesViewModel()
 
     lookup.connectFrom = ko.observable(null);
     lookup.previousConnectFrom = ko.observable(null);
+    lookup.GetRandomColor = function() {
+        var selectedColorIndex = Math.floor(Math.random() * color_presets.length);
+        var selectedColor = color_presets[selectedColorIndex];
+        return selectedColor;
+    };
 
     lookup.CreateNote = function(obj, callback) {
 
-        var selectedColorIndex = Math.floor(Math.random() * color_presets.length);
-        var selectedColor = color_presets[selectedColorIndex];
+        var selectedColor = lookup.GetRandomColor();
         var toAdd = new model_Node(
             {
                 id: lookup.getLocalIndex(),
                 text: obj.text,
-                x: obj.x + 100,
-                y: obj.y,
                 color: selectedColor.color,
                 background: selectedColor.background
             });
@@ -933,8 +930,7 @@ function ConnectedNotesViewModel()
     lookup.CreateNoteFromSearchQuery = function() {
         var obj = {
             text: lookup.SearchNotesQuery().trim()
-            , x: coord.x
-            , y: coord.y };
+            };
         lookup.CreateNote(obj);
         lookup.SearchNotesQuery("");
     };
