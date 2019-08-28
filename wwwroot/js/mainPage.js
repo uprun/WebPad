@@ -100,6 +100,10 @@ function ConnectedNotesViewModel()
     ko.utils.arrayPushAll(lookup.ColorPresets, toAddColors);
 
 
+    lookup.SwitchEditOfConnection = function(connection){
+        connection.underEdit(!connection.underEdit());
+    };
+
     lookup.ColorNode = function(colorToApply) {
         
         var toWorkWith = lookup.NoteToEdit();

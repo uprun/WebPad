@@ -10,6 +10,7 @@ function model_Connection(id, sourceId, destinationId, label, generated, findNod
     self.label = ko.observable(label);
     self.labelUpdateCallback;
     self.generated = generated ? generated : false;
+    self.underEdit = ko.observable(false);
     self.ConvertToJs = function() {
         return {
             id: self.id,
