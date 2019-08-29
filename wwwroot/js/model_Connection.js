@@ -8,6 +8,21 @@ function model_Connection(id, sourceId, destinationId, label, generated, findNod
     self.Source = findNodeByIdFunc(self.SourceId);
     self.Destination = findNodeByIdFunc(self.DestinationId);
     self.label = ko.observable(label);
+    self.labelAlmost = ko.computed(function()
+    {
+        var valueToCheck = self.label();
+        if( 
+            typeof(valueToCheck) == "undefined" ||
+             valueToCheck == null || 
+             valueToCheck == "")
+             {
+                 return "...";
+             }
+        else
+        {
+            return valueToCheck;
+        }
+    });
     self.labelUpdateCallback;
     self.generated = generated ? generated : false;
     self.underEdit = ko.observable(false);

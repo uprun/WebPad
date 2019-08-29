@@ -3,8 +3,25 @@ function model_Node(data)
     var self = this;
     self.id = data.id;
     self.text = ko.observable(data.text);
+    self.textAlmost = ko.computed(function()
+    {
+        var valueToCheck = self.text();
+        if( 
+            typeof(valueToCheck) == "undefined" ||
+             valueToCheck == null || 
+             valueToCheck == "")
+             {
+                 return "...";
+             }
+        else
+        {
+            return valueToCheck;
+        }
+    });
     self.color = data.color;
     self.background = data.background;
+    self.underEdit = ko.observable(false);
+    
     if(typeof(self.background) == "undefined" || self.background == null)
     {
         self.background = '#97c2fc';

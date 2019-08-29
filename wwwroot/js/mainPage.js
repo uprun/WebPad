@@ -104,6 +104,10 @@ function ConnectedNotesViewModel()
         connection.underEdit(!connection.underEdit());
     };
 
+    lookup.SwitchEditOfNode = function(card){
+        card.Note.underEdit(!card.Note.underEdit());
+    };
+
     lookup.ColorNode = function(colorToApply) {
         
         var toWorkWith = lookup.NoteToEdit();

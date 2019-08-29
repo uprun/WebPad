@@ -282,7 +282,7 @@ border-style: dashed; -->
                 border-width: 2mm;
                 border-style: dashed;" >
                 <h2>
-                    <div class="webpad-inline-flex">
+                    <span data-bind="ifnot: $data.Note.underEdit">
                         <span
                             class="webpad-node" data-bind=
                         "
@@ -291,56 +291,84 @@ border-style: dashed; -->
                                 color: $data.Note.color,
                                 background: $data.Note.background,
                             },
-                            text:$data.Note.text()">
+                            text:$data.Note.textAlmost">
                         </span>
-                    </div>
+                        <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfNode">Edit</button>
+                    </span>
+                        
+                    <span data-bind="if: $data.Note.underEdit">
+                        <span style="width: 100%;" class="webpad-node"
+                            data-bind="
+                                    style:
+                                    {
+                                        color: $data.Note.color,
+                                        background: $data.Note.background,
+                                    },">
+                            <input 
+                                placeholder="..." 
+                                
+                                style="box-sizing : border-box; width: 100%;" 
+                                type="text" 
+                                data-bind="
+                                    textInput:  $data.Note.text,
+                                    " 
+                            />
+                        </span>
+                        <button class="webpad-node webpad-blue-print" data-bind="click: $root.SwitchEditOfNode">Close Edit</button>
+                    </span>
+                    
                 </h2>
                 <div data-bind="foreach: $data.Tags">
-                    <div>
-                        <div class="webpad-inline-flex" data-bind="ifnot: $data.underEdit">
-                            <span class="webpad-node webpad-orange" data-bind="text: $data.label"> </span>
+                        <span data-bind="ifnot: $data.underEdit">
+                            <span class="webpad-node webpad-orange" data-bind=" text: $data.labelAlmost" > </span>
                             <span class="webpad-node" data-bind="
-                        style:
+                            style:
                             {
                                 color: $data.Destination.color,
                                 background: $data.Destination.background,
-                            },text: $data.Destination.text">
+                            },text: $data.Destination.textAlmost">
                             </span>
-                            <button class="webpad-node webpad-blue-print" data-bind="click: $root.SwitchEditOfConnection">Edit</button>
-                            
-                        </div>
-                        <div data-bind="if: $data.underEdit">
-                            <span style="width: 100%;" class="webpad-node webpad-green">
-                                <input 
-                                    placeholder="..." 
-                                    
-                                    style="box-sizing : border-box; width: 100%;" 
-                                    type="text" 
-                                    data-bind="
-                                        textInput: $data.label,
-                                        " 
-                                />
-                            </span>
-                        </div>
-                        <div data-bind="if: $data.underEdit">
-                            <span style="width: 100%;" class="webpad-node webpad-green">
-                                <input 
-                                    placeholder="..." 
-                                    
-                                    style="box-sizing : border-box; width: 100%;" 
-                                    type="text" 
-                                    data-bind="
-                                        textInput:  $data.Destination.text,
-                                        " 
-                                />
-                            </span>
-                        </div>
-                        <div data-bind="if: $data.underEdit">
-                            <button class="webpad-node webpad-blue-print" data-bind="click: $root.SwitchEditOfConnection">Close Edit</button>
-                        </div>
+                            <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfConnection">Edit</button>
 
-                    </div>
-                    
+                        </span>
+                            
+                        <span data-bind="if: $data.underEdit">
+                            
+                                <span style="width: 100%;" class="webpad-node webpad-green">
+                                    <input 
+                                        placeholder="..." 
+                                        
+                                        style="box-sizing : border-box; width: 100%;" 
+                                        type="text" 
+                                        data-bind="
+                                            textInput: $data.label,
+                                            " 
+                                    />
+                                </span>
+                            
+                                <span style="width: 100%;" class="webpad-node"
+                                    data-bind="
+                                            style:
+                                            {
+                                                color: $data.Destination.color,
+                                                background: $data.Destination.background,
+                                            },">
+                                    <input 
+                                        placeholder="..." 
+                                        
+                                        style="box-sizing : border-box; width: 100%;" 
+                                        type="text" 
+                                        data-bind="
+                                            textInput:  $data.Destination.text,
+                                            " 
+                                    />
+                                </span>
+                            
+                                <button class="webpad-node webpad-blue-print" data-bind="click: $root.SwitchEditOfConnection">Close Edit</button>
+                            
+
+
+                        </span>
                 </div>
                 <div>
                     <button class="webpad-node webpad-blue-print" data-bind="click: $root.AddNoteToExistingOne">+ Add</button>
