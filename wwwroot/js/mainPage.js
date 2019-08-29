@@ -23,6 +23,8 @@ function ConnectedNotesViewModel()
     lookup.freeLocalIndex = 0;
     lookup.localPrefix = '_local_';
 
+    lookup.hashCards = {};
+
     lookup.Notes = ko.observableArray([]);
 
     lookup.ColorPresets = ko.observableArray([]);
@@ -167,7 +169,7 @@ function ConnectedNotesViewModel()
     lookup.composedCards = ko.observableArray([]);
 
     lookup.populate = function(data) {
-        lookup.hashCards = {};
+        
         var toAdd = ko.utils.arrayMap(data.notes, function(elem) 
         {
             var noteToAdd = new model_Node(elem);
