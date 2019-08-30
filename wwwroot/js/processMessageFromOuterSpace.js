@@ -15,7 +15,7 @@ lookup.processMessageFromOuterSpace = function(item)
             }
             else
             {
-                var noteToAdd = new model_Node(current_data);
+                var noteToAdd = lookup.Instanciate_model_node(current_data);
                 lookup.Notes.push(noteToAdd);
             }
         }
@@ -48,7 +48,7 @@ lookup.processMessageFromOuterSpace = function(item)
             var found = lookup.findNodeById(current_data.id);
             if( !found || found.id == -1 )
             {
-                var noteToAdd = new model_Node(current_data);
+                var noteToAdd = lookup.Instanciate_model_node(current_data);
                 lookup.Notes.push(noteToAdd);
                 var cardToAdd = new model_Card({ Note: noteToAdd});
                 lookup.hashCards[noteToAdd.id] = cardToAdd;

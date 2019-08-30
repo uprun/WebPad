@@ -65,6 +65,12 @@ function ConnectedNotesViewModel()
         lookup.localStorage.setItem("PromoVisible", JSON.stringify(true));
     };
 
+    lookup.Instanciate_model_node = function(data)
+    {
+        var result = new model_Node(data);
+        return result;
+    }
+
 
 
     
@@ -172,7 +178,7 @@ function ConnectedNotesViewModel()
         
         var toAdd = ko.utils.arrayMap(data.notes, function(elem) 
         {
-            var noteToAdd = new model_Node(elem);
+            var noteToAdd = lookup.Instanciate_model_node(elem);
             lookup.hashCards[noteToAdd.id] = new model_Card({ Note: noteToAdd});
             return noteToAdd;
         });
@@ -920,7 +926,7 @@ function ConnectedNotesViewModel()
     lookup.CreateNote = function(obj, callback) {
 
         var selectedColor = lookup.GetRandomColor();
-        var toAdd = new model_Node(
+        var toAdd = lookup.Instanciate_model_node(
             {
                 id: lookup.getLocalIndex(),
                 text: obj.text,
