@@ -67,10 +67,57 @@ function ConnectedNotesViewModel()
 
     lookup.Instanciate_model_node = function(data)
     {
+        data.textChangedHandler = function(changes, model) 
+        {
+            if(changes 
+                //&& changes != model.text()
+                )
+            {
+                var toSend = model.ConvertToJs();
+                toSend.text = changes;
+                
+                lookup.pushToHistory({
+                        action: lookup.actions.NoteUpdated,
+                        data: toSend
+                    }
+                );
+            }
+        };
         var result = new model_Node(data);
         return result;
     }
 
+
+    lookup.Instanciate_model_connection = function(data)
+    {
+        data.textChangedHandler = function(changes, model) 
+        {
+            if(changes  
+                //&& changes != model.label()
+                )
+            {
+                var toSend = model.ConvertToJs();
+                toSend.label = changes;
+                lookup.pushToHistory({
+                    action: lookup.actions.ConnectionUpdated,
+                    data: toSend
+                });
+            }
+        };
+        var result = new model_Connection(data);
+        return result;
+    }
+
+
+    // if(changes && lookup.EdgeToEdit() && changes != lookup.EdgeToEdit().label())
+    //         {
+    //             var toSend = lookup.EdgeToEdit().ConvertToJs();
+    //             toSend.label = changes;
+    //             lookup.pushToHistory({
+    //                 action: lookup.actions.ConnectionUpdated,
+    //                 data: toSend
+    //             });
+    //         }
 
 
     
@@ -185,7 +232,15 @@ function ConnectedNotesViewModel()
         ko.utils.arrayPushAll(lookup.Notes, toAdd);
 
         var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
-            var connectionToAdd = new model_Connection(elem.id, elem.SourceId, elem.DestinationId, elem.label, elem.generated, lookup.findNodeById);
+            var connectionToAdd = lookup.Instanciate_model_connection(
+                {
+                    id: elem.id,
+                    sourceId: elem.SourceId,
+                    destinationId: elem.DestinationId,
+                    label: elem.label,
+                    generated: elem.generated,
+                    findNodeByIdFunc: lookup.findNodeById
+                });
             var found = lookup.hashCards[connectionToAdd.SourceId];
             if(found)
             {
@@ -964,13 +1019,15 @@ function ConnectedNotesViewModel()
     };
 
     lookup.ConnectNotes = function(from, to, label, generated) {
-        var connectionToAdd = new model_Connection(
-            lookup.getLocalIndex(),
-            from.id,
-            to.id,
-            label ? label : "", 
-            generated,
-            lookup.findNodeById
+        var connectionToAdd = lookup.Instanciate_model_connection(
+            {
+                id: lookup.getLocalIndex(),
+                sourceId: from.id,
+                destinationId: to.id,
+                label: label ? label : "", 
+                generated: generated,
+                findNodeByIdFunc: lookup.findNodeById
+            }
         );
         var added = connectionToAdd.ConvertToJs();
         var filtered = ko.utils.arrayFilter(

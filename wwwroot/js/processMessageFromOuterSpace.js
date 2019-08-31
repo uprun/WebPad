@@ -30,14 +30,16 @@ lookup.processMessageFromOuterSpace = function(item)
             else
             {
                 var connectionToAdd = 
-                new model_Connection
+                lookup.Instanciate_model_connection
                     (
-                    current_data.id,
-                    current_data.SourceId,
-                    current_data.DestinationId,
-                    current_data.label,
-                    current_data.generated,
-                    lookup.findNodeById
+                        {
+                            id: current_data.id,
+                            sourceId: current_data.SourceId,
+                            destinationId: current_data.DestinationId,
+                            label: current_data.label,
+                            generated: current_data.generated,
+                            findNodeByIdFunc: lookup.findNodeById
+                        }
                     );
                 lookup.Connections.push(connectionToAdd)
             }
@@ -79,14 +81,16 @@ lookup.processMessageFromOuterSpace = function(item)
             if(!found)
             {
                 var connectionToAdd = 
-                    new model_Connection
+                lookup.Instanciate_model_connection
                     (
-                        current_data.id,
-                        current_data.SourceId,
-                        current_data.DestinationId, 
-                        current_data.label, 
-                        current_data.generated,
-                        lookup.findNodeById
+                        {
+                            id: current_data.id,
+                            sourceId: current_data.SourceId,
+                            destinationId: current_data.DestinationId, 
+                            label: current_data.label, 
+                            generated: current_data.generated,
+                            findNodeByIdFunc: lookup.findNodeById
+                        }
                     );
                 lookup.Connections.push(connectionToAdd)
                 var found = lookup.hashCards[connectionToAdd.SourceId];

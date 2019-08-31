@@ -3,7 +3,14 @@ function model_Node(data)
     var self = this;
     self.id = data.id;
     self.text = ko.observable(data.text);
-    self.text.subscribe(data.textChangedHandler);
+    if(typeof(data.textChangedHandler) != "undefined")
+    {
+        self.text.subscribe(function(changes)
+        {
+            data.textChangedHandler(changes, self);
+        });
+    }
+    
     self.textAlmost = ko.computed(function()
     {
         var valueToCheck = self.text();

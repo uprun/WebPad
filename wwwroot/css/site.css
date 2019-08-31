@@ -52,10 +52,10 @@ body {
 
 .webpad-card
 {
-    width: 70mm;
-    min-height: 70mm;
+    margin: 5mm; 
+    border-color: aliceblue;
     border-width: 2mm;
-    border-color: #ff5e00;
+    border-style: dashed;
 }
 
 .webpad-inline

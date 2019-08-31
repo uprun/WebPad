@@ -1,5 +1,11 @@
-function model_Connection(id, sourceId, destinationId, label, generated, findNodeByIdFunc)
+function model_Connection(data)
 {
+    var id = data.id;
+    var sourceId = data.sourceId;
+    var destinationId = data.destinationId;
+    var label = data.label;
+    var generated = data.generated;
+    var findNodeByIdFunc = data.findNodeByIdFunc;
 
     var self = this;
     self.id = id;
@@ -8,6 +14,13 @@ function model_Connection(id, sourceId, destinationId, label, generated, findNod
     self.Source = findNodeByIdFunc(self.SourceId);
     self.Destination = findNodeByIdFunc(self.DestinationId);
     self.label = ko.observable(label);
+    if(typeof(data.textChangedHandler) != "undefined")
+    {
+        self.label.subscribe(function(changes)
+        {
+            data.textChangedHandler(changes, self);
+        });
+    }
     self.labelAlmost = ko.computed(function()
     {
         var valueToCheck = self.label();
