@@ -468,28 +468,29 @@ function ConnectedNotesViewModel()
 
     lookup.SearchNotesQuery = ko.observable("");
 
-    lookup.MaxSearchResults = ko.observable(4);
 
-    lookup.FilteredNodes = ko.pureComputed(function() {
+    lookup.FilteredCards = ko.pureComputed(function() {
         return ko.utils.arrayFilter
         (
-            lookup.Notes(), 
+            lookup.composedCards(), 
             function(item, index)
                 { 
                     if(lookup.SearchNotesQuery() && lookup.SearchNotesQuery().trim().length > 0)
                     {
-                        var result = item.text().toLowerCase().indexOf(lookup.SearchNotesQuery().trim().toLowerCase()) >= 0;
+                        var result = item.IsForSearchResult(lookup.SearchNotesQuery().trim().toLowerCase())
                         return result;
                     }
                     else
                     {
-                        return false;
+                        return true;
                     }
                     
                 }
         );
     });
-    
+
+    lookup.FilteredCards
+        .extend({ rateLimit: 500 });
 
     lookup.SendMessage = function(item) {
         lookup.crypto_worker.postMessage({
