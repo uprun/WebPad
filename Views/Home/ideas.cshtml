@@ -337,6 +337,13 @@ border-style: dashed; -->
                              text: 'Connect from: ' + $root.previousConnectFrom().Note.text()">
                     </button>
                 </div>
+                <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() != $data">
+                    <button class="webpad-node webpad-yellow" 
+                        data-bind=
+                            "click: $root.ClearPreviousFrom">
+                            - Discard Connect
+                    </button>
+                </div>
                 <div data-bind="foreach: $data.Tags">
                     <div>
                         <span data-bind="ifnot: $data.underEdit">
