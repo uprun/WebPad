@@ -1009,16 +1009,19 @@ function ConnectedNotesViewModel()
         lookup.SearchNotesQuery("");
     };
 
-    lookup.SelectFrom = function(data) {
-        // prevent self-selection, because self-loops are not allowed here
-        if(lookup.connectFrom() != data){
-            lookup.previousConnectFrom(lookup.connectFrom());
-            lookup.connectFrom(data);
-        }
+    lookup.SelectPreviousFrom = function(data) {
+        lookup.previousConnectFrom(data);
+    };
+    lookup.ClearPreviousFrom = function() {
+        lookup.previousConnectFrom(null);
     };
 
-    lookup.ConnectPreviousWithCurrent = function() {
-        lookup.ConnectNotes(lookup.previousConnectFrom(), lookup.connectFrom() )
+    lookup.ConnectPreviousWithCurrent = function(data) {
+        // prevent self-selection, because self-loops are not allowed here
+        if(lookup.previousConnectFrom() != data){
+            lookup.ConnectNotes(lookup.previousConnectFrom().Note, data.Note )
+            lookup.previousConnectFrom(null);
+        }
     };
 
     lookup.ConnectNotes = function(from, to, label, generated) {

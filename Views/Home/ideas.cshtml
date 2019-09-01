@@ -330,6 +330,13 @@ border-style: dashed; -->
                     </span>
                     
                 </h2>
+                <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() != $data">
+                    <button class="webpad-node webpad-purple" 
+                        data-bind=
+                            "click: $root.ConnectPreviousWithCurrent,
+                             text: 'Connect from: ' + $root.previousConnectFrom().Note.text()">
+                    </button>
+                </div>
                 <div data-bind="foreach: $data.Tags">
                     <div>
                         <span data-bind="ifnot: $data.underEdit">
@@ -387,6 +394,16 @@ border-style: dashed; -->
                 </div>
                 <div>
                     <button class="webpad-node webpad-blue-print" data-bind="click: $root.AddNoteToExistingOne">+ Add tag</button>
+                </div>
+                <div data-bind="ifnot: $root.previousConnectFrom">
+                    <button class="webpad-node webpad-green" data-bind="click: $root.SelectPreviousFrom">+ Connect</button>
+                </div>
+                <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() == $data">
+                    <button class="webpad-node webpad-yellow" 
+                        data-bind=
+                            "click: $root.ClearPreviousFrom">
+                            - Discard Connect
+                    </button>
                 </div>
             </div>
             
