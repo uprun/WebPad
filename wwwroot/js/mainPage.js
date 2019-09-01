@@ -770,6 +770,8 @@ function ConnectedNotesViewModel()
 
 
     lookup.GetOneTimeSynchronizationToken = function() {
+        lookup.OpenTokenConsumptionMenu(false);
+        lookup.OpenTokenGenerationMenu(true);
         lookup.TokenToShare("");
         $.ajax({
             type: "POST",
@@ -1052,128 +1054,38 @@ function ConnectedNotesViewModel()
         
     };
 
-    lookup.RemoveNoteUnderEdit = function() {
-        var toRemove = lookup.NoteToEdit();
-
-        lookup.Notes.remove(toRemove);
-        var deleted = toRemove.ConvertToJs();
-        lookup.pushToHistory({
-            action: lookup.actions.NoteDeleted,
-            data: deleted
-        });
-    };
-
-    
-
-    
-
-    lookup.RemoveConnectionUnderEdit = function() {
-        var toRemove = lookup.EdgeToEdit();
-        lookup.Connections.remove(toRemove);
-        var deleted = toRemove.ConvertToJs();
-        lookup.pushToHistory({
-            action: lookup.actions.ConnectionDeleted,
-            data: deleted
-        });
-    };
-
-    lookup.NoteToEdit = ko.observable(null);
-
-    lookup.EdgeToEdit = ko.observable(null);
-
-    
-
-   
-    lookup.textToEdit = ko.observable("");
-
-    lookup.textToEdit
-        .subscribe(function(changes) {
-            if(changes && lookup.NoteToEdit() && changes != lookup.NoteToEdit().text())
-            {
-                var toSend = lookup.NoteToEdit().ConvertToJs();
-                toSend.text = changes;
-                
-                lookup.pushToHistory({
-                        action: lookup.actions.NoteUpdated,
-                        data: toSend
-                    }
-                );
-            }
-            if(changes && lookup.EdgeToEdit() && changes != lookup.EdgeToEdit().label())
-            {
-                var toSend = lookup.EdgeToEdit().ConvertToJs();
-                toSend.label = changes;
-                lookup.pushToHistory({
-                    action: lookup.actions.ConnectionUpdated,
-                    data: toSend
-                });
-            }
-        });
-
-
-    lookup.SelectNoteToEdit = function(id) {
-        
-        var from = lookup.findNodeById(id);
-        if(from != null) {
-            lookup.NoteToEdit( from );
-            lookup.textToEdit(from.text());
-            lookup.SelectFrom( from );
-        }
-    };
-
-    lookup.DeselectNoteToEdit = function() {
-        lookup.NoteToEdit(null);
-    };
-
-    lookup.SelectEdgeToEdit = function(id) {
-        
-        var from = lookup.findEdgeById(id);
-        if(from != null) {
-            lookup.EdgeToEdit( from );
-            lookup.textToEdit(from.label());
-        }
-    };
-
-    lookup.DeselectEdgeToEdit = function() {
-        lookup.EdgeToEdit(null);
-    };
-
-    lookup.UpdatePositionsOfNodes = function (positions){
-        for(var key in positions)
-        {
-            var elem = positions[key];
-            if(typeof(elem) != "function")
-            {
-                var nodeFound = lookup.findNodeById(key);
-                if(nodeFound) {
-                    nodeFound.x = elem.x;
-                    nodeFound.y = elem.y;
-                    var toSend = nodeFound.ConvertToJs();
-                    lookup.pushToHistory({
-                            action: lookup.actions.NoteUpdated,
-                            data: toSend
-                        }
-                    );
-                }
-
-            }
-        }
-        ko.utils.arrayForEach(positions, function(position) {
-            
-        });
-        lookup.pushToHistory({
-            action: lookup.actions.PositionsUpdated,
-            data: null
-        });
-    };
-
-    lookup.ViewPortUpdated = function()
+    lookup.OpenTokenConsumptionMenu = ko.observable(false);
+    lookup.OpenTokenGenerationMenu = ko.observable(false);
+    lookup.iHaveSyncToken = function()
     {
-        lookup.pushToHistory({
-            action: lookup.actions.PositionsUpdated,
-            data: null
-        });
-    }
+        lookup.OpenTokenConsumptionMenu(true);
+        lookup.OpenTokenGenerationMenu(false);
+    };
+
+    // lookup.RemoveNoteUnderEdit = function() {
+    //     var toRemove = lookup.NoteToEdit();
+
+    //     lookup.Notes.remove(toRemove);
+    //     var deleted = toRemove.ConvertToJs();
+    //     lookup.pushToHistory({
+    //         action: lookup.actions.NoteDeleted,
+    //         data: deleted
+    //     });
+    // };
+
+    
+
+    
+
+    // lookup.RemoveConnectionUnderEdit = function() {
+    //     var toRemove = lookup.EdgeToEdit();
+    //     lookup.Connections.remove(toRemove);
+    //     var deleted = toRemove.ConvertToJs();
+    //     lookup.pushToHistory({
+    //         action: lookup.actions.ConnectionDeleted,
+    //         data: deleted
+    //     });
+    // };
 
 
     self.ApplyLookupToSelf = function()
