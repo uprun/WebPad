@@ -108,3 +108,9 @@ a
 {
     margin-right: 14mm;
 }
+
+.webpad-working-area
+{
+    /* overflow-y: scroll; */
+    /* height: 90vh; */
+}

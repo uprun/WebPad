@@ -20,6 +20,9 @@
 <script language="JavaScript" type="text/javascript" src="~/js/findEdgeById.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/processMessageFromOuterSpace.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/defineLocalStorage.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/findCardByMainNodeId.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/jumpToCard.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/showSearchResultOfCards.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/document_ready_ideas.js" asp-append-version="true"></script>
 
@@ -170,18 +173,18 @@
     </div>
 </div>
 
-<div  style="text-align: center; width: 100%; margin-top: 20mm; display: inline-block; display: none;" data-bind="visible: !$root.PromoVisible()">
+<div  style="text-align: center; width: 100%; margin-top: 0px; display: inline-block; display: none;" data-bind="visible: !$root.PromoVisible()">
         <span class="webpad-node webpad-green">WebPad</span> <span class="webpad-node webpad-orange" data-bind="click: $root.ShowPromo"><a href="#">about</a></span>
         <span data-bind="if: $root.publicCryptoKey() != null  &&
                     $root.publicCryptoKey() != undefined &&
                     $root.publicCryptoKey().trim() != '' ">
 
-                    <div data-bind="ifnot: $root.SyncOptionsVisible" >
+                    <span data-bind="ifnot: $root.SyncOptionsVisible" >
                         <button class="webpad-node webpad-green" data-bind="click: $root.OpenSyncOptions">Open Sync</button>
-                    </div>
-                    <div data-bind="if: $root.SyncOptionsVisible" >
+                    </span>
+                    <span data-bind="if: $root.SyncOptionsVisible" >
                         <button class="webpad-node webpad-orange" data-bind="click: $root.HideSyncOptions">Hide Sync</button>
-                    </div>
+                    </span>
                     <div data-bind="if: $root.SyncOptionsVisible" >
                         <button class="webpad-node webpad-green" data-bind="click: $root.iHaveSyncToken">I already have sync token</button>
                         <button class="webpad-node webpad-blue-print" data-bind="click: $root.GetOneTimeSynchronizationToken">What sync token? Generate one.</button>
@@ -289,10 +292,9 @@ border-style: dashed; -->
 
 } -->
 
-<div class="w3-container" style="display: none;" data-bind="visible: !$root.PromoVisible()">
-    <div class="w3-row" data-bind="foreach: FilteredCards">
+<script type="text/html" id="card-template">
         <div class="w3-col w3-container s12 m6 l4">
-            <div class="webpad-card">
+            <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
                 <h2>
                     <span data-bind="ifnot: $data.Note.underEdit">
                         <span
@@ -333,9 +335,17 @@ border-style: dashed; -->
                 <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() != $data">
                     <button class="webpad-node webpad-purple" 
                         data-bind=
-                            "click: $root.ConnectPreviousWithCurrent,
-                             text: 'Connect from: ' + $root.previousConnectFrom().Note.text()">
+                            "click: $root.ConnectPreviousWithCurrent">
+                            Connect from:
                     </button>
+                    <span class="webpad-node webpad-orange" 
+                        data-bind="
+                         style:
+                            {
+                                color: $root.previousConnectFrom().Note.color,
+                                background: $root.previousConnectFrom().Note.background,
+                            },
+                        text: $root.previousConnectFrom().Note.textAlmost" > </span>
                 </div>
                 <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() != $data">
                     <button class="webpad-node webpad-yellow" 
@@ -355,6 +365,7 @@ border-style: dashed; -->
                                 background: $data.Destination.background,
                             },text: $data.Destination.textAlmost">
                             </span>
+                            <button class="webpad-node webpad-blue-print" data-bind=" click: $root.jumpToCard"> jump to</button>
                             <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfConnection">Edit</button>
 
                         </span>
@@ -399,11 +410,14 @@ border-style: dashed; -->
 
                     </div>
                 </div>
-                <div>
-                    <button class="webpad-node webpad-blue-print" data-bind="click: $root.AddNoteToExistingOne">+ Add tag</button>
-                </div>
                 <div data-bind="ifnot: $root.previousConnectFrom">
                     <button class="webpad-node webpad-green" data-bind="click: $root.SelectPreviousFrom">+ Connect</button>
+                </div>
+                <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() == $data">
+                    <button class="webpad-node webpad-orange" 
+                        >
+                            #click catcher
+                    </button>
                 </div>
                 <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() == $data">
                     <button class="webpad-node webpad-yellow" 
@@ -416,6 +430,19 @@ border-style: dashed; -->
             
             
         </div>
+</script>
+
+<div class="w3-container webpad-working-area" style="display: none;" data-bind="visible: !$root.PromoVisible()">
+    <div class="w3-row" data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
+
     </div>
+
+    <hr/>
+    <div style="width: 100%;" data-bind="if: lookup.showSearchResultOfCards">
+        <div class="w3-row" data-bind="template: { name: 'card-template', foreach: FilteredCards } ">
+
+        </div>
+    </div>
+    
 </div>
 
