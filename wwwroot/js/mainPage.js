@@ -1005,7 +1005,11 @@ function ConnectedNotesViewModel()
         var obj = {
             text: lookup.SearchNotesQuery().trim()
             };
-        lookup.CreateNote(obj);
+        lookup.CreateNote(obj, function(added)
+        {
+            lookup.jumpToCardOnCreate(added);
+        }
+        );
         lookup.SearchNotesQuery("");
     };
 
