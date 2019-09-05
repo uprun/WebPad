@@ -443,8 +443,21 @@ border-style: dashed; -->
 
     <hr/>
     <div style="width: 100%;" data-bind="if: lookup.showSearchResultOfCards">
-        <div class="w3-row" data-bind="template: { name: 'card-template', foreach: FilteredCards } ">
+        <div class="w3-row" data-bind="template: { name: 'card-template', foreach: LimitedFilteredCards } ">
 
+        </div>
+        <div class="w3-row" data-bind="if: $root.ShowExtendCurrentResultLimit">
+            <div class="w3-col w3-container s0 m3 l4">
+           </div>
+           <div class="w3-col w3-container s12 m6 l4">
+               <span>                    
+                    <button style="width: 100%;" class="webpad-node webpad-green" 
+                        data-bind=
+                            "click: $root.ExtendCurrentResultLimit,
+                            text: 'Show more items ( ' + $root.NumberOfHiddenSearhItems() + ' hidden)'">
+                    </button>
+                </span>
+           </div>
         </div>
     </div>
     

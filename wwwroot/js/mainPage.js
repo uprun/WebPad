@@ -467,7 +467,9 @@ function ConnectedNotesViewModel()
     };
 
     lookup.SearchNotesQuery = ko.observable("");
-
+    lookup.SearchNotesQuery
+        .extend({ rateLimit: 500 });
+    
 
     lookup.FilteredCards = ko.pureComputed(function() {
         return ko.utils.arrayFilter
@@ -491,6 +493,34 @@ function ConnectedNotesViewModel()
 
     lookup.FilteredCards
         .extend({ rateLimit: 500 });
+
+    lookup.CurrentResultLimit = ko.observable(15);
+
+    lookup.ResetCurrentResultLimit = function()
+    {
+        lookup.CurrentResultLimit(15);
+    };
+
+    lookup.LimitedFilteredCards = ko.pureComputed(function()
+    {
+        return lookup.FilteredCards().slice(0, lookup.CurrentResultLimit());
+    });
+
+    lookup.ShowExtendCurrentResultLimit = ko.pureComputed(function()
+    {
+        return lookup.FilteredCards().length > lookup.CurrentResultLimit();
+    });
+
+    lookup.NumberOfHiddenSearhItems = ko.pureComputed(function()
+    {
+        return lookup.FilteredCards().length - lookup.CurrentResultLimit();
+    });
+
+
+    lookup.ExtendCurrentResultLimit = function()
+    {
+        lookup.CurrentResultLimit(lookup.CurrentResultLimit() + 15);
+    };
 
     lookup.SendMessage = function(item) {
         lookup.crypto_worker.postMessage({
@@ -1015,6 +1045,7 @@ function ConnectedNotesViewModel()
 
     lookup.SelectPreviousFrom = function(data) {
         lookup.previousConnectFrom(data);
+        lookup.ResetCurrentResultLimit();
     };
     lookup.ClearPreviousFrom = function() {
         lookup.previousConnectFrom(null);
