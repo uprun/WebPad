@@ -411,8 +411,11 @@ border-style: dashed; -->
 
                     </div>
                 </div>
+                <div data-bind="">
+                    <button class="webpad-node webpad-purple" data-bind="click: $root.AddNoteToExistingOne">+ Add information</button>
+                </div>
                 <div data-bind="ifnot: $root.previousConnectFrom">
-                    <button class="webpad-node webpad-green" data-bind="click: $root.SelectPreviousFrom">+ Connect</button>
+                    <button class="webpad-node webpad-green" data-bind="click: $root.SelectPreviousFrom">+ Connect to Card</button>
                 </div>
                 <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() == $data">
                     <button class="webpad-node webpad-orange" 
