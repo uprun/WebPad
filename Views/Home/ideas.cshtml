@@ -26,6 +26,7 @@
 <script language="JavaScript" type="text/javascript" src="~/js/jumpToCardOnCreate.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/insertIntoStackOfCards.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/pushIntoStackOfCards.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/clearStackOfCards.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/document_ready_ideas.js" asp-append-version="true"></script>
 
@@ -237,34 +238,7 @@
         
         
 
-       <div class="w3-row">
-           <div class="w3-col w3-container s0 m2 l3">
-
-           </div>
-           <div class="w3-col w3-container s12 m8 l6">
-               <span>
-                    <span style="width: 100%;" class="webpad-node webpad-yellow">
-                        <input 
-                            placeholder="Create or search note..." 
-                            style="width: 100%; min-width: 150px;" 
-                            type="text" 
-                            data-bind="
-                                textInput: $root.SearchNotesQuery,
-                                " 
-                        />
-
-                    </span>
-                    
-                    <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
-                        <button class="webpad-node webpad-green" data-bind="click: $root.CreateNoteFromSearchQuery">Create</button>
-                    </span>
-                    
-                    
-                    
-                </span>
-           </div>
-
-       </div>
+       
         
         
         <!-- <span data-bind="if: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
@@ -442,8 +416,55 @@ border-style: dashed; -->
     <div class="w3-row" data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
 
     </div>
+    <div class="w3-row">
+        <div class="w3-col w3-container s0 m3 l4">
+        </div>
+        <div class="w3-col w3-container s12 m6 l4">
+            <span data-bind="if: $root.stackOfCards().length > 0">                    
+                    <button style="width: 100%;" class="webpad-node webpad-purple" 
+                        data-bind="click: $root.clearStackOfCards">
+                        Clear Working area
+                    </button>
+            </span>
+        </div>
+    </div>
 
-    <hr/>
+    <div style="width: 100%" data-bind="if: $root.stackOfCards().length > 0">
+        <hr/>
+    </div>    
+    
+
+    <div class="w3-row">
+        <div class="w3-col w3-container s0 m2 l3">
+        </div>
+        <div class="w3-col w3-container s12 m8 l6">
+            <span>
+                <span style="width: 100%;" class="webpad-node webpad-yellow">
+                    <input 
+                        placeholder="Create or search note..." 
+                        style="width: 100%; min-width: 150px;" 
+                        type="text" 
+                        data-bind="
+                            textInput: $root.SearchNotesQuery,
+                            " 
+                    />
+
+                </span>
+            </span>
+        </div>
+    </div>
+    <div class="w3-row">
+        <div class="w3-col w3-container s0 m3 l4">
+        </div>
+        <div class="w3-col w3-container s12 m6 l4">
+            <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">                    
+                    <button style="width: 100%;" class="webpad-node webpad-green" 
+                        data-bind="click: $root.CreateNoteFromSearchQuery">
+                        Create
+                    </button>
+            </span>
+        </div>
+    </div>
     <div style="width: 100%;" data-bind="if: lookup.showSearchResultOfCards">
         <div class="w3-row" data-bind="template: { name: 'card-template', foreach: LimitedFilteredCards } ">
 
