@@ -4,6 +4,13 @@ body {
     background-color:#333333;
 }
 
+div {
+   border-color: inherit; 
+}
+
+span {
+    border-color: inherit; 
+ }
 
 .webpad-orange
 { 
@@ -53,7 +60,7 @@ body {
 .webpad-card
 {
     margin: 5mm; 
-    border-color: aliceblue;
+    border-color: inherit;
     border-width: 2mm;
     border-style: dashed;
 }
@@ -111,6 +118,14 @@ a
 
 .webpad-working-area
 {
+    border-color: #1a65b7;
+    /* overflow-y: scroll; */
+    /* height: 90vh; */
+}
+
+.webpad-search-result-area
+{
+    border-color: aliceblue;
     /* overflow-y: scroll; */
     /* height: 90vh; */
 }

@@ -412,10 +412,13 @@ border-style: dashed; -->
         </div>
 </script>
 
-<div class="w3-container webpad-working-area" style="display: none;" data-bind="visible: !$root.PromoVisible()">
-    <div class="w3-row" data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
+<div class="w3-container " style="display: none;" data-bind="visible: !$root.PromoVisible()">
+    <div style="width: 100%;" class="webpad-working-area">
+        <div class="w3-row"  data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
 
-    </div>
+        </div>
+    </div>    
+    
     <div class="w3-row">
         <div class="w3-col w3-container s0 m3 l4">
         </div>
@@ -465,7 +468,7 @@ border-style: dashed; -->
             </span>
         </div>
     </div>
-    <div style="width: 100%;" data-bind="if: lookup.showSearchResultOfCards">
+    <div style="width: 100%;" class="webpad-search-result-area" data-bind="if: lookup.showSearchResultOfCards">
         <div class="w3-row" data-bind="template: { name: 'card-template', foreach: LimitedFilteredCards } ">
 
         </div>
