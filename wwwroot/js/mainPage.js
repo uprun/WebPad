@@ -1046,6 +1046,7 @@ function ConnectedNotesViewModel()
     lookup.SelectPreviousFrom = function(data) {
         lookup.previousConnectFrom(data);
         lookup.ResetCurrentResultLimit();
+        lookup.insertIntoStackOfCards(data);
     };
     lookup.ClearPreviousFrom = function() {
         lookup.previousConnectFrom(null);
