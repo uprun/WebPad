@@ -193,13 +193,13 @@
                         <button class="webpad-node webpad-green" data-bind="click: $root.iHaveSyncToken">I already have sync token</button>
                         <button class="webpad-node webpad-blue-print" data-bind="click: $root.GetOneTimeSynchronizationToken">What sync token? Generate one.</button>
                         <div data-bind="if: $root.OpenTokenGenerationMenu">
-                            <br>
+                            <br/>
                             <span class="webpad-node webpad-green" >Share this sync token:&nbsp;</span>
                             <span class="webpad-node webpad-blue-print" data-bind="text: $root.TokenToShare"></span>
-                            <br>
+                            <br/>
                             <span class="webpad-node webpad-orange">You have to receive this check code:&nbsp;</span>
                             <span class="webpad-node webpad-yellow" data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
-                            <br>
+                            <br/>
 
                         </div>
                         <div data-bind="if: $root.OpenTokenConsumptionMenu">
@@ -214,22 +214,26 @@
 
                             </span>
                             
-                            <br>
+                            <br/>
                             <button class="webpad-node webpad-blue-print" data-bind="click: $root.SynchronizeUsingToken"> Use sync token</button>
-                            <br>
+                            <br/>
+                            
+                            <span class="webpad-node webpad-orange">Code for other side:&nbsp;</span>
+                            <span class="webpad-node webpad-yellow" data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
+                            
+
+                        </div>
+                        <div data-bind="if: $root.ReceivedPublicKey() != null  &&
+                                $root.ReceivedPublicKey() != undefined &&
+                                $root.ReceivedPublicKey().trim() != '' " >
                             <span class="webpad-node webpad-green">Received check code:&nbsp;</span>
                             <span class="webpad-node webpad-yellow" data-bind="text: $root.ReceivedPublicKey().substring(0, 10) + '...' "></span>
-                            <div data-bind="if: $root.ReceivedPublicKey() != null  &&
-                                    $root.ReceivedPublicKey() != undefined &&
-                                    $root.ReceivedPublicKey().trim() != '' " >
-                                <span class="webpad-node webpad-blue-print" data-bind=>
-                                    Do you trust to this ? 
-                                </span>
-                                <button class="webpad-node webpad-green" data-bind="click: $root.AddReceivedPublicKeyToTrusted"> Trust</button>
-                                <button class="webpad-node webpad-orange" data-bind="click: $root.RemoveReceivedPublicKey"> No-no-no</button>
-
-                            </div>
-                            
+                            <br/>
+                            <span class="webpad-node webpad-blue-print" data-bind=>
+                                Do you trust to this ? 
+                            </span>
+                            <button class="webpad-node webpad-green" data-bind="click: $root.AddReceivedPublicKeyToTrusted"> Trust</button>
+                            <button class="webpad-node webpad-orange" data-bind="click: $root.RemoveReceivedPublicKey"> No-no-no</button>
 
                         </div>
                     </div>
