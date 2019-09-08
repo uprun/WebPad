@@ -124,24 +124,40 @@ function ConnectedNotesViewModel()
 
     var color_presets = [ 
         { 
-            background: "#ff5e00",
-            color: "#000000" 
+            background: "inherit",
+            color: "#ffa26b" 
         },
         { 
-            background: "#6a1b9a",
-            color: "#ffffff" 
+            background: "inherit",
+            color: "#84bfff" 
         },
         { 
-            background: "#19bd11",
-            color: "#000000" 
+            background: "inherit",
+            color: "#ff94eb" 
         },
         { 
-            background: "#f8df00",
-            color: "#000000" 
+            background: "inherit",
+            color: "#64e05e" 
         },
         { 
-            background: "#1a65b7",
-            color: "#ffffff" 
+            background: "inherit",
+            color: "#f8e755" 
+        },
+        { 
+            background: "inherit",
+            color: "#dce9f6" 
+        },
+        { 
+            background: "inherit",
+            color: "#ffbbdc" 
+        },
+        { 
+            background: "inherit",
+            color: "#d190ff" 
+        },
+        { 
+            background: "inherit",
+            color: "#ff8f95" 
         }
     ];
 
