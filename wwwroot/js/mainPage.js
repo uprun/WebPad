@@ -161,6 +161,8 @@ function ConnectedNotesViewModel()
         }
     ];
 
+    lookup.data_color_presets = color_presets;
+
     // populate colors immediately
     var toAddColors = ko.utils.arrayMap(color_presets, function(elem) 
     {
@@ -206,39 +208,20 @@ function ConnectedNotesViewModel()
         });
     };
 
-    lookup.CheckIfEveryNodeHasColor = function()
+    lookup.CheckIfEveryNodeHasMigratedColor = function()
     {
-        var filtered = ko.utils.arrayFilter(
-            lookup.Notes(),
-            function(item) 
-            {
-                if(typeof(item.color) === "undefined" )
-                {
-                    return true;
-                }
-                return false;
-            }
-        );
-        if(filtered.length > 0)
-        {
-            var colors =  lookup.ColorPresets();
-            filtered = ko.utils.arrayFilter(filtered, function(item, index)
-            {
-                return index < 50;
+            ko.utils.arrayForEach(lookup.Notes(), function(item) {
+                lookup.MigrationOfColorOfNode(item);
             });
-
-            ko.utils.arrayForEach(filtered, function(item) {
-                var selectedColorIndex = Math.floor(Math.random() * colors.length);
-                var selectedColor = colors[selectedColorIndex];
-                lookup.ColorNodeFromCode(selectedColor, item);
-            });
-        }
     };
 
     lookup.composedCards = ko.observableArray([]);
 
     lookup.populate = function(data) {
-        
+        lookup.for_code_access_hash_of_color_presets = {};
+        lookup.data_color_presets.forEach(element => {
+            lookup.for_code_access_hash_of_color_presets[element.color] = true;
+        });
         var toAdd = ko.utils.arrayMap(data.notes, function(elem) 
         {
             var noteToAdd = lookup.Instanciate_model_node(elem);
@@ -271,7 +254,7 @@ function ConnectedNotesViewModel()
             lookup.composedCards.push(lookup.hashCards[key]);
         }
 
-        //lookup.CheckIfEveryNodeHasColor();
+        lookup.CheckIfEveryNodeHasMigratedColor();
 
         
         
@@ -1021,11 +1004,7 @@ function ConnectedNotesViewModel()
 
     lookup.connectFrom = ko.observable(null);
     lookup.previousConnectFrom = ko.observable(null);
-    lookup.GetRandomColor = function() {
-        var selectedColorIndex = Math.floor(Math.random() * color_presets.length);
-        var selectedColor = color_presets[selectedColorIndex];
-        return selectedColor;
-    };
+    
 
     lookup.CreateNote = function(obj, callback) {
 
@@ -1034,8 +1013,8 @@ function ConnectedNotesViewModel()
             {
                 id: lookup.getLocalIndex(),
                 text: obj.text,
-                color: selectedColor.color,
-                background: selectedColor.background
+                color: selectedColor.Color(),
+                background: "inherit"
             });
         var added = toAdd.ConvertToJs();
         lookup.pushToHistory({
@@ -1046,6 +1025,8 @@ function ConnectedNotesViewModel()
             callback(toAdd);
         }
     };
+
+    
 
     lookup.CreateNoteFromSearchQuery = function() {
         var obj = {

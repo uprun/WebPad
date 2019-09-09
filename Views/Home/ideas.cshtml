@@ -27,6 +27,8 @@
 <script language="JavaScript" type="text/javascript" src="~/js/insertIntoStackOfCards.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/pushIntoStackOfCards.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/clearStackOfCards.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/GetRandomColor.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/MigrationOfColorOfNode.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/document_ready_ideas.js" asp-append-version="true"></script>
 
@@ -283,8 +285,7 @@ border-style: dashed; -->
                         "
                             style:
                             {
-                                color: $data.Note.color,
-                                background: $data.Note.background,
+                                color: $data.Note.color
                             },
                             text:$data.Note.textAlmost">
                         </span>
@@ -297,7 +298,6 @@ border-style: dashed; -->
                                     style:
                                     {
                                         color: $data.Note.color,
-                                        background: $data.Note.background,
                                     },">
                             <input 
                                 placeholder="..." 
@@ -323,8 +323,7 @@ border-style: dashed; -->
                         data-bind="
                          style:
                             {
-                                color: $root.previousConnectFrom().Note.color,
-                                background: $root.previousConnectFrom().Note.background,
+                                color: $root.previousConnectFrom().Note.color
                             },
                         text: $root.previousConnectFrom().Note.textAlmost" > </span>
                 </div>
@@ -342,8 +341,7 @@ border-style: dashed; -->
                             <span class="webpad-node" data-bind="
                             style:
                             {
-                                color: $data.Destination.color,
-                                background: $data.Destination.background,
+                                color: $data.Destination.color
                             },text: $data.Destination.textAlmost">
                             </span>
                             <button class="webpad-node webpad-blue-print" data-bind=" click: $root.jumpToCard"> jump to</button>
@@ -369,8 +367,7 @@ border-style: dashed; -->
                                     data-bind="
                                             style:
                                             {
-                                                color: $data.Destination.color,
-                                                background: $data.Destination.background,
+                                                color: $data.Destination.color
                                             },">
                                     <input 
                                         placeholder="..." 
