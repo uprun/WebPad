@@ -3,9 +3,11 @@ lookup.jumpToCard = function(data)
 {
     
     var sourceCard = lookup.findCardByMainNodeId(data.SourceId);
-    lookup.insertIntoStackOfCards(sourceCard);
-    
     var destinationCard = lookup.findCardByMainNodeId(data.DestinationId);
-    lookup.pushIntoStackOfCards(destinationCard);
+    if(destinationCard != null)
+    {
+        lookup.insertIntoStackOfCards(sourceCard);
+        lookup.pushIntoStackOfCards(destinationCard);
+    }
 
 };

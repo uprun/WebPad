@@ -342,9 +342,9 @@ border-style: dashed; -->
                             style:
                             {
                                 color: $data.Destination.color
-                            },text: $data.Destination.textAlmost">
+                            },click: $root.jumpToCard">
+                            <a data-bind=" text: $data.Destination.textAlmost"></a>
                             </span>
-                            <button class="webpad-node webpad-blue-print" data-bind=" click: $root.jumpToCard"> jump to</button>
                             <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfConnection">Edit</button>
 
                         </span>
@@ -391,9 +391,10 @@ border-style: dashed; -->
                 <div data-bind="">
                     <button class="webpad-node webpad-purple" data-bind="click: $root.AddNoteToExistingOne">+ Add information</button>
                 </div>
-                <div data-bind="ifnot: $root.previousConnectFrom">
+                <!-- will be replaced with other functionality -->
+                <!-- <div data-bind="ifnot: $root.previousConnectFrom">
                     <button class="webpad-node webpad-green" data-bind="click: $root.SelectPreviousFrom">+ Connect to Card</button>
-                </div>
+                </div> -->
                 <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() == $data">
                     <button class="webpad-node webpad-orange" 
                         >
@@ -427,7 +428,7 @@ border-style: dashed; -->
             <span data-bind="if: $root.stackOfCards().length > 0">                    
                     <button style="width: 100%;" class="webpad-node webpad-purple" 
                         data-bind="click: $root.clearStackOfCards">
-                        Clear Working area
+                        Close Working area
                     </button>
             </span>
         </div>
