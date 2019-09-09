@@ -337,7 +337,7 @@ border-style: dashed; -->
                 <div data-bind="foreach: $data.Tags">
                     <div>
                         <span data-bind="ifnot: $data.underEdit">
-                            <span class="webpad-node webpad-orange" data-bind=" text: $data.labelAlmost" > </span>
+                            <span class="webpad-node" style="color: #64e05e;" data-bind=" text: $data.labelAlmost" > </span>
                             <span class="webpad-node" data-bind="
                             style:
                             {
@@ -351,7 +351,7 @@ border-style: dashed; -->
                             
                         <span data-bind="if: $data.underEdit">
                             
-                                <span style="width: 100%;" class="webpad-node webpad-green">
+                                <span style="width: 100%; color: #64e05e;" class="webpad-node">
                                     <input 
                                         placeholder="..." 
                                         
