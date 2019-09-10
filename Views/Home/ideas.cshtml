@@ -319,7 +319,7 @@ border-style: dashed; -->
                             "click: $root.ConnectPreviousWithCurrent">
                             Connect from:
                     </button>
-                    <span class="webpad-node webpad-orange" 
+                    <span class="webpad-node" 
                         data-bind="
                          style:
                             {
@@ -392,9 +392,9 @@ border-style: dashed; -->
                     <button class="webpad-node webpad-purple" data-bind="click: $root.AddNoteToExistingOne">+ Add information</button>
                 </div>
                 <!-- will be replaced with other functionality -->
-                <!-- <div data-bind="ifnot: $root.previousConnectFrom">
+                <div data-bind="ifnot: $root.previousConnectFrom">
                     <button class="webpad-node webpad-green" data-bind="click: $root.SelectPreviousFrom">+ Connect to Card</button>
-                </div> -->
+                </div>
                 <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() == $data">
                     <button class="webpad-node webpad-orange" 
                         >
