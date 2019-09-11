@@ -29,7 +29,7 @@ function model_Connection(data)
              valueToCheck == null || 
              valueToCheck == "")
              {
-                 return "...";
+                 return "";
              }
         else
         {

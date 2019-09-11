@@ -280,6 +280,7 @@ border-style: dashed; -->
             <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
                 <h2>
                     <span data-bind="ifnot: $data.Note.underEdit">
+                        <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfNode">Edit</button>
                         <span
                             class="webpad-node" data-bind=
                         "
@@ -289,7 +290,6 @@ border-style: dashed; -->
                             },
                             text:$data.Note.textAlmost">
                         </span>
-                        <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfNode">Edit</button>
                     </span>
                         
                     <span data-bind="if: $data.Note.underEdit">
@@ -337,6 +337,7 @@ border-style: dashed; -->
                 <div data-bind="foreach: $data.Tags">
                     <div>
                         <span data-bind="ifnot: $data.underEdit">
+                            <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfConnection">Edit</button>
                             <span class="webpad-node" style="color: #64e05e;" data-bind=" text: $data.labelAlmost" > </span>
                             <span class="webpad-node" data-bind="
                             style:
@@ -345,7 +346,7 @@ border-style: dashed; -->
                             },click: $root.jumpToCard">
                             <a data-bind=" text: $data.Destination.textAlmost"></a>
                             </span>
-                            <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfConnection">Edit</button>
+                            
 
                         </span>
                             

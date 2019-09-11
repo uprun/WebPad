@@ -19,7 +19,7 @@ function model_Node(data)
              valueToCheck == null || 
              valueToCheck == "")
              {
-                 return "...";
+                 return "";
              }
         else
         {
