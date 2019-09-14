@@ -29,6 +29,7 @@
 <script language="JavaScript" type="text/javascript" src="~/js/clearStackOfCards.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/GetRandomColor.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/MigrationOfColorOfNode.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/switchExpandedCardTagsList.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/document_ready_ideas.js" asp-append-version="true"></script>
 
@@ -41,13 +42,13 @@
     <div property="offers" typeof="Offer">
         Price: $<span property="price">0.00</span>
         <meta property="priceCurrency" content="USD" />
-        <span property="description">1 device to sync, max 7 thousand of changes.</span>
+        <span property="description">3 in total devices to sync, max 7 thousand of changes.</span>
     </div>
 
     <div property="offers" typeof="Offer">
-        Price: $<span property="price">3.00</span>
+        Price: $<span property="price">2.00</span>
         <meta property="priceCurrency" content="USD" />
-        <span property="description">plus 4 devices to sync with (5 in total), max 40 thousand of changes.</span>
+        <span property="description">plus 4 devices to sync with (7 in total), max 40 thousand of changes.</span>
     </div>
     <span property="operatingSystem">Windows</span>
     <span property="operatingSystem">Linux</span>
@@ -275,12 +276,72 @@ border-style: dashed; -->
 
 } -->
 
+<script type="text/html" id="tag-template">
+    <div>
+        <span data-bind="ifnot: $data.underEdit">
+            <span data-bind="if: $parent.isCardUnderEdit">
+                <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfConnection">Edit</button>
+            </span>
+            <span class="webpad-node" style="color: #64e05e;" data-bind=" text: $data.labelAlmost" > </span>
+            <span class="webpad-node" data-bind="
+            style:
+            {
+                color: $data.Destination.color
+            },click: $root.jumpToCard">
+            <a data-bind=" text: $data.Destination.textAlmost"></a>
+            </span>
+            
+
+        </span>
+            
+        <span data-bind="if: $data.underEdit">
+            
+                <span style="width: 100%; color: #64e05e;" class="webpad-node">
+                    <input 
+                        placeholder="..." 
+                        
+                        style="box-sizing : border-box; width: 100%;" 
+                        type="text" 
+                        data-bind="
+                            textInput: $data.label,
+                            " 
+                    />
+                </span>
+            
+                <span style="width: 100%;" class="webpad-node"
+                    data-bind="
+                            style:
+                            {
+                                color: $data.Destination.color
+                            },">
+                    <input 
+                        placeholder="..." 
+                        
+                        style="box-sizing : border-box; width: 100%;" 
+                        type="text" 
+                        data-bind="
+                            textInput:  $data.Destination.text,
+                            " 
+                    />
+                </span>
+            
+                <button class="webpad-node webpad-blue-print" data-bind="click: $root.SwitchEditOfConnection">Close Edit</button>
+            
+
+
+        </span>
+
+    </div>
+</script>
+
 <script type="text/html" id="card-template">
         <div class="w3-col w3-container s12 m6 l4">
             <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
-                <h2>
+                <h1>
                     <span data-bind="ifnot: $data.Note.underEdit">
-                        <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfNode">Edit</button>
+                        <span data-bind="if: $data.isCardUnderEdit">
+                            <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfNode">Edit</button>
+                        </span>
                         <span
                             class="webpad-node" data-bind=
                         "
@@ -312,7 +373,7 @@ border-style: dashed; -->
                         <button class="webpad-node webpad-blue-print" data-bind="click: $root.SwitchEditOfNode">Close Edit</button>
                     </span>
                     
-                </h2>
+                </h1>
                 <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() != $data">
                     <button class="webpad-node webpad-purple" 
                         data-bind=
@@ -334,61 +395,15 @@ border-style: dashed; -->
                             - Discard Connect
                     </button>
                 </div>
-                <div data-bind="foreach: $data.Tags">
-                    <div>
-                        <span data-bind="ifnot: $data.underEdit">
-                            <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfConnection">Edit</button>
-                            <span class="webpad-node" style="color: #64e05e;" data-bind=" text: $data.labelAlmost" > </span>
-                            <span class="webpad-node" data-bind="
-                            style:
-                            {
-                                color: $data.Destination.color
-                            },click: $root.jumpToCard">
-                            <a data-bind=" text: $data.Destination.textAlmost"></a>
-                            </span>
-                            
-
-                        </span>
-                            
-                        <span data-bind="if: $data.underEdit">
-                            
-                                <span style="width: 100%; color: #64e05e;" class="webpad-node">
-                                    <input 
-                                        placeholder="..." 
-                                        
-                                        style="box-sizing : border-box; width: 100%;" 
-                                        type="text" 
-                                        data-bind="
-                                            textInput: $data.label,
-                                            " 
-                                    />
-                                </span>
-                            
-                                <span style="width: 100%;" class="webpad-node"
-                                    data-bind="
-                                            style:
-                                            {
-                                                color: $data.Destination.color
-                                            },">
-                                    <input 
-                                        placeholder="..." 
-                                        
-                                        style="box-sizing : border-box; width: 100%;" 
-                                        type="text" 
-                                        data-bind="
-                                            textInput:  $data.Destination.text,
-                                            " 
-                                    />
-                                </span>
-                            
-                                <button class="webpad-node webpad-blue-print" data-bind="click: $root.SwitchEditOfConnection">Close Edit</button>
-                            
-
-
-                        </span>
-
+                <span data-bind="if: $data.isCardExpanded">
+                    <div data-bind="template: { name: 'tag-template', foreach: $data.Tags } " >
                     </div>
-                </div>
+                    <button class="webpad-node webpad-orange" data-bind="click: $root.switchExpandedCardTagsList">Collapse</button>
+                </span>
+                <span data-bind="ifnot: $data.isCardExpanded">
+                    <button class="webpad-node webpad-orange" data-bind="click: $root.switchExpandedCardTagsList, text: 'Expand ' + $data.Tags().length + ' items'">Expand</button>
+                </span>
+                
                 <div data-bind="">
                     <button class="webpad-node webpad-purple" data-bind="click: $root.AddNoteToExistingOne">+ Add information</button>
                 </div>
