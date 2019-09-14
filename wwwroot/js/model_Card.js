@@ -1,7 +1,6 @@
 function model_Card(data)
 {
     var self = this;
-    self.isCardUnderEdit = ko.observable(false);
     self.isCardExpanded = ko.observable(false);
     self.Note = data.Note;
     self.Tags = ko.observableArray([]);

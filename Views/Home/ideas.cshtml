@@ -279,9 +279,9 @@ border-style: dashed; -->
 <script type="text/html" id="tag-template">
     <div>
         <span data-bind="ifnot: $data.underEdit">
-            <span data-bind="if: $parent.isCardUnderEdit">
-                <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfConnection">Edit</button>
-            </span>
+            <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfConnection"> 
+                    
+                Edit</button>
             <span class="webpad-node" style="color: #64e05e;" data-bind=" text: $data.labelAlmost" > </span>
             <span class="webpad-node" data-bind="
             style:
@@ -337,11 +337,11 @@ border-style: dashed; -->
 <script type="text/html" id="card-template">
         <div class="w3-col w3-container s12 m6 l4">
             <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
-                <h1>
+                <h2>
                     <span data-bind="ifnot: $data.Note.underEdit">
-                        <span data-bind="if: $data.isCardUnderEdit">
-                            <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfNode">Edit</button>
-                        </span>
+                        <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfNode">
+                            <object type="image/svg+xml" data="~/svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit"></object> 
+                        </div>
                         <span
                             class="webpad-node" data-bind=
                         "
@@ -370,10 +370,12 @@ border-style: dashed; -->
                                     " 
                             />
                         </span>
-                        <button class="webpad-node webpad-blue-print" data-bind="click: $root.SwitchEditOfNode">Close Edit</button>
+                        <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfNode">
+                            <object type="image/svg+xml" data="~/svg/check.svg" class="webpad-edit-pencil" alt="Close edit" ></object> 
+                        </div>
                     </span>
                     
-                </h1>
+                </h2>
                 <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() != $data">
                     <button class="webpad-node webpad-purple" 
                         data-bind=

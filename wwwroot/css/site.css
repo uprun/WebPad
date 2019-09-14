@@ -51,7 +51,7 @@ span {
     padding-bottom: 2mm;
     box-sizing: border-box;
     display: inline-block;
-    font-size: 7mm;
+    font-size: 1em;
     word-break: break-all;
 }
 
@@ -126,4 +126,19 @@ a
     border-color: aliceblue;
     /* overflow-y: scroll; */
     /* height: 90vh; */
+}
+
+.webpad-edit-pencil
+{
+    width: 1em;
+    height: 1em;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+    pointer-events: none;
+}
+
+.webpad-button-no-border
+{
+    border-style: none;
+    display: inline-block;
 }
