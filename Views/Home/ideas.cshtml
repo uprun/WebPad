@@ -279,9 +279,9 @@ border-style: dashed; -->
 <script type="text/html" id="tag-template">
     <div>
         <span data-bind="ifnot: $data.underEdit">
-            <button class="webpad-node webpad-blue-print" data-bind=" click: $root.SwitchEditOfConnection"> 
-                    
-                Edit</button>
+            <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfConnection">
+                <object type="image/svg+xml" data="~/svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit-Connection"></object> 
+            </div>
             <span class="webpad-node" style="color: #64e05e;" data-bind=" text: $data.labelAlmost" > </span>
             <span class="webpad-node" data-bind="
             style:
@@ -416,12 +416,16 @@ border-style: dashed; -->
                     </h2>
                     
                 </span>
-                
-                <div data-bind="">
+                <h2>
+                    <div class=" webpad-button-no-border" data-bind=" click: $root.AddNoteToExistingOne">
+                        <object type="image/svg+xml" data="~/svg/plus.svg" class="webpad-edit-pencil" alt="Add information" ></object> 
+                    </div>
+                </h2>
+                <!-- <div data-bind="">
                     <button class="webpad-node webpad-purple" data-bind="click: $root.AddNoteToExistingOne">+ Add information</button>
-                </div>
+                </div> -->
                 <!-- will be replaced with other functionality -->
-                <div data-bind="ifnot: $root.previousConnectFrom">
+                <!-- <div data-bind="ifnot: $root.previousConnectFrom">
                     <button class="webpad-node webpad-green" data-bind="click: $root.SelectPreviousFrom">+ Connect to Card</button>
                 </div>
                 <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() == $data">
@@ -436,7 +440,7 @@ border-style: dashed; -->
                             "click: $root.ClearPreviousFrom">
                             - Discard Connect
                     </button>
-                </div>
+                </div> -->
             </div>
             
             

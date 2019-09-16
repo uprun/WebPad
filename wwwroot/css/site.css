@@ -60,7 +60,8 @@ span {
     margin: 5mm; 
     border-color: inherit;
     border-width: 2mm;
-    border-style: dashed;
+    /* border-style: dashed; */
+    border-style: none;
 }
 
 .webpad-inline
