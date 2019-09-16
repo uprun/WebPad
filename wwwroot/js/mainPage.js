@@ -145,10 +145,6 @@ function ConnectedNotesViewModel()
         },
         { 
             background: "inherit",
-            color: "#dce9f6" 
-        },
-        { 
-            background: "inherit",
             color: "#ffbbdc" 
         },
         { 
