@@ -881,10 +881,12 @@ function ConnectedNotesViewModel()
     
     lookup.AddNoteToExistingOne = function(existing) {
         var obj = {
-            text: ""
+            text: existing.AdditionalInformationText()
         };
         lookup.CreateNote(obj, function(destination) { 
             lookup.ConnectNotes(existing.Note, destination);  
+            existing.AdditionalInformationText("");
+            lookup.switchAdditionalInformationText(existing);
         });
     };
 
