@@ -335,16 +335,14 @@ border-style: dashed; -->
                     </div>
                     <h2>
                         <div class=" webpad-button-no-border" style="color: aliceblue;" data-bind=" click: $root.switchExpandedCardTagsList" alt="Collapse">
-                            <object type="image/svg+xml" data="~/svg/chevron-up.svg" class="webpad-edit-pencil" alt="Collapse" ></object> 
-                            <object type="image/svg+xml" data="~/svg/chevron-up.svg" class="webpad-edit-pencil" alt="Collapse" ></object> 
-                            <object type="image/svg+xml" data="~/svg/chevron-up.svg" class="webpad-edit-pencil" alt="Collapse" ></object> 
+                            <object type="image/svg+xml" data="~/svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Collapse" ></object> 
                         </div>
                     </h2>
                 </span>
                 <span data-bind="ifnot: $data.isCardExpanded">
                     <h2>
                         <div class=" webpad-button-no-border" style="color: aliceblue;" data-bind=" click: $root.switchExpandedCardTagsList">
-                            <button class="webpad-button-no-border" data-bind="text: '...' + $data.Tags().length + '...'" alt="Expand">Expand</button>
+                            <button class="webpad-button-no-border" data-bind="text: $data.Tags().length + '...'" alt="Expand">Expand</button>
                         </div>
                     </h2>
                     
