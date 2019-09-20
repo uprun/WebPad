@@ -472,15 +472,24 @@ function ConnectedNotesViewModel()
             lookup.composedCards(), 
             function(item, index)
                 { 
+                    var resultOfSearchQuery = true;
                     if(lookup.SearchNotesQuery() && lookup.SearchNotesQuery().trim().length > 0)
                     {
-                        var result = item.IsForSearchResult(lookup.SearchNotesQuery().trim().toLowerCase())
-                        return result;
+                        resultOfSearchQuery = item.IsForSearchResult(lookup.SearchNotesQuery().trim().toLowerCase())
                     }
-                    else
+                    if(lookup.stackOfSearch().length > 0)
                     {
-                        return true;
+                        var stackResult = lookup.stackOfSearch().every( function (searchItem) 
+                        {
+                            var result = item.IsForSearchResult(searchItem);
+                            return result;
+
+                        });
+                        resultOfSearchQuery = resultOfSearchQuery && stackResult;
+
                     }
+                    return resultOfSearchQuery;
+                    
                     
                 }
         );
