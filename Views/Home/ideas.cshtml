@@ -34,6 +34,7 @@
 <script language="JavaScript" type="text/javascript" src="~/js/defineStackOfSearch.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/addToStackOfSearch.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/removeFromStackOfSearch.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/searchBarKeyPress.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/mainPage.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/document_ready_ideas.js" asp-append-version="true"></script>
 
@@ -459,6 +460,7 @@ border-style: dashed; -->
                         type="text" 
                         data-bind="
                             textInput: $root.SearchNotesQuery,
+                            event: {keypress: $root.searchBarKeyPress}
                             " 
                     />
 
@@ -474,7 +476,7 @@ border-style: dashed; -->
             <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">                    
                     <button style="width: 100%;" class="webpad-node webpad-green" 
                         data-bind="click: $root.CreateNoteFromSearchQuery">
-                        Create
+                        Create [Enter]
                     </button>
             </span>
         </div>
@@ -487,7 +489,7 @@ border-style: dashed; -->
             <span data-bind="if: $root.SearchNotesQuery().trim().length > 0 && $root.stackOfSearch().length < 3">                    
                     <button style="width: 100%;" class="webpad-node webpad-blue-print" 
                         data-bind="click: $root.addToStackOfSearch">
-                        pin as filter
+                        pin as filter [Shift + Enter]
                     </button>
             </span>
         </div>
