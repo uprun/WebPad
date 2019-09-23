@@ -4,8 +4,19 @@ function model_Card(data)
     self.isCardExpanded = ko.observable(false);
     self.Note = data.Note;
     self.Tags = ko.observableArray([]);
+    self.InitialTagsCount = ko.observable(0);
     self.AdditionalInformationText = ko.observable("");
     self.AdditionalInformationTextVisible = ko.observable(false);
+    self.InitialTags = ko.pureComputed(function()
+    {
+        return self.Tags().slice(0, self.InitialTagsCount());
+    });
+    self.RecentTags = ko.pureComputed(
+        function()
+        {
+            return self.Tags().slice(self.InitialTagsCount(), self.Tags().length);
+        }
+    );
     self.AnalyzeText = function(text, query)
     {
         return text.toLowerCase().indexOf(query) >= 0

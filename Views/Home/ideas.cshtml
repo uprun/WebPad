@@ -333,9 +333,9 @@ border-style: dashed; -->
                             - Discard Connect
                     </button>
                 </div>
-                <span data-bind="if: $data.Tags().length > 0">
+                <span data-bind="if: $data.InitialTags().length > 0">
                     <span data-bind="if: $data.isCardExpanded">
-                        <div data-bind="template: { name: 'tag-template', foreach: $data.Tags } " >
+                        <div data-bind="template: { name: 'tag-template', foreach: $data.InitialTags } " >
                         </div>
                         <h2>
                             <div class=" webpad-button-no-border" style="color: aliceblue;" data-bind=" click: $root.switchExpandedCardTagsList" alt="Collapse">
@@ -346,12 +346,14 @@ border-style: dashed; -->
                     <span data-bind="ifnot: $data.isCardExpanded">
                         <h2>
                             <div class=" webpad-button-no-border" style="color: aliceblue;" data-bind=" click: $root.switchExpandedCardTagsList">
-                                <button class="webpad-button-no-border" data-bind="text: $data.Tags().length + '...'" alt="Expand">Expand</button>
+                                <button class="webpad-button-no-border" data-bind="text: $data.InitialTags().length + ' items hidden...'" alt="Expand">Expand</button>
                             </div>
                         </h2>
                         
                     </span>
                 </span>
+                <div data-bind="template: { name: 'tag-template', foreach: $data.RecentTags } " >
+                </div>
 
                 
                 <span data-bind="ifnot: $data.AdditionalInformationTextVisible">
