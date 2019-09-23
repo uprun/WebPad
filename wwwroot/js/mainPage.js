@@ -1022,7 +1022,8 @@ function ConnectedNotesViewModel()
                 id: lookup.getLocalIndex(),
                 text: obj.text,
                 color: selectedColor.Color(),
-                background: "inherit"
+                background: "inherit",
+                createDate: new Date()
             });
         var added = toAdd.ConvertToJs();
         lookup.pushToHistory({

@@ -29,17 +29,37 @@ function model_Node(data)
     self.color = data.color;
     self.background = data.background;
     self.underEdit = ko.observable(false);
+    self.createDate = data.createDate;
+
 
     if(typeof(self.color) == "undefined" || self.color == null)
     {
         self.color = '#d190ff';
     }
+    
+
+
     self.ConvertToJs = function() {
         return {
             id: self.id,
             text: self.text(),
             color: self.color,
-            background: self.background
+            background: self.background,
+            createDate: self.createDate
         };
     };
+
+    if(typeof(self.createDate) == "undefined" || self.createDate == null)
+    {
+        self.createDate = new Date();
+        if(self.id !== -1 )
+        {
+            var info = self.ConvertToJs();
+            lookup.pushToHistory({
+                action: lookup.actions.NoteUpdated,
+                data: info
+            });
+        }
+        
+    }
 };
