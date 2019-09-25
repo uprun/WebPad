@@ -84,6 +84,8 @@ input
     background:inherit;
     color: inherit;
 }
+
+
 a 
 {
     color: inherit;
@@ -149,7 +151,40 @@ a
     width: 100%;
     min-width: 150px;
     color: #64e05e;
-    border-radius: 3mm;
+    border-radius: .3em;
     border-style: solid;
     border-color: aliceblue;
+}
+.webpad-search-bar::placeholder
+{
+    color: inherit;
+    filter: brightness(70%);
+}
+
+.webpad-extra-information
+{
+    border-radius: .3em;
+    box-sizing : border-box;
+    border-color: aliceblue;
+    border-style: solid;
+    width: 100%;
+}
+.webpad-extra-information::placeholder
+{
+    color: inherit;
+    filter: brightness(70%);
+}
+
+.webpad-main-information
+{
+    border-radius: .3em;
+    box-sizing : border-box;
+    border-color: aliceblue;
+    border-style: solid;
+    width: 100%;
+}
+.webpad-main-information::placeholder
+{
+    color: inherit;
+    filter: brightness(70%);
 }
