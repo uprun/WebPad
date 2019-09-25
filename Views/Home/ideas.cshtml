@@ -344,7 +344,8 @@ border-style: dashed; -->
                     <span data-bind="ifnot: $data.isCardExpanded">
                         <h2>
                             <div class=" webpad-button-no-border" style="color: aliceblue;" data-bind=" click: $root.switchExpandedCardTagsList">
-                                <button class="webpad-button-no-border" data-bind="text: $data.InitialTags().length + ' items hidden...'" alt="Expand">Expand</button>
+                                <button class="webpad-button-no-border" data-bind="text: $data.InitialTags().length + ' items hidden'" alt="Expand">Expand</button>
+                                <object type="image/svg+xml" data="~/svg/chevron-right.svg" class="webpad-edit-pencil" alt="Collapse" ></object> 
                             </div>
                         </h2>
                         
