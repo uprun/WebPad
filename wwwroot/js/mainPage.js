@@ -168,13 +168,8 @@ function ConnectedNotesViewModel()
 
     ko.utils.arrayPushAll(lookup.ColorPresets, toAddColors);
 
-
-    lookup.SwitchEditOfConnection = function(connection){
-        connection.underEdit(!connection.underEdit());
-    };
-
-    lookup.SwitchEditOfNode = function(card){
-        card.Note.underEdit(!card.Note.underEdit());
+    lookup.SwitchEditOfCard = function(card){
+        card.underEdit(!card.underEdit());
     };
 
     lookup.ColorNode = function(colorToApply) {

@@ -32,5 +32,6 @@ function model_Card(data)
         var tagsAnyPassed = filtered.length > 0 ;
         return tagsAnyPassed;
     };
+    self.underEdit = ko.observable(false);
 
 }

@@ -188,3 +188,17 @@ a
     color: inherit;
     filter: brightness(70%);
 }
+
+.webpad-inner-information
+{
+    border-radius: .3em;
+    box-sizing : border-box;
+    border-color: aliceblue;
+    border-style: solid;
+    width: 100%;
+}
+.webpad-inner-information::placeholder
+{
+    color: inherit;
+    filter: brightness(70%);
+}

@@ -28,7 +28,6 @@ function model_Node(data)
     });
     self.color = data.color;
     self.background = data.background;
-    self.underEdit = ko.observable(false);
     self.createDate = data.createDate;
 
 

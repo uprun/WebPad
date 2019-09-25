@@ -218,10 +218,10 @@ border-style: dashed; -->
 
 <script type="text/html" id="tag-template">
     <div>
-        <span data-bind="ifnot: $data.underEdit">
-            <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfConnection">
+        <span data-bind="ifnot: $parent.underEdit">
+            <!-- <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfConnection">
                 <object type="image/svg+xml" data="~/svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit-Connection"></object> 
-            </div>
+            </div> -->
             <span class="webpad-node" style="color: #64e05e;" data-bind=" text: $data.labelAlmost" > </span>
             <span class="webpad-node" data-bind="
             style:
@@ -234,9 +234,9 @@ border-style: dashed; -->
 
         </span>
             
-        <span data-bind="if: $data.underEdit">
+        <span data-bind="if: $parent.underEdit">
             
-                <span style="width: 100%; color: #64e05e;" class="webpad-node">
+                <!-- <span style="width: 100%; color: #64e05e;" class="webpad-node">
                     <input 
                         placeholder="..." 
                         
@@ -246,27 +246,27 @@ border-style: dashed; -->
                             textInput: $data.label,
                             " 
                     />
-                </span>
+                </span> -->
             
                 <span style="width: 100%;" class="webpad-node"
                     data-bind="
-                            style:
-                            {
-                                color: $data.Destination.color
-                            },">
+                           ">
                     <input 
                         placeholder="..." 
-                        
-                        style="box-sizing : border-box; width: 100%;" 
+                        class="webpad-inner-information"
                         type="text" 
                         data-bind="
                             textInput:  $data.Destination.text,
+                            style:
+                            {
+                                color: $data.Destination.color
+                            },
                             " 
                     />
                 </span>
-                <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfConnection">
+                <!-- <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfConnection">
                     <object type="image/svg+xml" data="~/svg/check.svg" class="webpad-edit-pencil" alt="Close edit" ></object> 
-                </div>
+                </div> -->
         </span>
 
     </div>
@@ -276,8 +276,8 @@ border-style: dashed; -->
         <div class="w3-col w3-container s12 m6 l4">
             <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
                 <h2>
-                    <span data-bind="ifnot: $data.Note.underEdit">
-                        <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfNode">
+                    <span data-bind="ifnot: $data.underEdit">
+                        <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
                             <object type="image/svg+xml" data="~/svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit"></object> 
                         </div>
                         <span
@@ -291,24 +291,20 @@ border-style: dashed; -->
                         </span>
                     </span>
                         
-                    <span data-bind="if: $data.Note.underEdit">
-                        <span style="width: 100%;" class="webpad-node"
-                            data-bind="
-                                    style:
-                                    {
-                                        color: $data.Note.color,
-                                    },">
+                    <span data-bind="if: $data.underEdit">
                             <input 
                                 placeholder="..." 
-                                
-                                style="box-sizing : border-box; width: 100%;" 
+                                class="webpad-main-information"
                                 type="text" 
                                 data-bind="
                                     textInput:  $data.Note.text,
+                                    style:
+                                    {
+                                        color: $data.Note.color,
+                                    },
                                     " 
                             />
-                        </span>
-                        <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfNode">
+                        <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
                             <object type="image/svg+xml" data="~/svg/check.svg" class="webpad-edit-pencil" alt="Close edit" ></object> 
                         </div>
                     </span>
