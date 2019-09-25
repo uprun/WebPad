@@ -314,7 +314,7 @@ border-style: dashed; -->
                     </span>
                     
                 </h2>
-                <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() != $data">
+                <!-- <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() != $data">
                     <button class="webpad-node webpad-purple" 
                         data-bind=
                             "click: $root.ConnectPreviousWithCurrent">
@@ -334,7 +334,7 @@ border-style: dashed; -->
                             "click: $root.ClearPreviousFrom">
                             - Discard Connect
                     </button>
-                </div>
+                </div> -->
                 <span data-bind="if: $data.InitialTags().length > 0">
                     <span data-bind="if: $data.isCardExpanded">
                         <div data-bind="template: { name: 'tag-template', foreach: $data.InitialTags } " >
