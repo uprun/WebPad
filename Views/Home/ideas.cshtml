@@ -339,6 +339,11 @@ border-style: dashed; -->
                             <div class=" webpad-button-no-border" style="color: aliceblue;" data-bind=" click: $root.switchExpandedCardTagsList" alt="Collapse">
                                 <object type="image/svg+xml" data="~/svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Collapse" ></object> 
                             </div>
+                            <span data-bind="if: $data.underEdit">
+                                <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
+                                    <object type="image/svg+xml" data="~/svg/check.svg" class="webpad-edit-pencil" alt="Close edit" ></object> 
+                                </div>
+                            </span>
                         </h2>
                     </span>
                     <span data-bind="ifnot: $data.isCardExpanded">
