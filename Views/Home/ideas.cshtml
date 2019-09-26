@@ -382,7 +382,8 @@ border-style: dashed; -->
                                 type="text" 
                                 data-bind="
                                     textInput:  $data.AdditionalInformationText,
-                                    event: {keypress: $root.additionalInfoKeyPress}
+                                    event: {keypress: $root.additionalInfoKeyPress}, 
+                                    hasFocus: $data.AdditionalInformationTextVisible()
                                     " 
                             />
                         </span>
