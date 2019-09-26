@@ -891,7 +891,6 @@ function ConnectedNotesViewModel()
         lookup.CreateNote(obj, function(destination) { 
             lookup.ConnectNotes(existing.Note, destination);  
             existing.AdditionalInformationText("");
-            lookup.switchAdditionalInformationText(existing);
         });
     };
 
