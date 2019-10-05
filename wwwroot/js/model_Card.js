@@ -47,5 +47,6 @@ function model_Card(data)
     {
         self.AdditionalInformationTextFocus(false);
     };
+    self.AdditionalInformationTextColor = ko.observable(lookup.GetRandomColor().Color());
 
 }

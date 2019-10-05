@@ -886,11 +886,13 @@ function ConnectedNotesViewModel()
     
     lookup.AddNoteToExistingOne = function(existing) {
         var obj = {
-            text: existing.AdditionalInformationText()
+            text: existing.AdditionalInformationText(),
+            textColor: existing.AdditionalInformationTextColor()
         };
         lookup.CreateNote(obj, function(destination) { 
             lookup.ConnectNotes(existing.Note, destination);  
             existing.AdditionalInformationText("");
+            existing.AdditionalInformationTextColor(lookup.GetRandomColor().Color());
         });
     };
 
@@ -1010,12 +1012,16 @@ function ConnectedNotesViewModel()
 
     lookup.CreateNote = function(obj, callback) {
 
-        var selectedColor = lookup.GetRandomColor();
+        var selectedColor = lookup.GetRandomColor().Color();
+        if(typeof(obj.textColor) !== "undefined")
+        {
+            selectedColor = obj.textColor;
+        }
         var toAdd = lookup.Instanciate_model_node(
             {
                 id: lookup.getLocalIndex(),
                 text: obj.text,
-                color: selectedColor.Color(),
+                color: selectedColor,
                 background: "inherit",
                 createDate: new Date()
             });
