@@ -461,11 +461,35 @@ function ConnectedNotesViewModel()
     lookup.SearchNotesQuery
         .extend({ rateLimit: 500 });
     
-
+    lookup.sortedByDateCards = ko.pureComputed(function()
+    {
+        return lookup
+            .composedCards()
+            .sort(
+                function(left, right)
+                {
+                    if(left.Note.createDate === right.Note.createDate)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        if(left.Note.createDate < right.Note.createDate)
+                        {
+                            return 1;
+                        }
+                        else
+                        {
+                            return -1;
+                        }
+                    }
+                }
+            );
+    });
     lookup.FilteredCards = ko.pureComputed(function() {
         return ko.utils.arrayFilter
         (
-            lookup.composedCards(), 
+            lookup.sortedByDateCards(), 
             function(item, index)
                 { 
                     var resultOfSearchQuery = true;

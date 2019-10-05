@@ -61,4 +61,8 @@ function model_Node(data)
         }
         
     }
+    else
+    {
+        self.createDate = new Date(self.createDate);
+    }
 };
