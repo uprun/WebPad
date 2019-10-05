@@ -7,6 +7,16 @@ function model_Card(data)
     self.InitialTagsCount = ko.observable(0);
     self.AdditionalInformationText = ko.observable("");
     self.AdditionalInformationTextVisible = ko.observable(false);
+    self
+        .AdditionalInformationTextVisible
+        .subscribe(function(data) 
+        {
+            if(data)
+            {
+                self.AdditionalInformationTextFocus(true);
+            }
+        });
+    self.AdditionalInformationTextFocus = ko.observable(false);
     self.InitialTags = ko.pureComputed(function()
     {
         return self.Tags().slice(0, self.InitialTagsCount());
@@ -33,5 +43,9 @@ function model_Card(data)
         return tagsAnyPassed;
     };
     self.underEdit = ko.observable(false);
+    self.blurHandler = function()
+    {
+        self.AdditionalInformationTextFocus(false);
+    };
 
 }
