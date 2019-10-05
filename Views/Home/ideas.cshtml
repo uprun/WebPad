@@ -276,10 +276,8 @@ border-style: dashed; -->
         <div class="w3-col w3-container s12 m6 l4">
             <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
                 <h2>
+                    <span style="color: aliceblue;" data-bind="click: $data.switchToolBoxVisibility"> +</span>
                     <span data-bind="ifnot: $data.underEdit">
-                        <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
-                            <object type="image/svg+xml" data="~/svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit"></object> 
-                        </div>
                         <span
                             class="webpad-node" data-bind=
                         "
@@ -287,7 +285,8 @@ border-style: dashed; -->
                             {
                                 color: $data.Note.color
                             },
-                            text:$data.Note.textAlmost">
+                            text:$data.Note.textAlmost
+                            ">
                         </span>
                     </span>
                         
@@ -304,9 +303,19 @@ border-style: dashed; -->
                                     },
                                     " 
                             />
-                        <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
-                            <object type="image/svg+xml" data="~/svg/check.svg" class="webpad-edit-pencil" alt="Close edit" ></object> 
-                        </div>
+                    </span>
+                    <span data-bind="if: $data.toolBoxVisible">
+                        <span data-bind="ifnot: $data.underEdit">
+                            <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
+                                <object type="image/svg+xml" data="~/svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit"></object> 
+                            </div>
+                        </span>
+                        <span data-bind="if: $data.underEdit">
+                            <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
+                                <object type="image/svg+xml" data="~/svg/check.svg" class="webpad-edit-pencil" alt="Close edit" ></object> 
+                            </div>
+                        </span>
+                        
                     </span>
                     
                 </h2>
@@ -339,11 +348,6 @@ border-style: dashed; -->
                             <div class=" webpad-button-no-border" style="color: aliceblue;" data-bind=" click: $root.switchExpandedCardTagsList" alt="Collapse">
                                 <object type="image/svg+xml" data="~/svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Collapse" ></object> 
                             </div>
-                            <span data-bind="if: $data.underEdit">
-                                <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
-                                    <object type="image/svg+xml" data="~/svg/check.svg" class="webpad-edit-pencil" alt="Close edit" ></object> 
-                                </div>
-                            </span>
                         </h2>
                     </span>
                     <span data-bind="ifnot: $data.isCardExpanded">

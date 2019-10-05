@@ -48,5 +48,10 @@ function model_Card(data)
         self.AdditionalInformationTextFocus(false);
     };
     self.AdditionalInformationTextColor = ko.observable(lookup.GetRandomColor().Color());
+    self.toolBoxVisible = ko.observable(false);
+    self.switchToolBoxVisibility = function()
+    {
+        self.toolBoxVisible(!self.toolBoxVisible());
+    };
 
 }
