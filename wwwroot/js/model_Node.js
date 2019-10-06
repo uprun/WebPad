@@ -29,6 +29,7 @@ function model_Node(data)
     self.color = data.color;
     self.background = data.background;
     self.createDate = data.createDate;
+    self.isDone = ko.observable(false);
 
 
     if(typeof(self.color) == "undefined" || self.color == null)

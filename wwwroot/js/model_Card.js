@@ -48,4 +48,9 @@ function model_Card(data)
         self.toolBoxVisible(!self.toolBoxVisible());
     };
 
+    self.switchDone = function()
+    {
+        self.Note.isDone(!self.Note.isDone());
+    }
+
 }
