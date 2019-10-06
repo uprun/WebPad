@@ -485,10 +485,35 @@ function ConnectedNotesViewModel()
                 }
             );
     });
+
+    // the idea is that cards without tags should not be displayed unless they are root
+    lookup.filteredOutLeafs = ko.pureComputed(
+        function()
+        {
+            return ko.utils.arrayFilter
+            (
+                lookup.sortedByDateCards(),
+                function(item, index)
+                {
+                    if(item.Tags.length == 0)
+                    {
+                        return !item.Note.isReferenced();
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+
+
+            );
+
+        }
+    );
     lookup.FilteredCards = ko.pureComputed(function() {
         return ko.utils.arrayFilter
         (
-            lookup.sortedByDateCards(), 
+            lookup.filteredOutLeafs(), 
             function(item, index)
                 { 
                     var resultOfSearchQuery = true;

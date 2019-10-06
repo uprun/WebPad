@@ -52,6 +52,7 @@ lookup.processMessageFromOuterSpace = function(item)
             {
                 var noteToAdd = lookup.Instanciate_model_node(current_data);
                 lookup.Notes.push(noteToAdd);
+                lookup.findNodeById_buffer[noteToAdd.id] = item;
                 var cardToAdd = new model_Card({ Note: noteToAdd});
                 lookup.hashCards[noteToAdd.id] = cardToAdd;
                 lookup.composedCards.push(cardToAdd);

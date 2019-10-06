@@ -47,6 +47,8 @@ function model_Node(data)
         });
 
     }
+
+    self.isReferenced = ko.observable(false);
     
 
 

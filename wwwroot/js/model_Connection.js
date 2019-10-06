@@ -13,6 +13,7 @@ function model_Connection(data)
     self.DestinationId = destinationId;
     self.Source = findNodeByIdFunc(self.SourceId);
     self.Destination = findNodeByIdFunc(self.DestinationId);
+    self.Destination.isReferenced(true);
     self.label = ko.observable(label);
     if(typeof(data.textChangedHandler) != "undefined")
     {
