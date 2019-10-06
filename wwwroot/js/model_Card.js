@@ -50,7 +50,7 @@ function model_Card(data)
 
     self.switchDone = function()
     {
-        self.Note.isDone(!self.Note.isDone());
+        self.Note.switchDone();
     }
 
 }

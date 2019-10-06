@@ -29,7 +29,25 @@ function model_Node(data)
     self.color = data.color;
     self.background = data.background;
     self.createDate = data.createDate;
-    self.isDone = ko.observable(false);
+    if(typeof(data.isDone) != "undefined")
+    {
+        self.isDone = ko.observable(data.isDone);
+    }
+    else
+    {
+        self.isDone = ko.observable(false);
+    }
+    self.switchDone = function()
+    {
+        self.isDone(!self.isDone());
+        var info = self.ConvertToJs();
+        lookup.pushToHistory({
+            action: lookup.actions.NoteUpdated,
+            data: info
+        });
+
+    }
+    
 
 
     if(typeof(self.color) == "undefined" || self.color == null)
@@ -45,7 +63,8 @@ function model_Node(data)
             text: self.text(),
             color: self.color,
             background: self.background,
-            createDate: self.createDate
+            createDate: self.createDate,
+            isDone: self.isDone()
         };
     };
 
