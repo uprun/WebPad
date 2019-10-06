@@ -222,6 +222,9 @@ border-style: dashed; -->
             <!-- <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfConnection">
                 <object type="image/svg+xml" data="~/svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit-Connection"></object> 
             </div> -->
+            <span data-bind="if: $data.Destination.isDone">
+                <span style="color: #64e05e;">[x]</span>
+            </span>
             <span class="webpad-node" style="color: #64e05e;" data-bind=" text: $data.labelAlmost" > </span>
             <span class="webpad-node" data-bind="
             style:
@@ -280,7 +283,7 @@ border-style: dashed; -->
             <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
                 <h2>
                     <span data-bind="if: $data.Note.isDone">
-                        <span style="color: #64e05e;" data-bind="">[x]</span>
+                        <span style="color: #64e05e;">[x]</span>
                     </span>
                     <span data-bind="ifnot: $data.underEdit">
                         <span
