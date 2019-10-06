@@ -1,10 +1,14 @@
 function model_Card(data)
 {
     var self = this;
-    self.isCardExpanded = ko.observable(false);
     self.Note = data.Note;
     self.Tags = ko.observableArray([]);
-    self.InitialTagsCount = ko.observable(0);
+    self.ReversedTags = ko.pureComputed(
+        function()
+        {
+            return self.Tags().reverse();
+        }
+    );
     self.AdditionalInformationText = ko.observable("");
     self.AdditionalInformationTextVisible = ko.observable(false);
     self
@@ -17,16 +21,6 @@ function model_Card(data)
             }
         });
     self.AdditionalInformationTextFocus = ko.observable(false);
-    self.InitialTags = ko.pureComputed(function()
-    {
-        return self.Tags().slice(0, self.InitialTagsCount());
-    });
-    self.RecentTags = ko.pureComputed(
-        function()
-        {
-            return self.Tags().slice(self.InitialTagsCount(), self.Tags().length);
-        }
-    );
     self.AnalyzeText = function(text, query)
     {
         return text.toLowerCase().indexOf(query) >= 0

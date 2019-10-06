@@ -235,7 +235,6 @@ function ConnectedNotesViewModel()
             if(found)
             {
                 found.Tags.push(connectionToAdd);
-                found.InitialTagsCount(found.InitialTagsCount() + 1);
             }
 
             return connectionToAdd;

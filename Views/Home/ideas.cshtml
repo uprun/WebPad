@@ -276,7 +276,6 @@ border-style: dashed; -->
         <div class="w3-col w3-container s12 m6 l4">
             <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
                 <h2>
-                    <span style="color: aliceblue;" data-bind="click: $data.switchToolBoxVisibility"> +</span>
                     <span data-bind="ifnot: $data.underEdit">
                         <span
                             class="webpad-node" data-bind=
@@ -285,7 +284,8 @@ border-style: dashed; -->
                             {
                                 color: $data.Note.color
                             },
-                            text:$data.Note.textAlmost
+                            text:$data.Note.textAlmost,
+                            click: $data.switchToolBoxVisibility
                             ">
                         </span>
                     </span>
@@ -319,51 +319,6 @@ border-style: dashed; -->
                     </span>
                     
                 </h2>
-                <!-- <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() != $data">
-                    <button class="webpad-node webpad-purple" 
-                        data-bind=
-                            "click: $root.ConnectPreviousWithCurrent">
-                            Connect from:
-                    </button>
-                    <span class="webpad-node" 
-                        data-bind="
-                         style:
-                            {
-                                color: $root.previousConnectFrom().Note.color
-                            },
-                        text: $root.previousConnectFrom().Note.textAlmost" > </span>
-                </div>
-                <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() != $data">
-                    <button class="webpad-node webpad-yellow" 
-                        data-bind=
-                            "click: $root.ClearPreviousFrom">
-                            - Discard Connect
-                    </button>
-                </div> -->
-                <span data-bind="if: $data.InitialTags().length > 0">
-                    <span data-bind="if: $data.isCardExpanded">
-                        <div data-bind="template: { name: 'tag-template', foreach: $data.InitialTags } " >
-                        </div>
-                        <h2>
-                            <div class=" webpad-button-no-border" style="color: aliceblue;" data-bind=" click: $root.switchExpandedCardTagsList" alt="Collapse">
-                                <object type="image/svg+xml" data="~/svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Collapse" ></object> 
-                            </div>
-                        </h2>
-                    </span>
-                    <span data-bind="ifnot: $data.isCardExpanded">
-                        <h2>
-                            <div class=" webpad-button-no-border" style="color: aliceblue;" data-bind=" click: $root.switchExpandedCardTagsList">
-                                <button class="webpad-button-no-border" data-bind="text: $data.InitialTags().length + ' items hidden'" alt="Expand">Expand</button>
-                                <object type="image/svg+xml" data="~/svg/chevron-right.svg" class="webpad-edit-pencil" alt="Collapse" ></object> 
-                            </div>
-                        </h2>
-                        
-                    </span>
-                </span>
-                <div data-bind="template: { name: 'tag-template', foreach: $data.RecentTags } " >
-                </div>
-
-                
                 <span data-bind="ifnot: $data.AdditionalInformationTextVisible">
                     <h2>
                         <div class=" webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
@@ -408,26 +363,11 @@ border-style: dashed; -->
                     </h2>
                     
                 </span>
-                <!-- <div data-bind="">
-                    <button class="webpad-node webpad-purple" data-bind="click: $root.AddNoteToExistingOne">+ Add information</button>
-                </div> -->
-                <!-- will be replaced with other functionality -->
-                <!-- <div data-bind="ifnot: $root.previousConnectFrom">
-                    <button class="webpad-node webpad-green" data-bind="click: $root.SelectPreviousFrom">+ Connect to Card</button>
+                <div data-bind="template: { name: 'tag-template', foreach: $data.ReversedTags } " >
                 </div>
-                <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() == $data">
-                    <button class="webpad-node webpad-orange" 
-                        >
-                            #click catcher
-                    </button>
-                </div>
-                <div data-bind="if: $root.previousConnectFrom() && $root.previousConnectFrom() == $data">
-                    <button class="webpad-node webpad-yellow" 
-                        data-bind=
-                            "click: $root.ClearPreviousFrom">
-                            - Discard Connect
-                    </button>
-                </div> -->
+
+                
+                
             </div>
             
             
