@@ -234,7 +234,7 @@ function ConnectedNotesViewModel()
             var found = lookup.hashCards[connectionToAdd.SourceId];
             if(found)
             {
-                found.Tags.push(connectionToAdd);
+                found.Tags.unshift(connectionToAdd);
             }
 
             return connectionToAdd;

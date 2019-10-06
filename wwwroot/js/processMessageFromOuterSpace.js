@@ -98,7 +98,7 @@ lookup.processMessageFromOuterSpace = function(item)
                 var found = lookup.hashCards[connectionToAdd.SourceId];
                 if(found)
                 {
-                    found.Tags.push(connectionToAdd);
+                    found.Tags.unshift(connectionToAdd);
                 }
             }
             else

@@ -3,12 +3,6 @@ function model_Card(data)
     var self = this;
     self.Note = data.Note;
     self.Tags = ko.observableArray([]);
-    self.ReversedTags = ko.pureComputed(
-        function()
-        {
-            return self.Tags().reverse();
-        }
-    );
     self.AdditionalInformationText = ko.observable("");
     self.AdditionalInformationTextVisible = ko.observable(false);
     self
