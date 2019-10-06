@@ -219,63 +219,68 @@ border-style: dashed; -->
 <script type="text/html" id="tag-template">
     <div>
         <span data-bind="">
-            <!-- <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfConnection">
-                <object type="image/svg+xml" data="~/svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit-Connection"></object> 
-            </div> -->
             <span data-bind="if: $data.Destination.isDone">
                 <span style="color: #64e05e;">[x]</span>
             </span>
             <span class="webpad-node" style="color: #64e05e;" data-bind=" text: $data.labelAlmost" > </span>
             <span class="webpad-node" data-bind="
-            style:
-            {
-                color: $data.Destination.color
-            },click: $root.jumpToCard">
-            <a data-bind=" text: $data.Destination.textAlmost"></a>
+                style:
+                {
+                    color: $data.Destination.color
+                },click: $root.jumpToCard">
+                <a data-bind=" text: $data.Destination.textAlmost"></a>
             </span>
-            
 
-        </span>
-            
-        <span data-bind="if: $parent.underEdit">
-            
-                <!-- <span style="width: 100%; color: #64e05e;" class="webpad-node">
-                    <input 
-                        placeholder="..." 
-                        
-                        style="box-sizing : border-box; width: 100%;" 
-                        type="text" 
-                        data-bind="
-                            textInput: $data.label,
-                            " 
-                    />
-                </span> -->
-            
-                <!-- <span style="width: 100%;" class="webpad-node"
-                    data-bind="
-                           ">
-                    <input 
-                        placeholder="..." 
-                        class="webpad-inner-information"
-                        type="text" 
-                        data-bind="
-                            textInput:  $data.Destination.text,
-                            style:
-                            {
-                                color: $data.Destination.color
-                            },
-                            " 
-                    />
-                </span> -->
-                <!-- <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfConnection">
-                    <object type="image/svg+xml" data="~/svg/check.svg" class="webpad-edit-pencil" alt="Close edit" ></object> 
-                </div> -->
         </span>
 
     </div>
 </script>
 
 <script type="text/html" id="additional-info-template">
+    <span data-bind="ifnot: $data.AdditionalInformationTextVisible">
+        <h2>
+            <div class=" webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
+                <object type="image/svg+xml" data="~/svg/plus.svg" class="webpad-edit-pencil" alt="Add information" ></object> 
+            </div>
+        </h2>
+        
+    </span>
+    <span data-bind="if: $data.AdditionalInformationTextVisible">
+        <h2>
+            <span style="width: 100%;" class="webpad-node"
+                data-bind="
+                        style:
+                        {
+                            color: $data.AdditionalInformationTextColor,
+                        },">
+                <input 
+                    placeholder="input information" 
+                    class="webpad-extra-information"
+                    type="text" 
+                    data-bind="
+                        textInput:  $data.AdditionalInformationText,
+                        event: {keypress: $root.additionalInfoKeyPress, blur: $data.blurHandler}, 
+                        hasFocus: $data.AdditionalInformationTextFocus()
+                        " 
+                />
+            </span>
+            <div class=" webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
+                <object type="image/svg+xml" data="~/svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Cancel edit" ></object> 
+            </div>
+            <span 
+                data-bind="
+                        if: $data.AdditionalInformationText().trim().length > 0">
+                <div class=" webpad-button-no-border" data-bind=" click: $root.AddNoteToExistingOne">
+                    <object type="image/svg+xml" data="~/svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" ></object> 
+                    <span style="color: aliceblue;">
+                    [Enter]
+                    </span>
+                </div>
+            </span>
+            
+        </h2>
+        
+    </span>
 </script>
 
 <script type="text/html" id="card-template">
@@ -325,7 +330,7 @@ border-style: dashed; -->
                             </div>
                         </span>
                         <span data-bind="ifnot: $data.Note.isDone">
-                            <span style="color: aliceblue;" data-bind=" click: $data.switchDone">[done]</span>
+                            <span style="color: #64e05e;" data-bind=" click: $data.switchDone">[done]</span>
                         </span>
                         <span data-bind="if: $data.Note.isDone">
                             <span style="color: #ffa26b;" data-bind=" click: $data.switchDone">[not-done]</span>
@@ -335,50 +340,8 @@ border-style: dashed; -->
                     </span>
                     
                 </h2>
-                <span data-bind="ifnot: $data.AdditionalInformationTextVisible">
-                    <h2>
-                        <div class=" webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
-                            <object type="image/svg+xml" data="~/svg/plus.svg" class="webpad-edit-pencil" alt="Add information" ></object> 
-                        </div>
-                    </h2>
-                    
-                </span>
-                <span data-bind="if: $data.AdditionalInformationTextVisible">
-                    <h2>
-                        <span style="width: 100%;" class="webpad-node"
-                            data-bind="
-                                    style:
-                                    {
-                                        color: $data.AdditionalInformationTextColor,
-                                    },">
-                            <input 
-                                placeholder="input information" 
-                                class="webpad-extra-information"
-                                type="text" 
-                                data-bind="
-                                    textInput:  $data.AdditionalInformationText,
-                                    event: {keypress: $root.additionalInfoKeyPress, blur: $data.blurHandler}, 
-                                    hasFocus: $data.AdditionalInformationTextFocus()
-                                    " 
-                            />
-                        </span>
-                        <div class=" webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
-                            <object type="image/svg+xml" data="~/svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Cancel edit" ></object> 
-                        </div>
-                        <span 
-                            data-bind="
-                                    if: $data.AdditionalInformationText().trim().length > 0">
-                            <div class=" webpad-button-no-border" data-bind=" click: $root.AddNoteToExistingOne">
-                                <object type="image/svg+xml" data="~/svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" ></object> 
-                                <span style="color: aliceblue;">
-                                [Enter]
-                                </span>
-                            </div>
-                        </span>
-                        
-                    </h2>
-                    
-                </span>
+                <div data-bind="template: { name: 'additional-info-template' } " >
+                </div>
                 <div data-bind="template: { name: 'tag-template', foreach: $data.ReversedTags } " >
                 </div>
 
