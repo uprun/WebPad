@@ -12,6 +12,7 @@ lookup.processMessageFromOuterSpace = function(item)
                 found.background = current_data.background;
                 found.x = current_data.x;
                 found.y = current_data.y;
+                found.isDone(current_data.isDone);
             }
             else
             {
