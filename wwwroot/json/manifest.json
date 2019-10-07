@@ -64,9 +64,9 @@
       }
 
     ],
-    "start_url": "/ideas/?web_app=true",
+    "start_url": "/?web_app=true",
     "background_color": "#333333",
     "display": "standalone",
-    "scope": "/ideas/",
+    "scope": "/",
     "theme_color": "#333333"
 } 
