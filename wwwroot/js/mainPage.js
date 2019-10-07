@@ -592,49 +592,56 @@ function ConnectedNotesViewModel()
     };
 
     lookup.ActualSendMessage = function(receiver, text, id) {
-        $.ajax({
-            type: "POST",
-            url: "SendMessages",
-            data: {
-                messages: [
-                    {
-                        Receiver: receiver,
-                        Text: text
-                    }
-                ],
-                senderPublicKey: lookup.publicCryptoKey()
-            },
-            success: function() {
-            },
-            error: function() {
-                console.log("SendMessages error");
-            },
-            dataType: "json"
-        });
+        if(navigator.onLine)
+        {
+            $.ajax({
+                type: "POST",
+                url: "SendMessages",
+                data: {
+                    messages: [
+                        {
+                            Receiver: receiver,
+                            Text: text
+                        }
+                    ],
+                    senderPublicKey: lookup.publicCryptoKey()
+                },
+                success: function() {
+                },
+                error: function() {
+                    console.log("SendMessages error");
+                },
+                dataType: "json"
+            });
+        }
+        
 
     };
 
     lookup.ReceiveMessages = function(publicKey) {
-        $.ajax({
-            type: "POST",
-            url: "ReceiveMessages",
-            data: {
-                publicKey: publicKey
-            },
-            success: function(data) {
-                if(data && data.length > 0)
-                {
-                    ko.utils.arrayForEach(data, function(item) {
-                        lookup.DecryptMessage(item);
-                    });
-                }
-                
-            },
-            error: function() {
-                console.log("ReceiveMessages error");
-            },
-            dataType: "json"
-        });
+        if(navigator.onLine)
+        {
+            $.ajax({
+                type: "POST",
+                url: "ReceiveMessages",
+                data: {
+                    publicKey: publicKey
+                },
+                success: function(data) {
+                    if(data && data.length > 0)
+                    {
+                        ko.utils.arrayForEach(data, function(item) {
+                            lookup.DecryptMessage(item);
+                        });
+                    }
+                    
+                },
+                error: function() {
+                    console.log("ReceiveMessages error");
+                },
+                dataType: "json"
+            });
+        }
 
     };
 
@@ -686,110 +693,84 @@ function ConnectedNotesViewModel()
         
     };
 
+    lookup.isOnLine = ko.observable(navigator.onLine);
 
     lookup.processMessages = function() {
         var ownPublicKey = lookup.publicCryptoKey();
         var shrinkedOwnPublicKey = ownPublicKey.substring(0, 5) + '_' ;
-        var messages = ko.utils.arrayMap(lookup.TrustedPublicKeysToSendTo(), function(item) 
-            {
-                if(item.messagesPrepared && item.messagesPrepared.length > 0 ) 
+        if(navigator.onLine)
+        {
+            lookup.isOnLine(true);
+            var messages = ko.utils.arrayMap
+            (lookup.TrustedPublicKeysToSendTo(), function(item) 
                 {
-                    var itemToSend = item.messagesPrepared.shift();
-                    // hope message will not be lost
-
-                    if(itemToSend.data)
+                    if(item.messagesPrepared && item.messagesPrepared.length > 0 ) 
                     {
-                        var data = itemToSend.data;
-                        if(data.id)
+                        var itemToSend = item.messagesPrepared.shift();
+                        // hope message will not be lost
+
+                        if(itemToSend.data)
                         {
-                            if(data.id.startsWith(lookup.localPrefix))
+                            var data = itemToSend.data;
+                            if(data.id)
                             {
-                                data.id = shrinkedOwnPublicKey + data.id.substring(lookup.localPrefix.length);
+                                if(data.id.startsWith(lookup.localPrefix))
+                                {
+                                    data.id = shrinkedOwnPublicKey + data.id.substring(lookup.localPrefix.length);
+                                }
+                            }
+                            if(data.SourceId)
+                            {
+                                if(data.SourceId.startsWith(lookup.localPrefix))
+                                {
+                                    data.SourceId = shrinkedOwnPublicKey + data.SourceId.substring(lookup.localPrefix.length);
+                                }
+                            }
+                            if(data.DestinationId)
+                            {
+                                if(data.DestinationId.startsWith(lookup.localPrefix))
+                                {
+                                    data.DestinationId = shrinkedOwnPublicKey + data.DestinationId.substring(lookup.localPrefix.length);
+                                }
                             }
                         }
-                        if(data.SourceId)
-                        {
-                            if(data.SourceId.startsWith(lookup.localPrefix))
-                            {
-                                data.SourceId = shrinkedOwnPublicKey + data.SourceId.substring(lookup.localPrefix.length);
-                            }
-                        }
-                        if(data.DestinationId)
-                        {
-                            if(data.DestinationId.startsWith(lookup.localPrefix))
-                            {
-                                data.DestinationId = shrinkedOwnPublicKey + data.DestinationId.substring(lookup.localPrefix.length);
-                            }
+
+                        return {
+                            receiver: item.publicKey,
+                            message: JSON.stringify(itemToSend)
                         }
                     }
-
-                    return {
-                        receiver: item.publicKey,
-                        message: JSON.stringify(itemToSend)
+                    else 
+                    {
+                        return null;
                     }
-                }
-                else 
-                {
-                    return null;
-                }
 
-            }
-        );
-
-        messages = ko.utils.arrayFilter(
-            messages,
-            function(item) 
-                {
-                    return item != null;
                 }
             );
-        if(messages && messages.length > 0) 
-        {
-            ko.utils.arrayForEach(messages, function(item) {
-                lookup.SendMessage(item);
-            });
-            lookup.saveTrustedPublicKeys();
-        }
-        var needToSavePublicKeys = false;
-        ko.utils.arrayForEach(lookup.TrustedPublicKeysToSendTo(), function(publicKey) {
-            var time_now = new Date();
-            var conditionApplies = false;
-            if(publicKey.lastTimeHealthChecked)
-            {
-                var hours_26_check_ms = 26 * 60 * 60 * 1000; // value of 26 hours in milliseconds
-                
-                var diff_ms = time_now - publicKey.lastTimeHealthChecked;
-                if(diff_ms < 0 || diff_ms > hours_26_check_ms)
-                {
-                    conditionApplies = true;
-                }
-            }
-            else
-            {
-                conditionApplies = true;
-            }
-            if(conditionApplies)
-            {
-                publicKey.lastTimeHealthChecked = time_now;
-                needToSavePublicKeys = true;
-                lookup.pushToHistory({
-                    action: lookup.actions.HealthCheckRequest,
-                    data: { 
-                        checkedIndex: undefined,
-                        publicKey: publicKey.publicKey 
+
+            messages = ko.utils.arrayFilter(
+                messages,
+                function(item) 
+                    {
+                        return item != null;
                     }
+                );
+            if(messages && messages.length > 0) 
+            {
+                ko.utils.arrayForEach(messages, function(item) {
+                    lookup.SendMessage(item);
                 });
+                lookup.saveTrustedPublicKeys();
             }
-        });
-        
-        if(needToSavePublicKeys)
-        {
-            lookup.saveTrustedPublicKeys();
+
+            lookup.ReceiveMessages(ownPublicKey);
+            
         }
-
-        lookup.TrustedPublicKeysToSendTo()
-
-        lookup.ReceiveMessages(ownPublicKey);
+        else
+        {
+            lookup.isOnLine(false);
+        }
+        
         setTimeout(lookup.processMessages, 3000);
     };
 
@@ -852,47 +833,59 @@ function ConnectedNotesViewModel()
         lookup.OpenTokenConsumptionMenu(false);
         lookup.OpenTokenGenerationMenu(true);
         lookup.TokenToShare("");
-        $.ajax({
-            type: "POST",
-            url: "GetOneTimeSynchronizationToken",
-            data: {
-                publicKey: lookup.publicCryptoKey()
-            },
-            success: function(data){
-                lookup.TokenToShare(data);
-            },
-            dataType: "json"
-        });
+        if(navigator.onLine)
+        {
+            $.ajax({
+                type: "POST",
+                url: "GetOneTimeSynchronizationToken",
+                data: {
+                    publicKey: lookup.publicCryptoKey()
+                },
+                success: function(data){
+                    lookup.TokenToShare(data);
+                },
+                dataType: "json"
+            });
+        }
+        
 
     };
 
     lookup.StatisticsOnLoad = function() {
-        $.ajax({
-            type: "POST",
-            url: "StatisticsOnLoad",
-            data: {
-                publicKey: lookup.publicCryptoKey()
-            },
-            success: function(data){
-            },
-            dataType: "json"
-        });
+        if(navigator.onLine)
+        {
+            $.ajax({
+                type: "POST",
+                url: "StatisticsOnLoad",
+                data: {
+                    publicKey: lookup.publicCryptoKey()
+                },
+                success: function(data){
+                },
+                dataType: "json"
+            });
+        }
+        
 
     };
 
 
     lookup.SynchronizeUsingToken = function() {
-        $.ajax({
-            type: "POST",
-            url: "GetSyncPublicKey",
-            data: {
-                token: lookup.SynchronizationToken().trim()
-            },
-            success: function(data){
-                lookup.ReceivedPublicKey(data);
-            },
-            dataType: "json"
-        });
+        if(navigator.onLine)
+        {
+            $.ajax({
+                type: "POST",
+                url: "GetSyncPublicKey",
+                data: {
+                    token: lookup.SynchronizationToken().trim()
+                },
+                success: function(data){
+                    lookup.ReceivedPublicKey(data);
+                },
+                dataType: "json"
+            });
+        }
+        
 
     };
 

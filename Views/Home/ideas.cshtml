@@ -135,6 +135,12 @@ if('serviceWorker' in navigator) {
 
 <div  style="text-align: center; width: 100%; margin-top: 0px; display: inline-block; display: none;" data-bind="visible: !$root.PromoVisible()">
         <span class="webpad-node webpad-green">WebPad</span> <span class="webpad-node webpad-orange" data-bind="click: $root.ShowPromo"><a href="#">about</a></span>
+        <span data-bind="if: $root.isOnLine" >
+            <span class="webpad-node webpad-green">[online]</span>
+        </span>
+        <span data-bind="ifnot: $root.isOnLine" >
+            <span class="webpad-node webpad-orange">[offline]</span>
+        </span>
         <span data-bind="if: $root.publicCryptoKey() != null  &&
                     $root.publicCryptoKey() != undefined &&
                     $root.publicCryptoKey().trim() != '' ">

@@ -1,7 +1,8 @@
+var current_cache_name = "v2";
 self.addEventListener('install', event => {
-    console.log('V1 installing…');
+    console.log(current_cache_name + ' installing…');
     event.waitUntil(
-        caches.open('v1').then(function(cache) {
+        caches.open(current_cache_name).then(function(cache) {
           return cache.addAll([
             'svg/plus.svg'
           ]);
@@ -10,7 +11,18 @@ self.addEventListener('install', event => {
   });
   
   self.addEventListener('activate', event => {
-    console.log('V1 now ready to handle fetches!');
+    console.log(current_cache_name + ' now ready to handle fetches!');
+    event.waitUntil(
+      caches.keys().then(function(cacheNames) {
+        return Promise.all(
+          cacheNames.map(function(cacheName) {
+            if (cacheName !== current_cache_name) {
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      })
+    );
   });
 
 
@@ -29,7 +41,7 @@ self.addEventListener('install', event => {
           
           if(event.request.method !== "POST")
           {
-            caches.open('v1').then(function (cache) {
+            caches.open(current_cache_name).then(function (cache) {
               cache.put(event.request, responseClone);
             });
           }
