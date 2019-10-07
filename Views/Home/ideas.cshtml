@@ -1,6 +1,19 @@
 ﻿@{
 }
 
+<script>
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker
+           .register('service-worker-offline.js', { scope: '/' })
+           .then(
+            function(registration) 
+            {
+                // Registration was successful
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            });
+}
+</script>
+
 <link rel="stylesheet" href="~/css/w3-4.13.css" asp-append-version="true"> 
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
