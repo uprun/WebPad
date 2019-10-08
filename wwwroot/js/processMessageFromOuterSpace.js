@@ -94,11 +94,12 @@ lookup.processMessageFromOuterSpace = function(item)
                             findNodeByIdFunc: lookup.findNodeById
                         }
                     );
+                lookup.findEdgeById_buffer[connectionToAdd.id] = connectionToAdd;
                 lookup.Connections.push(connectionToAdd)
-                var found = lookup.hashCards[connectionToAdd.SourceId];
-                if(found)
+                var foundHashCard = lookup.hashCards[connectionToAdd.SourceId];
+                if(foundHashCard)
                 {
-                    found.Tags.unshift(connectionToAdd);
+                    foundHashCard.Tags.unshift(connectionToAdd);
                 }
             }
             else
@@ -118,28 +119,4 @@ lookup.processMessageFromOuterSpace = function(item)
                 lookup.Connections.remove(found);
             }
         }
-
-        // if(current_action == lookup.actions.HealthCheckRequest)
-        // {
-        //     var toStoreNotes = ko.utils.arrayMap(lookup.Notes(), function(item) {
-        //         return item.id;
-        //     });
-        //     var toStoreConnections = ko.utils.arrayMap(lookup.Connections(), function(item) {
-        //         return item.id;
-        //     });
-        //     var all_available_ids = toStoreNotes.concat(toStoreConnections);
-        //     var chunked_ids = all_available_ids.chunk(40);
-
-        //     ko.utils.arrayForEach(chunked_ids, function(item, id) {
-        //         self.pushToHistory({
-        //             action: lookup.actions.HealthCheckIdsProposal,
-        //             data: { 
-        //                 checkedIndex: undefined,
-        //                 publicKey: publicKey.publicKey 
-        //             }
-        //         });
-        //     });
-
-
-        // }
     };
