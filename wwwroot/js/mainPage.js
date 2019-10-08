@@ -495,7 +495,7 @@ function ConnectedNotesViewModel()
                 lookup.sortedByDateCards(),
                 function(item, index)
                 {
-                    if(item.Tags.length == 0)
+                    if(item.Tags().length == 0)
                     {
                         return !item.Note.isReferenced();
                     }
