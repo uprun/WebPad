@@ -614,7 +614,7 @@ function ConnectedNotesViewModel()
                 
                     
 
-        if(itemToSend.data)
+        if(typeof(itemToSend.data) !== "undefined")
         {
             var data = itemToSend.data;
             if(data.id)
@@ -624,14 +624,14 @@ function ConnectedNotesViewModel()
                     data.id = lookup.localPrefix + data.id.substring(shrinkedOwnPublicKey.length);
                 }
             }
-            if(data.SourceId)
+            if(typeof(data.SourceId) === "string")
             {
                 if(data.SourceId.startsWith(shrinkedOwnPublicKey))
                 {
                     data.SourceId = lookup.localPrefix + data.SourceId.substring(shrinkedOwnPublicKey.length);
                 }
             }
-            if(data.DestinationId)
+            if(typeof(data.DestinationId) === "string")
             {
                 if(data.DestinationId.startsWith(shrinkedOwnPublicKey))
                 {
