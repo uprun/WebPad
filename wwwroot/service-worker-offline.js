@@ -1,4 +1,4 @@
-var current_cache_name = "v21";
+var current_cache_name = "v22";
 self.addEventListener('install', event => {
     console.log(current_cache_name + ' installing…');
     event.waitUntil(
