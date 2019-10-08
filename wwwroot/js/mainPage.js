@@ -663,24 +663,24 @@ function ConnectedNotesViewModel()
                         var itemToSend = item.messagesPrepared.shift();
                         // hope message will not be lost
 
-                        if(itemToSend.data)
+                        if(typeof(itemToSend.data) !== "undefined")
                         {
                             var data = itemToSend.data;
-                            if(data.id)
+                            if(typeof(data.id) === "string")
                             {
                                 if(data.id.startsWith(lookup.localPrefix))
                                 {
                                     data.id = shrinkedOwnPublicKey + data.id.substring(lookup.localPrefix.length);
                                 }
                             }
-                            if(data.SourceId)
+                            if(typeof(data.SourceId) === "string")
                             {
                                 if(data.SourceId.startsWith(lookup.localPrefix))
                                 {
                                     data.SourceId = shrinkedOwnPublicKey + data.SourceId.substring(lookup.localPrefix.length);
                                 }
                             }
-                            if(data.DestinationId)
+                            if(typeof(data.DestinationId) === "string")
                             {
                                 if(data.DestinationId.startsWith(lookup.localPrefix))
                                 {
