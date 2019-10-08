@@ -25,17 +25,13 @@ function ConnectedNotesViewModel()
 
     lookup.hashCards = {};
 
-    lookup.Notes = ko.observableArray([]);
-
-    lookup.ColorPresets = ko.observableArray([]);
-
-    lookup.Connections = ko.observableArray([]);
+    
 
     lookup.crypto_worker = undefined;
     
     lookup.crypto_worker = new Worker("js/worker-crypto.js");
 
-    lookup.history = ko.observableArray([]); 
+    
 
     lookup.publicCryptoKey = ko.observable(undefined);
 
@@ -65,48 +61,10 @@ function ConnectedNotesViewModel()
         lookup.localStorage.setItem("PromoVisible", JSON.stringify(true));
     };
 
-    lookup.Instanciate_model_node = function(data)
-    {
-        data.textChangedHandler = function(changes, model) 
-        {
-            if(changes 
-                //&& changes != model.text()
-                )
-            {
-                var toSend = model.ConvertToJs();
-                toSend.text = changes;
-                
-                lookup.pushToHistory({
-                        action: lookup.actions.NoteUpdated,
-                        data: toSend
-                    }
-                );
-            }
-        };
-        var result = new model_Node(data);
-        return result;
-    }
+    
 
 
-    lookup.Instanciate_model_connection = function(data)
-    {
-        data.textChangedHandler = function(changes, model) 
-        {
-            if(changes  
-                //&& changes != model.label()
-                )
-            {
-                var toSend = model.ConvertToJs();
-                toSend.label = changes;
-                lookup.pushToHistory({
-                    action: lookup.actions.ConnectionUpdated,
-                    data: toSend
-                });
-            }
-        };
-        var result = new model_Connection(data);
-        return result;
-    }
+    
 
 
     // if(changes && lookup.EdgeToEdit() && changes != lookup.EdgeToEdit().label())
@@ -246,6 +204,7 @@ function ConnectedNotesViewModel()
         }
 
         lookup.CheckIfEveryNodeHasMigratedColor();
+        lookup.migrateConnectionToNode();
 
         
         
@@ -253,12 +212,7 @@ function ConnectedNotesViewModel()
 
     
 
-    lookup.pushToHistory = function(item) {
-        item = lookup.ConvertToLocalId(item);
-        lookup.processMessageFromOuterSpace(item);
-        item.historyIndex = lookup.freeLocalIndex++;
-        lookup.history.push(item);
-    };
+    
 
     lookup.saveTrustedPublicKeys = function() {
         lookup.localStorage.setItem("TrustedPublicKeysToSendTo", JSON.stringify(lookup.TrustedPublicKeysToSendTo()));
@@ -1051,30 +1005,7 @@ function ConnectedNotesViewModel()
     lookup.previousConnectFrom = ko.observable(null);
     
 
-    lookup.CreateNote = function(obj, callback) {
-
-        var selectedColor = lookup.GetRandomColor().Color();
-        if(typeof(obj.textColor) !== "undefined")
-        {
-            selectedColor = obj.textColor;
-        }
-        var toAdd = lookup.Instanciate_model_node(
-            {
-                id: lookup.getLocalIndex(),
-                text: obj.text,
-                color: selectedColor,
-                background: "inherit",
-                createDate: new Date()
-            });
-        var added = toAdd.ConvertToJs();
-        lookup.pushToHistory({
-            action: lookup.actions.NoteAdded,
-            data: added
-        });
-        if(callback && typeof(callback) === "function") {
-            callback(toAdd);
-        }
-    };
+    
 
     
 
@@ -1107,39 +1038,7 @@ function ConnectedNotesViewModel()
         }
     };
 
-    lookup.ConnectNotes = function(from, to, label, generated) {
-        var connectionToAdd = lookup.Instanciate_model_connection(
-            {
-                id: lookup.getLocalIndex(),
-                sourceId: from.id,
-                destinationId: to.id,
-                label: label ? label : "", 
-                generated: generated,
-                findNodeByIdFunc: lookup.findNodeById
-            }
-        );
-        var added = connectionToAdd.ConvertToJs();
-        var filtered = ko.utils.arrayFilter(
-            lookup.Connections(), 
-            function(item)
-                { 
-                    return item.SourceId == connectionToAdd.SourceId &&
-                        item.DestinationId == connectionToAdd.DestinationId &&
-                        item.label() == connectionToAdd.label();
-                } 
-            );
-        var searchResult = filtered.length > 0 ? filtered[0] : null;
-        // don't allow to create duplicate connections
-        if(!searchResult)
-        {
-            
-            lookup.pushToHistory({
-                action: lookup.actions.ConnectionAdded,
-                data: added
-            });
-        }
-        
-    };
+    
 
     lookup.OpenTokenConsumptionMenu = ko.observable(false);
     lookup.OpenTokenGenerationMenu = ko.observable(false);
@@ -1164,15 +1063,7 @@ function ConnectedNotesViewModel()
 
     
 
-    // lookup.RemoveConnectionUnderEdit = function() {
-    //     var toRemove = lookup.EdgeToEdit();
-    //     lookup.Connections.remove(toRemove);
-    //     var deleted = toRemove.ConvertToJs();
-    //     lookup.pushToHistory({
-    //         action: lookup.actions.ConnectionDeleted,
-    //         data: deleted
-    //     });
-    // };
+    
 
 
     self.ApplyLookupToSelf = function()
