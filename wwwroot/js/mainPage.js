@@ -61,25 +61,6 @@ function ConnectedNotesViewModel()
         lookup.localStorage.setItem("PromoVisible", JSON.stringify(true));
     };
 
-    
-
-
-    
-
-
-    // if(changes && lookup.EdgeToEdit() && changes != lookup.EdgeToEdit().label())
-    //         {
-    //             var toSend = lookup.EdgeToEdit().ConvertToJs();
-    //             toSend.label = changes;
-    //             lookup.pushToHistory({
-    //                 action: lookup.actions.ConnectionUpdated,
-    //                 data: toSend
-    //             });
-    //         }
-
-
-    
-
     var color_presets = [ 
         { 
             background: "inherit",
@@ -1048,16 +1029,7 @@ function ConnectedNotesViewModel()
         lookup.OpenTokenGenerationMenu(false);
     };
 
-    // lookup.RemoveNoteUnderEdit = function() {
-    //     var toRemove = lookup.NoteToEdit();
-
-    //     lookup.Notes.remove(toRemove);
-    //     var deleted = toRemove.ConvertToJs();
-    //     lookup.pushToHistory({
-    //         action: lookup.actions.NoteDeleted,
-    //         data: deleted
-    //     });
-    // };
+    
 
     
 

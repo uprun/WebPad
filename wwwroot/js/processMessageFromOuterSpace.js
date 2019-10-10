@@ -74,6 +74,11 @@ lookup.processMessageFromOuterSpace = function(item)
             if(found)
             {
                 lookup.Notes.remove(found);
+                var foundHashCard = lookup.hashCards[current_data.id];
+                if(foundHashCard)
+                {
+                    lookup.composedCards.remove(foundHashCard);
+                }
             }
         }
 
