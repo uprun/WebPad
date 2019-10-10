@@ -202,3 +202,8 @@ a
     color: inherit;
     filter: brightness(70%);
 }
+
+.webpad-brightness-dimmed
+{
+    filter: brightness(70%);
+}

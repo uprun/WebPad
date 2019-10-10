@@ -266,14 +266,6 @@ border-style: dashed; -->
 </script>
 
 <script type="text/html" id="additional-info-template">
-    <span data-bind="ifnot: $data.AdditionalInformationTextVisible">
-        <h2>
-            <div class=" webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
-                <object type="image/svg+xml" data="~/svg/plus.svg" class="webpad-edit-pencil" alt="Add information" ></object> 
-            </div>
-        </h2>
-        
-    </span>
     <span data-bind="if: $data.AdditionalInformationTextVisible">
         <h2>
             <span style="width: 100%;" class="webpad-node"
@@ -293,13 +285,13 @@ border-style: dashed; -->
                         " 
                 />
             </span>
-            <div class=" webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
+            <div  class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
                 <object type="image/svg+xml" data="~/svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Cancel edit" ></object> 
             </div>
             <span 
                 data-bind="
                         if: $data.AdditionalInformationText().trim().length > 0">
-                <div class=" webpad-button-no-border" data-bind=" click: $root.AddNoteToExistingOne">
+                <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.AddNoteToExistingOne">
                     <object type="image/svg+xml" data="~/svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" ></object> 
                     <span style="color: aliceblue;">
                     [Enter]
@@ -317,8 +309,8 @@ border-style: dashed; -->
             <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
                 <h2>
                     <span data-bind="if: $data.Note.isDone">
-                        <span style="color: #64e05e;" data-bind=" click: $data.switchDone">[x]</span>
-                        <span data-bind="ifnot: $data.underEdit">
+                        <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.switchDone">[x]</span>
+                        <span class="webpad-brightness-dimmed" data-bind="ifnot: $data.underEdit">
                             <span
                                 class="webpad-node" data-bind=
                             "
@@ -333,7 +325,7 @@ border-style: dashed; -->
                         </span>
                     </span>
                     <span data-bind="ifnot: $data.Note.isDone">
-                        <span style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
+                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
                         <span data-bind="ifnot: $data.underEdit">
                             <span
                                 class="webpad-node" data-bind=
@@ -349,7 +341,7 @@ border-style: dashed; -->
                     </span>
                     <span data-bind="if: $data.toolBoxVisible">
                         <span data-bind="ifnot: $data.underEdit">
-                            <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
+                            <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
                                 <object type="image/svg+xml" data="~/svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit"></object> 
                             </div>
                         </span>
@@ -373,17 +365,24 @@ border-style: dashed; -->
                         </div>
                     </span>
                     <span data-bind="if: $data.toolBoxVisible">
-                        <span style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^^]</span>
+                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^^]</span>
                     </span>
                     <span data-bind="ifnot: $data.toolBoxVisible">
-                        <span style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="open toolbox">[..]</span>
+                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="open toolbox">[..]</span>
                     </span>
                     
                     <span data-bind="if: $data.toolBoxVisible">
-                        <div data-bind="template: { name: 'additional-info-template' } " >
-                        </div>
+                        <span data-bind="ifnot: $data.AdditionalInformationTextVisible">
+                            <h2>
+                                <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
+                                    <object type="image/svg+xml" data="~/svg/plus.svg" class="webpad-edit-pencil" alt="Add information" ></object> 
+                                </div>
+                            </h2>
+                        </span>
+                        
                     </span>
-                    
+                    <div data-bind="template: { name: 'additional-info-template' } " >
+                    </div>
                 </h2>
                 
                 <div data-bind="template: { name: 'tag-template', foreach: $data.Tags } " >
