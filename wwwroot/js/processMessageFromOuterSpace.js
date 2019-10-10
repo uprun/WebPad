@@ -117,6 +117,11 @@ lookup.processMessageFromOuterSpace = function(item)
             if(found)
             {
                 lookup.Connections.remove(found);
+                var foundHashCard = lookup.hashCards[found.SourceId];
+                if(foundHashCard)
+                {
+                    foundHashCard.Tags.remove(found);
+                }
             }
         }
     };
