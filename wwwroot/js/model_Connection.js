@@ -49,4 +49,14 @@ function model_Connection(data)
             generated: generated
         };
     };
+    self.switchDone = function()
+    {
+        self.Destination.switchDone();
+    }
+    
+    self.toolBoxVisible = ko.observable(false);
+    self.switchToolBoxVisibility = function()
+    {
+        self.toolBoxVisible(!self.toolBoxVisible());
+    };
 };

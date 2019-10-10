@@ -246,19 +246,49 @@ border-style: dashed; -->
     <div>
         <span data-bind="">
             <span data-bind="if: $data.Destination.isDone">
-                <span style="color: #64e05e;">[x]</span>
+                <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.switchDone">[x]</span>
+                <span class="webpad-brightness-dimmed" data-bind="ifnot: $data.underEdit">
+                    <span
+                        class="webpad-node" data-bind=
+                    "
+                        style:
+                        {
+                            color: $data.Destination.color,
+                            'text-decoration': 'line-through'
+                        },
+                        text:$data.Destination.textAlmost
+                        ">
+                    </span>
+                </span>
             </span>
-            <span class="webpad-node" data-bind="
-                style:
-                {
-                    color: $data.Destination.color
-                },
-                text: $data.Destination.textAlmost">
-                <a data-bind=" "></a>
+            <span data-bind="ifnot: $data.Destination.isDone">
+                <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
+                <span data-bind="ifnot: $data.underEdit">
+                    <span
+                        class="webpad-node" data-bind=
+                    "
+                        style:
+                        {
+                            color: $data.Destination.color
+                        },
+                        text:$data.Destination.textAlmost
+                        ">
+                    </span>
+                </span>
             </span>
-            <span>
-                <span style="color: aliceblue;" data-bind="click: $root.jumpToCard">[>]</span>
+            <span data-bind="if: $data.toolBoxVisible">
+                <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^_^]</span>
             </span>
+            <span data-bind="ifnot: $data.toolBoxVisible">
+                <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="open toolbox">[..]</span>
+            </span>
+            
+            <span data-bind="if: $data.toolBoxVisible">
+                <span>
+                    <a class="webpad-brightness-dimmed" style="color: #d190ff;" data-bind="click: $root.jumpToCard, attr: {href: '#' + $data.Destination.id }">[focus&nbsp;on]</a>
+                </span>
+            </span>
+            
 
         </span>
 
@@ -365,7 +395,7 @@ border-style: dashed; -->
                         </div>
                     </span>
                     <span data-bind="if: $data.toolBoxVisible">
-                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^^]</span>
+                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^_^]</span>
                     </span>
                     <span data-bind="ifnot: $data.toolBoxVisible">
                         <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="open toolbox">[..]</span>
