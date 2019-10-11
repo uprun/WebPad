@@ -48,4 +48,20 @@ function model_Card(data)
         self.Note.switchDone();
     }
 
+    self.toBeRemoved = ko.observable(false);
+    self.prepareToBeRemoved = function()
+    {
+        self.toBeRemoved(true);
+    }
+    self.rollbackRemoval = function()
+    {
+        self.toBeRemoved(false);
+    }
+    self.completlyRemoved = ko.observable(false);
+    self.reallyRemove = function()
+    {
+        self.completlyRemoved(true);
+        lookup.RemoveNote(self);
+    }
+
 }
