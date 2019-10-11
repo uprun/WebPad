@@ -409,15 +409,14 @@ border-style: dashed; -->
                     </span>
                     
                     <span data-bind="if: $data.toolBoxVisible">
-                        <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $root.RemoveNote">[remove]</span>
-                        <span data-bind="ifnot: $data.AdditionalInformationTextVisible">
-                            <h2>
-                                <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
-                                    <object type="image/svg+xml" data="~/svg/plus.svg" class="webpad-edit-pencil" alt="Add information" ></object> 
-                                </div>
-                            </h2>
-                        </span>
-                        
+                        <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $root.RemoveNote">[remove]</span>                        
+                    </span>
+                    <span data-bind="ifnot: $data.AdditionalInformationTextVisible">
+                        <h2>
+                            <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
+                                <object type="image/svg+xml" data="~/svg/plus.svg" class="webpad-edit-pencil" alt="Add information" ></object> 
+                            </div>
+                        </h2>
                     </span>
                     <div data-bind="template: { name: 'additional-info-template' } " >
                     </div>
