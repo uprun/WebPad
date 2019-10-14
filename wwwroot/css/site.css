@@ -55,9 +55,14 @@ span {
     word-break: break-all;
 }
 
+.webpad-break-words-node
+{
+    font-size: 1em;
+    word-break: break-all;
+}
+
 .webpad-card
 {
-    margin: 5mm; 
     border-color: inherit;
     border-width: 2mm;
     /* border-style: dashed; */
