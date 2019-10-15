@@ -67,6 +67,7 @@ span {
     border-width: 2mm;
     /* border-style: dashed; */
     border-style: none;
+    padding-bottom: 1em;
 }
 
 .webpad-inline
