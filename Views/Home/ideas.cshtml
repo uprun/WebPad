@@ -291,11 +291,9 @@ border-style: dashed; -->
                 <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $root.RemoveConnection">[disconnect]</span>
             </span>
 
-            <div data-bind="if: $data.DestinationCard && $data.DestinationCard.Tags().length > 0 ">
-                <h6>
+            <span data-bind="if: $data.DestinationCard && $data.DestinationCard.Tags().length > 0 ">
                     <span class="webpad-brightness-dimmed" style="color: aliceblue; font-size: .6em;" data-bind="text: $data.DestinationCard.Tags().length + ' items'"></span>
-                <h6>
-            <div>
+            <span>
 
         </span>
 
