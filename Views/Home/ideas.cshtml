@@ -17,6 +17,7 @@ if('serviceWorker' in navigator) {
 <link rel="stylesheet" href="~/css/w3-4.13.css" asp-append-version="true"> 
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+<script language="JavaScript" type="text/javascript" src="~/js/knockout-extension-contentEditable.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/cryptico/jsbn.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/cryptico/random.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/cryptico/hash.js" asp-append-version="true"></script>
@@ -345,16 +346,20 @@ border-style: dashed; -->
                 <span data-bind="if: $data.toBeRemoved">
                     <span data-bind="ifnot: $data.completlyRemoved">
                         <h2>
-                            <span
-                                class="webpad-break-words-node" data-bind=
-                            "
-                                style:
-                                {
-                                    color: $data.Note.color
-                                },
-                                text:$data.Note.textAlmost
-                                ">
-                            </span>
+                            <span 
+                                    placeholder="..." 
+                                    class="webpad-break-words-node"
+                                    data-bind="
+                                        contentEditable: false,
+                                        htmlLazy:  $data.Note.text,
+                                        style:
+                                        {
+                                            color: $data.Note.color,
+                                        },
+                                        event: {blur: $root.SwitchEditOfCard},
+                                        hasFocus: $data.underEdit
+                                        " 
+                                ></span>
                             <br/>
                             <h1 style="color: aliceblue;"  >
                                 0_0
@@ -382,32 +387,40 @@ border-style: dashed; -->
                         <span data-bind="if: $data.Note.isDone">
                             <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.switchDone">[x]</span>
                             <span class="webpad-brightness-dimmed" data-bind="ifnot: $data.underEdit">
-                                <span
-                                    class="webpad-break-words-node" data-bind=
-                                "
-                                    style:
-                                    {
-                                        color: $data.Note.color,
-                                        'text-decoration': 'line-through'
-                                    },
-                                    text:$data.Note.textAlmost
-                                    ">
-                                </span>
+                                <span 
+                                    placeholder="..." 
+                                    class="webpad-break-words-node"
+                                    data-bind="
+                                        contentEditable: false,
+                                        htmlLazy:  $data.Note.text,
+                                        style:
+                                        {
+                                            color: $data.Note.color,
+                                            'text-decoration': 'line-through'
+                                        },
+                                        event: {blur: $root.SwitchEditOfCard},
+                                        hasFocus: $data.underEdit
+                                        " 
+                                ></span>
                             </span>
                         </span>
                         <span data-bind="ifnot: $data.Note.isDone">
                             <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
                             <span data-bind="ifnot: $data.underEdit">
-                                <span
-                                    class="webpad-break-words-node" data-bind=
-                                "
-                                    style:
-                                    {
-                                        color: $data.Note.color
-                                    },
-                                    text:$data.Note.textAlmost
-                                    ">
-                                </span>
+                                <span 
+                                    placeholder="..." 
+                                    class="webpad-break-words-node"
+                                    data-bind="
+                                        contentEditable: $data.underEdit,
+                                        htmlLazy:  $data.Note.text,
+                                        style:
+                                        {
+                                            color: $data.Note.color,
+                                        },
+                                        event: {blur: $root.SwitchEditOfCard},
+                                        hasFocus: $data.underEdit
+                                        " 
+                                ></span>
                             </span>
                         </span>
                         <span data-bind="if: $data.toolBoxVisible">
@@ -419,7 +432,21 @@ border-style: dashed; -->
                         </span>
                             
                         <span data-bind="if: $data.underEdit">
-                                <input 
+                            <span 
+                                    placeholder="..." 
+                                    class="webpad-main-information webpad-break-words-node"
+                                    data-bind="
+                                        contentEditable: $data.underEdit,
+                                        htmlLazy:  $data.Note.text,
+                                        style:
+                                        {
+                                            color: $data.Note.color,
+                                        },
+                                        event: {blur: $root.SwitchEditOfCard},
+                                        hasFocus: $data.underEdit
+                                        " 
+                                ></span>
+                                <!-- <input 
                                     placeholder="..." 
                                     class="webpad-main-information"
                                     type="text" 
@@ -432,7 +459,7 @@ border-style: dashed; -->
                                         event: {blur: $root.SwitchEditOfCard},
                                         hasFocus: $data.underEdit
                                         " 
-                                />
+                                /> -->
                             <!-- <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
                                 <object type="image/svg+xml" data="~/svg/check.svg" class="webpad-edit-pencil" alt="Close edit" ></object> 
                             </div> -->
