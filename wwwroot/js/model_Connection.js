@@ -60,7 +60,7 @@ function model_Connection(data)
     {
         self.toolBoxVisible(!self.toolBoxVisible());
     };
-    self.DisplayNextLevel = ko.observable(false);
+    self.DisplayNextLevel = ko.observable(true);
     self.SwitchDisplayNextLevel = function()
     {
         self.DisplayNextLevel(!self.DisplayNextLevel());
