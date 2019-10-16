@@ -19,7 +19,7 @@ ko.bindingHandlers.contentEditable = {
         
         $(element).on("input", function () {
             if (this.isContentEditable && ko.isWriteableObservable(htmlLazy)) {
-                htmlLazy(this.innerHTML);
+                htmlLazy(this.innerText);
             }
         });
     },

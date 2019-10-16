@@ -293,7 +293,13 @@ border-style: dashed; -->
             </span>
 
             <span data-bind="if: $data.DestinationCard && $data.DestinationCard.Tags().length > 0 ">
-                    <span class="webpad-brightness-dimmed" style="color: aliceblue; font-size: .6em;" data-bind="text: $data.DestinationCard.Tags().length + ' items'"></span>
+                    <span 
+                        class="webpad-brightness-dimmed" 
+                        style="color: aliceblue; font-size: .6em;" 
+                        data-bind="
+                            text: '[ show ' + $data.DestinationCard.Tags().length + ' items]',
+                            click: $root.SwitchDisplayNextLevel">
+                    </span>
             <span>
 
         </span>
