@@ -302,17 +302,34 @@ border-style: dashed; -->
                     </span> -->
                     <span data-bind="if: $data.DisplayNextLevel">
                         <div style="padding-left: 2em;" data-bind="foreach: $data.DestinationCard.Tags">
-                            <div 
-                                class="webpad-brightness-dimmed" 
-                                style="font-size: .6em;" 
-                                class="webpad-break-words-node" data-bind=
-                                "
-                                    style:
-                                    {
-                                        color: $data.Destination.color
-                                    },
-                                    text:$data.Destination.textAlmost
-                                    ">
+                            <div>
+                                <span data-bind="if: $data.Destination.isDone">
+                                    <span
+                                        style="font-size: .6em;" 
+                                        class="webpad-break-words-node webpad-brightness-dimmed" data-bind=
+                                    "
+                                        style:
+                                        {
+                                            color: $data.Destination.color,
+                                            'text-decoration': 'line-through'
+                                        },
+                                        text:$data.Destination.textAlmost
+                                        ">
+                                    </span>
+                                </span>
+                                <span data-bind="ifnot: $data.Destination.isDone">
+                                        <span
+                                            style="font-size: .6em;" 
+                                            class="webpad-break-words-node" data-bind=
+                                        "
+                                            style:
+                                            {
+                                                color: $data.Destination.color,
+                                            },
+                                            text:$data.Destination.textAlmost
+                                            ">
+                                        </span>
+                                </span>
                             </div>
                         </div>
                     </span>
