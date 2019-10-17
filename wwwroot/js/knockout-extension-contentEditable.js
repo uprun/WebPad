@@ -17,6 +17,10 @@ ko.bindingHandlers.contentEditable = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         var value = ko.unwrap(valueAccessor()),
             htmlLazy = allBindingsAccessor().htmlLazy;
+        $(element).on('paste', function (event) {
+            event.preventDefault();
+            document.execCommand('inserttext', false, event.originalEvent.clipboardData.getData('text/plain'));
+        });
         
         $(element).on("input", function () {
             if (this.isContentEditable && ko.isWriteableObservable(htmlLazy)) {
