@@ -24,6 +24,12 @@ ko.bindingHandlers.contentEditable = {
                 htmlLazy(data.text());
             }
         });
+        $(element).focusout(function(){
+            var data = $(this);        
+            if (!data.text().replace(" ", "").length) {
+                data.empty();
+            }
+        });
     },
     update: function (element, valueAccessor) {
         var value = ko.unwrap(valueAccessor());

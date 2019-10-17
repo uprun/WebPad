@@ -387,7 +387,7 @@ border-style: dashed; -->
                         <h2>
                             <span 
                                     placeholder="..." 
-                                    class="webpad-break-words-node"
+                                    class="webpad-contenteditable webpad-break-words-node"
                                     data-bind="
                                         contentEditable: false,
                                         htmlLazy:  $data.Note.text,
@@ -428,7 +428,7 @@ border-style: dashed; -->
                             <span class="webpad-brightness-dimmed" data-bind="ifnot: $data.underEdit">
                                 <span 
                                     placeholder="..." 
-                                    class="webpad-break-words-node"
+                                    class="webpad-contenteditable webpad-break-words-node"
                                     data-bind="
                                         contentEditable: false,
                                         htmlLazy:  $data.Note.text,
@@ -448,7 +448,7 @@ border-style: dashed; -->
                             <span data-bind="ifnot: $data.underEdit">
                                 <span 
                                     placeholder="..." 
-                                    class="webpad-break-words-node"
+                                    class="webpad-contenteditable webpad-break-words-node"
                                     data-bind="
                                         contentEditable: $data.underEdit,
                                         htmlLazy:  $data.Note.text,
@@ -473,7 +473,7 @@ border-style: dashed; -->
                         <span data-bind="if: $data.underEdit">
                             <span 
                                     placeholder="..." 
-                                    class="webpad-main-information webpad-break-words-node"
+                                    class="webpad-contenteditable webpad-main-information webpad-break-words-node"
                                     data-bind="
                                         contentEditable: $data.underEdit,
                                         htmlLazy:  $data.Note.text,

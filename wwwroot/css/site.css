@@ -193,6 +193,7 @@ a
     box-sizing : border-box;
     border-color: aliceblue;
     border-style: solid;
+    min-width: 4em;
     width: 100%;
 }
 .webpad-main-information::placeholder
@@ -218,4 +219,19 @@ a
 .webpad-brightness-dimmed
 {
     filter: brightness(70%);
+}
+
+.webpad-contenteditable
+{
+    min-width: 4em;
+}
+
+.webpad-contenteditable[placeholder]:empty:before {
+    content: attr(placeholder);
+    color: inherit;
+    filter: brightness(70%);
+}
+
+.webpad-contenteditable[placeholder]:empty:focus:before {
+    content: "";
 }
