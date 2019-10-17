@@ -2,13 +2,14 @@ ko.bindingHandlers.htmlLazy = {
     init: function(element, valueAccessor) {
         var $element = $(element);
         var initialValue = ko.utils.unwrapObservable(valueAccessor());
-        $element.html(initialValue);
+        $element.text(initialValue);
       },
     update: function (element, valueAccessor) {
         var value = ko.unwrap(valueAccessor());
+        var $element = $(element);
         
         if (!element.isContentEditable) {
-            element.innerHTML = value;
+            $element.text(value);
         }
     }
 };
