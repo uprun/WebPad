@@ -34,7 +34,6 @@ function model_Card(data)
     self.blurHandler = function()
     {
         self.AdditionalInformationTextFocus(false);
-        self.AdditionalInformationTextVisible(false);
     };
     self.AdditionalInformationTextColor = ko.observable(lookup.GetRandomColor().Color());
     self.toolBoxVisible = ko.observable(false);
