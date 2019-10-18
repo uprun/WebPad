@@ -523,12 +523,13 @@ border-style: dashed; -->
                         <span data-bind="if: $data.toolBoxVisible">
                             <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.prepareToBeRemoved">[remove]</span>                        
                         </span>
-                        <div data-bind="template: { name: 'additional-info-template' } " >
+                        <div style="padding-left: 1em;" data-bind="template: { name: 'additional-info-template' } " >
+                        </div>
+                        <div style="padding-left: 1em;" data-bind="template: { name: 'tag-template', foreach: $data.Tags } " >
                         </div>
                     </h2>
                     
-                    <div data-bind="template: { name: 'tag-template', foreach: $data.Tags } " >
-                    </div>
+                    
                 </span>
                
 
@@ -541,13 +542,13 @@ border-style: dashed; -->
 </script>
 
 <div class="" style="display: none; width: 100%;" data-bind="visible: !$root.PromoVisible()">
-    <div style="width: 100%;" class="webpad-working-area">
+    <!-- <div style="width: 100%;" class="webpad-working-area">
         <div class="w3-row"  data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
 
         </div>
-    </div>    
+    </div>     -->
     
-    <div class="w3-row">
+    <!-- <div class="w3-row">
         <div class="w3-col w3-container s0 m3 l4">
         </div>
         <div class="w3-col w3-container s12 m6 l4">
@@ -558,11 +559,9 @@ border-style: dashed; -->
                     </button>
             </span>
         </div>
-    </div>
+    </div> -->
 
-    <div style="width: 100%" data-bind="if: $root.stackOfCards().length > 0">
-        <hr/>
-    </div>    
+       
     
 
     <div class="w3-row">
@@ -629,7 +628,13 @@ border-style: dashed; -->
             </span>
         </div>
     </div>
-    <div style="width: 100%;" class="webpad-search-result-area" data-bind="if: lookup.showSearchResultOfCards">
+    <div style="width: 100%;" class="webpad-search-result-area">
+        <div class="w3-row"  data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
+
+        </div>
+        <div style="width: 100%" data-bind="if: $root.stackOfCards().length > 0">
+            <hr/>
+        </div> 
         <div class="w3-row" data-bind="template: { name: 'card-template', foreach: LimitedFilteredCards } ">
 
         </div>
