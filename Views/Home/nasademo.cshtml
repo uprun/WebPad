@@ -1,1 +1,6 @@
-﻿Hello Nasa
+﻿@model ConnectedNotes.Models.nasastatuslist
+@foreach (var x in Model.statuses)
+{
+    <div>x.id</div>
+    <div>x.status</div>
+}
