@@ -1,4 +1,16 @@
 ﻿@model ConnectedNotes.Models.nasastatuslist
+
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.full-height {
+  height: 100%;
+  background: yellow;
+}
+</style>
 <script>
 
 function ViewModel_nasademo() {
@@ -105,9 +117,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
 <select data-bind="options: available_ids,
                    value: selected_id,
                    optionsCaption: 'Choose...'"></select>
-<div  data-bind="if: $root.selected_status">
+<span data-bind="if: $root.selected_status"
+>
+<div class='full-height' style=" background: green;"  >
     true
 </div>
-<div data-bind="ifnot: $root.selected_status">
+</span>
+<span data-bind="ifnot: $root.selected_status"
+>
+<div class='full-height' style=" background: orange;"  >
     false
 </div>
+</span>
