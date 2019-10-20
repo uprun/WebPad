@@ -28,11 +28,7 @@ namespace ConnectedNotes.Controllers
             return View();
         }
 
-        public IActionResult nasademo( )
-        {
-           
-            return View();
-        }
+        
 
         private static Dictionary<string, string> synchronization = new Dictionary<string, string>();
 
@@ -174,6 +170,32 @@ namespace ConnectedNotes.Controllers
                 }
             }
             return new JsonResult(publicKey);
+
+        }
+
+        public IActionResult nasademo( )
+        {
+           
+            return View();
+        }
+
+        private static Dictionary<string, bool?> nasasync = new Dictionary<string, bool?>();
+        [HttpPost]
+        public JsonResult setstatus(string id, bool status)
+        {
+            lock(nasasync)
+            {
+                if(nasasync.ContainsKey(id))
+                {
+                    nasasync[id] = status;
+                    
+                }
+                else
+                {
+                    nasasync.Add(id, status);
+                }
+            }
+            return new JsonResult(true);
 
         }
 
