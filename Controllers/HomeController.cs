@@ -226,15 +226,28 @@ namespace ConnectedNotes.Controllers
         public bool servo()
         {
             
-                
+                bool nasa82 = false;
                 if(nasasync.ContainsKey("82"))
                 {
-                    return nasasync["82"] ?? false;
+                    nasa82 = nasasync["82"] ?? false;
                 }
                 else
                 {
-                    return false;
+                    nasa82 = false;
                 }
+
+                bool nasa72 = false;
+                
+                if(nasasync.ContainsKey("72"))
+                {
+                    nasa72 = nasasync["72"] ?? false;
+                }
+                else
+                {
+                    nasa72 = false;
+                }
+
+                return nasa82 || nasa72;
 
         }
 
