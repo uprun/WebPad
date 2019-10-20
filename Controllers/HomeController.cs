@@ -186,6 +186,7 @@ namespace ConnectedNotes.Controllers
         {
             lock(nasasync)
             {
+                status = !status;
                 if(nasasync.ContainsKey(id))
                 {
                     nasasync[id] = status;
