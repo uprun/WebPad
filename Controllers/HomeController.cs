@@ -175,22 +175,9 @@ namespace ConnectedNotes.Controllers
 
         public IActionResult nasademo( )
         {
-            nasastatuslist result = new nasastatuslist();
-           lock(nasasync)
-            {
-                List<nasastatus> temp = new List<nasastatus>();
-                foreach(var x in nasasync.Keys)
-                {
-                    temp.Add(new nasastatus
-                    {
-                        id = x,
-                        status = nasasync[x]
-                    });
-                    
-                }
-                result.statuses = temp.ToArray();
-            }
-            return View(result);
+            
+           
+            return View();
         }
 
         private static Dictionary<string, bool?> nasasync = new Dictionary<string, bool?>();
