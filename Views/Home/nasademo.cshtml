@@ -39,6 +39,12 @@ function ViewModel_nasademo() {
 		});
 	};
 
+    self.timerCheckStatuses = function()
+    {
+        self.RetrieveData();
+        setTimeout(self.timerCheckStatuses, 200);
+    };
+
 	
 };
 
@@ -47,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 	var viewModel = new ViewModel_nasademo();
 	ko.applyBindings(viewModel);
 	viewModel.RetrieveData();
+    viewModel.timerCheckStatuses();
 });
 </script>
 <button data-bind="click: $root.RetrieveData">Recheck</button>
@@ -55,8 +62,3 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     </div>
 </div>
-@foreach (var x in Model.statuses)
-{
-    <div>@(x.id)</div>
-    <div>@(x.status)</div>
-}
