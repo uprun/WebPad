@@ -6,6 +6,12 @@ function ViewModel_nasademo() {
 
     self.statuses = ko.observableArray([]);
 
+    self.nasa_lookup = {};
+
+    self.selected_status = ko.observable(false);
+
+    self.available_ids = ko.observableArray([]);
+
 	self.RetrieveData = function () {
 
 
@@ -23,8 +29,16 @@ function ViewModel_nasademo() {
 
                 var toAdd = ko.utils.arrayMap(data.statuses, function(elem) 
                 {
-                    
-                    return elem.id + '#' + elem.status;
+                    var found = self.nasa_lookup[elem.id];
+                    if(typeof(found) === 'undefined')
+                    {
+                        self.nasa_lookup[elem.id] = ko.observable(elem.status);
+                    }
+                    else
+                    {
+                        found(elem.status);
+                    }
+                    return elem.id;
                 });
                 ko.utils.arrayPushAll(self.statuses, toAdd);
 
@@ -38,6 +52,31 @@ function ViewModel_nasademo() {
 			dataType: "json"
 		});
 	};
+
+    self.repopulate_ids = function()
+    {
+        self.available_ids.removeAll();
+        for(var k in self.nasa_lookup)
+        {
+            var elem = self.nasa_lookup[k];
+            self.available_ids.push(k);
+        }
+    };
+
+    self.selected_id = ko.observable();
+    self.selected_status = ko.computed(function()
+    {
+        var check = self.selected_id();
+        if(typeof(check) ==='undefined' || check == null)
+        {
+            return false;
+        }
+        else
+        {
+            return self.nasa_lookup[self.selected_id()]();
+        }
+        
+    });
 
     self.timerCheckStatuses = function()
     {
@@ -56,9 +95,19 @@ document.addEventListener("DOMContentLoaded", function (event) {
     viewModel.timerCheckStatuses();
 });
 </script>
-<button data-bind="click: $root.RetrieveData">Recheck</button>
+<button data-bind="click: $root.repopulate_ids">Recheck</button>
 <div data-bind='foreach: $root.statuses'>
     <div data-bind="text: $data">
 
     </div>
+</div>
+
+<select data-bind="options: available_ids,
+                   value: selected_id,
+                   optionsCaption: 'Choose...'"></select>
+<div  data-bind="if: $root.selected_status">
+    true
+</div>
+<div data-bind="ifnot: $root.selected_status">
+    false
 </div>
