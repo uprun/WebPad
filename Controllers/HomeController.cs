@@ -235,6 +235,15 @@ namespace ConnectedNotes.Controllers
 
         }
 
+        [HttpPost]
+        public bool servo()
+        {
+            
+           
+            return true;
+
+        }
+
     
     }
 }
