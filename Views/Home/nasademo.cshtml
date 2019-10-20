@@ -1,4 +1,60 @@
 ﻿@model ConnectedNotes.Models.nasastatuslist
+<script>
+
+function ViewModel_nasademo() {
+	var self = this;
+
+    self.statuses = ko.observableArray([]);
+
+	self.RetrieveData = function () {
+
+
+		$.ajax({
+			type: "POST",
+			url: "retrievestatuses",
+			data: {
+			},
+			success: function (data) {
+
+				// populate
+
+				
+                self.statuses.removeAll();
+
+                var toAdd = ko.utils.arrayMap(data.statuses, function(elem) 
+                {
+                    
+                    return elem.id + '#' + elem.status;
+                });
+                ko.utils.arrayPushAll(self.statuses, toAdd);
+
+				console.log('success ');
+			},
+			error: function () {
+				console.log("Publish/ error");
+			},
+			complete: function () {
+			},
+			dataType: "json"
+		});
+	};
+
+	
+};
+
+
+document.addEventListener("DOMContentLoaded", function (event) {
+	var viewModel = new ViewModel_nasademo();
+	ko.applyBindings(viewModel);
+	viewModel.RetrieveData();
+});
+</script>
+<button data-bind="click: $root.RetrieveData">Recheck</button>
+<div data-bind='foreach: $root.statuses'>
+    <div data-bind="text: $data">
+
+    </div>
+</div>
 @foreach (var x in Model.statuses)
 {
     <div>@(x.id)</div>
