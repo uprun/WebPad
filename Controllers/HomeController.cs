@@ -28,6 +28,12 @@ namespace ConnectedNotes.Controllers
             return View();
         }
 
+        public IActionResult nasademo( )
+        {
+           
+            return View();
+        }
+
         private static Dictionary<string, string> synchronization = new Dictionary<string, string>();
 
         private static Dictionary<(string Receiver, string Sender), List<string> > messageBox = new Dictionary<(string Receiver, string Sender), List<string> > ();
