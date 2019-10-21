@@ -390,15 +390,8 @@ border-style: dashed; -->
     </span>
 </script>
 
-<script type="text/html" id="card-template">
-        <div class="w3-col w3-container s12 m6 l4">
+<script type="text/html" id="inner-card-template">
             <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
-                <span data-bind='if: $data.isInStack'>
-                    <span style="color: aliceblue;">[S]</span>
-                </span>
-                <span data-bind='if: $data.isTopOfStack'>
-                    <span style="color: aliceblue;">[T]</span>
-                </span>
                 <span data-bind="if: $data.toBeRemoved">
                     <span data-bind="ifnot: $data.completlyRemoved">
                         <h2>
@@ -541,6 +534,26 @@ border-style: dashed; -->
                 
                 
             </div>
+</script>
+
+<script type="text/html" id="card-template">
+        <div class="w3-col w3-container s12 m6 l4">
+            <div  data-bind="if: $data.isTopOfStack" >
+                <div class="webpad-top-of-stack" data-bind="template: { name: 'inner-card-template' } ">
+                </div>
+            </div>
+
+            <div data-bind="ifnot: $data.isTopOfStack" >
+                <div data-bind="if: $data.isInStack" >
+                    <div class="webpad-border-in-stack" data-bind="template: { name: 'inner-card-template' } ">
+                    </div>
+                </div>
+                <div data-bind="ifnot: $data.isInStack" >
+                    <div data-bind="template: { name: 'inner-card-template' } ">
+                    </div>
+                </div>
+            </div>
+            
             
             
         </div>
