@@ -489,6 +489,44 @@ function ConnectedNotesViewModel()
         return lookup.FilteredCards().slice(0, lookup.CurrentResultLimit());
     });
 
+    lookup.mergedOpenedAndFilteredCards = ko.pureComputed(function()
+    {
+        if(lookup.stackOfCards().length > 0)
+        {
+            var toWorkWith = lookup.stackOfCards();
+            var parent = null;
+            for(var k in toWorkWith)
+            {
+                var x = toWorkWith[k];
+                var foundIndex = lookup.LimitedFilteredCards().indexOf(x);
+                if(foundIndex >= 0)
+                {
+                    parent = x;
+                }
+            }
+
+            if(parent !== null)
+            {
+                var indexInStack = lookup.stackOfCards.indexOf(parent);
+                var indexInFiltered = lookup.LimitedFilteredCards().indexOf(parent);
+                var left = lookup.LimitedFilteredCards().slice(0, indexInFiltered);
+                var right = lookup.LimitedFilteredCards().slice(indexInFiltered);
+                var middle = lookup.stackOfCards().slice(indexInStack + 1);
+                return left.concat(middle, right);
+
+            }
+            else
+            {
+                return lookup.stackOfCards().concat(lookup.LimitedFilteredCards());
+            }
+
+        }
+        else
+        {
+            return lookup.LimitedFilteredCards();
+        }
+    });
+
     lookup.ShowExtendCurrentResultLimit = ko.pureComputed(function()
     {
         return lookup.FilteredCards().length > lookup.CurrentResultLimit();

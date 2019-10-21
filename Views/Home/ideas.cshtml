@@ -36,7 +36,6 @@ if('serviceWorker' in navigator) {
 <script language="JavaScript" type="text/javascript" src="~/js/defineLocalStorage.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/findCardByMainNodeId.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/jumpToCard.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="~/js/showSearchResultOfCards.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/jumpToCardOnCreate.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/insertIntoStackOfCards.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/pushIntoStackOfCards.js" asp-append-version="true"></script>
@@ -394,6 +393,12 @@ border-style: dashed; -->
 <script type="text/html" id="card-template">
         <div class="w3-col w3-container s12 m6 l4">
             <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
+                <span data-bind='if: $data.isInStack'>
+                    <span style="color: aliceblue;">[S]</span>
+                </span>
+                <span data-bind='if: $data.isTopOfStack'>
+                    <span style="color: aliceblue;">[T]</span>
+                </span>
                 <span data-bind="if: $data.toBeRemoved">
                     <span data-bind="ifnot: $data.completlyRemoved">
                         <h2>
@@ -629,13 +634,13 @@ border-style: dashed; -->
         </div>
     </div>
     <div style="width: 100%;" class="webpad-search-result-area">
-        <div class="w3-row"  data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
+        <!-- <div class="w3-row"  data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
 
         </div>
         <div style="width: 100%" data-bind="if: $root.stackOfCards().length > 0">
             <hr/>
-        </div> 
-        <div class="w3-row" data-bind="template: { name: 'card-template', foreach: LimitedFilteredCards } ">
+        </div>  -->
+        <div class="w3-row" data-bind="template: { name: 'card-template', foreach: mergedOpenedAndFilteredCards } ">
 
         </div>
         <div class="w3-row" data-bind="if: $root.ShowExtendCurrentResultLimit">
