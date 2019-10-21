@@ -394,6 +394,16 @@ function ConnectedNotesViewModel()
     lookup.SearchNotesQuery = ko.observable("");
     lookup.SearchNotesQuery
         .extend({ rateLimit: 500 });
+    lookup.SearchNotesQuery.subscribe(function(value){
+        console.log('clear');
+        // do not remove stack if card is just created
+        if(lookup.stackOfCards().length > 1 || value.trim().length > 0)
+        {
+            lookup.clearStackOfCards();
+            
+        }
+        
+    });
     
     lookup.sortedByDateCards = ko.pureComputed(function()
     {
@@ -1033,11 +1043,12 @@ function ConnectedNotesViewModel()
             text: lookup.SearchNotesQuery().trim()
             };
         lookup.CreateNote(obj, function(added)
-        {
-            lookup.jumpToCardOnCreate(added);
-        }
+            {
+                console.log('create');
+                lookup.SearchNotesQuery("");
+                lookup.jumpToCardOnCreate(added);
+            }
         );
-        lookup.SearchNotesQuery("");
     };
 
     lookup.SelectPreviousFrom = function(data) {

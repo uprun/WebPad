@@ -1,4 +1,4 @@
-lookup.clearStackOfCards = function(card)
+lookup.clearStackOfCards = function()
 {
         lookup.stackOfCards.removeAll();
 };
