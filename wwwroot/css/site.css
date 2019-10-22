@@ -256,3 +256,11 @@ a
 .webpad-contenteditable[placeholder]:empty:focus:before {
     content: "";
 }
+
+.webpad-search-absolute-position
+{
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    background:#333333;
+}

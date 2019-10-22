@@ -581,27 +581,42 @@ border-style: dashed; -->
 
        
     
+    
 
-    <div class="w3-row">
-        <div class="w3-col w3-container s0 m2 l3">
-        </div>
-        <div class="w3-col w3-container s12 m8 l6">
-            <h2>
-               
-                    <input 
-                        placeholder="Create or search note..." 
-                        class="webpad-search-bar"
-                        type="text" 
-                        data-bind="
-                            textInput: $root.SearchNotesQuery,
-                            event: {keypress: $root.searchBarKeyPress}
-                            " 
-                    />
+    
+    <div style="width: 100%;" class="webpad-search-result-area">
+        <!-- <div class="w3-row"  data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
 
-               
-            </h2>
         </div>
+        <div style="width: 100%" data-bind="if: $root.stackOfCards().length > 0">
+            <hr/>
+        </div>  -->
+        <div class="w3-row" data-bind="template: { name: 'card-template', foreach: mergedOpenedAndFilteredCards } ">
+
+        </div>
+        <div class="w3-row" data-bind="if: $root.ShowExtendCurrentResultLimit">
+            <div class="w3-col w3-container s0 m3 l4">
+           </div>
+           <div class="w3-col w3-container s12 m6 l4">
+               <span>                    
+                    <button style="width: 100%;" class="webpad-node webpad-green" 
+                        data-bind=
+                            "click: $root.ExtendCurrentResultLimit,
+                            text: 'Show more items ( ' + $root.NumberOfHiddenSearhItems() + ' hidden)'">
+                    </button>
+                </span>
+           </div>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
     </div>
+    
+</div>
+<div class="webpad-search-absolute-position" style="display: none;" data-bind="visible: !$root.PromoVisible()">
     <div class="w3-row">
         <div class="w3-col w3-container s0 m3 l4">
         </div>
@@ -646,36 +661,27 @@ border-style: dashed; -->
             </span>
         </div>
     </div>
-    <div style="width: 100%;" class="webpad-search-result-area">
-        <!-- <div class="w3-row"  data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
+    <div class="w3-row">
+        <div class="w3-col w3-container s0 m2 l3">
+        </div>
+        <div class="w3-col w3-container s12 m8 l6">
+            <h2>
+            
+                    <input 
+                        placeholder="Create or search note..." 
+                        class="webpad-search-bar"
+                        type="text" 
+                        data-bind="
+                            textInput: $root.SearchNotesQuery,
+                            event: {keypress: $root.searchBarKeyPress}
+                            " 
+                    />
 
+            
+            </h2>
         </div>
-        <div style="width: 100%" data-bind="if: $root.stackOfCards().length > 0">
-            <hr/>
-        </div>  -->
-        <div class="w3-row" data-bind="template: { name: 'card-template', foreach: mergedOpenedAndFilteredCards } ">
-
-        </div>
-        <div class="w3-row" data-bind="if: $root.ShowExtendCurrentResultLimit">
-            <div class="w3-col w3-container s0 m3 l4">
-           </div>
-           <div class="w3-col w3-container s12 m6 l4">
-               <span>                    
-                    <button style="width: 100%;" class="webpad-node webpad-green" 
-                        data-bind=
-                            "click: $root.ExtendCurrentResultLimit,
-                            text: 'Show more items ( ' + $root.NumberOfHiddenSearhItems() + ' hidden)'">
-                    </button>
-                </span>
-           </div>
-        </div>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
     </div>
     
-</div>
+    
 
+</div>
