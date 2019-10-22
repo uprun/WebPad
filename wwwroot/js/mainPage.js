@@ -431,6 +431,11 @@ function ConnectedNotesViewModel()
             );
     });
 
+    lookup.searchBarPosition = ko.pureComputed(function()
+    {
+        return lookup.sortedByDateCards().length === 0 ? "45%" : "0%" ;
+    });
+
     // the idea is that cards without tags should not be displayed unless they are root
     lookup.filteredOutLeafs = ko.pureComputed(
         function()
