@@ -214,6 +214,7 @@ a
 .webpad-border-in-stack
 {
     border-radius: .3em;
+    border-width: .5em;
     box-sizing : border-box;
     border-color: aliceblue;
     border-style: dashed;
@@ -223,6 +224,7 @@ a
 .webpad-top-of-stack
 {
     border-radius: .3em;
+    border-width: .5em;
     box-sizing : border-box;
     border-color: yellow;
     border-style: dashed;
