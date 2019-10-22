@@ -521,7 +521,7 @@ function ConnectedNotesViewModel()
                 var indexInFiltered = lookup.LimitedFilteredCards().indexOf(parent);
                 var left = lookup.LimitedFilteredCards().slice(0, indexInFiltered);
                 var right = lookup.LimitedFilteredCards().slice(indexInFiltered);
-                var middle = lookup.stackOfCards().slice(indexInStack + 1);
+                var middle = lookup.stackOfCards().slice(indexInStack + 1).reverse();
                 return left.concat(middle, right);
 
             }
