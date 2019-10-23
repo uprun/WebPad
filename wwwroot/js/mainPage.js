@@ -47,7 +47,7 @@ function ConnectedNotesViewModel()
         lookup.SyncOptionsVisible(false);
     };
 
-    lookup.PromoVisible = ko.observable(true);
+    lookup.PromoVisible = ko.observable(false);
 
     lookup.HidePromo = function() 
     {
