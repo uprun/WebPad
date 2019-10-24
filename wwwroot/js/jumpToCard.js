@@ -8,12 +8,8 @@ lookup.jumpToCard = function(data)
     {
         lookup.insertIntoStackOfCards(sourceCard);
         lookup.pushIntoStackOfCards(destinationCard);
-        var cards = $('#' + data.Destination.id);
 
-        if(typeof(cards) !== "undefined" && cards.length > 0)
-        {
-            cards[0].scrollIntoView();
-        }
+        lookup.scrollToCard(data.Destination.id);
         
 
     }

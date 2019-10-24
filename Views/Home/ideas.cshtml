@@ -27,6 +27,7 @@
 <script language="JavaScript" type="text/javascript" src="~/js/model_ColorPreset.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/model_Card.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/lookup.js" asp-append-version="true"></script>
+<script language="JavaScript" type="text/javascript" src="~/js/scrollToCard.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/findNodeById.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/findEdgeById.js" asp-append-version="true"></script>
 <script language="JavaScript" type="text/javascript" src="~/js/processMessageFromOuterSpace.js" asp-append-version="true"></script>
@@ -358,7 +359,8 @@ border-style: dashed; -->
                     data-bind="
                         textInput:  $data.AdditionalInformationText,
                         event: {keypress: $root.additionalInfoKeyPress, blur: $data.blurHandler}, 
-                        hasFocus: $data.AdditionalInformationTextFocus()
+                        hasFocus: $data.AdditionalInformationTextFocus(),
+                        attr: {id:  'exi' + $data.Note.id}
                         " 
                 />
             </span>
