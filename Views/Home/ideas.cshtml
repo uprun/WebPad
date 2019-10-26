@@ -1,704 +1,765 @@
-﻿<script>
-if('serviceWorker' in navigator) {
-  navigator.serviceWorker
-           .register('service-worker-offline.js', { scope: '/' })
-           .then(
-            function(registration) 
-            {
-                // Registration was successful
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            });
-}
-</script>
-
-<link rel="stylesheet" href="css/w3-4.13.css" asp-append-version="true"> 
-
-<link rel="stylesheet" href="css/site.css" asp-append-version="true"/>
-<script language="JavaScript" type="text/javascript" src="js/knockout-extension-contentEditable.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/cryptico/jsbn.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/cryptico/random.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/cryptico/hash.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/cryptico/rsa.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/cryptico/aes.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/cryptico/api.js" asp-append-version="true"></script>
-
-<script language="JavaScript" type="text/javascript" src="js/model_Connection.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/model_Node.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/model_ColorPreset.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/model_Card.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/lookup.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/scrollToCard.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/findNodeById.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/findEdgeById.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/processMessageFromOuterSpace.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/defineLocalStorage.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/findCardByMainNodeId.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/jumpToCard.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/jumpToCardOnCreate.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/insertIntoStackOfCards.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/pushIntoStackOfCards.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/clearStackOfCards.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/GetRandomColor.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/MigrationOfColorOfNode.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/switchExpandedCardTagsList.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/switchAdditionalInformationText.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/defineStackOfSearch.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/addToStackOfSearch.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/removeFromStackOfSearch.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/searchBarKeyPress.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/additionalInfoKeyPress.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/pushToHistory.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/Instanciate_model_node.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/ConnectNotes.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/CreateNote.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/RemoveConnection.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/RemoveNote.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/migrateConnectionToNode.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/Instanciate_model_connection.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/mainPage.js" asp-append-version="true"></script>
-<script language="JavaScript" type="text/javascript" src="js/document_ready_ideas.js" asp-append-version="true"></script>
-
-<div vocab="https://schema.org/"
-    typeof="WebApplication" style="display: none;">
-    <span property="name" >WebPad</span>
-    <span property="description">is a note taking app, where privacy is a priority, where no-login required to try.</span>
-    <span property="accessMode">textual</span>
-    <div property="offers" typeof="Offer">
-        Price: $<span property="price">0.00</span>
-        <meta property="priceCurrency" content="USD" />
-        <span property="description">3 in total devices to sync, max 7 thousand of changes.</span>
-    </div>
-
-    <div property="offers" typeof="Offer">
-        Price: $<span property="price">2.00</span>
-        <meta property="priceCurrency" content="USD" />
-        <span property="description">plus 4 devices to sync with (7 in total), max 40 thousand of changes.</span>
-    </div>
-    <span property="operatingSystem">Windows</span>
-    <span property="operatingSystem">Linux</span>
-    <span property="operatingSystem">MacOs</span>
-    <span property="operatingSystem">iOs</span>
-    <span property="operatingSystem">Android</span>
-    <span property="image">https://webpad.com.ua/WebPad_logo_500.png</span>
-
-</div>
-
-<div vocab="https://schema.org/"
-    typeof="Organization" style="display: none;">
-    <span property="url" >https://webpad.com.ua</span>
-    <span property="logo">https://webpad.com.ua/WebPad_logo_500.png</span>
-</div>
-
-<div class="w3-container" data-bind="visible: $root.PromoVisible" style="margin-top: 20mm;" 
-    >
-    <div class="w3-row">
-        <div class="w3-col w3-container s12 m12 l12">
-            <div style="text-align: center; width: 100%;">
-                <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-blue-print webpad-right" >WebPad</span>
-                </div>
-            </div>
-        </div>
-        <div class="w3-col w3-container s12 m12 l12">
-            <div style="text-align: center; width: 100%;">
-                <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-green webpad-right">is a note taking app</span>
-                </div>
-            </div>
-        </div>
-        <div class="w3-col w3-container s12 m12 l12">
-            <div style="text-align: center; width: 100%;">
-                <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-orange webpad-left">where</span>
-                </div>
-            </div>
-        </div>
-        <div class="w3-col w3-container s12 m12 l12">
-            <div style="text-align: center; width: 100%;">
-                <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-purple webpad-left">privacy is a priority</span>
-                </div>
-            </div>
-        </div>
-        <div class="w3-col w3-container s12 m12 l12">
-            <div style="text-align: center; width: 100%;">
-                <div class="webpad-inline-flex">
-                    <span class="webpad-node webpad-blue-print webpad-right-2x">no-login required to</span>
-                </div>
-            </div>
-        </div>
-        <div class="w3-col w3-container s12 m12 l12">
-            <div style="text-align: center; width: 100%;">
-                <div class="webpad-inline-flex">
-                    <button class="webpad-node webpad-green webpad-left" data-bind="click: $root.HidePromo">
-                        <a href="#">try for free now</a>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- <div  style="text-align: center; width: 100%; margin-top: 0px; display: inline-block; display: none;" data-bind="visible: !$root.PromoVisible()">
-    <span class="webpad-node webpad-green">WebPad</span> <span class="webpad-node webpad-orange" data-bind="click: $root.ShowPromo"><a href="#">about</a></span>
-    <span data-bind="if: $root.isOnLine" >
-        <span class="webpad-node webpad-green">[online]</span>
-    </span>
-    <span data-bind="ifnot: $root.isOnLine" >
-        <span class="webpad-node webpad-orange">[offline]</span>
-    </span>
-    <span data-bind="if: $root.publicCryptoKey() != null  &&
-                $root.publicCryptoKey() != undefined &&
-                $root.publicCryptoKey().trim() != '' ">
-
-                <span data-bind="ifnot: $root.SyncOptionsVisible" >
-                    <button class="webpad-node webpad-green" data-bind="click: $root.OpenSyncOptions">Open Sync</button>
-                </span>
-                <span data-bind="if: $root.SyncOptionsVisible" >
-                    <button class="webpad-node webpad-orange" data-bind="click: $root.HideSyncOptions">Hide Sync</button>
-                </span>
-                <div data-bind="if: $root.SyncOptionsVisible" >
-                    <button class="webpad-node webpad-green" data-bind="click: $root.iHaveSyncToken">I already have sync token</button>
-                    <button class="webpad-node webpad-blue-print" data-bind="click: $root.GetOneTimeSynchronizationToken">What sync token? Generate one.</button>
-                    <div data-bind="if: $root.OpenTokenGenerationMenu">
-                        <br/>
-                        <span class="webpad-node webpad-green" >Share this sync token:&nbsp;</span>
-                        <span class="webpad-node webpad-blue-print" data-bind="text: $root.TokenToShare"></span>
-                        <br/>
-                        <span class="webpad-node webpad-orange">You have to receive this check code:&nbsp;</span>
-                        <span class="webpad-node webpad-yellow" data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
-                        <br/>
-
-                    </div>
-                    <div data-bind="if: $root.OpenTokenConsumptionMenu">
-                        <span class="webpad-node webpad-orange">
-                            <input 
-                                placeholder="Input sync token..." 
-                                style="width: 30vw; min-width: 150px;" 
-                                type="text" 
-                                data-bind="
-                                    textInput: $root.SynchronizationToken,
-                                    " />
-
-                        </span>
-                        
-                        <br/>
-                        <button class="webpad-node webpad-blue-print" data-bind="click: $root.SynchronizeUsingToken"> Use sync token</button>
-                        <br/>
-                        
-                        <span class="webpad-node webpad-orange">Code for other side:&nbsp;</span>
-                        <span class="webpad-node webpad-yellow" data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
-                        
-
-                    </div>
-                    <div data-bind="if: $root.ReceivedPublicKey() != null  &&
-                            $root.ReceivedPublicKey() != undefined &&
-                            $root.ReceivedPublicKey().trim() != '' " >
-                        <span class="webpad-node webpad-green">Received check code:&nbsp;</span>
-                        <span class="webpad-node webpad-yellow" data-bind="text: $root.ReceivedPublicKey().substring(0, 10) + '...' "></span>
-                        <br/>
-                        <span class="webpad-node webpad-blue-print" data-bind=>
-                            Do you trust to this ? 
-                        </span>
-                        <button class="webpad-node webpad-green" data-bind="click: $root.AddReceivedPublicKeyToTrusted"> Trust</button>
-                        <button class="webpad-node webpad-orange" data-bind="click: $root.RemoveReceivedPublicKey"> No-no-no</button>
-
-                    </div>
-                </div>
-
-    </span>
+﻿<!DOCTYPE html>
+<html>
+<head prefix="og: http://ogp.me/ns#">
+    <title>WebPad</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#333333" />
+    <meta name="application-name" content="WebPad">
+    <meta name="msapplication-TileColor" content="#333333">
     
-</div> -->
 
-<!-- <span data-bind="if: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
+    <meta name="description" content="Secure todo, note-taking and more.">
+    <meta name="keywords" content="secure, todo, note taking app, note-taking, privacy, link notes, linked-data, linked data, knowledge graph, semantic web, semantic">
+    <meta name="author" content="Kryvonos Oleksandr">
+
+    <!-- Facebook's OpenGraph protocol meta start -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="WebPad" />
+    
+    <meta property="og:image" content="https://webpad.com.ua/WebPad_logo_500.png" />
+    <meta property="og:image:secure_url" content="https://webpad.com.ua/WebPad_logo_500.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="500" />
+    <meta property="og:image:height" content="500" />
+    <meta property="og:image:alt" content="The WebPad logo that consists of 4 bricks colored in (from top to bottom): orange, purple, green and yellow." />
+
+    <meta property="og:url" content="https://webpad.com.ua/" />
+    <meta property="og:description" content="Secure todo, note-taking and more." />
+    <meta property="og:determiner" content="the" />
+    <meta property="og:site_name" content="WebPad" />
+    <meta property="og:video" content="https://www.youtube.com/watch?v=SxVn7iSVn3A" />
+    <!-- Facebook's OpenGraph protocol meta end -->
+    
+    <link rel="manifest" href="json/manifest.json" asp-append-version="true">
+    <script src="lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+    
+    <script src="js/knockout-3.4.2.js" asp-append-version="true"></script>
 
 
+    <link rel="stylesheet" href="css/site.css" asp-append-version="true"/>
 
-<button data-bind="click: $root.CreateNoteFromDestinationSearchQuery">Add connection</button>
-<span data-bind="foreach: $root.ColorPresets">
-    <button data-bind="click: $root.ColorNode, style: { 'background' : $data.Background(), color: $data.Color() }">Highlight</button>
-</span>
+    <link rel="apple-touch-icon" sizes="32x32" href="/WebPad_logo_32.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/WebPad_logo_57.png">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/WebPad_logo_57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/WebPad_logo_60.png">
+    <link rel="apple-touch-icon" sizes="64x64" href="/WebPad_logo_64.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/WebPad_logo_72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/WebPad_logo_76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/WebPad_logo_114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/WebPad_logo_120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/WebPad_logo_144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/WebPad_logo_152.png">
+    <link rel="apple-touch-icon" sizes="250x250" href="/WebPad_logo_250.png">
+    <link rel="apple-touch-icon" sizes="500x500" href="/WebPad_logo_500.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/WebPad_logo_512.png">
 
-
-</span>    -->
-
-<!-- background-image: linear-gradient(to bottom right, #3900d9, #d6920b); -->
-
-<!-- border-color: aliceblue;
-border-width: 5px;
-border-style: dashed; -->
-
-<!-- border-width: 5px;
-    border-style: dashed;
-    border-image: linear-gradient(to bottom right, #3900d9, #d6920b) 1;
-
-} -->
-
-<script type="text/html" id="tag-template">
-    <div>
-        <span data-bind="if: $data.toUnlink">
-            <span
-                class="webpad-break-words-node" data-bind=
-            "
-                style:
-                {
-                    color: $data.Destination.color,
-                },
-                text:$data.Destination.textAlmost
-                ">
-            </span>
-            <div style="padding-left: 1.4em;">
-                <span class="webpad-brightness-dimmed" style="color: aliceblue;">
-                    really unlink?
-                </span>
-                <br/>
-                <span style="color: #64e05e;" data-bind="click: $data.cancelUnlink">
-                    [no-no-no]
-                </span>
-                <br/>
-                <br/>
-                <span style="color: #ffa26b;" data-bind="click: $data.confirmUnlink">
-                    [yes.]
-                </span>
+</head>
+<body style="margin: 0">
+    <script>
+        if('serviceWorker' in navigator) {
+          navigator.serviceWorker
+                   .register('service-worker-offline.js', { scope: '/' })
+                   .then(
+                    function(registration) 
+                    {
+                        // Registration was successful
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    });
+        }
+        </script>
+        
+        <link rel="stylesheet" href="css/w3-4.13.css" asp-append-version="true"> 
+        
+        <link rel="stylesheet" href="css/site.css" asp-append-version="true"/>
+        <script language="JavaScript" type="text/javascript" src="js/knockout-extension-contentEditable.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/cryptico/jsbn.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/cryptico/random.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/cryptico/hash.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/cryptico/rsa.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/cryptico/aes.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/cryptico/api.js" asp-append-version="true"></script>
+        
+        <script language="JavaScript" type="text/javascript" src="js/model_Connection.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/model_Node.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/model_ColorPreset.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/model_Card.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/lookup.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/scrollToCard.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/findNodeById.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/findEdgeById.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/processMessageFromOuterSpace.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/defineLocalStorage.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/findCardByMainNodeId.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/jumpToCard.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/jumpToCardOnCreate.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/insertIntoStackOfCards.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/pushIntoStackOfCards.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/clearStackOfCards.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/GetRandomColor.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/MigrationOfColorOfNode.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/switchExpandedCardTagsList.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/switchAdditionalInformationText.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/defineStackOfSearch.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/addToStackOfSearch.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/removeFromStackOfSearch.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/searchBarKeyPress.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/additionalInfoKeyPress.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/pushToHistory.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/Instanciate_model_node.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/ConnectNotes.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/CreateNote.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/RemoveConnection.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/RemoveNote.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/migrateConnectionToNode.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/Instanciate_model_connection.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/mainPage.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/document_ready_ideas.js" asp-append-version="true"></script>
+        
+        <div vocab="https://schema.org/"
+            typeof="WebApplication" style="display: none;">
+            <span property="name" >WebPad</span>
+            <span property="description">is a note taking app, where privacy is a priority, where no-login required to try.</span>
+            <span property="accessMode">textual</span>
+            <div property="offers" typeof="Offer">
+                Price: $<span property="price">0.00</span>
+                <meta property="priceCurrency" content="USD" />
+                <span property="description">3 in total devices to sync, max 7 thousand of changes.</span>
             </div>
+        
+            <div property="offers" typeof="Offer">
+                Price: $<span property="price">2.00</span>
+                <meta property="priceCurrency" content="USD" />
+                <span property="description">plus 4 devices to sync with (7 in total), max 40 thousand of changes.</span>
+            </div>
+            <span property="operatingSystem">Windows</span>
+            <span property="operatingSystem">Linux</span>
+            <span property="operatingSystem">MacOs</span>
+            <span property="operatingSystem">iOs</span>
+            <span property="operatingSystem">Android</span>
+            <span property="image">https://webpad.com.ua/WebPad_logo_500.png</span>
+        
+        </div>
+        
+        <div vocab="https://schema.org/"
+            typeof="Organization" style="display: none;">
+            <span property="url" >https://webpad.com.ua</span>
+            <span property="logo">https://webpad.com.ua/WebPad_logo_500.png</span>
+        </div>
+        
+        <div class="w3-container" data-bind="visible: $root.PromoVisible" style="margin-top: 20mm;" 
+            >
+            <div class="w3-row">
+                <div class="w3-col w3-container s12 m12 l12">
+                    <div style="text-align: center; width: 100%;">
+                        <div class="webpad-inline-flex">
+                            <span class="webpad-node webpad-blue-print webpad-right" >WebPad</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <div style="text-align: center; width: 100%;">
+                        <div class="webpad-inline-flex">
+                            <span class="webpad-node webpad-green webpad-right">is a note taking app</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <div style="text-align: center; width: 100%;">
+                        <div class="webpad-inline-flex">
+                            <span class="webpad-node webpad-orange webpad-left">where</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <div style="text-align: center; width: 100%;">
+                        <div class="webpad-inline-flex">
+                            <span class="webpad-node webpad-purple webpad-left">privacy is a priority</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <div style="text-align: center; width: 100%;">
+                        <div class="webpad-inline-flex">
+                            <span class="webpad-node webpad-blue-print webpad-right-2x">no-login required to</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <div style="text-align: center; width: 100%;">
+                        <div class="webpad-inline-flex">
+                            <button class="webpad-node webpad-green webpad-left" data-bind="click: $root.HidePromo">
+                                <a href="#">try for free now</a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- <div  style="text-align: center; width: 100%; margin-top: 0px; display: inline-block; display: none;" data-bind="visible: !$root.PromoVisible()">
+            <span class="webpad-node webpad-green">WebPad</span> <span class="webpad-node webpad-orange" data-bind="click: $root.ShowPromo"><a href="#">about</a></span>
+            <span data-bind="if: $root.isOnLine" >
+                <span class="webpad-node webpad-green">[online]</span>
+            </span>
+            <span data-bind="ifnot: $root.isOnLine" >
+                <span class="webpad-node webpad-orange">[offline]</span>
+            </span>
+            <span data-bind="if: $root.publicCryptoKey() != null  &&
+                        $root.publicCryptoKey() != undefined &&
+                        $root.publicCryptoKey().trim() != '' ">
+        
+                        <span data-bind="ifnot: $root.SyncOptionsVisible" >
+                            <button class="webpad-node webpad-green" data-bind="click: $root.OpenSyncOptions">Open Sync</button>
+                        </span>
+                        <span data-bind="if: $root.SyncOptionsVisible" >
+                            <button class="webpad-node webpad-orange" data-bind="click: $root.HideSyncOptions">Hide Sync</button>
+                        </span>
+                        <div data-bind="if: $root.SyncOptionsVisible" >
+                            <button class="webpad-node webpad-green" data-bind="click: $root.iHaveSyncToken">I already have sync token</button>
+                            <button class="webpad-node webpad-blue-print" data-bind="click: $root.GetOneTimeSynchronizationToken">What sync token? Generate one.</button>
+                            <div data-bind="if: $root.OpenTokenGenerationMenu">
+                                <br/>
+                                <span class="webpad-node webpad-green" >Share this sync token:&nbsp;</span>
+                                <span class="webpad-node webpad-blue-print" data-bind="text: $root.TokenToShare"></span>
+                                <br/>
+                                <span class="webpad-node webpad-orange">You have to receive this check code:&nbsp;</span>
+                                <span class="webpad-node webpad-yellow" data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
+                                <br/>
+        
+                            </div>
+                            <div data-bind="if: $root.OpenTokenConsumptionMenu">
+                                <span class="webpad-node webpad-orange">
+                                    <input 
+                                        placeholder="Input sync token..." 
+                                        style="width: 30vw; min-width: 150px;" 
+                                        type="text" 
+                                        data-bind="
+                                            textInput: $root.SynchronizationToken,
+                                            " />
+        
+                                </span>
+                                
+                                <br/>
+                                <button class="webpad-node webpad-blue-print" data-bind="click: $root.SynchronizeUsingToken"> Use sync token</button>
+                                <br/>
+                                
+                                <span class="webpad-node webpad-orange">Code for other side:&nbsp;</span>
+                                <span class="webpad-node webpad-yellow" data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
+                                
+        
+                            </div>
+                            <div data-bind="if: $root.ReceivedPublicKey() != null  &&
+                                    $root.ReceivedPublicKey() != undefined &&
+                                    $root.ReceivedPublicKey().trim() != '' " >
+                                <span class="webpad-node webpad-green">Received check code:&nbsp;</span>
+                                <span class="webpad-node webpad-yellow" data-bind="text: $root.ReceivedPublicKey().substring(0, 10) + '...' "></span>
+                                <br/>
+                                <span class="webpad-node webpad-blue-print" data-bind=>
+                                    Do you trust to this ? 
+                                </span>
+                                <button class="webpad-node webpad-green" data-bind="click: $root.AddReceivedPublicKeyToTrusted"> Trust</button>
+                                <button class="webpad-node webpad-orange" data-bind="click: $root.RemoveReceivedPublicKey"> No-no-no</button>
+        
+                            </div>
+                        </div>
+        
+            </span>
             
+        </div> -->
+        
+        <!-- <span data-bind="if: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
+        
+        
+        
+        <button data-bind="click: $root.CreateNoteFromDestinationSearchQuery">Add connection</button>
+        <span data-bind="foreach: $root.ColorPresets">
+            <button data-bind="click: $root.ColorNode, style: { 'background' : $data.Background(), color: $data.Color() }">Highlight</button>
         </span>
-        <span data-bind="ifnot: $data.toUnlink">
-            <span data-bind="if: $data.Destination.isDone">
-                <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.switchDone">[x]</span>
-                <span class="webpad-brightness-dimmed" data-bind="ifnot: $data.underEdit">
+        
+        
+        </span>    -->
+        
+        <!-- background-image: linear-gradient(to bottom right, #3900d9, #d6920b); -->
+        
+        <!-- border-color: aliceblue;
+        border-width: 5px;
+        border-style: dashed; -->
+        
+        <!-- border-width: 5px;
+            border-style: dashed;
+            border-image: linear-gradient(to bottom right, #3900d9, #d6920b) 1;
+        
+        } -->
+        
+        <script type="text/html" id="tag-template">
+            <div>
+                <span data-bind="if: $data.toUnlink">
                     <span
                         class="webpad-break-words-node" data-bind=
                     "
                         style:
                         {
                             color: $data.Destination.color,
-                            'text-decoration': 'line-through'
                         },
                         text:$data.Destination.textAlmost
                         ">
                     </span>
-                </span>
-            </span>
-            <span data-bind="ifnot: $data.Destination.isDone">
-                <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
-                <span data-bind="ifnot: $data.underEdit">
-                    <span
-                        class="webpad-break-words-node" data-bind=
-                    "
-                        style:
-                        {
-                            color: $data.Destination.color
-                        },
-                        text:$data.Destination.textAlmost
-                        ">
-                    </span>
-                </span>
-            </span>
-            <span data-bind="if: $data.toolBoxVisible">
-                <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^_^]</span>
-            </span>
-            <span data-bind="ifnot: $data.toolBoxVisible">
-                <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="open toolbox">[..]</span>
-            </span>
-            
-            <span data-bind="if: $data.toolBoxVisible">
-                <span class="webpad-brightness-dimmed" style="color: #d190ff;" data-bind="click: $root.jumpToCard, attr: {href: '#' + $data.Destination.id }">[focus&nbsp;on]
-                </span>
-                <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.prepareToUnlink">[unlink]</span>
-            </span>
-
-            <span data-bind="if: $data.DestinationCard && $data.DestinationCard.Tags().length > 0 ">
-                    <!-- <span 
-                        class="webpad-brightness-dimmed" 
-                        style="color: aliceblue; font-size: .6em;" 
-                        data-bind="
-                            text: '[ show ' + $data.DestinationCard.Tags().length + ' items]',
-                            click: $data.SwitchDisplayNextLevel">
-                    </span> -->
-                    <span data-bind="if: $data.DisplayNextLevel">
-                        <div style="padding-left: 1.4em;" data-bind="foreach: $data.DestinationCard.Tags">
-                            <div>
-                                <span data-bind="if: $data.Destination.isDone">
-                                    <span
-                                        style="font-size: .6em;" 
-                                        class="webpad-break-words-node webpad-brightness-dimmed" data-bind=
-                                    "
-                                        style:
-                                        {
-                                            color: $data.Destination.color,
-                                            'text-decoration': 'line-through'
-                                        },
-                                        text:$data.Destination.textAlmost
-                                        ">
-                                    </span>
-                                </span>
-                                <span data-bind="ifnot: $data.Destination.isDone">
-                                        <span
-                                            style="font-size: .6em;" 
-                                            class="webpad-break-words-node" data-bind=
-                                        "
-                                            style:
-                                            {
-                                                color: $data.Destination.color,
-                                            },
-                                            text:$data.Destination.textAlmost
-                                            ">
-                                        </span>
-                                </span>
-                            </div>
-                        </div>
-                    </span>
-            <span>
-
-        </span>
-
-    </div>
-</script>
-
-<script type="text/html" id="additional-info-template">
-    
-    <span class="webpad-extra-information-plus-icon" data-bind="ifnot: $data.AdditionalInformationTextVisible">
-        <h1>
-            <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
-                <object type="image/svg+xml" data="svg/plus.svg" class="webpad-edit-pencil" alt="Add information" ></object> 
-            </div>
-        </h1>
-    </span>
-    
-    <span data-bind="if: $data.AdditionalInformationTextVisible">
-        <h2>
-            <h1>
-                <div  class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
-                    <object type="image/svg+xml" data="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Cancel edit" ></object> 
-                </div>
-            </h1>
-            <span style="width: 100%;" class="webpad-break-words-node"
-                data-bind="
-                        style:
-                        {
-                            color: $data.AdditionalInformationTextColor,
-                        },">
-                <input 
-                    placeholder="input information" 
-                    class="webpad-extra-information"
-                    type="text" 
-                    data-bind="
-                        textInput:  $data.AdditionalInformationText,
-                        event: {keypress: $root.additionalInfoKeyPress, blur: $data.blurHandler}, 
-                        hasFocus: $data.AdditionalInformationTextFocus(),
-                        attr: {id:  'exi' + $data.Note.id}
-                        " 
-                />
-            </span>
-            
-            <span 
-                data-bind="
-                        if: $data.AdditionalInformationText().trim().length > 0">
-                <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.AddNoteToExistingOne">
-                    <object type="image/svg+xml" data="svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" ></object> 
-                    <span style="color: aliceblue;">
-                    [Enter]
-                    </span>
-                </div>
-            </span>
-            
-        </h2>
-        
-    </span>
-</script>
-
-<script type="text/html" id="inner-card-template">
-            <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
-                <span data-bind="if: $data.toBeRemoved">
-                    <span data-bind="ifnot: $data.completlyRemoved">
-                        <h2>
-                            <span 
-                                    placeholder="..." 
-                                    class="webpad-contenteditable webpad-break-words-node"
-                                    data-bind="
-                                        contentEditable: false,
-                                        htmlLazy:  $data.Note.text,
-                                        style:
-                                        {
-                                            color: $data.Note.color,
-                                        },
-                                        event: {blur: $root.SwitchEditOfCard},
-                                        hasFocus: $data.underEdit
-                                        " 
-                                ></span>
-                            <div>
-                                <h1 style="color: aliceblue;"  >
-                                    0_0
-                                </h1>
-                                <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">Really remove?</span>
-                                <br/>
-                                <span  style="color: #64e05e;" data-bind=" click: $data.rollbackRemoval">[no-no-no]</span>
-                                <br/>
-                                <br/>
-                                <span  style="color: #ffa26b;" data-bind=" click: $data.reallyRemove">[yes.]</span>
-                            </div>
-                            
-                        </h2>
-                    </span>
-                    <span data-bind="if: $data.completlyRemoved">
+                    <div style="padding-left: 1.4em;">
+                        <span class="webpad-brightness-dimmed" style="color: aliceblue;">
+                            really unlink?
+                        </span>
+                        <br/>
+                        <span style="color: #64e05e;" data-bind="click: $data.cancelUnlink">
+                            [no-no-no]
+                        </span>
                         <br/>
                         <br/>
-                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" >removing...</span>
-                    </span>
+                        <span style="color: #ffa26b;" data-bind="click: $data.confirmUnlink">
+                            [yes.]
+                        </span>
+                    </div>
                     
                 </span>
-                <span data-bind="ifnot: $data.toBeRemoved">
-                    <h2>
-                        <span data-bind="if: $data.Note.isDone">
-                            <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.switchDone">[x]</span>
-                            <span class="webpad-brightness-dimmed" data-bind="ifnot: $data.underEdit">
-                                <span 
-                                    placeholder="..." 
-                                    class="webpad-contenteditable webpad-break-words-node"
-                                    data-bind="
-                                        contentEditable: false,
-                                        htmlLazy:  $data.Note.text,
-                                        style:
-                                        {
-                                            color: $data.Note.color,
-                                            'text-decoration': 'line-through'
-                                        },
-                                        event: {blur: $root.SwitchEditOfCard},
-                                        hasFocus: $data.underEdit
-                                        " 
-                                ></span>
+                <span data-bind="ifnot: $data.toUnlink">
+                    <span data-bind="if: $data.Destination.isDone">
+                        <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.switchDone">[x]</span>
+                        <span class="webpad-brightness-dimmed" data-bind="ifnot: $data.underEdit">
+                            <span
+                                class="webpad-break-words-node" data-bind=
+                            "
+                                style:
+                                {
+                                    color: $data.Destination.color,
+                                    'text-decoration': 'line-through'
+                                },
+                                text:$data.Destination.textAlmost
+                                ">
                             </span>
                         </span>
-                        <span data-bind="ifnot: $data.Note.isDone">
-                            <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
-                            <span data-bind="ifnot: $data.underEdit">
-                                <span 
-                                    placeholder="..." 
-                                    class="webpad-contenteditable webpad-break-words-node"
-                                    data-bind="
-                                        contentEditable: $data.underEdit,
-                                        htmlLazy:  $data.Note.text,
-                                        style:
-                                        {
-                                            color: $data.Note.color,
-                                        },
-                                        event: {blur: $root.SwitchEditOfCard},
-                                        hasFocus: $data.underEdit
-                                        " 
-                                ></span>
+                    </span>
+                    <span data-bind="ifnot: $data.Destination.isDone">
+                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
+                        <span data-bind="ifnot: $data.underEdit">
+                            <span
+                                class="webpad-break-words-node" data-bind=
+                            "
+                                style:
+                                {
+                                    color: $data.Destination.color
+                                },
+                                text:$data.Destination.textAlmost
+                                ">
                             </span>
                         </span>
-                        <span data-bind="if: $data.underEdit">
-                            <span 
-                                    placeholder="..." 
-                                    class="webpad-contenteditable webpad-main-information webpad-break-words-node"
-                                    data-bind="
-                                        contentEditable: $data.underEdit,
-                                        htmlLazy:  $data.Note.text,
-                                        style:
-                                        {
-                                            color: $data.Note.color,
-                                        },
-                                        event: {blur: $root.SwitchEditOfCard},
-                                        hasFocus: $data.underEdit
-                                        " 
-                                ></span>
-                                <!-- <input 
-                                    placeholder="..." 
-                                    class="webpad-main-information"
-                                    type="text" 
-                                    data-bind="
-                                        textInput:  $data.Note.text,
-                                        style:
-                                        {
-                                            color: $data.Note.color,
-                                        },
-                                        event: {blur: $root.SwitchEditOfCard},
-                                        hasFocus: $data.underEdit
-                                        " 
-                                /> -->
-                            <!-- <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
-                                <object type="image/svg+xml" data="svg/check.svg" class="webpad-edit-pencil" alt="Close edit" ></object> 
-                            </div> -->
+                    </span>
+                    <span data-bind="if: $data.toolBoxVisible">
+                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^_^]</span>
+                    </span>
+                    <span data-bind="ifnot: $data.toolBoxVisible">
+                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="open toolbox">[..]</span>
+                    </span>
+                    
+                    <span data-bind="if: $data.toolBoxVisible">
+                        <span class="webpad-brightness-dimmed" style="color: #d190ff;" data-bind="click: $root.jumpToCard, attr: {href: '#' + $data.Destination.id }">[focus&nbsp;on]
                         </span>
-                        <span data-bind="if: $data.toolBoxVisible">
-                            <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^_^]</span>
-                        </span>
-                        <span data-bind="ifnot: $data.toolBoxVisible">
-                            <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="open toolbox">[..]</span>
-                        </span>
-                        <span data-bind="if: $data.toolBoxVisible">
-                            <span data-bind="ifnot: $data.underEdit">
-                                <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
-                                    <object type="image/svg+xml" data="svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit"></object> 
+                        <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.prepareToUnlink">[unlink]</span>
+                    </span>
+        
+                    <span data-bind="if: $data.DestinationCard && $data.DestinationCard.Tags().length > 0 ">
+                            <!-- <span 
+                                class="webpad-brightness-dimmed" 
+                                style="color: aliceblue; font-size: .6em;" 
+                                data-bind="
+                                    text: '[ show ' + $data.DestinationCard.Tags().length + ' items]',
+                                    click: $data.SwitchDisplayNextLevel">
+                            </span> -->
+                            <span data-bind="if: $data.DisplayNextLevel">
+                                <div style="padding-left: 1.4em;" data-bind="foreach: $data.DestinationCard.Tags">
+                                    <div>
+                                        <span data-bind="if: $data.Destination.isDone">
+                                            <span
+                                                style="font-size: .6em;" 
+                                                class="webpad-break-words-node webpad-brightness-dimmed" data-bind=
+                                            "
+                                                style:
+                                                {
+                                                    color: $data.Destination.color,
+                                                    'text-decoration': 'line-through'
+                                                },
+                                                text:$data.Destination.textAlmost
+                                                ">
+                                            </span>
+                                        </span>
+                                        <span data-bind="ifnot: $data.Destination.isDone">
+                                                <span
+                                                    style="font-size: .6em;" 
+                                                    class="webpad-break-words-node" data-bind=
+                                                "
+                                                    style:
+                                                    {
+                                                        color: $data.Destination.color,
+                                                    },
+                                                    text:$data.Destination.textAlmost
+                                                    ">
+                                                </span>
+                                        </span>
+                                    </div>
                                 </div>
                             </span>
-                        </span>
-                        <span data-bind="if: $data.toolBoxVisible">
-                            <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.prepareToBeRemoved">[remove]</span>                        
-                        </span>
-                        <div style="padding-left: 1em;" data-bind="template: { name: 'additional-info-template' } " >
-                        </div>
-                        <div style="padding-left: 1em;" data-bind="template: { name: 'tag-template', foreach: $data.Tags } " >
-                        </div>
-                    </h2>
-                    
-                    
+                    <span>
+        
                 </span>
-               
-
-                
-                
-            </div>
-</script>
-
-<script type="text/html" id="card-template">
-        <div class="w3-col w3-container s12 m6 l4">
-            <div  data-bind="if: $data.isTopOfStack" >
-                <div class="webpad-top-of-stack" data-bind="template: { name: 'inner-card-template' } ">
-                </div>
-            </div>
-
-            <div data-bind="ifnot: $data.isTopOfStack" >
-                <div data-bind="if: $data.isInStack" >
-                    <div class="webpad-border-in-stack" data-bind="template: { name: 'inner-card-template' } ">
-                    </div>
-                </div>
-                <div data-bind="ifnot: $data.isInStack" >
-                    <div data-bind="template: { name: 'inner-card-template' } ">
-                    </div>
-                </div>
-            </div>
-            
-            
-            
-        </div>
-</script>
-
-<div class="" style="display: none; width: 100%;" data-bind="visible: !$root.PromoVisible()">
-    <!-- <div style="width: 100%;" class="webpad-working-area">
-        <div class="w3-row"  data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
-
-        </div>
-    </div>     -->
-    
-    <!-- <div class="w3-row">
-        <div class="w3-col w3-container s0 m3 l4">
-        </div>
-        <div class="w3-col w3-container s12 m6 l4">
-            <span data-bind="if: $root.stackOfCards().length > 0">                    
-                    <button style="width: 100%;" class="webpad-node webpad-purple" 
-                        data-bind="click: $root.clearStackOfCards">
-                        Close Working area
-                    </button>
-            </span>
-        </div>
-    </div> -->
-
-       
-    
-    
-
-    
-    <div style="width: 100%;" class="webpad-search-result-area">
-        <!-- <div class="w3-row"  data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
-
-        </div>
-        <div style="width: 100%" data-bind="if: $root.stackOfCards().length > 0">
-            <hr/>
-        </div>  -->
-        <div class="w3-row" data-bind="template: { name: 'card-template', foreach: mergedOpenedAndFilteredCards } ">
-
-        </div>
-        <div class="w3-row" data-bind="if: $root.ShowExtendCurrentResultLimit">
-            <div class="w3-col w3-container s0 m3 l4">
-           </div>
-           <div class="w3-col w3-container s12 m6 l4">
-               <span>                    
-                    <button style="width: 100%;" class="webpad-node webpad-green" 
-                        data-bind=
-                            "click: $root.ExtendCurrentResultLimit,
-                            text: 'Show more items ( ' + $root.NumberOfHiddenSearhItems() + ' hidden)'">
-                    </button>
-                </span>
-           </div>
-        </div>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-    </div>
-    
-</div>
-<div class="webpad-search-absolute-position" style="display: none;" data-bind="visible: !$root.PromoVisible(), style: {bottom: $root.searchBarPosition}">
-    <div class="w3-row">
-        <div class="w3-col w3-container s0 m3 l4">
-        </div>
         
-        <div class="w3-col w3-container s12 m6 l4">
-            <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">                    
-                    <button style="width: 100%;" class="webpad-node webpad-green" 
-                        data-bind="click: $root.CreateNoteFromSearchQuery">
-                        Create [Enter]
-                    </button>
-            </span>
-        </div>
-    </div>
-    <div class="w3-row">
-        <div class="w3-col w3-container s0 m3 l4">
-        </div>
+            </div>
+        </script>
         
-        <div class="w3-col w3-container s12 m6 l4">
-            <span data-bind="if: $root.SearchNotesQuery().trim().length > 0 && $root.stackOfSearch().length < 3">                    
-                    <button style="width: 100%;" class="webpad-node webpad-blue-print" 
-                        data-bind="click: $root.addToStackOfSearch">
-                        pin as filter [Shift + Enter]
-                    </button>
-            </span>
-        </div>
-    </div>
-    <div class="w3-row">
-        <div class="w3-col w3-container s0 m3 l4">
-        </div>
-        
-        <div class="w3-col w3-container s12 m6 l4">
-            <span data-bind="foreach: lookup.stackOfSearch">
-                <button  class="webpad-node webpad-blue-print" 
-                    data-bind=" click: $root.removeFromStackOfSearch">
-                    <span data-bind="text: $data">
-                    </span>
-                    <div class=" webpad-button-no-border">
-                        <object type="image/svg+xml" data="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Remove search filter" ></object> 
-                    </div>
-                    
-                </button>
-            </span>
-        </div>
-    </div>
-    <div class="w3-row">
-        <div class="w3-col w3-container s0 m2 l3">
-        </div>
-        <div class="w3-col w3-container s12 m8 l6">
-            <h2>
+        <script type="text/html" id="additional-info-template">
             
-                    <input 
-                        placeholder="Create or search note..." 
-                        class="webpad-search-bar"
-                        type="text" 
+            <span class="webpad-extra-information-plus-icon" data-bind="ifnot: $data.AdditionalInformationTextVisible">
+                <h1>
+                    <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
+                        <object type="image/svg+xml" data="svg/plus.svg" class="webpad-edit-pencil" alt="Add information" ></object> 
+                    </div>
+                </h1>
+            </span>
+            
+            <span data-bind="if: $data.AdditionalInformationTextVisible">
+                <h2>
+                    <h1>
+                        <div  class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
+                            <object type="image/svg+xml" data="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Cancel edit" ></object> 
+                        </div>
+                    </h1>
+                    <span style="width: 100%;" class="webpad-break-words-node"
                         data-bind="
-                            textInput: $root.SearchNotesQuery,
-                            event: {keypress: $root.searchBarKeyPress}
-                            " 
-                    />
-
+                                style:
+                                {
+                                    color: $data.AdditionalInformationTextColor,
+                                },">
+                        <input 
+                            placeholder="input information" 
+                            class="webpad-extra-information"
+                            type="text" 
+                            data-bind="
+                                textInput:  $data.AdditionalInformationText,
+                                event: {keypress: $root.additionalInfoKeyPress, blur: $data.blurHandler}, 
+                                hasFocus: $data.AdditionalInformationTextFocus(),
+                                attr: {id:  'exi' + $data.Note.id}
+                                " 
+                        />
+                    </span>
+                    
+                    <span 
+                        data-bind="
+                                if: $data.AdditionalInformationText().trim().length > 0">
+                        <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.AddNoteToExistingOne">
+                            <object type="image/svg+xml" data="svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" ></object> 
+                            <span style="color: aliceblue;">
+                            [Enter]
+                            </span>
+                        </div>
+                    </span>
+                    
+                </h2>
+                
+            </span>
+        </script>
+        
+        <script type="text/html" id="inner-card-template">
+                    <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
+                        <span data-bind="if: $data.toBeRemoved">
+                            <span data-bind="ifnot: $data.completlyRemoved">
+                                <h2>
+                                    <span 
+                                            placeholder="..." 
+                                            class="webpad-contenteditable webpad-break-words-node"
+                                            data-bind="
+                                                contentEditable: false,
+                                                htmlLazy:  $data.Note.text,
+                                                style:
+                                                {
+                                                    color: $data.Note.color,
+                                                },
+                                                event: {blur: $root.SwitchEditOfCard},
+                                                hasFocus: $data.underEdit
+                                                " 
+                                        ></span>
+                                    <div>
+                                        <h1 style="color: aliceblue;"  >
+                                            0_0
+                                        </h1>
+                                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">Really remove?</span>
+                                        <br/>
+                                        <span  style="color: #64e05e;" data-bind=" click: $data.rollbackRemoval">[no-no-no]</span>
+                                        <br/>
+                                        <br/>
+                                        <span  style="color: #ffa26b;" data-bind=" click: $data.reallyRemove">[yes.]</span>
+                                    </div>
+                                    
+                                </h2>
+                            </span>
+                            <span data-bind="if: $data.completlyRemoved">
+                                <br/>
+                                <br/>
+                                <span class="webpad-brightness-dimmed" style="color: aliceblue;" >removing...</span>
+                            </span>
+                            
+                        </span>
+                        <span data-bind="ifnot: $data.toBeRemoved">
+                            <h2>
+                                <span data-bind="if: $data.Note.isDone">
+                                    <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.switchDone">[x]</span>
+                                    <span class="webpad-brightness-dimmed" data-bind="ifnot: $data.underEdit">
+                                        <span 
+                                            placeholder="..." 
+                                            class="webpad-contenteditable webpad-break-words-node"
+                                            data-bind="
+                                                contentEditable: false,
+                                                htmlLazy:  $data.Note.text,
+                                                style:
+                                                {
+                                                    color: $data.Note.color,
+                                                    'text-decoration': 'line-through'
+                                                },
+                                                event: {blur: $root.SwitchEditOfCard},
+                                                hasFocus: $data.underEdit
+                                                " 
+                                        ></span>
+                                    </span>
+                                </span>
+                                <span data-bind="ifnot: $data.Note.isDone">
+                                    <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
+                                    <span data-bind="ifnot: $data.underEdit">
+                                        <span 
+                                            placeholder="..." 
+                                            class="webpad-contenteditable webpad-break-words-node"
+                                            data-bind="
+                                                contentEditable: $data.underEdit,
+                                                htmlLazy:  $data.Note.text,
+                                                style:
+                                                {
+                                                    color: $data.Note.color,
+                                                },
+                                                event: {blur: $root.SwitchEditOfCard},
+                                                hasFocus: $data.underEdit
+                                                " 
+                                        ></span>
+                                    </span>
+                                </span>
+                                <span data-bind="if: $data.underEdit">
+                                    <span 
+                                            placeholder="..." 
+                                            class="webpad-contenteditable webpad-main-information webpad-break-words-node"
+                                            data-bind="
+                                                contentEditable: $data.underEdit,
+                                                htmlLazy:  $data.Note.text,
+                                                style:
+                                                {
+                                                    color: $data.Note.color,
+                                                },
+                                                event: {blur: $root.SwitchEditOfCard},
+                                                hasFocus: $data.underEdit
+                                                " 
+                                        ></span>
+                                        <!-- <input 
+                                            placeholder="..." 
+                                            class="webpad-main-information"
+                                            type="text" 
+                                            data-bind="
+                                                textInput:  $data.Note.text,
+                                                style:
+                                                {
+                                                    color: $data.Note.color,
+                                                },
+                                                event: {blur: $root.SwitchEditOfCard},
+                                                hasFocus: $data.underEdit
+                                                " 
+                                        /> -->
+                                    <!-- <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
+                                        <object type="image/svg+xml" data="svg/check.svg" class="webpad-edit-pencil" alt="Close edit" ></object> 
+                                    </div> -->
+                                </span>
+                                <span data-bind="if: $data.toolBoxVisible">
+                                    <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^_^]</span>
+                                </span>
+                                <span data-bind="ifnot: $data.toolBoxVisible">
+                                    <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="open toolbox">[..]</span>
+                                </span>
+                                <span data-bind="if: $data.toolBoxVisible">
+                                    <span data-bind="ifnot: $data.underEdit">
+                                        <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
+                                            <object type="image/svg+xml" data="svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit"></object> 
+                                        </div>
+                                    </span>
+                                </span>
+                                <span data-bind="if: $data.toolBoxVisible">
+                                    <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.prepareToBeRemoved">[remove]</span>                        
+                                </span>
+                                <div style="padding-left: 1em;" data-bind="template: { name: 'additional-info-template' } " >
+                                </div>
+                                <div style="padding-left: 1em;" data-bind="template: { name: 'tag-template', foreach: $data.Tags } " >
+                                </div>
+                            </h2>
+                            
+                            
+                        </span>
+                       
+        
+                        
+                        
+                    </div>
+        </script>
+        
+        <script type="text/html" id="card-template">
+                <div class="w3-col w3-container s12 m6 l4">
+                    <div  data-bind="if: $data.isTopOfStack" >
+                        <div class="webpad-top-of-stack" data-bind="template: { name: 'inner-card-template' } ">
+                        </div>
+                    </div>
+        
+                    <div data-bind="ifnot: $data.isTopOfStack" >
+                        <div data-bind="if: $data.isInStack" >
+                            <div class="webpad-border-in-stack" data-bind="template: { name: 'inner-card-template' } ">
+                            </div>
+                        </div>
+                        <div data-bind="ifnot: $data.isInStack" >
+                            <div data-bind="template: { name: 'inner-card-template' } ">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                </div>
+        </script>
+        
+        <div class="" style="display: none; width: 100%;" data-bind="visible: !$root.PromoVisible()">
+            <!-- <div style="width: 100%;" class="webpad-working-area">
+                <div class="w3-row"  data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
+        
+                </div>
+            </div>     -->
             
-            </h2>
+            <!-- <div class="w3-row">
+                <div class="w3-col w3-container s0 m3 l4">
+                </div>
+                <div class="w3-col w3-container s12 m6 l4">
+                    <span data-bind="if: $root.stackOfCards().length > 0">                    
+                            <button style="width: 100%;" class="webpad-node webpad-purple" 
+                                data-bind="click: $root.clearStackOfCards">
+                                Close Working area
+                            </button>
+                    </span>
+                </div>
+            </div> -->
+        
+               
+            
+            
+        
+            
+            <div style="width: 100%;" class="webpad-search-result-area">
+                <!-- <div class="w3-row"  data-bind="template: { name: 'card-template', foreach: stackOfCards } ">
+        
+                </div>
+                <div style="width: 100%" data-bind="if: $root.stackOfCards().length > 0">
+                    <hr/>
+                </div>  -->
+                <div class="w3-row" data-bind="template: { name: 'card-template', foreach: mergedOpenedAndFilteredCards } ">
+        
+                </div>
+                <div class="w3-row" data-bind="if: $root.ShowExtendCurrentResultLimit">
+                    <div class="w3-col w3-container s0 m3 l4">
+                   </div>
+                   <div class="w3-col w3-container s12 m6 l4">
+                       <span>                    
+                            <button style="width: 100%;" class="webpad-node webpad-green" 
+                                data-bind=
+                                    "click: $root.ExtendCurrentResultLimit,
+                                    text: 'Show more items ( ' + $root.NumberOfHiddenSearhItems() + ' hidden)'">
+                            </button>
+                        </span>
+                   </div>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+            </div>
+            
         </div>
-    </div>
-    
-    
-
-</div>
+        <div class="webpad-search-absolute-position" style="display: none;" data-bind="visible: !$root.PromoVisible(), style: {bottom: $root.searchBarPosition}">
+            <div class="w3-row">
+                <div class="w3-col w3-container s0 m3 l4">
+                </div>
+                
+                <div class="w3-col w3-container s12 m6 l4">
+                    <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">                    
+                            <button style="width: 100%;" class="webpad-node webpad-green" 
+                                data-bind="click: $root.CreateNoteFromSearchQuery">
+                                Create [Enter]
+                            </button>
+                    </span>
+                </div>
+            </div>
+            <div class="w3-row">
+                <div class="w3-col w3-container s0 m3 l4">
+                </div>
+                
+                <div class="w3-col w3-container s12 m6 l4">
+                    <span data-bind="if: $root.SearchNotesQuery().trim().length > 0 && $root.stackOfSearch().length < 3">                    
+                            <button style="width: 100%;" class="webpad-node webpad-blue-print" 
+                                data-bind="click: $root.addToStackOfSearch">
+                                pin as filter [Shift + Enter]
+                            </button>
+                    </span>
+                </div>
+            </div>
+            <div class="w3-row">
+                <div class="w3-col w3-container s0 m3 l4">
+                </div>
+                
+                <div class="w3-col w3-container s12 m6 l4">
+                    <span data-bind="foreach: lookup.stackOfSearch">
+                        <button  class="webpad-node webpad-blue-print" 
+                            data-bind=" click: $root.removeFromStackOfSearch">
+                            <span data-bind="text: $data">
+                            </span>
+                            <div class=" webpad-button-no-border">
+                                <object type="image/svg+xml" data="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Remove search filter" ></object> 
+                            </div>
+                            
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="w3-row">
+                <div class="w3-col w3-container s0 m2 l3">
+                </div>
+                <div class="w3-col w3-container s12 m8 l6">
+                    <h2>
+                    
+                            <input 
+                                placeholder="Create or search note..." 
+                                class="webpad-search-bar"
+                                type="text" 
+                                data-bind="
+                                    textInput: $root.SearchNotesQuery,
+                                    event: {keypress: $root.searchBarKeyPress}
+                                    " 
+                            />
+        
+                    
+                    </h2>
+                </div>
+            </div>
+            
+            
+        
+        </div>
+        
+</body>
+</html>
