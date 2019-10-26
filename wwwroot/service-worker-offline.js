@@ -1,4 +1,4 @@
-var current_cache_name = "v36";
+var current_cache_name = "v37";
 self.addEventListener('install', event => {
     console.log(current_cache_name + ' installing…');
     event.waitUntil(
@@ -34,17 +34,7 @@ self.addEventListener('install', event => {
         return response;
       } else {
         return fetch(event.request).then(function (response) {
-          // response may be used only once
-          // we need to save clone to put one copy in cache
-          // and serve second one
-          let responseClone = response.clone();
-          
-          if(event.request.method !== "POST")
-          {
-            caches.open(current_cache_name).then(function (cache) {
-              cache.put(event.request, responseClone);
-            });
-          }
+          // do not cache because it takes to long to update web-site
           return response;
         }).catch(function () {
           return caches.match('/svg/plus.svg');
