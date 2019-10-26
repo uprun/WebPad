@@ -65,4 +65,18 @@ function model_Connection(data)
     {
         self.DisplayNextLevel(!self.DisplayNextLevel());
     };
+    self.toUnlink = ko.observable(false);
+    self.prepareToUnlink = function()
+    {
+        self.toUnlink(true);
+    };
+    self.cancelUnlink = function()
+    {
+        self.toUnlink(false);
+    };
+    self.confirmUnlink = function()
+    {
+        lookup.RemoveConnection(self);
+    };
+
 };

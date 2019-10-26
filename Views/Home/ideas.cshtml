@@ -236,7 +236,34 @@ border-style: dashed; -->
 
 <script type="text/html" id="tag-template">
     <div>
-        <span data-bind="">
+        <span data-bind="if: $data.toUnlink">
+            <span
+                class="webpad-break-words-node" data-bind=
+            "
+                style:
+                {
+                    color: $data.Destination.color,
+                },
+                text:$data.Destination.textAlmost
+                ">
+            </span>
+            <div style="padding-left: 1.4em;">
+                <span class="webpad-brightness-dimmed" style="color: aliceblue;">
+                    really unlink?
+                </span>
+                <br/>
+                <span style="color: #64e05e;" data-bind="click: $data.cancelUnlink">
+                    [no-no-no]
+                </span>
+                <br/>
+                <br/>
+                <span style="color: #ffa26b;" data-bind="click: $data.confirmUnlink">
+                    [yes.]
+                </span>
+            </div>
+            
+        </span>
+        <span data-bind="ifnot: $data.toUnlink">
             <span data-bind="if: $data.Destination.isDone">
                 <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.switchDone">[x]</span>
                 <span class="webpad-brightness-dimmed" data-bind="ifnot: $data.underEdit">
@@ -278,7 +305,7 @@ border-style: dashed; -->
             <span data-bind="if: $data.toolBoxVisible">
                 <span class="webpad-brightness-dimmed" style="color: #d190ff;" data-bind="click: $root.jumpToCard, attr: {href: '#' + $data.Destination.id }">[focus&nbsp;on]
                 </span>
-                <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $root.RemoveConnection">[disconnect]</span>
+                <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.prepareToUnlink">[unlink]</span>
             </span>
 
             <span data-bind="if: $data.DestinationCard && $data.DestinationCard.Tags().length > 0 ">
@@ -400,19 +427,18 @@ border-style: dashed; -->
                                         hasFocus: $data.underEdit
                                         " 
                                 ></span>
-                            <br/>
-                            <h1 style="color: aliceblue;"  >
-                                0_0
-                            </h1>
-                            <br/>
-                            <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">Really remove?</span>
-                            <br/>
-                            <br/>
-                            <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.rollbackRemoval">[no-no-no]</span>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.reallyRemove">[yes.]</span>
+                            <div>
+                                <h1 style="color: aliceblue;"  >
+                                    0_0
+                                </h1>
+                                <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">Really remove?</span>
+                                <br/>
+                                <span  style="color: #64e05e;" data-bind=" click: $data.rollbackRemoval">[no-no-no]</span>
+                                <br/>
+                                <br/>
+                                <span  style="color: #ffa26b;" data-bind=" click: $data.reallyRemove">[yes.]</span>
+                            </div>
+                            
                         </h2>
                     </span>
                     <span data-bind="if: $data.completlyRemoved">
