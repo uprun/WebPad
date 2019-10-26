@@ -303,7 +303,7 @@ function ConnectedNotesViewModel()
         .history
         .extend(
             { 
-                rateLimit: 3000 
+                rateLimit: 500 
             }
         )
         .subscribe(
@@ -393,7 +393,7 @@ function ConnectedNotesViewModel()
 
     lookup.SearchNotesQuery = ko.observable("");
     lookup.SearchNotesQuery
-        .extend({ rateLimit: 500 });
+        .extend({ rateLimit: 200 });
     lookup.SearchNotesQuery.subscribe(function(value){
         console.log('clear');
         // do not remove stack if card is just created
