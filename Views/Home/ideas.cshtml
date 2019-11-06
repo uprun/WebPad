@@ -365,12 +365,21 @@
                     </span>
                     
                     <span data-bind="if: $data.toolBoxVisible">
-                        <span class="webpad-brightness-dimmed" style="color: #d190ff;" data-bind="click: $root.jumpToCard, attr: {href: '#' + $data.Destination.id }">[focus&nbsp;on]
+                        <!-- <span class="webpad-brightness-dimmed" style="color: #d190ff;" data-bind="click: $root.jumpToCard, attr: {href: '#' + $data.Destination.id }">[focus&nbsp;on]
+                        </span> -->
+                        <span class="webpad-brightness-dimmed" data-bind=" click: $root.jumpToCard">
+                            <object type="image/svg+xml" data="svg/pin-violet.svg" class="webpad-edit-pencil" alt="jump to sub-item"></object> 
                         </span>
-                        &nbsp;
-                        <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.prepareToUnlink">
-                            <object type="image/svg+xml" data="svg/unlink-orange.svg" class="webpad-edit-pencil" alt="remove"></object> 
+                        <!-- <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.jumpAndEdit">
+                            <object type="image/svg+xml" data="svg/pencil-alt.svg" class="webpad-edit-pencil" alt="edit sub-item"></object> 
                         </div>
+                        <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.jumpAndEdit">
+                            <object type="image/svg+xml" data="svg/plus.svg" class="webpad-edit-pencil" alt="edit sub-item"></object> 
+                        </div> -->
+                        &nbsp;
+                        <span class="webpad-brightness-dimmed " data-bind=" click: $data.prepareToUnlink">
+                            <object type="image/svg+xml" data="svg/unlink-orange.svg" class="webpad-edit-pencil" alt="remove"></object> 
+                        </span>
                         <!-- <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.prepareToUnlink">[unlink]</span> -->
                     </span>
         
