@@ -306,18 +306,22 @@
                         ">
                     </span>
                     <div style="padding-left: 1.4em;">
+                        <div class="webpad-brightness-dimmed webpad-button-no-border">
+                            <object type="image/svg+xml" data="svg/unlink-orange.svg" class="webpad-edit-pencil" alt="unlink question"></object> 
+                        </div>
                         <span class="webpad-brightness-dimmed" style="color: aliceblue;">
-                            really unlink?
+                            ?
                         </span>
                         <br/>
-                        <span style="color: #64e05e;" data-bind="click: $data.cancelUnlink">
-                            [no-no-no]
-                        </span>
-                        <br/>
-                        <br/>
-                        <span style="color: #ffa26b;" data-bind="click: $data.confirmUnlink">
-                            [yes.]
-                        </span>
+                       
+                        <div class=" webpad-button-no-border" data-bind="click: $data.cancelUnlink">
+                            <object type="image/svg+xml" data="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel unlink"></object> 
+                        </div>
+                        &nbsp;&nbsp;
+                        <div class=" webpad-button-no-border" data-bind="click: $data.confirmUnlink">
+                            <object type="image/svg+xml" data="svg/thumbs-up-orange.svg" class="webpad-edit-pencil" alt="confirm unlink"></object> 
+                        </div>
+                       
                     </div>
                     
                 </span>
@@ -363,7 +367,11 @@
                     <span data-bind="if: $data.toolBoxVisible">
                         <span class="webpad-brightness-dimmed" style="color: #d190ff;" data-bind="click: $root.jumpToCard, attr: {href: '#' + $data.Destination.id }">[focus&nbsp;on]
                         </span>
-                        <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.prepareToUnlink">[unlink]</span>
+                        &nbsp;
+                        <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.prepareToUnlink">
+                            <object type="image/svg+xml" data="svg/unlink-orange.svg" class="webpad-edit-pencil" alt="remove"></object> 
+                        </div>
+                        <!-- <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.prepareToUnlink">[unlink]</span> -->
                     </span>
         
                     <span data-bind="if: $data.DestinationCard && $data.DestinationCard.Tags().length > 0 ">
@@ -603,7 +611,6 @@
                                     <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.prepareToBeRemoved">
                                         <object type="image/svg+xml" data="svg/trash-orange.svg" class="webpad-edit-pencil" alt="remove"></object> 
                                     </div>
-                                    <!-- <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.prepareToBeRemoved">[remove]</span> -->
                                 </span>
                                 <div style="padding-left: 1em;" data-bind="template: { name: 'additional-info-template' } " >
                                 </div>
