@@ -487,14 +487,19 @@
                                         ></span>
                                     <div>
                                         <h1 style="color: aliceblue;"  >
-                                            0_0
+                                            0_0 
+                                            <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" ">
+                                                <object type="image/svg+xml" data="svg/trash-orange.svg" class="webpad-edit-pencil" alt="rollback removal"></object> 
+                                            </div>
+                                            <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" ">?</span>
                                         </h1>
-                                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">Really remove?</span>
-                                        <br/>
-                                        <span  style="color: #64e05e;" data-bind=" click: $data.rollbackRemoval">[no-no-no]</span>
-                                        <br/>
-                                        <br/>
-                                        <span  style="color: #ffa26b;" data-bind=" click: $data.reallyRemove">[yes.]</span>
+                                        <div class="webpad-button-no-border" data-bind=" click: $data.rollbackRemoval">
+                                            <object type="image/svg+xml" data="svg/times-green.svg" class="webpad-edit-pencil" alt="rollback removal"></object> 
+                                        </div>
+                                        &nbsp;&nbsp;
+                                        <div class="webpad-button-no-border" data-bind=" click: $data.reallyRemove">
+                                            <object type="image/svg+xml" data="svg/thumbs-up-orange.svg" class="webpad-edit-pencil" alt="really remove"></object> 
+                                        </div>
                                     </div>
                                     
                                 </h2>
@@ -593,8 +598,12 @@
                                         </div>
                                     </span>
                                 </span>
+                                &nbsp;
                                 <span data-bind="if: $data.toolBoxVisible">
-                                    <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.prepareToBeRemoved">[remove]</span>                        
+                                    <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.prepareToBeRemoved">
+                                        <object type="image/svg+xml" data="svg/trash-orange.svg" class="webpad-edit-pencil" alt="remove"></object> 
+                                    </div>
+                                    <!-- <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.prepareToBeRemoved">[remove]</span> -->
                                 </span>
                                 <div style="padding-left: 1em;" data-bind="template: { name: 'additional-info-template' } " >
                                 </div>
