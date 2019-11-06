@@ -307,7 +307,7 @@
                     </span>
                     <div style="padding-left: 1.4em;">
                         <div class="webpad-brightness-dimmed webpad-button-no-border">
-                            <object type="image/svg+xml" data="svg/unlink-orange.svg" class="webpad-edit-pencil" alt="unlink question"></object> 
+                            <img src="svg/unlink-orange.svg" class="webpad-edit-pencil" alt="unlink question"/> 
                         </div>
                         <span class="webpad-brightness-dimmed" style="color: aliceblue;">
                             ?
@@ -315,11 +315,11 @@
                         <br/>
                        
                         <div class=" webpad-button-no-border" data-bind="click: $data.cancelUnlink">
-                            <object type="image/svg+xml" data="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel unlink"></object> 
+                            <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel unlink"/> 
                         </div>
                         &nbsp;&nbsp;
                         <div class=" webpad-button-no-border" data-bind="click: $data.confirmUnlink">
-                            <object type="image/svg+xml" data="svg/thumbs-up-orange.svg" class="webpad-edit-pencil" alt="confirm unlink"></object> 
+                            <img src="svg/thumbs-up-orange.svg" class="webpad-edit-pencil" alt="confirm unlink"/> 
                         </div>
                        
                     </div>
@@ -365,22 +365,20 @@
                     </span>
                     
                     <span data-bind="if: $data.toolBoxVisible">
-                        <!-- <span class="webpad-brightness-dimmed" style="color: #d190ff;" data-bind="click: $root.jumpToCard, attr: {href: '#' + $data.Destination.id }">[focus&nbsp;on]
-                        </span> -->
+                        
                         <span class="webpad-brightness-dimmed" data-bind=" click: $root.jumpToCard">
-                            <object type="image/svg+xml" data="svg/pin-violet.svg" class="webpad-edit-pencil" alt="jump to sub-item"></object> 
+                            <img src="svg/pin-violet.svg" class="webpad-edit-pencil" alt="jump to sub-item"/>
                         </span>
                         <!-- <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.jumpAndEdit">
-                            <object type="image/svg+xml" data="svg/pencil-alt.svg" class="webpad-edit-pencil" alt="edit sub-item"></object> 
+                            <img src="svg/pencil-alt.svg" class="webpad-edit-pencil" alt="edit sub-item"/> 
                         </div>
                         <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.jumpAndEdit">
-                            <object type="image/svg+xml" data="svg/plus.svg" class="webpad-edit-pencil" alt="edit sub-item"></object> 
+                            <img src="svg/plus.svg" class="webpad-edit-pencil" alt="edit sub-item"/> 
                         </div> -->
                         &nbsp;
                         <span class="webpad-brightness-dimmed " data-bind=" click: $data.prepareToUnlink">
-                            <object type="image/svg+xml" data="svg/unlink-orange.svg" class="webpad-edit-pencil" alt="remove"></object> 
+                            <img src="svg/unlink-orange.svg" class="webpad-edit-pencil" alt="remove"/> 
                         </span>
-                        <!-- <span class="webpad-brightness-dimmed" style="color: #ffa26b;" data-bind=" click: $data.prepareToUnlink">[unlink]</span> -->
                     </span>
         
                     <span data-bind="if: $data.DestinationCard && $data.DestinationCard.Tags().length > 0 ">
@@ -436,7 +434,7 @@
             <span class="webpad-extra-information-plus-icon" data-bind="ifnot: $data.AdditionalInformationTextVisible">
                 <h1>
                     <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
-                        <object type="image/svg+xml" data="svg/plus.svg" class="webpad-edit-pencil" alt="Add information" ></object> 
+                        <img src="svg/plus.svg" class="webpad-edit-pencil" alt="Add information" /> 
                     </div>
                 </h1>
             </span>
@@ -445,7 +443,7 @@
                 <h2>
                     <h1>
                         <div  class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
-                            <object type="image/svg+xml" data="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Cancel edit" ></object> 
+                            <img src="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Cancel edit" /> 
                         </div>
                     </h1>
                     <span style="width: 100%;" class="webpad-break-words-node"
@@ -471,7 +469,7 @@
                         data-bind="
                                 if: $data.AdditionalInformationText().trim().length > 0">
                         <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.AddNoteToExistingOne">
-                            <object type="image/svg+xml" data="svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" ></object> 
+                            <img src="svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" /> 
                             <span style="color: aliceblue;">
                             [Enter]
                             </span>
@@ -506,16 +504,16 @@
                                         <h1 style="color: aliceblue;"  >
                                             0_0 
                                             <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" ">
-                                                <object type="image/svg+xml" data="svg/trash-orange.svg" class="webpad-edit-pencil" alt="rollback removal"></object> 
+                                                <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="rollback removal"/> 
                                             </div>
                                             <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" ">?</span>
                                         </h1>
                                         <div class="webpad-button-no-border" data-bind=" click: $data.rollbackRemoval">
-                                            <object type="image/svg+xml" data="svg/times-green.svg" class="webpad-edit-pencil" alt="rollback removal"></object> 
+                                            <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="rollback removal"/> 
                                         </div>
                                         &nbsp;&nbsp;
                                         <div class="webpad-button-no-border" data-bind=" click: $data.reallyRemove">
-                                            <object type="image/svg+xml" data="svg/thumbs-up-orange.svg" class="webpad-edit-pencil" alt="really remove"></object> 
+                                            <img src="svg/thumbs-up-orange.svg" class="webpad-edit-pencil" alt="really remove"/> 
                                         </div>
                                     </div>
                                     
@@ -599,7 +597,7 @@
                                                 " 
                                         /> -->
                                     <!-- <div class=" webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
-                                        <object type="image/svg+xml" data="svg/check.svg" class="webpad-edit-pencil" alt="Close edit" ></object> 
+                                        <img src="svg/check.svg" class="webpad-edit-pencil" alt="Close edit" /> 
                                     </div> -->
                                 </span>
                                 <span data-bind="if: $data.toolBoxVisible">
@@ -611,14 +609,14 @@
                                 <span data-bind="if: $data.toolBoxVisible">
                                     <span data-bind="ifnot: $data.underEdit">
                                         <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
-                                            <object type="image/svg+xml" data="svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit"></object> 
+                                            <img src="svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit"/> 
                                         </div>
                                     </span>
                                 </span>
                                 &nbsp;
                                 <span data-bind="if: $data.toolBoxVisible">
                                     <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.prepareToBeRemoved">
-                                        <object type="image/svg+xml" data="svg/trash-orange.svg" class="webpad-edit-pencil" alt="remove"></object> 
+                                        <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="remove"/> 
                                     </div>
                                 </span>
                                 <div style="padding-left: 1em;" data-bind="template: { name: 'additional-info-template' } " >
@@ -754,7 +752,7 @@
                             <span data-bind="text: $data">
                             </span>
                             <div class=" webpad-button-no-border">
-                                <object type="image/svg+xml" data="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Remove search filter" ></object> 
+                                <img src="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Remove search filter" /> 
                             </div>
                             
                         </button>
