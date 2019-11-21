@@ -914,15 +914,29 @@ function ConnectedNotesViewModel()
 
     
     lookup.AddNoteToExistingOne = function(existing) {
-        var obj = {
-            text: existing.AdditionalInformationText(),
-            textColor: existing.AdditionalInformationTextColor()
-        };
-        lookup.CreateNote(obj, function(destination) { 
-            lookup.ConnectNotes(existing.Note, destination);  
-            existing.AdditionalInformationText("");
-            existing.AdditionalInformationTextColor(lookup.GetRandomColor().Color());
-        });
+        var extraText = existing.AdditionalInformationText();
+        if(typeof(extraText) !== "undefined")
+        {
+            extraText = extraText.trim();
+        }
+        else
+        {
+            extraText = "";
+        }
+        // block adding of extra information if it is empty
+        if(extraText.length !== 0)
+        {
+            var obj = {
+                text: extraText,
+                textColor: existing.AdditionalInformationTextColor()
+            };
+            lookup.CreateNote(obj, function(destination) { 
+                lookup.ConnectNotes(existing.Note, destination);  
+                existing.AdditionalInformationText("");
+                existing.AdditionalInformationTextColor(lookup.GetRandomColor().Color());
+            });
+        }
+        
     };
 
 
