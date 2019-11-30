@@ -176,6 +176,12 @@ a
     width: 100%;
 }
 
+.webpad-extra-information-container
+{
+    width: calc();
+
+}
+
 .webpad-extra-information-plus-icon
 {
    vertical-align: middle;

@@ -1066,6 +1066,7 @@ function ConnectedNotesViewModel()
                 console.log('create');
                 lookup.SearchNotesQuery("");
                 lookup.jumpToCardOnCreate(added);
+                lookup.assign_labels_by_dictionary(added);
             }
         );
     };
@@ -1082,7 +1083,7 @@ function ConnectedNotesViewModel()
     lookup.ConnectPreviousWithCurrent = function(data) {
         // prevent self-selection, because self-loops are not allowed here
         if(lookup.previousConnectFrom() != data){
-            lookup.ConnectNotes(lookup.previousConnectFrom().Note, data.Note )
+            lookup.ConnectNotes(lookup.previousConnectFrom().Note, data.Note );
             lookup.previousConnectFrom(null);
         }
     };

@@ -113,8 +113,10 @@
         <script language="JavaScript" type="text/javascript" src="js/RemoveNote.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/migrateConnectionToNode.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/Instanciate_model_connection.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/dictionary_uk_ua.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/mainPage.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/document_ready_ideas.js" asp-append-version="true"></script>
+        
         
         <div vocab="https://schema.org/"
             typeof="WebApplication" style="display: none;">
@@ -432,20 +434,17 @@
         <script type="text/html" id="additional-info-template">
             
             <span class="webpad-extra-information-plus-icon" data-bind="ifnot: $data.AdditionalInformationTextVisible">
-                <h1>
-                    <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
+                
+                    <span class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
                         <img src="svg/plus.svg" class="webpad-edit-pencil" alt="Add information" /> 
-                    </div>
-                </h1>
+                    </span>
             </span>
             
             <span data-bind="if: $data.AdditionalInformationTextVisible">
                 <h2>
-                    <h1>
-                        <div  class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
+                        <span  class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
                             <img src="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Cancel edit" /> 
-                        </div>
-                    </h1>
+                        </span>
                     <span style="width: 100%;" class="webpad-break-words-node"
                         data-bind="
                                 style:
@@ -619,7 +618,7 @@
                                         <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="remove"/> 
                                     </div>
                                 </span>
-                                <div style="padding-left: 1em;" data-bind="template: { name: 'additional-info-template' } " >
+                                <div style="" data-bind="template: { name: 'additional-info-template' } " >
                                 </div>
                                 <div style="padding-left: 1em;" data-bind="template: { name: 'tag-template', foreach: $data.Tags } " >
                                 </div>
