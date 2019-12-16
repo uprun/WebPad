@@ -1,7 +1,12 @@
 ﻿
-body {
+body.dark {
     margin: 0px;
     background-color:#333333;
+}
+
+body.night {
+    margin: 0px;
+    background-color:#000000;
 }
 
 div {
@@ -268,7 +273,7 @@ a
     width: 100%;
     position: fixed;
     bottom: 0px;
-    background:#333333;
+    background:inherit;
 }
 
 .webpad-color-orange{ 
