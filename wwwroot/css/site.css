@@ -165,6 +165,8 @@ a
     border-radius: .3em;
     border-style: solid;
     border-color: aliceblue;
+    padding-left: .3em;
+    padding-right: .3em;
 }
 .webpad-search-bar::placeholder
 {
@@ -179,6 +181,8 @@ a
     border-color: aliceblue;
     border-style: solid;
     width: 100%;
+    padding-left: .3em;
+    padding-right: .3em;
 }
 
 .webpad-extra-information-container
