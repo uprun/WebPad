@@ -584,7 +584,7 @@ function ConnectedNotesViewModel()
         {
             $.ajax({
                 type: "POST",
-                url: "SendMessages",
+                url: "Home/SendMessages",
                 data: {
                     messages: [
                         {
@@ -825,7 +825,7 @@ function ConnectedNotesViewModel()
         {
             $.ajax({
                 type: "POST",
-                url: "GetOneTimeSynchronizationToken",
+                url: "Home/GetOneTimeSynchronizationToken",
                 data: {
                     publicKey: lookup.publicCryptoKey()
                 },
@@ -844,7 +844,7 @@ function ConnectedNotesViewModel()
         {
             $.ajax({
                 type: "POST",
-                url: "StatisticsOnLoad",
+                url: "Home/StatisticsOnLoad",
                 data: {
                     publicKey: lookup.publicCryptoKey()
                 },
@@ -863,7 +863,7 @@ function ConnectedNotesViewModel()
         {
             $.ajax({
                 type: "POST",
-                url: "GetSyncPublicKey",
+                url: "Home/GetSyncPublicKey",
                 data: {
                     token: lookup.SynchronizationToken().trim()
                 },
