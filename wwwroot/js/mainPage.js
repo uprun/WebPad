@@ -611,7 +611,7 @@ function ConnectedNotesViewModel()
         {
             $.ajax({
                 type: "POST",
-                url: "ReceiveMessages",
+                url: "Home/ReceiveMessages",
                 data: {
                     publicKey: publicKey
                 },

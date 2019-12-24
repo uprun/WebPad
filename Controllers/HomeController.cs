@@ -47,6 +47,7 @@ namespace ConnectedNotes.Controllers
             return $"{firstPart}{toSelect[secondIndex]}{toSelect[secondIndex_2]}{thirdPart}{toSelect[fourthIndex]}{toSelect[fourthIndex_2]}";
         }
 
+        [HttpPost]
         [Throttle(Name = nameof(GetOneTimeSynchronizationToken), Seconds = 10)]
         public JsonResult GetOneTimeSynchronizationToken(string publicKey)
         {
@@ -76,7 +77,7 @@ namespace ConnectedNotes.Controllers
             
         }
         
-
+        [HttpPost]
         public JsonResult SendMessages(Message[] messages, string senderPublicKey)
         {
             if(messages.Length > 10)
@@ -115,6 +116,7 @@ namespace ConnectedNotes.Controllers
             
         }
 
+        [HttpPost]
         public JsonResult ReceiveMessages(string publicKey)
         { // potential place for abuse, because anyone who nows my public key can receive messages for me, but on the other hand they are encrypted
             var result = new List<string>();
@@ -136,6 +138,7 @@ namespace ConnectedNotes.Controllers
             
         }
 
+        [HttpPost]
         public JsonResult StatisticsOnLoad(string publicKey)
         {
             Console.WriteLine($"StatisticsOnLoad ip: {HttpContext.Connection.RemoteIpAddress.ToString()}");
