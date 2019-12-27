@@ -345,7 +345,7 @@
                         </span>
                     </span>
                     <span data-bind="ifnot: $data.Destination.isDone">
-                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
+                        <!----><span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
                         <span data-bind="ifnot: $data.underEdit">
                             <span
                                 class="webpad-break-words-node" data-bind=
@@ -453,7 +453,7 @@
                                 },">
                         <input 
                             placeholder="input information" 
-                            class="webpad-extra-information"
+                            class="webpad-extra-information w3-animate-opacity"
                             type="text" 
                             data-bind="
                                 textInput:  $data.AdditionalInformationText,
@@ -481,7 +481,7 @@
         </script>
         
         <script type="text/html" id="inner-card-template">
-                    <div class="webpad-card" data-bind="attr: {id: $data.Note.id }">
+                    <div class="webpad-card w3-animate-opacity" data-bind="attr: {id: $data.Note.id }">
                         <span data-bind="if: $data.toBeRemoved">
                             <span data-bind="ifnot: $data.completlyRemoved">
                                 <h2>
@@ -548,7 +548,7 @@
                                     </span>
                                 </span>
                                 <span data-bind="ifnot: $data.Note.isDone">
-                                    <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
+                                    <!----><span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
                                     <span data-bind="ifnot: $data.underEdit">
                                         <span 
                                             placeholder="..." 
@@ -618,7 +618,7 @@
                                         <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="remove"/> 
                                     </div>
                                 </span>
-                                <div style="" data-bind="template: { name: 'additional-info-template' } " >
+                                <!----><div style="" data-bind="template: { name: 'additional-info-template' } " >
                                 </div>
                                 <div style="padding-left: 1em;" data-bind="template: { name: 'tag-template', foreach: $data.Tags } " >
                                 </div>
