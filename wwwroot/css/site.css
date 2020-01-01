@@ -1,12 +1,9 @@
 ﻿
-body.dark {
-    margin: 0px;
-    background-color:#333333;
-}
 
-body.night {
+.night {
     margin: 0px;
     background-color:#000000;
+    min-height: 100vh;
 }
 
 div {
@@ -73,6 +70,7 @@ span {
     /* border-style: dashed; */
     border-style: none;
     padding-bottom: 1em;
+    transition: left 0.3s, top 0.3s;
 }
 
 .webpad-inline
