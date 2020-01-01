@@ -278,6 +278,28 @@ a
     background:inherit;
 }
 
+.webpad-header-absolute-position
+{
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    background:inherit;
+    z-index: 10;
+}
+
+.webpad-menu-absolute-position
+{
+    width: 40rem;
+    max-width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background:red;
+    z-index: 10;
+    overflow-y: scroll;
+}
+
 .webpad-color-orange{ 
     color: #ffa26b;
 }
