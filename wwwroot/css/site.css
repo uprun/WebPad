@@ -295,7 +295,7 @@ a
     position: fixed;
     top: 0px;
     left: 0px;
-    background:red;
+    background: #333333;
     z-index: 10;
     overflow-y: scroll;
 }

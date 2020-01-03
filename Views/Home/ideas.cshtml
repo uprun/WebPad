@@ -152,7 +152,7 @@
             <span property="logo">https://webpad.com.ua/WebPad_logo_500.png</span>
         </div>
         
-        <div class="w3-container" data-bind="visible: $root.PromoVisible" style="margin-top: 20mm;" 
+        <div class="w3-container" style="display: none;" data-bind="visible: $root.PromoVisible" style="margin-top: 20mm;" 
             >
             <div class="w3-row">
                 <div class="w3-col w3-container s12 m12 l12">
@@ -668,7 +668,7 @@
                 </div>
             </div>
         </div>
-        <div class="webpad-menu-absolute-position w3-animate-opacity" style="display: none; background: red;" data-bind="visible: !$root.PromoVisible() && $root.menuIsOpen()">
+        <div class="webpad-menu-absolute-position w3-animate-opacity" style="display: none;" data-bind="visible: !$root.PromoVisible() && $root.menuIsOpen()">
             <div class="w3-row">
                 <div class="w3-col w3-container s12 m12 l12">
                     <button style="width: 100%;" class="webpad-node webpad-blue-print" 
