@@ -661,10 +661,18 @@
         <div class="webpad-header-absolute-position" style="display: none;" data-bind="visible: !$root.PromoVisible() && !$root.menuIsOpen()">
             <div class="w3-row">
                 <div class="w3-col w3-container s12 m3 l3">
-                    <button style="width: 100%;" class="webpad-node webpad-blue-print" 
-                            data-bind="click: $root.toggleMenu">
-                            [ open menu ]
-                    </button>
+                    <div class=" webpad-button-no-border" data-bind="click: $root.toggleMenu">
+                        <span style="font-size: 2rem;">
+                            <img src="svg/bars.svg" class="webpad-edit-pencil" alt="open menu"/> 
+                        </span>
+                        
+                    </div>
+                    <span class="webpad-color-yellow" style="font-size: 2rem;">
+                        Web
+                    </span>
+                    <span class="webpad-color-blue" style="font-size: 2rem;">
+                        Pad
+                    </span>
                 </div>
             </div>
         </div>

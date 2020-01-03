@@ -296,7 +296,7 @@ a
     top: 0px;
     left: 0px;
     background: #333333;
-    z-index: 10;
+    z-index: 2100;
     overflow-y: scroll;
 }
 
