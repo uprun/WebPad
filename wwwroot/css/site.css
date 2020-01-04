@@ -297,8 +297,37 @@ a
     left: 0px;
     background: #333333;
     z-index: 2100;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
+
+
+.webpad-menu-animate-show-from-left
+{
+    animation:animateshowfromleft 0.4s forwards;
+    
+}
+@keyframes animateshowfromleft
+{
+    from{left:-40rem;opacity:0} to{left:0;opacity:1}
+}
+
+
+.webpad-menu-animate-fade-back
+{
+    animation:animatefadeback 0.4s forwards;
+}
+@keyframes animatefadeback
+{
+    from{left: 0;opacity:1} to{left: -40rem;opacity:0}
+}
+.webpad-menu-logo {
+    width: 5rem;
+    height: 5rem;
+    background: url("../WebPad_logo_512.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    text-align: center;
+  }
 
 .webpad-color-orange{ 
     color: #ffa26b;

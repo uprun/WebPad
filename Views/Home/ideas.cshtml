@@ -676,13 +676,29 @@
                 </div>
             </div>
         </div>
-        <div class="webpad-menu-absolute-position w3-animate-opacity" style="display: none;" data-bind="visible: !$root.PromoVisible() && $root.menuIsOpen()">
+        <div 
+            class="webpad-menu-absolute-position webpad-menu-animate-left" 
+            style="display: none;" 
+            data-bind="
+                visible: !$root.PromoVisible() && $root.menuWasAlreadyOpen(),
+                css: { 
+                    'webpad-menu-animate-show-from-left': $root.menuIsOpen(),
+                    'webpad-menu-animate-fade-back': !$root.menuIsOpen()
+                }">
             <div class="w3-row">
                 <div class="w3-col w3-container s12 m12 l12">
-                    <button style="width: 100%;" class="webpad-node webpad-blue-print" 
-                            data-bind="click: $root.toggleMenu">
-                            [ hide menu ]
-                    </button>
+                    <span class="webpad-color-yellow" style="font-size: 2rem;">
+                        Web
+                    </span>
+                    <span class="webpad-color-blue" style="font-size: 2rem;">
+                        Pad
+                    </span>
+                    <div style="float: right;" class=" webpad-button-no-border" data-bind="click: $root.toggleMenu">
+                        <span style="font-size: 2rem;">
+                            <img src="svg/times-close-menu.svg" class="webpad-edit-pencil" alt="close menu"/> 
+                        </span>
+                        
+                    </div>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     <button style="width: 100%;" class="webpad-node webpad-blue-print" 
@@ -690,6 +706,7 @@
                             change background
                     </button>
                 </div>
+                
             </div>
         </div>
         <div class="" style="display: none; width: 100%;" data-bind="visible: !$root.PromoVisible()">
