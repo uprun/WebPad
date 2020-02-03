@@ -117,6 +117,7 @@
         <script language="JavaScript" type="text/javascript" src="js/dictionary_uk_ua.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/changeBackground.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/toggleMenu.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/recalculateColumnsCount.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/mainPage.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/document_ready_ideas.js" asp-append-version="true"></script>
         
@@ -637,7 +638,7 @@
         </script>
         
         <script type="text/html" id="card-template">
-                <div class="w3-col w3-container s12 m6 l4">
+                <div class="w3-col w3-container s12 m12 l12">
                     <div  data-bind="if: $data.isTopOfStack" >
                         <div class="webpad-top-of-stack" data-bind="template: { name: 'inner-card-template' } ">
                         </div>
@@ -658,7 +659,7 @@
                     
                 </div>
         </script>
-        <div class="webpad-header-absolute-position" style="display: none;" data-bind="visible: !$root.PromoVisible() && !$root.menuIsOpen()">
+        <div id="webpad-header-absolute-position" class="webpad-header-absolute-position" style="display: none;" data-bind="visible: !$root.PromoVisible() && !$root.menuIsOpen()">
             <div class="w3-row">
                 <div class="w3-col w3-container s12 m3 l3">
                     <div class=" webpad-button-no-border" data-bind="click: $root.toggleMenu">
@@ -711,7 +712,16 @@
         </div>
         <div class="" style="display: none; width: 100%;" data-bind="visible: !$root.PromoVisible()">
             <div style="width: 100%; padding-top: 3rem;" class="webpad-search-result-area">
-                <div class="w3-row" data-bind="template: { name: 'card-template', foreach: mergedOpenedAndFilteredCards } ">
+                <div class="w3-row" >
+                    <div  class="w3-col w3-container s12 m6 l4 webpad-text-column" data-bind="if: columnsCount">
+                        <div class="w3-row" data-bind="template: { name: 'card-template', foreach: mergedOpenedAndFilteredCards } ">
+
+                        </div>
+                    </div>
+                    <div class="w3-col w3-container s12 m6 l4"></div>
+                    <div class="w3-col w3-container s12 m6 l4"></div>
+                    <div class="w3-col w3-container s12 m6 l4"></div>
+                    <div class="w3-col w3-container s12 m6 l4"></div>
         
                 </div>
                 <div class="w3-row" data-bind="if: $root.ShowExtendCurrentResultLimit">
@@ -742,7 +752,7 @@
                 </div>
                 
                 <div class="w3-col w3-container s12 m6 l4">
-                    <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">                    
+                    <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
                             <button style="width: 100%;" class="webpad-node webpad-green" 
                                 data-bind="click: $root.CreateNoteFromSearchQuery">
                                 Create [Enter]
