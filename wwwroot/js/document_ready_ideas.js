@@ -4,5 +4,6 @@ $(document).ready(function()
     viewModel.ApplyLookupToSelf();
     ko.applyBindings(viewModel);
     viewModel.recalculateColumnsCount();
+    window.addEventListener('resize', function(){  viewModel.recalculateColumnsCount(); }, true);
     //setTimeout(viewModel.ActualGenerateConnections, 3000);
 });

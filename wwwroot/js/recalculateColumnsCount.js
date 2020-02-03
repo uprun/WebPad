@@ -7,6 +7,7 @@ lookup.recalculateColumnsCount = function() {
     {
         var column_width = found_columns[0].offsetWidth;
         var calculatedColumns = header_width / column_width;
+        // todo: add rounding here
         lookup.columnsCount(calculatedColumns);
     }
 };
