@@ -542,6 +542,42 @@ function ConnectedNotesViewModel()
         }
     });
 
+    lookup.cardsByColumns = ko.pureComputed(
+        function()
+        {
+            var columnsCount = lookup.columnsCount();
+            if(typeof(columnsCount) === "undefined" || columnsCount === 1 )
+            {
+               columnsCount = 1;
+            }
+            var result = [];
+            for(var k = 0; k < columnsCount; k++)
+            {
+                result.push([]);
+            }
+            ko.utils.arrayForEach(lookup.mergedOpenedAndFilteredCards(), function(item, index) {
+                var dividedIndex = index % columnsCount;
+                result[dividedIndex].push(item);
+            });
+            return result;
+
+        }
+    );
+
+    lookup.cardsByColumnsTail = ko.pureComputed(
+        function()
+        {
+            if(lookup.cardsByColumns().length > 1)
+            {
+                return lookup.cardsByColumns().slice(1);
+            }
+            else
+            {
+                return [];
+            }
+        }
+    );
+
     lookup.ShowExtendCurrentResultLimit = ko.pureComputed(function()
     {
         return lookup.FilteredCards().length > lookup.CurrentResultLimit();
