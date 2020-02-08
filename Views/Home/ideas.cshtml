@@ -659,6 +659,20 @@
                     
                 </div>
         </script>
+
+        <script type="text/html" id="show-more-template">
+                <div class="w3-row" data-bind="if: $root.ShowExtendCurrentResultLimit">
+                   <div class="w3-col w3-container s12 m12 l12">
+                       <span>                    
+                            <button style="width: 100%;" class="webpad-node webpad-green" 
+                                data-bind=
+                                    "click: $root.ExtendCurrentResultLimit,
+                                    text: 'Show more items ( ' + $root.NumberOfHiddenSearhItems() + ' hidden)'">
+                            </button>
+                        </span>
+                   </div>
+                </div>
+        </script>
         <div id="webpad-header-absolute-position" class="webpad-header-absolute-position" style="display: none;" data-bind="visible: !$root.PromoVisible() && !$root.menuIsOpen()">
             <div class="w3-row">
                 <div class="w3-col w3-container s12 m3 l3">
@@ -717,41 +731,34 @@
                         <div class="w3-row" data-bind="template: { name: 'card-template', foreach: cardsByColumns()[0] } ">
 
                         </div>
+                        <div style="" data-bind="template: { name: 'show-more-template' } " ></div>
                     </div>
                     <div  class="w3-col w3-container s12 m6 l4 webpad-text-column" data-bind="if: columnsCount() && cardsByColumns().length > 1">
                         <div class="w3-row" data-bind="template: { name: 'card-template', foreach: cardsByColumns()[1] } ">
 
                         </div>
+                        <div style="" data-bind="template: { name: 'show-more-template' } " ></div>
                     </div>
                     <div  class="w3-col w3-container s12 m6 l4 webpad-text-column" data-bind="if: columnsCount() && cardsByColumns().length > 2">
                         <div class="w3-row" data-bind="template: { name: 'card-template', foreach: cardsByColumns()[2] } ">
 
                         </div>
+                        <div style="" data-bind="template: { name: 'show-more-template' } " ></div>
                     </div>
                     <div  class="w3-col w3-container s12 m6 l4 webpad-text-column" data-bind="if: columnsCount() && cardsByColumns().length > 3">
                         <div class="w3-row" data-bind="template: { name: 'card-template', foreach: cardsByColumns()[3] } ">
 
                         </div>
+                        <div style="" data-bind="template: { name: 'show-more-template' } " ></div>
                     </div>
                     <div  class="w3-col w3-container s12 m6 l4 webpad-text-column" data-bind="if: columnsCount() && cardsByColumns().length > 4">
                         <div class="w3-row" data-bind="template: { name: 'card-template', foreach: cardsByColumns()[4] } ">
 
                         </div>
+                        <div style="" data-bind="template: { name: 'show-more-template' } " ></div>
                     </div>
                 </div>
-                <div class="w3-row" data-bind="if: $root.ShowExtendCurrentResultLimit">
-                    <div class="w3-col w3-container s0 m3 l4">
-                   </div>
-                   <div class="w3-col w3-container s12 m6 l4">
-                       <span>                    
-                            <button style="width: 100%;" class="webpad-node webpad-green" 
-                                data-bind=
-                                    "click: $root.ExtendCurrentResultLimit,
-                                    text: 'Show more items ( ' + $root.NumberOfHiddenSearhItems() + ' hidden)'">
-                            </button>
-                        </span>
-                   </div>
-                </div>
+                
                 <br/>
                 <br/>
                 <br/>

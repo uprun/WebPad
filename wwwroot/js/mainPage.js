@@ -564,20 +564,6 @@ function ConnectedNotesViewModel()
         }
     );
 
-    lookup.cardsByColumnsTail = ko.pureComputed(
-        function()
-        {
-            if(lookup.cardsByColumns().length > 1)
-            {
-                return lookup.cardsByColumns().slice(1);
-            }
-            else
-            {
-                return [];
-            }
-        }
-    );
-
     lookup.ShowExtendCurrentResultLimit = ko.pureComputed(function()
     {
         return lookup.FilteredCards().length > lookup.CurrentResultLimit();
