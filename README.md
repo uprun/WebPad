@@ -16,4 +16,4 @@ $ dotnet run
 
 ## License
 
-Copyright © Kryvonos Oleksandr 2018-2019 <geraclion@gmail.com>. Provided under the [MIT License](http://opensource.org/licenses/MIT).
+Copyright © Kryvonos Oleksandr 2018-2020 <geraclion@gmail.com>. Provided under the [MIT License](http://opensource.org/licenses/MIT).
