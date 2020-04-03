@@ -125,18 +125,18 @@
         <div vocab="https://schema.org/"
             typeof="WebApplication" style="display: none;">
             <span property="name" >WebPad</span>
-            <span property="description">is a note taking app, where privacy is a priority, where no-login required to try.</span>
+            <span property="description">task list and personal wiki.</span>
             <span property="accessMode">textual</span>
             <div property="offers" typeof="Offer">
                 Price: $<span property="price">0.00</span>
                 <meta property="priceCurrency" content="USD" />
-                <span property="description">3 in total devices to sync, max 7 thousand of changes.</span>
+                <span property="description">15 devices to sync.</span>
             </div>
         
             <div property="offers" typeof="Offer">
                 Price: $<span property="price">2.00</span>
                 <meta property="priceCurrency" content="USD" />
-                <span property="description">plus 4 devices to sync with (7 in total), max 40 thousand of changes.</span>
+                <span property="description">plus 15 devices to sync.</span>
             </div>
             <span property="operatingSystem">Windows</span>
             <span property="operatingSystem">Linux</span>
@@ -151,56 +151,6 @@
             typeof="Organization" style="display: none;">
             <span property="url" >https://webpad.com.ua</span>
             <span property="logo">https://webpad.com.ua/WebPad_logo_500.png</span>
-        </div>
-        
-        <div class="w3-container" style="display: none;" data-bind="visible: $root.PromoVisible" style="margin-top: 20mm;" 
-            >
-            <div class="w3-row">
-                <div class="w3-col w3-container s12 m12 l12">
-                    <div style="text-align: center; width: 100%;">
-                        <div class="webpad-inline-flex">
-                            <span class="webpad-node webpad-blue-print webpad-right" >WebPad</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12">
-                    <div style="text-align: center; width: 100%;">
-                        <div class="webpad-inline-flex">
-                            <span class="webpad-node webpad-green webpad-right">is a note taking app</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12">
-                    <div style="text-align: center; width: 100%;">
-                        <div class="webpad-inline-flex">
-                            <span class="webpad-node webpad-orange webpad-left">where</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12">
-                    <div style="text-align: center; width: 100%;">
-                        <div class="webpad-inline-flex">
-                            <span class="webpad-node webpad-purple webpad-left">privacy is a priority</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12">
-                    <div style="text-align: center; width: 100%;">
-                        <div class="webpad-inline-flex">
-                            <span class="webpad-node webpad-blue-print webpad-right-2x">no-login required to</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12">
-                    <div style="text-align: center; width: 100%;">
-                        <div class="webpad-inline-flex">
-                            <button class="webpad-node webpad-green webpad-left" data-bind="click: $root.HidePromo">
-                                <a href="#">try for free now</a>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         
         <!-- <div  style="text-align: center; width: 100%; margin-top: 0px; display: inline-block; display: none;" data-bind="visible: !$root.PromoVisible()">
@@ -664,7 +614,7 @@
                 <div class="w3-row" data-bind="if: $root.ShowExtendCurrentResultLimit">
                    <div class="w3-col w3-container s12 m12 l12">
                        <span>                    
-                            <button style="width: 100%;" class="webpad-node webpad-green" 
+                            <button  class="webpad-node webpad-green" 
                                 data-bind=
                                     "click: $root.ExtendCurrentResultLimit,
                                     text: 'Show more items ( ' + $root.NumberOfHiddenSearhItems() + ' hidden)'">
@@ -770,57 +720,13 @@
         </div>
         <div class="webpad-search-absolute-position" style="display: none;" data-bind="visible: !$root.PromoVisible(), style: {bottom: $root.searchBarPosition}">
             <div class="w3-row">
-                <div class="w3-col w3-container s0 m3 l4">
-                </div>
-                
-                <div class="w3-col w3-container s12 m6 l4">
-                    <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
-                            <button style="width: 100%;" class="webpad-node webpad-green" 
-                                data-bind="click: $root.CreateNoteFromSearchQuery">
-                                Create [Enter]
-                            </button>
-                    </span>
-                </div>
-            </div>
-            <div class="w3-row">
-                <div class="w3-col w3-container s0 m3 l4">
-                </div>
-                
-                <div class="w3-col w3-container s12 m6 l4">
-                    <span data-bind="if: $root.SearchNotesQuery().trim().length > 0 && $root.stackOfSearch().length < 3">                    
-                            <button style="width: 100%;" class="webpad-node webpad-blue-print" 
-                                data-bind="click: $root.addToStackOfSearch">
-                                pin as filter [Shift + Enter]
-                            </button>
-                    </span>
-                </div>
-            </div>
-            <div class="w3-row">
-                <div class="w3-col w3-container s0 m3 l4">
-                </div>
-                
-                <div class="w3-col w3-container s12 m6 l4">
-                    <span data-bind="foreach: lookup.stackOfSearch">
-                        <button  class="webpad-node webpad-blue-print" 
-                            data-bind=" click: $root.removeFromStackOfSearch">
-                            <span data-bind="text: $data">
-                            </span>
-                            <div class=" webpad-button-no-border">
-                                <img src="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Remove search filter" /> 
-                            </div>
-                            
-                        </button>
-                    </span>
-                </div>
-            </div>
-            <div class="w3-row">
                 <div class="w3-col w3-container s0 m2 l3">
                 </div>
                 <div class="w3-col w3-container s12 m8 l6">
                     <h2>
                     
                             <input 
-                                placeholder="Create or search note..." 
+                                placeholder="create or find your task.." 
                                 class="webpad-search-bar"
                                 type="text" 
                                 data-bind="
@@ -828,6 +734,12 @@
                                     event: {keypress: $root.searchBarKeyPress}
                                     " 
                             />
+                            <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
+                                <div class="webpad-button-no-border" data-bind=" click: $root.CreateNoteFromSearchQuery">
+                                    <img src="svg/plus.svg" class="webpad-edit-pencil" alt="really remove"/> 
+                                </div>
+                            </span>
+                            
         
                     
                     </h2>

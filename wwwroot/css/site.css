@@ -157,7 +157,7 @@ a
 
 .webpad-search-bar
 {
-    width: 100%;
+    width: calc(100% - 2em);
     min-width: 150px;
     color: #64e05e;
     border-radius: .3em;
