@@ -26,7 +26,18 @@ function model_Card(data)
         {
             return result;
         }
-        var filtered =  ko.utils.arrayFilter(self.Tags(), function(item){ return self.AnalyzeText(item.label(), query) || self.AnalyzeText(item.Destination.text(), query) ; } );
+        var filtered =  
+            ko.utils.arrayFilter
+            (
+                self.Tags(),
+                function(item)
+                { 
+                    var result = 
+                        self.AnalyzeText(item.label(), query) ||
+                        self.AnalyzeText(item.Destination.text(), query)
+                    return result; 
+                } 
+            );
         var tagsAnyPassed = filtered.length > 0 ;
         return tagsAnyPassed;
     };
@@ -74,6 +85,14 @@ function model_Card(data)
         var foundIndex = lookup.stackOfCards.indexOf(self);
         var lastIndex = lookup.stackOfCards().length -1;
         return lastIndex >= 0 && foundIndex === lastIndex;
+    });
+
+    self.isTask = ko.pureComputed(function()
+    {
+        var foundTaskTag = ko.utils.arrayFirst(self.Tags(), function(item){
+            return item.Destination.text().toLowerCase() === "task";
+        });
+        return  foundTaskTag !== null;
     });
 
 }
