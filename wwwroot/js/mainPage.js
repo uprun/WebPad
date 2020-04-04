@@ -492,11 +492,11 @@ function ConnectedNotesViewModel()
     lookup.FilteredCards
         .extend({ rateLimit: 500 });
 
-    lookup.CurrentResultLimit = ko.observable(15);
+    lookup.CurrentResultLimit = ko.observable(25);
 
     lookup.ResetCurrentResultLimit = function()
     {
-        lookup.CurrentResultLimit(15);
+        lookup.CurrentResultLimit(25);
     };
 
     lookup.LimitedFilteredCards = ko.pureComputed(function()
