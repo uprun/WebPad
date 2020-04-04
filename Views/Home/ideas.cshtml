@@ -268,7 +268,6 @@
                         <span class="webpad-brightness-dimmed" style="color: aliceblue;">
                             ?
                         </span>
-                        <br/>
                        
                         <div class=" webpad-button-no-border" data-bind="click: $data.cancelUnlink">
                             <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel unlink"/> 
@@ -282,36 +281,16 @@
                     
                 </span>
                 <span data-bind="ifnot: $data.toUnlink">
-                    <span data-bind="if: $data.Destination.isDone">
-                        <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.switchDone">[x]</span>
-                        <span class="webpad-brightness-dimmed" data-bind="ifnot: $data.underEdit">
-                            <span
-                                class="webpad-break-words-node" data-bind=
-                            "
-                                style:
-                                {
-                                    color: $data.Destination.color,
-                                    'text-decoration': 'line-through'
-                                },
-                                text:$data.Destination.textAlmost
-                                ">
-                            </span>
-                        </span>
-                    </span>
-                    <span data-bind="ifnot: $data.Destination.isDone">
-                        <!----><span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
-                        <span data-bind="ifnot: $data.underEdit">
-                            <span
-                                class="webpad-break-words-node" data-bind=
-                            "
-                                style:
-                                {
-                                    color: $data.Destination.color
-                                },
-                                text:$data.Destination.textAlmost
-                                ">
-                            </span>
-                        </span>
+                        
+                    <span
+                        class="webpad-break-words-node" data-bind=
+                    "
+                        style:
+                        {
+                            color: $data.Destination.color
+                        },
+                        text:$data.Destination.textAlmost
+                        ">
                     </span>
                     <span data-bind="if: $data.toolBoxVisible">
                         <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^_^]</span>
@@ -338,13 +317,6 @@
                     </span>
         
                     <span data-bind="if: $data.DestinationCard && $data.DestinationCard.Tags().length > 0 ">
-                            <!-- <span 
-                                class="webpad-brightness-dimmed" 
-                                style="color: aliceblue; font-size: .6em;" 
-                                data-bind="
-                                    text: '[ show ' + $data.DestinationCard.Tags().length + ' items]',
-                                    click: $data.SwitchDisplayNextLevel">
-                            </span> -->
                             <span data-bind="if: $data.DisplayNextLevel">
                                 <div style="padding-left: 1.4em;" data-bind="foreach: $data.DestinationCard.Tags">
                                     <div>
