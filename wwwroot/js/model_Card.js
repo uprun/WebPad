@@ -90,9 +90,31 @@ function model_Card(data)
     self.isTask = ko.pureComputed(function()
     {
         var foundTaskTag = ko.utils.arrayFirst(self.Tags(), function(item){
-            return item.Destination.text().toLowerCase() === "task";
+            return item.Destination.text().toLowerCase().trim() === "task";
         });
         return  foundTaskTag !== null;
     });
+
+    self.convertFromTask = function()
+    {
+        ko.utils.arrayForEach
+        (
+            self.Tags(), 
+            function(item) 
+            {
+                if(item.Destination.text().toLowerCase().trim() === "task")
+                {
+                    lookup.RemoveConnection(item);
+                    lookup.RemoveNote({Note: item.Destination });
+                }
+            }
+        );
+        
+    };
+
+    self.convertToTask = function()
+    {
+        lookup.AddInformationToExistingOne(self, "task");
+    };
 
 }

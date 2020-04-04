@@ -535,6 +535,11 @@
                                     <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.prepareToBeRemoved">
                                         <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="remove"/> 
                                     </div>
+                                    <button  class="webpad-node webpad-green" 
+                                        data-bind=
+                                            "click: $data.convertToTask,
+                                            text: 'is a task'">
+                                    </button>
                                 </span>
                                 <!----><div style="" data-bind="template: { name: 'additional-info-template' } " >
                                 </div>
@@ -657,6 +662,11 @@
                                     <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.prepareToBeRemoved">
                                         <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="remove"/> 
                                     </div>
+                                    <button  class="webpad-node webpad-green" 
+                                        data-bind=
+                                            "click: $data.convertFromTask,
+                                            text: 'not a task'">
+                                    </button>
                                 </span>
                             </h2>
                             
