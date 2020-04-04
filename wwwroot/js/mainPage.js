@@ -1039,6 +1039,8 @@ function ConnectedNotesViewModel()
         }
     }
 
+    lookup.backgroundApplySaved();
+
     
     lookup.crypto_worker.onmessage = function(e) {
         if(e.data.action == "applySaveOfKey.Result" ) {
