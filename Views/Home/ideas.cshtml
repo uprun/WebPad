@@ -94,6 +94,7 @@
         <script language="JavaScript" type="text/javascript" src="js/findCardByMainNodeId.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/jumpToCard.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/jumpToCardOnCreate.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/jumpToCardFromWord.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/insertIntoStackOfCards.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/pushIntoStackOfCards.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/clearStackOfCards.js" asp-append-version="true"></script>
@@ -282,7 +283,7 @@
                 </span>
                 <span data-bind="ifnot: $data.toUnlink">
                         
-                    <span
+                    <!-- <span
                         class="webpad-break-words-node" data-bind=
                     "
                         style:
@@ -291,7 +292,13 @@
                         },
                         text:$data.Destination.textAlmost
                         ">
-                    </span>
+                    </span>-->
+
+                    <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Destination }  -->
+                    <!-- /ko -->
+
+            
+
                     <span data-bind="if: $data.toolBoxVisible">
                         <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^_^]</span>
                     </span>
@@ -451,6 +458,33 @@
             </span>
         </script>
         
+        <script type="text/html" id="text-with-dictionary-template">
+            <!-- ko foreach: $data.textSplitted -->
+                <!-- ko if: $data.exists -->
+                    <span class="webpad-break-words-node webpad-border-bottom-dotted" data-bind="
+                        text: word,
+                        style:
+                        {
+                            color: $parent.color,
+                        },
+                        click: $root.jumpToCardFromWord
+                            ">
+                    </span>
+                <!-- /ko -->
+                <!-- ko ifnot: $data.exists -->
+                    <span class="webpad-break-words-node" data-bind="
+                        text: word,
+                        style:
+                        {
+                            color: $parent.color,
+                        },
+                            ">
+                    </span>
+                <!-- /ko -->
+                
+            <!-- /ko -->
+        </script>
+
         <script type="text/html" id="inner-card-template">
                     <div class="webpad-card w3-animate-opacity" data-bind="attr: {id: $data.Note.id }">
                         <!-- ko template: { name: 'to-be-removed-template' }  -->
@@ -458,20 +492,8 @@
                         <span data-bind="ifnot: $data.toBeRemoved">
                             <h2>
                                 <span data-bind="ifnot: $data.underEdit">
-                                    <span 
-                                        placeholder="..." 
-                                        class="webpad-contenteditable webpad-break-words-node"
-                                        data-bind="
-                                            contentEditable: $data.underEdit,
-                                            htmlLazy:  $data.Note.text,
-                                            style:
-                                            {
-                                                color: $data.Note.color,
-                                            },
-                                            event: {blur: $root.SwitchEditOfCard},
-                                            hasFocus: $data.underEdit
-                                            " 
-                                    ></span>
+                                    <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Note }  -->
+                                    <!-- /ko -->
                                 </span>
                                 <span data-bind="if: $data.underEdit">
                                     <span 

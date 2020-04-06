@@ -63,6 +63,11 @@ span {
     word-break: break-word;
 }
 
+.webpad-border-bottom-dotted{
+    border-bottom-width: 0.1em;
+    border-bottom-style: dotted;
+}
+
 .webpad-card
 {
     border-color: inherit;

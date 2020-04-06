@@ -87,4 +87,19 @@ function model_Node(data)
     {
         self.createDate = new Date(self.createDate);
     }
+
+    self.textSplitted = ko.computed(function(){
+        var test = self.text().split(" ");
+        var result = ko.utils.arrayMap(test, function(item)
+            {
+                var found = lookup.dictionary_of_notes()[item];
+                return {
+                    word: item,
+                    wordNode: found,
+                    exists: typeof(found) !== 'undefined' && self.text() !== item
+                };
+            }
+        );
+        return result;
+    });
 };
