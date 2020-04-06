@@ -13,7 +13,7 @@ function model_Node(data)
     
     self.textAlmost = ko.computed(function()
     {
-        var valueToCheck = self.text();
+        var valueToCheck = self.text().trim();
         if( 
             typeof(valueToCheck) == "undefined" ||
              valueToCheck == null || 

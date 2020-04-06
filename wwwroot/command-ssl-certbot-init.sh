@@ -1,0 +1,1 @@
+sudo certbot --nginx -d webpad.com.ua -d www.webpad.com.ua

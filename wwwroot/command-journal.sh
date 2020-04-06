@@ -1,0 +1,1 @@
+journalctl --unit kestrel-asp.service --reverse
