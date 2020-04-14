@@ -225,18 +225,6 @@
             
         </div> -->
         
-        <!-- <span data-bind="if: $root.NoteToEdit() != null && $root.NoteToEdit() !=  undefined " >
-        
-        
-        
-        <button data-bind="click: $root.CreateNoteFromDestinationSearchQuery">Add connection</button>
-        <span data-bind="foreach: $root.ColorPresets">
-            <button data-bind="click: $root.ColorNode, style: { 'background' : $data.Background(), color: $data.Color() }">Highlight</button>
-        </span>
-        
-        
-        </span>    -->
-        
         <!-- background-image: linear-gradient(to bottom right, #3900d9, #d6920b); -->
         
         <!-- border-color: aliceblue;
@@ -282,17 +270,6 @@
                     
                 </span>
                 <span data-bind="ifnot: $data.toUnlink">
-                        
-                    <!-- <span
-                        class="webpad-break-words-node" data-bind=
-                    "
-                        style:
-                        {
-                            color: $data.Destination.color
-                        },
-                        text:$data.Destination.textAlmost
-                        ">
-                    </span>-->
 
                     <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Destination }  -->
                     <!-- /ko -->
@@ -311,53 +288,11 @@
                         <span class="webpad-brightness-dimmed" data-bind=" click: $root.jumpToCard">
                             <img src="svg/pin-violet.svg" class="webpad-edit-pencil" alt="jump to sub-item"/>
                         </span>
-                        <!-- <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.jumpAndEdit">
-                            <img src="svg/pencil-alt.svg" class="webpad-edit-pencil" alt="edit sub-item"/> 
-                        </div>
-                        <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.jumpAndEdit">
-                            <img src="svg/plus.svg" class="webpad-edit-pencil" alt="edit sub-item"/> 
-                        </div> -->
                         &nbsp;
                         <span class="webpad-brightness-dimmed " data-bind=" click: $data.prepareToUnlink">
                             <img src="svg/unlink-orange.svg" class="webpad-edit-pencil" alt="remove"/> 
                         </span>
                     </span>
-        
-                    <span data-bind="if: $data.DestinationCard && $data.DestinationCard.Tags().length > 0 ">
-                            <span data-bind="if: $data.DisplayNextLevel">
-                                <div style="padding-left: 1.4em;" data-bind="foreach: $data.DestinationCard.Tags">
-                                    <div>
-                                        <span data-bind="if: $data.Destination.isDone">
-                                            <span
-                                                style="font-size: .6em;" 
-                                                class="webpad-break-words-node webpad-brightness-dimmed" data-bind=
-                                            "
-                                                style:
-                                                {
-                                                    color: $data.Destination.color,
-                                                    'text-decoration': 'line-through'
-                                                },
-                                                text:$data.Destination.textAlmost
-                                                ">
-                                            </span>
-                                        </span>
-                                        <span data-bind="ifnot: $data.Destination.isDone">
-                                                <span
-                                                    style="font-size: .6em;" 
-                                                    class="webpad-break-words-node" data-bind=
-                                                "
-                                                    style:
-                                                    {
-                                                        color: $data.Destination.color,
-                                                    },
-                                                    text:$data.Destination.textAlmost
-                                                    ">
-                                                </span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </span>
-                    <span>
         
                 </span>
         
@@ -486,11 +421,11 @@
         </script>
 
         <script type="text/html" id="inner-card-template">
-                    <div class="webpad-card w3-animate-opacity" data-bind="attr: {id: $data.Note.id }">
+                    <div style="font-size: 1.2rem;" class="webpad-card w3-animate-opacity" data-bind="attr: {id: $data.Note.id }">
                         <!-- ko template: { name: 'to-be-removed-template' }  -->
                         <!-- /ko -->
                         <span data-bind="ifnot: $data.toBeRemoved">
-                            <h2>
+                            
                                 <span data-bind="ifnot: $data.underEdit">
                                     <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Note }  -->
                                     <!-- /ko -->
@@ -511,6 +446,7 @@
                                                 " 
                                         ></span>
                                 </span>
+                            <span style="font-size: 2rem;">
                                 <span data-bind="if: $data.toolBoxVisible">
                                     <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^_^]</span>
                                 </span>
@@ -535,11 +471,14 @@
                                             text: 'is a task'">
                                     </button>
                                 </span>
-                                <!----><div style="" data-bind="template: { name: 'additional-info-template' } " >
-                                </div>
-                                <div style="padding-left: 1em;" data-bind="template: { name: 'tag-template', foreach: $data.Tags } " >
+                            </span>
+                            <h2>
+                                <div style="" data-bind="template: { name: 'additional-info-template' } " >
                                 </div>
                             </h2>
+                            <div style="padding-left: 1em;" data-bind="template: { name: 'tag-template', foreach: $data.Tags } " >
+                            </div>
+                           
                             
                             
                         </span>
