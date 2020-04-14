@@ -13,7 +13,15 @@ lookup.dictionary_of_notes = ko.computed(function()
     {
         var dictionary = {};
         ko.utils.arrayForEach(lookup.Notes(), function(item) {
-            dictionary[item.text()] = item;
+            var key = 
+                item
+                .text()
+                .replace("\r", " ")
+                .replace("\n", " ")
+                .replace("\t", " ")
+                .toLowerCase()
+                .trim();
+            dictionary[key] = item;
         });
         return dictionary;
 

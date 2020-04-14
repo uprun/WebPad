@@ -92,11 +92,29 @@ function model_Node(data)
         var test = self.text().split(" ");
         var result = ko.utils.arrayMap(test, function(item)
             {
-                var found = lookup.dictionary_of_notes()[item];
+                var toSearch = 
+                    item
+                    .replace("\r", " ")
+                    .replace("\n", " ")
+                    .replace("\t", " ")
+                    .toLowerCase()
+                    .trim();
+                
+                if(
+                    toSearch.endsWith(",") 
+                    || toSearch.endsWith(".") 
+                    || toSearch.endsWith("?")
+                    || toSearch.endsWith("!")
+                )
+                {
+                    toSearch = toSearch.substring(0, toSearch.length - 1);
+                }
+
+                var found = lookup.dictionary_of_notes()[toSearch];
                 return {
                     word: item,
                     wordNode: found,
-                    exists: typeof(found) !== 'undefined' && self.text() !== item
+                    exists: typeof(found) !== 'undefined' && self !== found
                 };
             }
         );
