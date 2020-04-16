@@ -9,7 +9,7 @@ lookup.Notes = ko.observableArray([]);
 lookup.ColorPresets = ko.observableArray([]);
 lookup.Connections = ko.observableArray([]);
 lookup.history = ko.observableArray([]); 
-lookup.dictionary_of_notes = ko.computed(function()
+lookup.dictionary_of_notes = ko.pureComputed(function()
     {
         var dictionary = {};
         ko.utils.arrayForEach(lookup.Notes(), function(item) {
