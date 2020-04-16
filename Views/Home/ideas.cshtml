@@ -401,6 +401,7 @@
                         style:
                         {
                             color: $parent.color,
+                            'border-color': wordNode.color
                         },
                         click: $root.jumpToCardFromWord
                             ">
@@ -421,7 +422,7 @@
         </script>
 
         <script type="text/html" id="inner-card-template">
-                    <div style="font-size: 1.2rem;" class="webpad-card w3-animate-opacity" data-bind="attr: {id: $data.Note.id }">
+                    <div style="font-size: 1.3rem;" class="webpad-card w3-animate-opacity" data-bind="attr: {id: $data.Note.id }">
                         <!-- ko template: { name: 'to-be-removed-template' }  -->
                         <!-- /ko -->
                         <span data-bind="ifnot: $data.toBeRemoved">
