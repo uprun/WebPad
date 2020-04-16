@@ -401,7 +401,8 @@
                         style:
                         {
                             color: $parent.color,
-                            'border-color': wordNode.color
+                            'border-color': wordNode.color,
+                            'border-bottom-style': word.length < 3 ? 'solid' : 'dotted'
                         },
                         click: $root.jumpToCardFromWord
                             ">

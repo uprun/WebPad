@@ -88,7 +88,7 @@ function model_Node(data)
         self.createDate = new Date(self.createDate);
     }
 
-    self.textSplitted = ko.computed(function(){
+    self.textSplitted = ko.pureComputed(function(){
         var test = self.text().split(" ");
         var result = ko.utils.arrayMap(test, function(item)
             {
