@@ -374,7 +374,17 @@
                         <!-- ko template: { name: 'to-be-removed-template' }  -->
                         <!-- /ko -->
                         <span data-bind="ifnot: $data.toBeRemoved">
-                            
+                            <!-- ko foreach: $data.Note.ReferencedBy  -->
+                                <div class="webpad-quote webpad-brightness-dimmed ">
+                                    <!-- ko template: { name: 'text-with-dictionary-template', data: $data }  -->
+                                    <!-- /ko -->
+                                    &nbsp;
+                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.5em;" data-bind=" click: $root.jumpToCard">
+                                        <img src="svg/link.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
+                                    </div>
+                                </div>
+                                
+                            <!-- /ko -->
                             <span data-bind="ifnot: $data.underEdit">
                                 <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Note }  -->
                                 <!-- /ko -->
