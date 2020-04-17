@@ -46,14 +46,11 @@ span {
 
 .webpad-node 
 {
-    border-radius: 3mm;
-    padding-left: 2mm;
-    padding-right: 2mm;
-    padding-top: 2mm;
-    padding-bottom: 2mm;
+    border-radius: .3em;
+    padding: .1em;
     box-sizing: border-box;
     display: inline-block;
-    font-size: 1em;
+    font-size: .7em;
     word-break: break-word;
 }
 
