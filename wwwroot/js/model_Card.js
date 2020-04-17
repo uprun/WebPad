@@ -117,4 +117,12 @@ function model_Card(data)
         lookup.AddInformationToExistingOne(self, "task");
     };
 
+    self.SmallTags = ko.pureComputed(function()
+    {
+        return ko.utils.arrayFilter(self.Tags(), function(item)
+        {
+            return item.Destination.text().length < 20;
+        })
+    });
+
 }

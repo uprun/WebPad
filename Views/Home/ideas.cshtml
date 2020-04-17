@@ -9,8 +9,8 @@
     <meta name="msapplication-TileColor" content="#333333">
     
 
-    <meta name="description" content="Secure todo, note-taking and more.">
-    <meta name="keywords" content="secure, todo, note taking app, note-taking, privacy, link notes, linked-data, linked data, knowledge graph, semantic web, semantic">
+    <meta name="description" content="Wiki, personal wiki.">
+    <meta name="keywords" content="wiki, personal wiki, personal-wiki, secure, todo, note taking app, note-taking, privacy, link notes, linked-data, linked data, knowledge graph, semantic web, semantic">
     <meta name="author" content="Kryvonos Oleksandr">
 
     <!-- Facebook's OpenGraph protocol meta start -->
@@ -22,10 +22,10 @@
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="500" />
     <meta property="og:image:height" content="500" />
-    <meta property="og:image:alt" content="The WebPad logo that consists of 4 bricks colored in (from top to bottom): orange, purple, green and yellow." />
+    <meta property="og:image:alt" content="The WebPad logo that consists of 4 colored lightning symbol, that l: orange, purple, green and yellow." />
 
     <meta property="og:url" content="https://webpad.com.ua/" />
-    <meta property="og:description" content="Secure todo, note-taking and more." />
+    <meta property="og:description" content="Wiki, personal wiki." />
     <meta property="og:determiner" content="the" />
     <meta property="og:site_name" content="WebPad" />
     <meta property="og:video" content="https://www.youtube.com/watch?v=SxVn7iSVn3A" />
@@ -126,7 +126,7 @@
         <div vocab="https://schema.org/"
             typeof="WebApplication" style="display: none;">
             <span property="name" >WebPad</span>
-            <span property="description">task list and personal wiki.</span>
+            <span property="description">wiki, personal wiki.</span>
             <span property="accessMode">textual</span>
             <div property="offers" typeof="Offer">
                 Price: $<span property="price">0.00</span>
@@ -238,65 +238,11 @@
         } -->
         
         <script type="text/html" id="tag-template">
-            <div>
-                <span data-bind="if: $data.toUnlink">
-                    <span
-                        class="webpad-break-words-node" data-bind=
-                    "
-                        style:
-                        {
-                            color: $data.Destination.color,
-                        },
-                        text:$data.Destination.textAlmost
-                        ">
-                    </span>
-                    <div style="padding-left: 1.4em;">
-                        <div class="webpad-brightness-dimmed webpad-button-no-border">
-                            <img src="svg/unlink-orange.svg" class="webpad-edit-pencil" alt="unlink question"/> 
-                        </div>
-                        <span class="webpad-brightness-dimmed" style="color: aliceblue;">
-                            ?
-                        </span>
-                       
-                        <div class=" webpad-button-no-border" data-bind="click: $data.cancelUnlink">
-                            <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel unlink"/> 
-                        </div>
-                        &nbsp;&nbsp;
-                        <div class=" webpad-button-no-border" data-bind="click: $data.confirmUnlink">
-                            <img src="svg/thumbs-up-orange.svg" class="webpad-edit-pencil" alt="confirm unlink"/> 
-                        </div>
-                       
-                    </div>
-                    
-                </span>
-                <span data-bind="ifnot: $data.toUnlink">
-
+                <span >
+                    <span class="webpad-brightness-dimmed" style="color: aliceblue;" alt="hashTagBeginSymbol">#</span>
                     <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Destination }  -->
                     <!-- /ko -->
-
-            
-
-                    <span data-bind="if: $data.toolBoxVisible">
-                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^_^]</span>
-                    </span>
-                    <span data-bind="ifnot: $data.toolBoxVisible">
-                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="open toolbox">[..]</span>
-                    </span>
-                    
-                    <span data-bind="if: $data.toolBoxVisible">
-                        
-                        <span class="webpad-brightness-dimmed" data-bind=" click: $root.jumpToCard">
-                            <img src="svg/pin-violet.svg" class="webpad-edit-pencil" alt="jump to sub-item"/>
-                        </span>
-                        &nbsp;
-                        <span class="webpad-brightness-dimmed " data-bind=" click: $data.prepareToUnlink">
-                            <img src="svg/unlink-orange.svg" class="webpad-edit-pencil" alt="remove"/> 
-                        </span>
-                    </span>
-        
                 </span>
-        
-            </div>
         </script>
         
         <script type="text/html" id="additional-info-template">
@@ -304,6 +250,7 @@
             <span class="webpad-extra-information-plus-icon" data-bind="ifnot: $data.AdditionalInformationTextVisible">
                 
                     <span class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
+                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" alt="hashTagBeginSymbol">#</span>
                         <img src="svg/plus.svg" class="webpad-edit-pencil" alt="Add information" /> 
                     </span>
             </span>
@@ -320,7 +267,7 @@
                                     color: $data.AdditionalInformationTextColor,
                                 },">
                         <input 
-                            placeholder="input information" 
+                            placeholder="add tag" 
                             class="webpad-extra-information w3-animate-opacity"
                             type="text" 
                             data-bind="
@@ -428,29 +375,36 @@
                         <!-- /ko -->
                         <span data-bind="ifnot: $data.toBeRemoved">
                             
-                                <span data-bind="ifnot: $data.underEdit">
-                                    <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Note }  -->
-                                    <!-- /ko -->
+                            <span data-bind="ifnot: $data.underEdit">
+                                <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Note }  -->
+                                <!-- /ko -->
+                            </span>
+                            <span data-bind="if: $data.underEdit">
+                                <span 
+                                        placeholder="..." 
+                                        class="webpad-contenteditable webpad-main-information webpad-break-words-node"
+                                        data-bind="
+                                            contentEditable: $data.underEdit,
+                                            htmlLazy:  $data.Note.text,
+                                            style:
+                                            {
+                                                color: $data.Note.color,
+                                            },
+                                            event: {blur: $root.SwitchEditOfCard},
+                                            hasFocus: $data.underEdit
+                                            " 
+                                    ></span>
+                            </span>
+                            <!-- ko if: $data.SmallTags().length > 0  -->
+                                <br/>
+                                <span data-bind="template: { name: 'tag-template', foreach: $data.SmallTags } " >
                                 </span>
-                                <span data-bind="if: $data.underEdit">
-                                    <span 
-                                            placeholder="..." 
-                                            class="webpad-contenteditable webpad-main-information webpad-break-words-node"
-                                            data-bind="
-                                                contentEditable: $data.underEdit,
-                                                htmlLazy:  $data.Note.text,
-                                                style:
-                                                {
-                                                    color: $data.Note.color,
-                                                },
-                                                event: {blur: $root.SwitchEditOfCard},
-                                                hasFocus: $data.underEdit
-                                                " 
-                                        ></span>
-                                </span>
+                            <!-- /ko -->
+                            
+                            <!-- tool-box menu-->
                             <span style="font-size: 2rem;">
                                 <span data-bind="if: $data.toolBoxVisible">
-                                    <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[^_^]</span>
+                                    <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[::]</span>
                                 </span>
                                 <span data-bind="ifnot: $data.toolBoxVisible">
                                     <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="open toolbox">[..]</span>
@@ -473,13 +427,12 @@
                                             text: 'is a task'">
                                     </button>
                                 </span>
+                                <span data-bind="if: $data.toolBoxVisible">
+                                    <div style="" data-bind="template: { name: 'additional-info-template' } " >
+                                    </div>
+                                </span>    
                             </span>
-                            <h2>
-                                <div style="" data-bind="template: { name: 'additional-info-template' } " >
-                                </div>
-                            </h2>
-                            <div style="padding-left: 1em;" data-bind="template: { name: 'tag-template', foreach: $data.Tags } " >
-                            </div>
+                            
                            
                             
                             
@@ -756,7 +709,7 @@
                     <h2>
                     
                             <input 
-                                placeholder="create or find..." 
+                                placeholder="create or search note ..." 
                                 class="webpad-search-bar"
                                 type="text" 
                                 data-bind="
