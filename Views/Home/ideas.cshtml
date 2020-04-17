@@ -95,6 +95,8 @@
         <script language="JavaScript" type="text/javascript" src="js/jumpToCard.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/jumpToCardOnCreate.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/jumpToCardFromWord.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/jumpToCardFromQuote.js" asp-append-version="true"></script>
+        
         <script language="JavaScript" type="text/javascript" src="js/insertIntoStackOfCards.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/pushIntoStackOfCards.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/clearStackOfCards.js" asp-append-version="true"></script>
@@ -379,7 +381,7 @@
                                     <!-- ko template: { name: 'text-with-dictionary-template', data: $data }  -->
                                     <!-- /ko -->
                                     &nbsp;
-                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.5em;" data-bind=" click: $root.jumpToCard">
+                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;" data-bind=" click: $root.jumpToCardFromQuote">
                                         <img src="svg/link.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
                                     </div>
                                 </div>
@@ -411,6 +413,7 @@
                                 </span>
                             <!-- /ko -->
                             
+                            
                             <!-- tool-box menu-->
                             <span style="font-size: 2rem;">
                                 <span data-bind="if: $data.toolBoxVisible">
@@ -439,6 +442,21 @@
                                     </div>
                                 </span> 
                             </span>
+                            <!-- tool-box menu: end -->
+
+                            <!-- ko foreach: $data.BigTags  -->
+                                <div class="webpad-quote webpad-brightness-dimmed ">
+                                    
+                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;" data-bind=" click: $root.jumpToCard">
+                                        <img src="svg/link.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
+                                    </div>
+                                    &nbsp;
+                                    <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Destination }  -->
+                                    <!-- /ko -->
+                                    
+                                </div>
+                                
+                            <!-- /ko -->
                             
                            
                             

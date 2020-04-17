@@ -125,4 +125,11 @@ function model_Card(data)
         })
     });
 
+    self.BigTags = ko.pureComputed(function()
+    {
+        return ko.utils.arrayFilter(self.Tags(), function(item)
+        {
+            return item.Destination.text().length >= 20;
+        })
+    });
 }
