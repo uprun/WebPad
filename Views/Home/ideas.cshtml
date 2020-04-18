@@ -103,6 +103,7 @@
 
         <script language="JavaScript" type="text/javascript" src="js/SearchNotesQuery.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/pushToSearchNotesQuery.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/rollbackSearchNotesQuery.js" asp-append-version="true"></script>
 
         <script language="JavaScript" type="text/javascript" src="js/GetRandomColor.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/MigrationOfColorOfNode.js" asp-append-version="true"></script>
@@ -575,7 +576,10 @@
                         Pad
                     </span>
 
-                    <span class="webpad-color-yellow" style="font-size: 2rem;">
+                    <span class="webpad-color-yellow webpad-hide-on-small-screen" style="font-size: 2rem;">
+                        : personal wiki
+                    </span>
+                    <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
                         : personal wiki
                     </span>
                 </div>
@@ -669,27 +673,79 @@
             <div class="w3-row">
                 <div class="w3-col w3-container s0 m2 l3">
                 </div>
-                <div class="w3-col w3-container s12 m8 l6">
-                    <h2>
+                <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-small-screen" style="font-size: 1.4rem;">
                     
+                    <span data-bind="if: $root.stackSearchNotesQuery().length > 0">
+                        <div class="webpad-button-no-border" data-bind=" click: $root.rollbackSearchNotesQuery">
+                            <span lass="webpad-brightness-dimmed" style="color: aliceblue; vertical-align: middle;" data-bind="text: $root.stackSearchNotesQuery().length">
+                            </span>
+                            <img src="svg/history.svg" class="webpad-edit-pencil" alt="create"/> 
+                        </div>
+                    </span>
+                    <span data-bind="if: $root.stackSearchNotesQuery().length === 0 && $root.SearchNotesQuery().trim().length > 0">
+                        <div class="webpad-button-no-border" data-bind=" click: $root.rollbackSearchNotesQuery">
+                            <img src="svg/history.svg" class="webpad-edit-pencil" alt="create"/> 
+                        </div>
+                    </span>
+                    <input 
+                        placeholder="create or search note ..." 
+                        class="webpad-search-bar webpad-search-bar-adjusted"
+                        type="text" 
+                        data-bind="
+                            textInput: $root.SearchNotesQuery,
+                            event: {keypress: $root.searchBarKeyPress}
+                            " 
+                    />
+                    <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
+                        <div class="webpad-button-no-border" data-bind=" click: $root.CreateNoteFromSearchQuery">
+                            <img src="svg/plus.svg" class="webpad-edit-pencil" alt="create"/> 
+                        </div>
+                    </span>
+                            
+        
+                    
+                </div>
+                <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-large-screen" style="font-size: 1.4rem; margin: 0px; padding: 0px;">
+                    <div class="w3-row">
+                        <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 1.4rem;">
+                            <span data-bind="if: $root.stackSearchNotesQuery().length > 0">
+                                <div class="webpad-button-no-border" data-bind=" click: $root.rollbackSearchNotesQuery">
+                                    <span lass="webpad-brightness-dimmed" style="color: aliceblue; vertical-align: middle;" data-bind="text: $root.stackSearchNotesQuery().length">
+                                    </span>
+                                    <img src="svg/history.svg" class="webpad-edit-pencil" alt="create"/> 
+                                </div>
+                            </span>
+                            <span data-bind="if: $root.stackSearchNotesQuery().length === 0 && $root.SearchNotesQuery().trim().length > 0">
+                                <div class="webpad-button-no-border" data-bind=" click: $root.rollbackSearchNotesQuery">
+                                    <img src="svg/history.svg" class="webpad-edit-pencil" alt="create"/> 
+                                </div>
+                            </span>
+                        </div>
+                        <div class="w3-col w3-container s6  webpad-hide-on-large-screen" style="font-size: 1.4rem;">
+                            <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
+                                <div class="webpad-button-no-border" style="float: right;" data-bind=" click: $root.CreateNoteFromSearchQuery">
+                                    <img src="svg/plus.svg" class="webpad-edit-pencil" alt="create"/> 
+                                </div>
+                            </span>
+                        </div>
+                        <div class="w3-col w3-container s12 webpad-hide-on-large-screen" style="font-size: 1.4rem;">
                             <input 
                                 placeholder="create or search note ..." 
-                                class="webpad-search-bar"
+                                class="webpad-search-bar webpad-search-bar-full-width"
                                 type="text" 
                                 data-bind="
                                     textInput: $root.SearchNotesQuery,
                                     event: {keypress: $root.searchBarKeyPress}
                                     " 
                             />
-                            <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
-                                <div class="webpad-button-no-border" data-bind=" click: $root.CreateNoteFromSearchQuery">
-                                    <img src="svg/plus.svg" class="webpad-edit-pencil" alt="create"/> 
-                                </div>
-                            </span>
+                        </div>
+                    </div>
+                    
+                    
+                    
                             
         
                     
-                    </h2>
                 </div>
             </div>
             

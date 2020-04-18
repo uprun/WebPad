@@ -157,9 +157,19 @@ a
     display: inline-block;
 }
 
+.webpad-search-bar-adjusted
+{
+    width: calc(100% - 4em);
+}
+
+.webpad-search-bar-full-width
+{
+    width: 100%;
+}
+
 .webpad-search-bar
 {
-    width: calc(100% - 2em);
+    
     min-width: 150px;
     color: #64e05e;
     border-radius: .3em;
@@ -167,6 +177,8 @@ a
     border-color: aliceblue;
     padding-left: .3em;
     padding-right: .3em;
+    padding-bottom: .3em;
+    padding-top: .3em;
 }
 .webpad-search-bar::placeholder
 {
@@ -372,3 +384,5 @@ a
 .webpad-color-coral{ 
     color: #ff8f95;
 }
+@media (max-width:60rem){.webpad-hide-on-small-screen{display: none;}}
+@media (min-width:60rem){.webpad-hide-on-large-screen{display: none;}}
