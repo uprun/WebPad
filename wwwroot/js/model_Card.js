@@ -106,7 +106,7 @@ function model_Card(data)
 
     self.isTask = ko.pureComputed(function()
     {
-        var foundTaskTag = ko.utils.arrayFirst(self.Tags(), function(item){
+        var foundTaskTag = ko.utils.arrayFirst(self.SmallTags(), function(item){
             return item.Destination.text().toLowerCase().trim() === "task";
         });
         return  foundTaskTag !== null;
@@ -114,16 +114,19 @@ function model_Card(data)
 
     self.convertFromTask = function()
     {
+        var foundTaskTags = 
+        ko.utils.arrayFilter(self.SmallTags(),
+            function(item)
+            {
+                return item.Destination.text().toLowerCase().trim() === "task";
+            });
         ko.utils.arrayForEach
         (
-            self.Tags(), 
+            foundTaskTags, 
             function(item) 
             {
-                if(item.Destination.text().toLowerCase().trim() === "task")
-                {
-                    lookup.RemoveConnection(item);
-                    lookup.RemoveNote({Note: item.Destination });
-                }
+                lookup.RemoveConnection(item);
+                lookup.RemoveNote({Note: item.Destination });
             }
         );
         
