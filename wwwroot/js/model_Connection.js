@@ -15,7 +15,7 @@ function model_Connection(data)
     self.Destination = findNodeByIdFunc(self.DestinationId);
     self.DestinationCard = lookup.hashCards[self.DestinationId];
     self.Destination.isReferenced(true);
-    self.Destination.ReferencedBy.push(self.Source);
+    self.Destination.AddExternalReferencedBy(self.Source);
     self.label = ko.observable(label);
     if(typeof(data.textChangedHandler) != "undefined")
     {

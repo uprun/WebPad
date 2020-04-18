@@ -50,6 +50,23 @@ function model_Node(data)
 
     self.isReferenced = ko.observable(false);
     self.ReferencedBy = ko.observableArray([]);
+    self.AddExternalReferencedBy = function(data)
+    {
+        var filtered =  
+            ko.utils.arrayFilter
+            (
+                self.ReferencedBy(),
+                function(item)
+                { 
+                    return  item.id === data.id;
+                } 
+            );
+        if(filtered.length === 0)
+        {
+            self.ReferencedBy.push(data);
+        }
+    };
+    
     
 
 

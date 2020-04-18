@@ -102,7 +102,8 @@
         <script language="JavaScript" type="text/javascript" src="js/clearStackOfCards.js" asp-append-version="true"></script>
 
         <script language="JavaScript" type="text/javascript" src="js/SearchNotesQuery.js" asp-append-version="true"></script>
-        
+        <script language="JavaScript" type="text/javascript" src="js/pushToSearchNotesQuery.js" asp-append-version="true"></script>
+
         <script language="JavaScript" type="text/javascript" src="js/GetRandomColor.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/MigrationOfColorOfNode.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/switchExpandedCardTagsList.js" asp-append-version="true"></script>
@@ -244,7 +245,7 @@
         
         <script type="text/html" id="tag-template">
                 <span >
-                    <span class="webpad-brightness-dimmed" style="color: aliceblue;" alt="hashTagBeginSymbol">#</span>
+                    <span class="webpad-brightness-dimmed" style="color: #84bfff;" alt="hashTagBeginSymbol">#</span>
                     <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Destination }  -->
                     <!-- /ko -->
                 </span>
@@ -256,6 +257,7 @@
                 
                     <span class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
                         <span class="webpad-brightness-dimmed" style="color: aliceblue;" alt="hashTagBeginSymbol">#</span>
+                        <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="Add information" /> 
                         <img src="svg/plus.svg" class="webpad-edit-pencil" alt="Add information" /> 
                     </span>
             </span>
@@ -265,14 +267,23 @@
                         <span  class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
                             <img src="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Cancel edit" /> 
                         </span>
-                    <span style="width: 100%;" class="webpad-break-words-node"
+                        <br/>
+                    <!-- ko if:  $data.AdditionalInformationText().trim().length < 20 -->
+                        <span class="webpad-brightness-dimmed" style="color: #84bfff;" alt="hashTagBeginSymbol">#</span>
+                    <!-- /ko -->
+                    <!-- ko ifnot:  $data.AdditionalInformationText().trim().length < 20 -->
+                        <span class="webpad-brightness-dimmed webpad-button-no-border" >
+                            <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                        </span>
+                    <!-- /ko -->
+                    <span style="width: calc(100% - 2em);" class="webpad-break-words-node"
                         data-bind="
                                 style:
                                 {
                                     color: $data.AdditionalInformationTextColor,
                                 },">
                         <input 
-                            placeholder="add tag" 
+                            placeholder="add tag or quote" 
                             class="webpad-extra-information w3-animate-opacity"
                             type="text" 
                             data-bind="
@@ -448,16 +459,16 @@
                             <!-- tool-box menu: end -->
 
                             <!-- ko if: $data.BigTags().length > 0  -->
-                                <div class="webpad-brightness-dimmed " data-bind=" click: $root.jumpToCard">
+                                <div class="webpad-brightness-dimmed " data-bind=" click: $root.pushToSearchNotesQuery">
                                     
-                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;" data-bind=" click: $root.jumpToCard">
+                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;" >
                                         <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
                                     </div>
                                     &nbsp;
                                     <span lass="webpad-brightness-dimmed" style="color: aliceblue; font-size: 1.4em; vertical-align: middle;" data-bind="text: $data.BigTags().length">
 
                                     </span>
-                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;  "  data-bind=" click: $root.jumpToCard">
+                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;  " >
                                         <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
                                     </div>
                                     

@@ -180,7 +180,7 @@ a
     box-sizing : border-box;
     border-color: aliceblue;
     border-style: solid;
-    width: 100%;
+    width: calc(100% - 2em);
     padding-left: .3em;
     padding-right: .3em;
 }

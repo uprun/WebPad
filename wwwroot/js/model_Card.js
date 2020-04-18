@@ -29,7 +29,7 @@ function model_Card(data)
         var filtered =  
             ko.utils.arrayFilter
             (
-                self.Tags(),
+                self.SmallTags(),
                 function(item)
                 { 
                     var result = 
@@ -39,7 +39,24 @@ function model_Card(data)
                 } 
             );
         var tagsAnyPassed = filtered.length > 0 ;
-        return tagsAnyPassed;
+        if(tagsAnyPassed)
+        {
+            return true;
+        }
+        var filteredReferencedBy =  
+            ko.utils.arrayFilter
+            (
+                self.Note.ReferencedBy(),
+                function(item)
+                { 
+                    var result = 
+                        self.AnalyzeText(item.text(), query);
+                    return result; 
+                } 
+            );
+
+        var referencedByPassed = filteredReferencedBy.length > 0;
+        return referencedByPassed;
     };
     self.underEdit = ko.observable(false);
     self.blurHandler = function()
