@@ -100,6 +100,9 @@
         <script language="JavaScript" type="text/javascript" src="js/insertIntoStackOfCards.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/pushIntoStackOfCards.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/clearStackOfCards.js" asp-append-version="true"></script>
+
+        <script language="JavaScript" type="text/javascript" src="js/SearchNotesQuery.js" asp-append-version="true"></script>
+        
         <script language="JavaScript" type="text/javascript" src="js/GetRandomColor.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/MigrationOfColorOfNode.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/switchExpandedCardTagsList.js" asp-append-version="true"></script>
@@ -444,15 +447,19 @@
                             </span>
                             <!-- tool-box menu: end -->
 
-                            <!-- ko foreach: $data.BigTags  -->
-                                <div class="webpad-quote webpad-brightness-dimmed ">
+                            <!-- ko if: $data.BigTags().length > 0  -->
+                                <div class="webpad-brightness-dimmed " data-bind=" click: $root.jumpToCard">
                                     
                                     <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;" data-bind=" click: $root.jumpToCard">
-                                        <img src="svg/link.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
+                                        <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
                                     </div>
                                     &nbsp;
-                                    <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Destination }  -->
-                                    <!-- /ko -->
+                                    <span lass="webpad-brightness-dimmed" style="color: aliceblue; font-size: 1.4em; vertical-align: middle;" data-bind="text: $data.BigTags().length">
+
+                                    </span>
+                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;  "  data-bind=" click: $root.jumpToCard">
+                                        <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
+                                    </div>
                                     
                                 </div>
                                 
