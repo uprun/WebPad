@@ -365,7 +365,8 @@
                         {
                             color: $parent.color,
                             'border-color': wordNode.color,
-                            'border-bottom-style': word.length < 3 ? 'solid' : 'dotted'
+                            'border-bottom-style': word.length < 3 ? 'solid' : 'dotted',
+                            'word-break': word.length < 20 ? 'break-word' : 'break-all',
                         },
                         click: $root.jumpToCardFromWord
                             ">
@@ -377,6 +378,7 @@
                         style:
                         {
                             color: $parent.color,
+                            'word-break': word.length < 20 ? 'break-word' : 'break-all',
                         },
                             ">
                     </span>
@@ -409,6 +411,11 @@
                                 <span 
                                         placeholder="..." 
                                         class="webpad-contenteditable webpad-main-information webpad-break-words-node"
+                                        style="
+                                            padding-left: .3em;
+                                            padding-right: .3em;
+                                            word-break: break-all;
+                                            "
                                         data-bind="
                                             contentEditable: $data.underEdit,
                                             htmlLazy:  $data.Note.text,

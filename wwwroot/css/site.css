@@ -207,7 +207,7 @@ a
     border-radius: .3em;
     box-sizing : border-box;
     border-color: aliceblue;
-    border-style: solid;
+    border-style: none;
     min-width: 4em;
     width: 100%;
 }
