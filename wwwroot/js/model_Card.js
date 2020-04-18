@@ -137,11 +137,24 @@ function model_Card(data)
         lookup.AddInformationToExistingOne(self, "task");
     };
 
+    self.isSmallTagChecker = function(item)
+    {
+        if(typeof(item.DestinationCard) !== 'undefined' 
+            && item.DestinationCard.Tags().length > 0)
+        {
+            return false;
+        }
+        else
+        {
+            return item.Destination.text().length < 20;
+        }
+    };
+
     self.SmallTags = ko.pureComputed(function()
     {
         return ko.utils.arrayFilter(self.Tags(), function(item)
         {
-            return item.Destination.text().length < 20;
+            return self.isSmallTagChecker(item);
         })
     });
 
@@ -149,7 +162,7 @@ function model_Card(data)
     {
         return ko.utils.arrayFilter(self.Tags(), function(item)
         {
-            return item.Destination.text().length >= 20;
+            return self.isSmallTagChecker(item) === false;
         })
     });
 }

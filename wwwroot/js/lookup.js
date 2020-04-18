@@ -12,6 +12,8 @@ lookup.history = ko.observableArray([]);
 lookup.dictionary_of_notes = ko.pureComputed(function()
     {
         var dictionary = {};
+        var dummyCallToTriggerOnConnectionsChange =
+            lookup.Connections().length;
         ko.utils.arrayForEach(lookup.Notes(), function(item) {
             var key = 
                 item
@@ -21,7 +23,15 @@ lookup.dictionary_of_notes = ko.pureComputed(function()
                 .replace("\t", " ")
                 .toLowerCase()
                 .trim();
-            dictionary[key] = item;
+            if(item.isReferenced())
+            {
+
+            }
+            else
+            {
+                dictionary[key] = item;
+            }
+            
         });
         return dictionary;
 
