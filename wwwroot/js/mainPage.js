@@ -494,6 +494,9 @@ function ConnectedNotesViewModel()
 
     lookup.mergedOpenedAndFilteredCards = ko.pureComputed(function()
     {
+        // there are 2 options 
+        // 1) cards in stackOfCards are not preseneted in filtration
+        // 2) first card present in filtration?
         if(lookup.stackOfCards().length > 0)
         {
             var toWorkWith = lookup.stackOfCards();

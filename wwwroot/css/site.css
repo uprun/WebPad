@@ -384,5 +384,22 @@ a
 .webpad-color-coral{ 
     color: #ff8f95;
 }
-@media (max-width:60rem){.webpad-hide-on-small-screen{display: none;}}
-@media (min-width:60rem){.webpad-hide-on-large-screen{display: none;}}
+.webpad-hide-on-small-screen
+{
+    display: initial;
+}
+.webpad-hide-on-large-screen
+{
+    display: none;
+}
+@media (max-width:60rem)
+{
+    .webpad-hide-on-small-screen
+    {
+        display: none;
+    }
+    .webpad-hide-on-large-screen
+    {
+        display: initial;
+    }
+}
