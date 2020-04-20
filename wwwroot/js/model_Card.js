@@ -50,7 +50,7 @@ function model_Card(data)
                 function(item)
                 { 
                     var result = 
-                        self.AnalyzeText(item.text(), query);
+                        self.AnalyzeText(item.Source.text(), query);
                     return result; 
                 } 
             );
@@ -88,6 +88,26 @@ function model_Card(data)
     self.reallyRemove = function()
     {
         self.completlyRemoved(true);
+        // remove incoming references
+        ko.utils.arrayForEach
+        (
+            self.Note.ReferencedBy(), 
+            function(item) 
+            {
+                lookup.RemoveConnection(item);
+            }
+        );
+        
+        //remove tags
+        ko.utils.arrayForEach
+        (
+            self.SmallTags(), 
+            function(item) 
+            {
+                lookup.RemoveConnection(item);
+                lookup.RemoveNote({Note: item.Destination });
+            }
+        );
         lookup.RemoveNote(self);
     }
 

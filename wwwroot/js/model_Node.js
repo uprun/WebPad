@@ -52,8 +52,9 @@ function model_Node(data)
     self.ReferencedBy = ko.observableArray([]);
     self.ReferencedByWrapped = ko.pureComputed(function()
     {
-        return ko.utils.arrayMap(self.ReferencedBy(), function(item)
+        return ko.utils.arrayMap(self.ReferencedBy(), function(elem)
         {
+            var item = elem.Source;
             var result = {
                 color: item.color,
                 id: item.id,
@@ -83,7 +84,7 @@ function model_Node(data)
                 self.ReferencedBy(),
                 function(item)
                 { 
-                    return  item.id === data.id;
+                    return  item.Source.id === data.Source.id;
                 } 
             );
         if(filtered.length === 0)
