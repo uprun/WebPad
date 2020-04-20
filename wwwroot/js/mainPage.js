@@ -480,11 +480,11 @@ function ConnectedNotesViewModel()
     lookup.FilteredCards
         .extend({ rateLimit: 500 });
 
-    lookup.CurrentResultLimit = ko.observable(25);
+    lookup.CurrentResultLimit = ko.observable(45);
 
     lookup.ResetCurrentResultLimit = function()
     {
-        lookup.CurrentResultLimit(25);
+        lookup.CurrentResultLimit(45);
     };
 
     lookup.LimitedFilteredCards = ko.pureComputed(function()
@@ -569,18 +569,30 @@ function ConnectedNotesViewModel()
                 }
                 
             }
-            
+            var cardsToAdd = lookup.stackOfCards();
+            var hideCardsLookup = {};
+            for(var t = 1; t < cardsToAdd.length; t++ )
+            {
+                hideCardsLookup[cardsToAdd[t].Note.id] = true;
+
+            }
             ko.utils.arrayForEach(lookup.LimitedFilteredCards(), function(item, index) {
-                var dividedIndex = index % columnsCount;
-                result[dividedIndex].push(item);
-                if(index === indexOfRootCardFound)
+                
+                if(typeof(hideCardsLookup[item.Note.id]) === 'undefined')
                 {
-                    var cardsToAdd = lookup.stackOfCards();
-                    for(var g = 1; g < cardsToAdd.length; g++ )
+                    var dividedIndex = index % columnsCount;
+                    result[dividedIndex].push(item);
+                    if(index === indexOfRootCardFound)
                     {
-                        result[dividedIndex].push(cardsToAdd[g]);
+                        
+                        for(var g = 1; g < cardsToAdd.length; g++ )
+                        {
+                            result[dividedIndex].push(cardsToAdd[g]);
+                        }
                     }
                 }
+                
+                
             });
             return result;
 

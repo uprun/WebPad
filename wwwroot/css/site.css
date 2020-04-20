@@ -388,7 +388,15 @@ a
 {
     display: initial;
 }
+div.webpad-hide-on-small-screen
+{
+    display: block;
+}
 .webpad-hide-on-large-screen
+{
+    display: none;
+}
+div.webpad-hide-on-large-screen
 {
     display: none;
 }
@@ -398,8 +406,16 @@ a
     {
         display: none;
     }
+    div.webpad-hide-on-small-screen
+    {
+        display: none;
+    }
     .webpad-hide-on-large-screen
     {
         display: initial;
+    }
+    div.webpad-hide-on-large-screen
+    {
+        display: block;
     }
 }
