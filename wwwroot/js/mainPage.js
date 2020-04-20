@@ -536,19 +536,51 @@ function ConnectedNotesViewModel()
     lookup.cardsByColumns = ko.pureComputed(
         function()
         {
+            var result = [];
             var columnsCount = lookup.columnsCount();
             if(typeof(columnsCount) === "undefined" || columnsCount === 1 )
             {
                columnsCount = 1;
             }
-            var result = [];
+            
             for(var k = 0; k < columnsCount; k++)
             {
                 result.push([]);
             }
-            ko.utils.arrayForEach(lookup.mergedOpenedAndFilteredCards(), function(item, index) {
+
+            var indexOfRootCardFound = -1;
+            if(lookup.stackOfCards().length > 0)
+            {
+                var toWorkWith = lookup.stackOfCards();
+                
+                var x = toWorkWith[0];
+                var foundIndex = lookup.LimitedFilteredCards().indexOf(x);
+                if(foundIndex >= 0)
+                {
+                    indexOfRootCardFound = foundIndex;
+                }
+                else
+                {
+                    for(var d = 0; d < toWorkWith.length; d++)
+                    {
+                        result[0].push(toWorkWith[d]);
+                    }
+
+                }
+                
+            }
+            
+            ko.utils.arrayForEach(lookup.LimitedFilteredCards(), function(item, index) {
                 var dividedIndex = index % columnsCount;
                 result[dividedIndex].push(item);
+                if(index === indexOfRootCardFound)
+                {
+                    var cardsToAdd = lookup.stackOfCards();
+                    for(var g = 1; g < cardsToAdd.length; g++ )
+                    {
+                        result[dividedIndex].push(cardsToAdd[g]);
+                    }
+                }
             });
             return result;
 

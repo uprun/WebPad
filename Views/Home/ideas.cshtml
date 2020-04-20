@@ -393,7 +393,7 @@
                         <!-- ko template: { name: 'to-be-removed-template' }  -->
                         <!-- /ko -->
                         <span data-bind="ifnot: $data.toBeRemoved">
-                            <!-- ko foreach: $data.Note.ReferencedBy  -->
+                            <!-- ko foreach: $data.Note.ReferencedByWrapped  -->
                                 <div class="webpad-quote webpad-brightness-dimmed ">
                                     <!-- ko template: { name: 'text-with-dictionary-template', data: $data }  -->
                                     <!-- /ko -->

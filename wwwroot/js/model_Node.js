@@ -50,6 +50,31 @@ function model_Node(data)
 
     self.isReferenced = ko.observable(false);
     self.ReferencedBy = ko.observableArray([]);
+    self.ReferencedByWrapped = ko.pureComputed(function()
+    {
+        return ko.utils.arrayMap(self.ReferencedBy(), function(item)
+        {
+            var result = {
+                color: item.color,
+                id: item.id,
+                parentNodeId: self.id,
+                textSplitted: ko.pureComputed(function()
+                {
+                    return ko.utils.arrayMap(item.textSplitted(), function(elemWord)
+                    {
+                        return {
+                            word: elemWord.word,
+                            wordNode: elemWord.wordNode,
+                            exists: elemWord.exists,
+                            parentNodeId: self.id
+                        };
+
+                    });
+                })
+            };
+            return result;
+        })
+    });
     self.AddExternalReferencedBy = function(data)
     {
         var filtered =  
@@ -132,7 +157,8 @@ function model_Node(data)
                 return {
                     word: item,
                     wordNode: found,
-                    exists: typeof(found) !== 'undefined' && self !== found
+                    exists: typeof(found) !== 'undefined' && self !== found,
+                    parentNodeId: self.id
                 };
             }
         );
