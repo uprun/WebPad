@@ -612,7 +612,7 @@ function ConnectedNotesViewModel()
 
     lookup.ExtendCurrentResultLimit = function()
     {
-        lookup.CurrentResultLimit(lookup.CurrentResultLimit() + 15);
+        lookup.CurrentResultLimit(lookup.CurrentResultLimit() + 45);
     };
 
     lookup.SendMessage = function(item) {
