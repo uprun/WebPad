@@ -495,12 +495,13 @@
                             </span>
                             <!-- tool-box menu: end -->
 
-                            <!-- ko if: $data.BigTags().length > 0  -->
+                            
                                 <div class="webpad-brightness-dimmed " data-bind=" click: $root.pushToSearchNotesQuery">
                                     
                                     <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;" >
                                         <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
                                     </div>
+                                    <!-- ko if: $data.BigTags().length > 0  -->
                                     &nbsp;
                                     <span lass="webpad-brightness-dimmed" style="color: aliceblue; font-size: 1.4em; vertical-align: middle;" data-bind="text: $data.BigTags().length">
 
@@ -508,10 +509,15 @@
                                     <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;  " >
                                         <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
                                     </div>
+                                    <!-- /ko -->
+                                    &nbsp;
+                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;  " >
+                                        <img src="svg/comment-dots.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
+                                    </div>
                                     
                                 </div>
                                 
-                            <!-- /ko -->
+                            
                             
                             <div class="webpad-hide-on-small-screen" style="height: 2em;">
                             </div>
