@@ -152,6 +152,7 @@ function ConnectedNotesViewModel()
         lookup.data_color_presets.forEach(element => {
             lookup.for_code_access_hash_of_color_presets[element.color] = true;
         });
+        // time consuming
         var toAdd = ko.utils.arrayMap(data.notes, function(elem) 
         {
             var noteToAdd = lookup.Instanciate_model_node(elem);
@@ -160,6 +161,7 @@ function ConnectedNotesViewModel()
         });
         ko.utils.arrayPushAll(lookup.Notes, toAdd);
 
+        //time consuming
         var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
             var connectionToAdd = lookup.Instanciate_model_connection(
                 {
@@ -179,6 +181,7 @@ function ConnectedNotesViewModel()
             return connectionToAdd;
         });
         ko.utils.arrayPushAll(lookup.Connections, connectionsToAdd);
+        //time consuming
         for(var key in lookup.hashCards)
         {
             lookup.composedCards.push(lookup.hashCards[key]);
@@ -1044,7 +1047,7 @@ function ConnectedNotesViewModel()
     else {
         lookup.freeLocalIndex = lookup.Notes().length + lookup.Connections().length + 1;
     }
-    
+
     if(typeof(lookup.localStorage["PromoVisible"]) != "undefined")
     {
         lookup.PromoVisible(JSON.parse(lookup.localStorage.getItem("PromoVisible")) );

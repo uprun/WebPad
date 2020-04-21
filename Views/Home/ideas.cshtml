@@ -32,9 +32,9 @@
     <!-- Facebook's OpenGraph protocol meta end -->
     
     <link rel="manifest" href="json/manifest.json" asp-append-version="true">
-    <script src="lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+    <script src="lib/jquery/jquery.js" asp-append-version="true"></script>
     
-    <script src="js/knockout-3.4.2.js" asp-append-version="true"></script>
+    <script src="lib/knockout/knockout-latest.debug.js" asp-append-version="true"></script>
 
 
     <link rel="stylesheet" href="css/site.css" asp-append-version="true"/>
@@ -57,7 +57,7 @@
 </head>
 <body class='night' style="background-color: #000000; margin: 0; " data-bind="style: { background: $root.backgroundColor() }">
 
-        <script>
+        @* <script>
         if('serviceWorker' in navigator) {
           navigator.serviceWorker
                    .register('service-worker-offline.js', { scope: '/' })
@@ -68,7 +68,7 @@
                         console.log('ServiceWorker registration successful with scope: ', registration.scope);
                     });
         }
-        </script>
+        </script> *@
         
         <link rel="stylesheet" href="css/w3-4.13.css" asp-append-version="true"> 
         
