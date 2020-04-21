@@ -129,7 +129,7 @@ function model_Card(data)
         var foundTaskTag = ko.utils.arrayFirst(self.SmallTags(), function(item){
             return item.Destination.text().toLowerCase().trim() === "task";
         });
-        return  foundTaskTag !== null;
+        return  typeof(foundTaskTag) !== 'undefined';
     });
 
     self.convertFromTask = function()

@@ -404,7 +404,7 @@
                             <!-- /ko -->
                             <span data-bind="
                                 ifnot: $data.underEdit,">
-                                <span data-bind="if: $data.isTask" style="font-size: 1.4em;">
+                                <span data-bind="if: $data.isTask()" style="font-size: 1.4em;">
                                     <span data-bind="if: $data.Note.isDone">
                                         <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.switchDone">[x]</span>
                                     </span>
@@ -469,7 +469,7 @@
                                         </div>
                                     </span>
                                     &nbsp;
-                                    <span data-bind="ifnot: $data.isTask" >
+                                    <span data-bind="ifnot: $data.isTask()" >
                                         <div 
                                             class="webpad-brightness-dimmed webpad-button-no-border" 
                                             style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"

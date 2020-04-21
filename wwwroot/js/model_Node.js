@@ -11,21 +11,6 @@ function model_Node(data)
         });
     }
     
-    self.textAlmost = ko.computed(function()
-    {
-        var valueToCheck = self.text().trim();
-        if( 
-            typeof(valueToCheck) == "undefined" ||
-             valueToCheck == null || 
-             valueToCheck == "")
-             {
-                 return "...";
-             }
-        else
-        {
-            return valueToCheck;
-        }
-    });
     self.color = data.color;
     self.background = data.background;
     self.createDate = data.createDate;
