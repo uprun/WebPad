@@ -31,7 +31,6 @@ function ConnectedNotesViewModel()
     
     lookup.crypto_worker = new Worker("js/worker-crypto.js");
 
-    
 
     lookup.publicCryptoKey = ko.observable(undefined);
 
@@ -138,61 +137,7 @@ function ConnectedNotesViewModel()
         });
     };
 
-    lookup.CheckIfEveryNodeHasMigratedColor = function()
-    {
-            ko.utils.arrayForEach(lookup.Notes(), function(item) {
-                lookup.MigrationOfColorOfNode(item);
-            });
-    };
-
-    lookup.composedCards = ko.observableArray([]);
-
-    lookup.populate = function(data) {
-        lookup.for_code_access_hash_of_color_presets = {};
-        lookup.data_color_presets.forEach(element => {
-            lookup.for_code_access_hash_of_color_presets[element.color] = true;
-        });
-        // time consuming
-        var toAdd = ko.utils.arrayMap(data.notes, function(elem) 
-        {
-            var noteToAdd = lookup.Instanciate_model_node(elem);
-            lookup.hashCards[noteToAdd.id] = new model_Card({ Note: noteToAdd});
-            return noteToAdd;
-        });
-        ko.utils.arrayPushAll(lookup.Notes, toAdd);
-
-        //time consuming
-        var connectionsToAdd = ko.utils.arrayMap(data.connections, function(elem) {
-            var connectionToAdd = lookup.Instanciate_model_connection(
-                {
-                    id: elem.id,
-                    sourceId: elem.SourceId,
-                    destinationId: elem.DestinationId,
-                    label: elem.label,
-                    generated: elem.generated,
-                    findNodeByIdFunc: lookup.findNodeById
-                });
-            var found = lookup.hashCards[connectionToAdd.SourceId];
-            if(found)
-            {
-                found.Tags.unshift(connectionToAdd);
-            }
-
-            return connectionToAdd;
-        });
-        ko.utils.arrayPushAll(lookup.Connections, connectionsToAdd);
-        //time consuming
-        for(var key in lookup.hashCards)
-        {
-            lookup.composedCards.push(lookup.hashCards[key]);
-        }
-
-        lookup.CheckIfEveryNodeHasMigratedColor();
-        lookup.migrateConnectionToNode();
-
-        
-        
-    };
+    
 
     
 
@@ -1031,12 +976,7 @@ function ConnectedNotesViewModel()
     }
 
     
-    if(lookup.localStorage["Notes"]){
-        var data = {};
-        data.notes = JSON.parse(lookup.localStorage.getItem("Notes"));
-        data.connections = JSON.parse(lookup.localStorage.getItem("Connections"));
-        lookup.populate(data);
-    }
+    
     if(lookup.localStorage["privateCryptoPair"]){
         lookup.privateCryptoPair = JSON.parse(lookup.localStorage.getItem("privateCryptoPair"));
     }
@@ -1045,7 +985,7 @@ function ConnectedNotesViewModel()
         lookup.freeLocalIndex = JSON.parse(lookup.localStorage.getItem("localFreeIndex"));
     }
     else {
-        lookup.freeLocalIndex = lookup.Notes().length + lookup.Connections().length + 1;
+        //lookup.freeLocalIndex = lookup.Notes().length + lookup.Connections().length + 1;
     }
 
     if(typeof(lookup.localStorage["PromoVisible"]) != "undefined")

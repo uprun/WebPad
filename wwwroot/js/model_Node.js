@@ -10,7 +10,7 @@ function model_Node(data)
             data.textChangedHandler(changes, self);
         });
     }
-    
+
     self.color = data.color;
     self.background = data.background;
     self.createDate = data.createDate;
@@ -139,7 +139,7 @@ function model_Node(data)
                     toSearch = toSearch.substring(0, toSearch.length - 1);
                 }
 
-                var found = lookup.dictionary_of_notes()[toSearch];
+                var found = lookup.dictionary_of_notes[toSearch];
                 return {
                     word: item,
                     wordNode: found,
