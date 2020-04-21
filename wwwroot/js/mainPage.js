@@ -1151,23 +1151,6 @@ function ConnectedNotesViewModel()
         );
     };
 
-    lookup.SelectPreviousFrom = function(data) {
-        lookup.previousConnectFrom(data);
-        lookup.ResetCurrentResultLimit();
-        lookup.insertIntoStackOfCards(data);
-    };
-    lookup.ClearPreviousFrom = function() {
-        lookup.previousConnectFrom(null);
-    };
-
-    lookup.ConnectPreviousWithCurrent = function(data) {
-        // prevent self-selection, because self-loops are not allowed here
-        if(lookup.previousConnectFrom() != data){
-            lookup.ConnectNotes(lookup.previousConnectFrom().Note, data.Note );
-            lookup.previousConnectFrom(null);
-        }
-    };
-
     
 
     lookup.OpenTokenConsumptionMenu = ko.observable(false);
