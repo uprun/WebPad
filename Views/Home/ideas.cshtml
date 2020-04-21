@@ -284,7 +284,7 @@
                                     color: $data.AdditionalInformationTextColor,
                                 },">
                         <input 
-                            placeholder="add tag or quote" 
+                            placeholder="add tag or comment" 
                             class="webpad-extra-information w3-animate-opacity"
                             type="text" 
                             data-bind="
@@ -472,19 +472,33 @@
                                     </span>
                                     &nbsp;
                                     <span data-bind="ifnot: $data.isTask" >
-                                        <button  class="webpad-node webpad-green" 
-                                            data-bind=
-                                                "click: $data.convertToTask,
-                                                text: 'is a task'">
-                                        </button>
+                                        <div 
+                                            class="webpad-brightness-dimmed webpad-button-no-border" 
+                                            style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
+                                            data-bind=" click: $data.convertToTask">
+                                            <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Edit"/> 
+                                            <span class="" style="color: #84bfff; vertical-align: middle; margin-right: 0.5rem;" alt="hashTagBeginSymbol"># task</span>
+                                        </div>
                                     </span>
-                                    <span data-bind="if: $data.isTask" >
-                                        <button  class="webpad-node webpad-green" 
-                                            data-bind=
-                                                "click: $data.convertFromTask,
-                                                text: 'not a task'">
-                                        </button>
-                                    </span>
+                                    <!-- ko foreach: $data.SmallTags  -->
+                                        &nbsp;
+                                        <div 
+                                            class="webpad-brightness-dimmed webpad-button-no-border" 
+                                            style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
+                                            data-bind=" click: $parent.removeTag">
+                                            <img src="svg/trash-orange.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Edit"/> 
+                                            <span class="" style="color: #84bfff; vertical-align: middle;" alt="hashTagBeginSymbol">#</span>
+                                            <span class="" style=" vertical-align: middle; margin-right: 0.5rem;"
+                                                data-bind="style: 
+                                                {
+                                                    color: $data.Destination.color
+                                                },
+                                                text: $data.Destination.text
+                                                "
+                                                alt="hashTagBeginSymbol"></span>
+                                            
+                                        </div>
+                                    <!-- /ko -->
                                     &nbsp;
                                     <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.prepareToBeRemoved">
                                         <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="remove"/> 

@@ -152,6 +152,12 @@ function model_Card(data)
         
     };
 
+    self.removeTag = function(item)
+    {
+        lookup.RemoveConnection(item);
+        lookup.RemoveNote({Note: item.Destination });
+    };
+
     self.convertToTask = function()
     {
         lookup.AddInformationToExistingOne(self, "task");
