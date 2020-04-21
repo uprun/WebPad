@@ -1044,11 +1044,7 @@ function ConnectedNotesViewModel()
     else {
         lookup.freeLocalIndex = lookup.Notes().length + lookup.Connections().length + 1;
     }
-
-    if(lookup.localStorage["viewPosition"])
-    {
-         var parsedViewPosition = JSON.parse(lookup.localStorage.getItem("viewPosition"));
-    }
+    
     if(typeof(lookup.localStorage["PromoVisible"]) != "undefined")
     {
         lookup.PromoVisible(JSON.parse(lookup.localStorage.getItem("PromoVisible")) );
