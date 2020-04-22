@@ -2,6 +2,8 @@ function model_Card(data)
 {
     var self = this;
     self.Note = data.Note;
+    self.isRoot = typeof(data.connections_incoming) === 'undefined';
+    self.hasTags = typeof(data.connections_outgoing) !== 'undefined';
     self.Tags = ko.observableArray([]);
     self.AdditionalInformationText = ko.observable("");
     self.AdditionalInformationTextVisible = ko.observable(false);

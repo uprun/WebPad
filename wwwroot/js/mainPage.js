@@ -381,14 +381,15 @@ function ConnectedNotesViewModel()
                 lookup.sortedByDateCards(),
                 function(item, index)
                 {
-                    if(item.Tags().length == 0 && item.Note.text().length < 20)
-                    {
-                        return !item.Note.isReferenced();
-                    }
-                    else
-                    {
-                        return true;
-                    }
+                    return item.isRoot || item.hasTags || item.Note.text().length >= 20;
+                    // if(item.Tags().length == 0 && item.Note.text().length < 20)
+                    // {
+                    //     return !item.Note.isReferenced();
+                    // }
+                    // else
+                    // {
+                    //     return true;
+                    // }
                 }
 
 

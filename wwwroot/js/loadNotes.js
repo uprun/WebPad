@@ -88,7 +88,9 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
         {
             var elem = lookup.data.notes[lookup.populateNotes_startIndex];
             var noteToAdd = lookup.Instanciate_model_node(elem);
-            var composedCard = new model_Card({ Note: noteToAdd});
+            var outgoing = lookup.outgoing_connections[noteToAdd.id];
+            var incoming = lookup.incoming_connections[noteToAdd.id];
+            var composedCard = new model_Card({ Note: noteToAdd, connections_incoming: incoming, connections_outgoing: outgoing });
             lookup.hashCards[noteToAdd.id] = composedCard;
             cardsBatch.push(composedCard);
             batchArray.push(noteToAdd);
@@ -109,6 +111,55 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
 
     };
 
+    lookup.outgoing_connections = {};
+    lookup.incoming_connections = {};
+
+
+    lookup.populate_incoming_outgoing_connections = function()
+    {
+        
+        // time consuming
+        if(typeof(lookup.populate_incoming_outgoing_connections_index) === 'undefined')
+        {
+            lookup.populate_incoming_outgoing_connections_index = lookup.data.connections.length -1;
+        }
+        console.log('populate_incoming_outgoing_connections: ' + lookup.populate_incoming_outgoing_connections_index);
+
+        for(var batchKey = 0; batchKey < 100 && lookup.populate_incoming_outgoing_connections_index >= 0; batchKey++, lookup.populate_incoming_outgoing_connections_index--)
+        {
+            var elem = lookup.data.connections[lookup.populate_incoming_outgoing_connections_index];
+            var stored_outgoing = lookup.outgoing_connections[elem.SourceId];
+            if(typeof(stored_outgoing) === 'undefined')
+            {
+                lookup.outgoing_connections[elem.SourceId] = [];
+                stored_outgoing = lookup.outgoing_connections[elem.SourceId];
+            }
+            stored_outgoing.push(elem);
+
+            var stored_incoming = lookup.incoming_connections[elem.DestinationId];
+            if(typeof(stored_incoming) === 'undefined')
+            {
+                lookup.incoming_connections[elem.DestinationId] = [];
+                stored_incoming = lookup.incoming_connections[elem.DestinationId];
+            }
+            stored_incoming.push(elem);
+            
+        }
+
+        if(lookup.populate_incoming_outgoing_connections_index >= 0)
+        {
+            setTimeout(lookup.populate_incoming_outgoing_connections, 3);
+        }
+        else
+        {
+            setTimeout(lookup.populateNotes, 3);
+        }
+
+
+        
+
+    };
+
     lookup.populate = function(data) {
         lookup.for_code_access_hash_of_color_presets = {};
         lookup.data_color_presets.forEach(element => {
@@ -118,7 +169,7 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
 
         //setTimeout(lookup.populateNotes, 30);
 
-        lookup.populateNotes();
+        lookup.populate_incoming_outgoing_connections();
         //lookup.populateConnections();
         //lookup.populateCards();
 
