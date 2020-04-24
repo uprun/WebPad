@@ -33,6 +33,25 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
         lookup.dictionary_of_notes_updated(val + 1);
     };
 
+    lookup.generateDictionary_NoteAdded = function(note)
+    {
+        if(typeof(note.hasIncomingConnection) === 'undefined' || note.hasIncomingConnection === false)
+        {
+            var key = 
+                    note
+                    .text()
+                    .replace("\r", " ")
+                    .replace("\n", " ")
+                    .replace("\t", " ")
+                    .toLowerCase()
+                    .trim();
+                lookup.dictionary_of_notes[key] = note;
+            var val = lookup.dictionary_of_notes_updated();
+            lookup.dictionary_of_notes_updated(val + 1);
+        }
+
+    };
+
 
     lookup.populateConnections = function()
     {
