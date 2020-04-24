@@ -69,7 +69,7 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
         }
         else
         {
-            lookup.generateDictionary();
+            setTimeout(lookup.generateDictionary, 3);
         }
 
     };
