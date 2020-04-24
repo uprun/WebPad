@@ -159,7 +159,7 @@ a
 
 .webpad-search-bar-adjusted
 {
-    width: calc(100% - 4em);
+    width: 100%;
 }
 
 .webpad-search-bar-full-width
