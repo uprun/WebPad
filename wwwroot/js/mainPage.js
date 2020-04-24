@@ -272,6 +272,28 @@ function ConnectedNotesViewModel()
                         var toStoreConnections = ko.utils.arrayMap(lookup.Connections(), function(item) {
                             return item.ConvertToJs();
                         });
+
+                        toStoreNotes = toStoreNotes
+                            .sort(
+                                function(left, right)
+                                {
+                                    if(left.createDate === right.createDate)
+                                    {
+                                        return 0;
+                                    }
+                                    else
+                                    {
+                                        if(left.createDate < right.createDate)
+                                        {
+                                            return -1;
+                                        }
+                                        else
+                                        {
+                                            return 1;
+                                        }
+                                    }
+                                }
+                            );
                        
                         
                         lookup.localStorage.setItem("Notes", JSON.stringify(toStoreNotes));

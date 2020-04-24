@@ -253,23 +253,55 @@
                 </span>
         </script>
         
-        <script type="text/html" id="additional-info-template">
+        <script type="text/html" id="additional-toolbox-template">
             
             <span class="webpad-extra-information-plus-icon" data-bind="ifnot: $data.AdditionalInformationTextVisible">
                 
-                    <span class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
-                        <span class="" style="color: aliceblue;" alt="hashTagBeginSymbol">#</span>
-                        <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="Add information" /> 
-                        <img src="svg/plus.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                    <span class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button" style="" data-bind=" click: $root.switchAdditionalInformationText">
+                        <span style="margin-left: 0.5rem; margin-right: 0.5rem;">
+                            <span class="" style="color: aliceblue;" alt="hashTagBeginSymbol">#</span>
+                            <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                            <img src="svg/plus.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                        </span>
+                        
                     </span>
             </span>
+            <span style="" data-bind="if: $data.AdditionalInformationTextVisible">
+                <span  class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button"  data-bind=" click: $root.switchAdditionalInformationText">
+                    <span style="margin-left: 0.5rem; margin-right: 0.5rem;">
+                        <img src="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Cancel edit" /> 
+                    </span>
+                </span>
+            </span>
+            &nbsp;
+            <div class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button" style="vertical-align: middle;" data-bind=" click: $root.pushToSearchNotesQuery">
+                <span style="margin-left: 0.5rem; margin-right: 0.5rem;">
+                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="" >
+                        <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
+                    </div>
+                    <!-- ko if: $data.BigTags().length > 0  -->
+                    &nbsp;
+                    <span lass="webpad-brightness-dimmed" style="color: aliceblue;  vertical-align: middle;" data-bind="text: $data.BigTags().length">
+
+                    </span>
+                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="  " >
+                        <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
+                    </div>
+                    <!-- /ko -->
+                    &nbsp;
+                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="  " >
+                        <img src="svg/comment-dots.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
+                    </div>
+                </span>
+                
+                
+            </div>
+            <br/>
             
             <span style="font-size: 1.6rem;" data-bind="if: $data.AdditionalInformationTextVisible">
                 
-                        <span  class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.switchAdditionalInformationText">
-                            <img src="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Cancel edit" /> 
-                        </span>
-                        <br/>
+                        
+                        
                     <!-- ko if:  $data.AdditionalInformationText().trim().length < 20 -->
                         <span class="webpad-brightness-dimmed" style="color: #84bfff;" alt="hashTagBeginSymbol">#</span>
                     <!-- /ko -->
@@ -502,33 +534,13 @@
                                     <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.prepareToBeRemoved">
                                         <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="remove"/> 
                                     </div>
-                                    <div style="" data-bind="template: { name: 'additional-info-template' } " >
-                                    </div>
+                                    
                                 </span> 
                             </span>
                             <!-- tool-box menu: end -->
                             <div>
-                                <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.pushToSearchNotesQuery">
-                                
-                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;" >
-                                        <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
-                                    </div>
-                                    <!-- ko if: $data.BigTags().length > 0  -->
-                                    &nbsp;
-                                    <span lass="webpad-brightness-dimmed" style="color: aliceblue; font-size: 1.4em; vertical-align: middle;" data-bind="text: $data.BigTags().length">
-
-                                    </span>
-                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;  " >
-                                        <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
-                                    </div>
-                                    <!-- /ko -->
-                                    &nbsp;
-                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;  " >
-                                        <img src="svg/comment-dots.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
-                                    </div>
-                                    
+                                <div style="font-size: 1.4rem;" data-bind="template: { name: 'additional-toolbox-template' } " >
                                 </div>
-
                             </div>
                             
                             <div class="webpad-hide-on-small-screen" style="height: 2em;">
