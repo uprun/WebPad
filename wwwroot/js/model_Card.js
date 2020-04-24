@@ -186,6 +186,33 @@ function model_Card(data)
         })
     });
 
+    self.SmallTagsWrapped = ko.pureComputed(function()
+    {
+        return ko.utils.arrayMap(self.SmallTags(), function(elem)
+        {
+            var item = elem.Destination;
+            var result = {
+                color: item.color,
+                id: item.id,
+                parentNodeId: self.Note.id,
+                textSplitted: ko.pureComputed(function()
+                {
+                    return ko.utils.arrayMap(item.textSplitted(), function(elemWord)
+                    {
+                        return {
+                            word: elemWord.word,
+                            wordNode: elemWord.wordNode,
+                            exists: elemWord.exists,
+                            parentNodeId: self.Note.id
+                        };
+
+                    });
+                })
+            };
+            return result;
+        })
+    });
+
     self.BigTags = ko.pureComputed(function()
     {
         return ko.utils.arrayFilter(self.Tags(), function(item)

@@ -248,7 +248,7 @@
         <script type="text/html" id="tag-template">
                 <span >
                     <span class="" style="color: #84bfff;" alt="hashTagBeginSymbol">#</span>
-                    <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Destination }  -->
+                    <!-- ko template: { name: 'text-with-dictionary-template', data: $data }  -->
                     <!-- /ko -->
                 </span>
         </script>
@@ -480,9 +480,9 @@
                                             " 
                                     ></span>
                             </span>
-                            <!-- ko if: $data.SmallTags().length > 0  -->
+                            <!-- ko if: $data.SmallTagsWrapped().length > 0  -->
                                 <br/>
-                                <span data-bind="template: { name: 'tag-template', foreach: $data.SmallTags } " >
+                                <span data-bind="template: { name: 'tag-template', foreach: $data.SmallTagsWrapped } " >
                                 </span>
                             <!-- /ko -->
                             
