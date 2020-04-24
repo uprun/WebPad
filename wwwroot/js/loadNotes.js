@@ -8,6 +8,8 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
     lookup.composedCards = ko.observableArray([]);
     lookup.dictionary_of_notes = {};
 
+    lookup.dictionary_of_notes_updated = ko.observable(0);
+
     lookup.generateDictionary = function()
     {
         
@@ -27,6 +29,8 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
                 lookup.dictionary_of_notes[key] = item.Note;
             }
         });
+        var val = lookup.dictionary_of_notes_updated();
+        lookup.dictionary_of_notes_updated(val + 1);
     };
 
 

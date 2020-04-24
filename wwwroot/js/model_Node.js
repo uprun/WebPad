@@ -119,6 +119,7 @@ function model_Node(data)
     }
 
     self.textSplitted = ko.pureComputed(function(){
+        var anotherDummyTriggerCall = lookup.dictionary_of_notes_updated();
         var test = self.text().split(" ");
         var result = ko.utils.arrayMap(test, function(item)
             {
