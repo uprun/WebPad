@@ -11,7 +11,8 @@ lookup.CreateNote = function(obj, callback) {
             text: obj.text,
             color: selectedColor,
             background: "inherit",
-            createDate: new Date()
+            createDate: new Date(),
+            hasIncomingConnection: obj.hasIncomingConnection
         });
     var added = toAdd.ConvertToJs();
     lookup.pushToHistory({

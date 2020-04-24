@@ -12,7 +12,6 @@ function model_Node(data)
     }
 
     self.color = data.color;
-    self.background = data.background;
     self.createDate = data.createDate;
     if(typeof(data.isDone) != "undefined")
     {
@@ -32,6 +31,8 @@ function model_Node(data)
         });
 
     }
+
+    self.hasIncomingConnection = data.hasIncomingConnection;
 
     self.isReferenced = ko.observable(false);
     self.ReferencedBy = ko.observableArray([]);
@@ -93,9 +94,9 @@ function model_Node(data)
             id: self.id,
             text: self.text(),
             color: self.color,
-            background: self.background,
             createDate: self.createDate,
-            isDone: self.isDone()
+            isDone: self.isDone(),
+            hasIncomingConnection: self.hasIncomingConnection
         };
     };
 

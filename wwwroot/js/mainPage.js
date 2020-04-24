@@ -956,7 +956,8 @@ function ConnectedNotesViewModel()
         {
             var obj = {
                 text: extraText,
-                textColor: existing.AdditionalInformationTextColor()
+                textColor: existing.AdditionalInformationTextColor(),
+                hasIncomingConnection: true
             };
             lookup.CreateNote(obj, function(destination) { 
                 lookup.ConnectNotes(existing.Note, destination);  
