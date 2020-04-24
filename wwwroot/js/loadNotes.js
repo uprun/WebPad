@@ -11,22 +11,20 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
     lookup.generateDictionary = function()
     {
         
-        ko.utils.arrayForEach(lookup.Notes(), function(item) {
-            var key = 
-                item
-                .text()
-                .replace("\r", " ")
-                .replace("\n", " ")
-                .replace("\t", " ")
-                .toLowerCase()
-                .trim();
-            if(item.isReferenced())
+        ko.utils.arrayForEach(lookup.composedCards(), function(item) {
+            
+            if(item.isRoot)
             {
-
-            }
-            else
-            {
-                lookup.dictionary_of_notes[key] = item;
+                var key = 
+                    item
+                    .Note
+                    .text()
+                    .replace("\r", " ")
+                    .replace("\n", " ")
+                    .replace("\t", " ")
+                    .toLowerCase()
+                    .trim();
+                lookup.dictionary_of_notes[key] = item.Note;
             }
         });
     };
