@@ -1014,6 +1014,8 @@ function ConnectedNotesViewModel()
         lookup.freeLocalIndex = JSON.parse(lookup.localStorage.getItem("localFreeIndex"));
     }
     else {
+        // demo
+        lookup.freeLocalIndex = 100;
         //lookup.freeLocalIndex = lookup.Notes().length + lookup.Connections().length + 1;
     }
 
