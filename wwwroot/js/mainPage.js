@@ -963,6 +963,11 @@ function ConnectedNotesViewModel()
                 lookup.ConnectNotes(existing.Note, destination);  
                 existing.AdditionalInformationText("");
                 existing.AdditionalInformationTextColor(lookup.GetRandomColor().Color());
+                if(destination.text().length >= 20)
+                {
+                    lookup.jumpToCardOnCreate(destination);
+                }
+                
             });
         }
         
