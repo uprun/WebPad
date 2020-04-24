@@ -53,6 +53,7 @@ function model_Node(data)
                             word: elemWord.word,
                             wordNode: elemWord.wordNode,
                             exists: elemWord.exists,
+                            isUrl: elemWord.isUrl,
                             parentNodeId: self.id
                         };
 
@@ -146,6 +147,7 @@ function model_Node(data)
                     word: item,
                     wordNode: found,
                     exists: typeof(found) !== 'undefined' && self !== found,
+                    isUrl: item.startsWith("https://"),
                     parentNodeId: self.id
                 };
             }

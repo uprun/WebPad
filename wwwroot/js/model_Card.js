@@ -203,6 +203,7 @@ function model_Card(data)
                             word: elemWord.word,
                             wordNode: elemWord.wordNode,
                             exists: elemWord.exists,
+                            isUrl: elemWord.isUrl,
                             parentNodeId: self.Note.id
                         };
 

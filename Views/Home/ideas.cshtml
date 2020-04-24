@@ -390,31 +390,49 @@
         
         <script type="text/html" id="text-with-dictionary-template">
             <!-- ko foreach: $data.textSplitted -->
-                <!-- ko if: $data.exists -->
-                    <span class="webpad-break-words-node webpad-border-bottom-dotted" data-bind="
-                        text: word,
-                        style:
-                        {
-                            color: $parent.color,
-                            'border-color': wordNode.color,
-                            'border-bottom-style': word.length < 3 ? 'solid' : 'dotted',
-                            'word-break': word.length < 20 ? 'break-word' : 'break-all',
-                        },
-                        click: $root.jumpToCardFromWord
-                            ">
-                    </span>
-                <!-- /ko -->
-                <!-- ko ifnot: $data.exists -->
-                    <span class="webpad-break-words-node" data-bind="
+                <!-- ko if: $data.isUrl -->
+                    <a class="webpad-break-words-node" target="_blank" data-bind="
                         text: word,
                         style:
                         {
                             color: $parent.color,
                             'word-break': word.length < 20 ? 'break-word' : 'break-all',
                         },
+                        attr:
+                        {
+                            href: word
+                        }
                             ">
-                    </span>
+                    </a>
                 <!-- /ko -->
+                <!-- ko ifnot: $data.isUrl -->
+                    <!-- ko if: $data.exists -->
+                        <span class="webpad-break-words-node webpad-border-bottom-dotted" data-bind="
+                            text: word,
+                            style:
+                            {
+                                color: $parent.color,
+                                'border-color': wordNode.color,
+                                'border-bottom-style': word.length < 3 ? 'solid' : 'dotted',
+                                'word-break': word.length < 20 ? 'break-word' : 'break-all',
+                            },
+                            click: $root.jumpToCardFromWord
+                                ">
+                        </span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: $data.exists -->
+                        <span class="webpad-break-words-node" data-bind="
+                            text: word,
+                            style:
+                            {
+                                color: $parent.color,
+                                'word-break': word.length < 20 ? 'break-word' : 'break-all',
+                            },
+                                ">
+                        </span>
+                    <!-- /ko -->
+                <!-- /ko -->
+                
                 
             <!-- /ko -->
         </script>
