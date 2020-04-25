@@ -587,12 +587,17 @@ function ConnectedNotesViewModel()
     };
 
     lookup.SendMessage = function(item) {
-        lookup.crypto_worker.postMessage({
-            action: 'encrypt'
-            , PlainText: unescape(encodeURIComponent(item.message))
-            , ReceiverPublicKey: item.receiver
-            , Id: 1
-        });
+        var ownPublicKey = lookup.publicCryptoKey();
+        if(item.receiver !== ownPublicKey) // do not send messages to your-self
+        {
+            lookup.crypto_worker.postMessage({
+                action: 'encrypt'
+                , PlainText: unescape(encodeURIComponent(item.message))
+                , ReceiverPublicKey: item.receiver
+                , Id: 1
+            });
+        }
+        
         
 
     };
@@ -1077,21 +1082,27 @@ function ConnectedNotesViewModel()
         if(e.data.action == "decrypt.Result") {
             var decrypted = e.data.decryptionResult;
             var publicKeyOfSender = decrypted.publicKeyString;
-            var foundMaybe = lookup.findPublicKey(publicKeyOfSender);
-            if(foundMaybe == null)
+            var ownPublicKey = lookup.publicCryptoKey();
+            if(publicKeyOfSender !== ownPublicKey) // do not receive messages from your-self
             {
-                lookup.ReceivedPublicKey(publicKeyOfSender);
+                var foundMaybe = lookup.findPublicKey(publicKeyOfSender);
+                if(foundMaybe == null)
+                {
+                    lookup.ReceivedPublicKey(publicKeyOfSender);
+                }
+                
+                // put public key to trusted -> ReceivedPublicKey
+                var signatureStatus = decrypted.signature;
+
+                var plainText = decodeURIComponent(escape(decrypted.plaintext));
+                // console.log(publicKeyOfSender);
+                // console.log(plainText);
+                var actionReceived = JSON.parse(plainText);
+                actionReceived.isFromOuterSpace = true;
+                lookup.pushToHistory(actionReceived);
+
             }
             
-            // put public key to trusted -> ReceivedPublicKey
-            var signatureStatus = decrypted.signature;
-
-            var plainText = decodeURIComponent(escape(decrypted.plaintext));
-            // console.log(publicKeyOfSender);
-            // console.log(plainText);
-            var actionReceived = JSON.parse(plainText);
-            actionReceived.isFromOuterSpace = true;
-            lookup.pushToHistory(actionReceived);
 
         }
     };

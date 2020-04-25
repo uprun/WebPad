@@ -7,11 +7,12 @@ lookup.processMessageFromOuterSpace = function(item)
             var found = lookup.findNodeById(current_data.id);
             if(found)
             {
-                found.text(current_data.text);
+                if(typeof(item.isFromOuterSpace) !== 'undefined' && item.isFromOuterSpace )
+                {
+                    found.text(current_data.text);
+                }
+                
                 found.color = current_data.color;
-                found.background = current_data.background;
-                found.x = current_data.x;
-                found.y = current_data.y;
                 found.isDone(current_data.isDone);
             }
             else
