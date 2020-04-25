@@ -27,9 +27,9 @@ function ConnectedNotesViewModel()
 
     
 
-    lookup.crypto_worker = undefined;
+    //lookup.crypto_worker = undefined;
     
-    lookup.crypto_worker = new Worker("js/worker-crypto.js");
+    //lookup.crypto_worker = new Worker("js/worker-crypto.js");
 
 
     lookup.publicCryptoKey = ko.observable(undefined);
@@ -587,27 +587,27 @@ function ConnectedNotesViewModel()
     };
 
     lookup.SendMessage = function(item) {
-        var ownPublicKey = lookup.publicCryptoKey();
-        if(item.receiver !== ownPublicKey) // do not send messages to your-self
-        {
-            lookup.crypto_worker.postMessage({
-                action: 'encrypt'
-                , PlainText: unescape(encodeURIComponent(item.message))
-                , ReceiverPublicKey: item.receiver
-                , Id: 1
-            });
-        }
+        // var ownPublicKey = lookup.publicCryptoKey();
+        // if(item.receiver !== ownPublicKey) // do not send messages to your-self
+        // {
+        //     lookup.crypto_worker.postMessage({
+        //         action: 'encrypt'
+        //         , PlainText: unescape(encodeURIComponent(item.message))
+        //         , ReceiverPublicKey: item.receiver
+        //         , Id: 1
+        //     });
+        // }
         
         
 
     };
 
     lookup.DecryptMessage = function(item) {
-        lookup.crypto_worker.postMessage(
-            {
-                action: 'decrypt'
-                , CipherText: item
-            });
+        // lookup.crypto_worker.postMessage(
+        //     {
+        //         action: 'decrypt'
+        //         , CipherText: item
+        //     });
         
 
     };
@@ -1053,62 +1053,62 @@ function ConnectedNotesViewModel()
     lookup.backgroundApplySaved();
 
     
-    lookup.crypto_worker.onmessage = function(e) {
-        if(e.data.action == "applySaveOfKey.Result" ) {
-            if(typeof(lookup.privateCryptoPair.n) == "undefined") {
-                lookup.localStorage.setItem("privateCryptoPair", JSON.stringify(e.data.data));
-            }
-            lookup.crypto_worker.postMessage({action: 'getPublicKey', data: lookup.privateCryptoPair});
-        }
-        if(e.data.action == "getPublicKey.Result") {
-            var keyToUse = e.data.data;
-            if(
-                !lookup.publicCryptoKey() 
-                || lookup.publicCryptoKey() == null 
-                || typeof(lookup.publicCryptoKey()) == "undefined" 
-            )
-            {
-                // will see maybe 10 MB is enough 
-                // lookup.AddPublicKeyToTrusted(keyToUse); // we need to keep history for our self in order to store everything not only on local machine but on server also
-                // because local storage is limited to 10 MB
-                lookup.publicCryptoKey(keyToUse);
-            }
+    // lookup.crypto_worker.onmessage = function(e) {
+    //     if(e.data.action == "applySaveOfKey.Result" ) {
+    //         if(typeof(lookup.privateCryptoPair.n) == "undefined") {
+    //             lookup.localStorage.setItem("privateCryptoPair", JSON.stringify(e.data.data));
+    //         }
+    //         lookup.crypto_worker.postMessage({action: 'getPublicKey', data: lookup.privateCryptoPair});
+    //     }
+    //     if(e.data.action == "getPublicKey.Result") {
+    //         var keyToUse = e.data.data;
+    //         if(
+    //             !lookup.publicCryptoKey() 
+    //             || lookup.publicCryptoKey() == null 
+    //             || typeof(lookup.publicCryptoKey()) == "undefined" 
+    //         )
+    //         {
+    //             // will see maybe 10 MB is enough 
+    //             // lookup.AddPublicKeyToTrusted(keyToUse); // we need to keep history for our self in order to store everything not only on local machine but on server also
+    //             // because local storage is limited to 10 MB
+    //             lookup.publicCryptoKey(keyToUse);
+    //         }
             
-            // start receiving outer world changes from here via timer
+    //         // start receiving outer world changes from here via timer
             
-        }
-        if(e.data.action == "encrypt.Result") {
-            lookup.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText.cipher, e.data.id);   
-        }
-        if(e.data.action == "decrypt.Result") {
-            var decrypted = e.data.decryptionResult;
-            var publicKeyOfSender = decrypted.publicKeyString;
-            var ownPublicKey = lookup.publicCryptoKey();
-            if(publicKeyOfSender !== ownPublicKey) // do not receive messages from your-self
-            {
-                var foundMaybe = lookup.findPublicKey(publicKeyOfSender);
-                if(foundMaybe == null)
-                {
-                    lookup.ReceivedPublicKey(publicKeyOfSender);
-                }
+    //     }
+    //     if(e.data.action == "encrypt.Result") {
+    //         lookup.ActualSendMessage(e.data.receiverPublicKey, e.data.encryptedText.cipher, e.data.id);   
+    //     }
+    //     if(e.data.action == "decrypt.Result") {
+    //         var decrypted = e.data.decryptionResult;
+    //         var publicKeyOfSender = decrypted.publicKeyString;
+    //         var ownPublicKey = lookup.publicCryptoKey();
+    //         if(publicKeyOfSender !== ownPublicKey) // do not receive messages from your-self
+    //         {
+    //             var foundMaybe = lookup.findPublicKey(publicKeyOfSender);
+    //             if(foundMaybe == null)
+    //             {
+    //                 lookup.ReceivedPublicKey(publicKeyOfSender);
+    //             }
                 
-                // put public key to trusted -> ReceivedPublicKey
-                var signatureStatus = decrypted.signature;
+    //             // put public key to trusted -> ReceivedPublicKey
+    //             var signatureStatus = decrypted.signature;
 
-                var plainText = decodeURIComponent(escape(decrypted.plaintext));
-                // console.log(publicKeyOfSender);
-                // console.log(plainText);
-                var actionReceived = JSON.parse(plainText);
-                actionReceived.isFromOuterSpace = true;
-                lookup.pushToHistory(actionReceived);
+    //             var plainText = decodeURIComponent(escape(decrypted.plaintext));
+    //             // console.log(publicKeyOfSender);
+    //             // console.log(plainText);
+    //             var actionReceived = JSON.parse(plainText);
+    //             actionReceived.isFromOuterSpace = true;
+    //             lookup.pushToHistory(actionReceived);
 
-            }
+    //         }
             
 
-        }
-    };
+    //     }
+    // };
 
-    lookup.crypto_worker.postMessage({action: 'applySaveOfKey', data: lookup.privateCryptoPair});
+    //lookup.crypto_worker.postMessage({action: 'applySaveOfKey', data: lookup.privateCryptoPair});
     
 
     lookup.connectFrom = ko.observable(null);
