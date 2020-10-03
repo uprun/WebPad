@@ -1,6 +1,9 @@
 lookup.columnsCount = ko.observable(undefined);
 lookup.recalculateColumnsCount = function() {
 
+    lookup.columnsCount(1);
+    return;
+    // previous implementation
     var header_width = document.getElementById("webpad-header-absolute-position").offsetWidth;
     var found_columns = document.getElementsByClassName("webpad-text-column");
     if(found_columns.length > 0)
