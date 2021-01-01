@@ -70,6 +70,7 @@ function model_Card(data)
     self.switchToolBoxVisibility = function()
     {
         self.toolBoxVisible(!self.toolBoxVisible());
+        return true;
     };
 
     self.switchDone = function()
