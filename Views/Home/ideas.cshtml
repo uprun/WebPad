@@ -502,12 +502,15 @@
                             
                             <!-- tool-box menu-->
                             <span style="font-size: 2rem;">
-                                <span data-bind="if: $data.toolBoxVisible">
+                                <!--
+                                    <span data-bind="if: $data.toolBoxVisible">
                                     <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="close toolbox">[::]</span>
                                 </span>
                                 <span data-bind="ifnot: $data.toolBoxVisible">
                                     <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchToolBoxVisibility" alt="open toolbox">[..]</span>
                                 </span>
+                                -->
+
                                 <span data-bind="if: $data.toolBoxVisible">
                                     <span data-bind="ifnot: $data.underEdit">
                                         <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
@@ -551,11 +554,13 @@
                                 </span> 
                             </span>
                             <!-- tool-box menu: end -->
+                            <!-- 
+
                             <div>
                                 <div style="font-size: 1.4rem;" data-bind="template: { name: 'additional-toolbox-template' } " >
                                 </div>
                             </div>
-                            
+                            -->
                             <div class="webpad-hide-on-small-screen" style="height: 2em;">
                             </div>
                             
