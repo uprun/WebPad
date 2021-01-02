@@ -463,6 +463,11 @@ function ConnectedNotesViewModel()
         return lookup.FilteredCards().slice(0, lookup.CurrentResultLimit());
     });
 
+    lookup.ReversedListOfCards = ko.pureComputed(function()
+    {
+        return lookup.LimitedFilteredCards().reverse();
+    });
+
     lookup.mergedOpenedAndFilteredCards = ko.pureComputed(function()
     {
         // there are 2 options 
