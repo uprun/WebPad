@@ -122,6 +122,7 @@
         <script language="JavaScript" type="text/javascript" src="js/toggleMenu.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/recalculateColumnsCount.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/loadNotes.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/toBeEdited.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/mainPage.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/document_ready_ideas.js" asp-append-version="true"></script>
         
@@ -372,9 +373,7 @@
                                     style:
                                     {
                                         color: $data.Note.color,
-                                    },
-                                    event: {blur: $root.SwitchEditOfCard},
-                                    hasFocus: $data.underEdit
+                                    }
                                     " 
                             ></span>
                         <div>
@@ -472,8 +471,7 @@
                                 </div>
                                 
                             <!-- /ko -->
-                            <span data-bind="
-                                ifnot: $data.underEdit,">
+                            <span>
                                 <span data-bind="if: $data.isTask()" style="font-size: 1.4em;">
                                     <span data-bind="if: $data.Note.isDone">
                                         <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.switchDone">[x]</span>
@@ -494,29 +492,6 @@
                                 </span>
                                 
                             </span>
-                            <span data-bind="
-                                if: $data.underEdit,
-                                ">
-                                <span 
-                                        placeholder="..." 
-                                        class="webpad-contenteditable webpad-main-information webpad-break-words-node"
-                                        style="
-                                            padding-left: .3em;
-                                            padding-right: .3em;
-                                            word-break: break-all;
-                                            "
-                                        data-bind="
-                                            contentEditable: $data.underEdit,
-                                            htmlLazy:  $data.Note.text,
-                                            style:
-                                            {
-                                                color: $data.Note.color,
-                                            },
-                                            event: {blur: $root.SwitchEditOfCard},
-                                            hasFocus: $data.underEdit
-                                            " 
-                                    ></span>
-                            </span>
                             <!-- ko if: $data.SmallTagsWrapped().length > 0  -->
                                 <br/>
                                 <span data-bind="template: { name: 'tag-template', foreach: $data.SmallTagsWrapped } " >
@@ -531,8 +506,8 @@
                                     
                                     data-bind="if: $data.toolBoxVisible">
                                     <span class="w3-animate-opacity" >
-                                        <span data-bind="ifnot: $data.underEdit">
-                                            <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.SwitchEditOfCard">
+                                        <span>
+                                            <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.beginToEdit">
                                                 <img src="svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit"/> 
                                             </div>
                                         </span>
@@ -710,7 +685,10 @@
             </div>
             
         </div>
-        <div class="webpad-search-absolute-position" style="display: none; bottom: 0rem; margin-bottom: 0.2em;" data-bind="visible: !$root.PromoVisible()">
+        <div 
+            class="webpad-search-absolute-position" 
+            style="display: none; bottom: 0rem; margin-bottom: 0.2em;" 
+            data-bind="visible: !$root.PromoVisible() && typeof($root.toBeEdited()) === 'undefined'">
             <div class="w3-row">
                 <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
                     &NonBreakingSpace;
@@ -777,6 +755,80 @@
                                 type="text" 
                                 data-bind="
                                     textInput: $root.SearchNotesQuery,
+                                    event: {keypress: $root.searchBarKeyPress}
+                                    " 
+                            />
+                        </div>
+                    </div>
+                    
+                    
+                    
+                            
+        
+                    
+                </div>
+            </div>
+            
+            
+        
+        </div>
+        <div 
+            class="webpad-search-absolute-position" 
+            style="display: none; bottom: 0rem; margin-bottom: 0.2em;"
+             data-bind="visible: typeof($root.toBeEdited()) !== 'undefined'">
+            <div class="w3-row">
+                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
+                    &NonBreakingSpace;
+                    <span style="float: right;">
+                        <div class="webpad-button-no-border" data-bind=" click: $root.cancelEdit">
+                            <img src="svg/times-close-menu.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
+                        </div>
+                    </span>
+                </div>
+                <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-small-screen" style="font-size: 1.4rem;">
+                    <input 
+                        placeholder="edit note ..." 
+                        class="webpad-search-bar webpad-search-bar-adjusted"
+                        type="text" 
+                        data-bind="
+                            textInput: $root.toBeEdited,
+                            event: {keypress: $root.searchBarKeyPress}
+                            " 
+                    /> 
+                </div>
+                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
+                    <span style="float: left;" data-bind="if: typeof($root.toBeEdited()) !== 'undefined' && $root.toBeEdited() !== $root.cardUnderEdit().Note.text()">
+                        <div class="webpad-button-no-border" data-bind=" click: $root.applyChanges">
+                            <img src="svg/check.svg" class="webpad-edit-pencil" alt="apply changes"/> 
+                        </div>
+                    </span>
+                    &NonBreakingSpace;
+
+                </div>
+                <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-large-screen" style="font-size: 1.4rem; margin: 0px; padding: 0px;">
+                    <div class="w3-row">
+                        <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 2rem;">
+                            <span >
+                                <div class="webpad-button-no-border" data-bind=" click: $root.cancelEdit">
+                                    <img src="svg/times-close-menu.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
+                                </div>
+                            </span>
+                           
+                        </div>
+                        <div class="w3-col w3-container s6  webpad-hide-on-large-screen" style="font-size: 2rem;">
+                            <span data-bind="if: typeof($root.toBeEdited()) !== 'undefined' && $root.toBeEdited() !== $root.cardUnderEdit().Note.text()">
+                                <div class="webpad-button-no-border" style="float: right;" data-bind=" click: $root.applyChanges">
+                                    <img src="svg/check.svg" class="webpad-edit-pencil" alt="apply changes"/> 
+                                </div>
+                            </span>
+                        </div>
+                        <div class="w3-col w3-container s12 webpad-hide-on-large-screen" style="font-size: 1.4rem;">
+                            <input 
+                                placeholder="edit note ..." 
+                                class="webpad-search-bar webpad-search-bar-full-width"
+                                type="text" 
+                                data-bind="
+                                    textInput: $root.toBeEdited,
                                     event: {keypress: $root.searchBarKeyPress}
                                     " 
                             />

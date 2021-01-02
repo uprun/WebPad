@@ -106,10 +106,6 @@ function ConnectedNotesViewModel()
 
     ko.utils.arrayPushAll(lookup.ColorPresets, toAddColors);
 
-    lookup.SwitchEditOfCard = function(card){
-        card.underEdit(!card.underEdit());
-    };
-
     lookup.ColorNode = function(colorToApply) {
         
         var toWorkWith = lookup.NoteToEdit();
