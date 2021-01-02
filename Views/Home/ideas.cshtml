@@ -493,13 +493,6 @@
                                 </span>
                                 
                             </span>
-                            <!-- ko if: $data.SmallTagsWrapped().length > 0  -->
-                                <br/>
-                                <span data-bind="template: { name: 'tag-template', foreach: $data.SmallTagsWrapped } " >
-                                </span>
-                            <!-- /ko -->
-                            
-                            
                             <!-- tool-box menu-->
                             <span style="font-size: 2rem;">
 
@@ -522,6 +515,14 @@
                                 </span> 
                             </span>
                             <!-- tool-box menu: end -->
+                            <!-- ko if: $data.SmallTagsWrapped().length > 0  -->
+                                <br/>
+                                <span data-bind="template: { name: 'tag-template', foreach: $data.SmallTagsWrapped } " >
+                                </span>
+                            <!-- /ko -->
+                            
+                            
+                            
                             
 
                             <div data-bind="if: $data.toolBoxVisible">
@@ -774,7 +775,6 @@
                         type="text" 
                         data-bind="
                             textInput: $root.toBeEdited,
-                            event: {keypress: $root.searchBarKeyPress}
                             " 
                     /> 
                 </div>
@@ -810,8 +810,7 @@
                                 class="webpad-search-bar webpad-search-bar-full-width"
                                 type="text" 
                                 data-bind="
-                                    textInput: $root.toBeEdited,
-                                    event: {keypress: $root.searchBarKeyPress}
+                                    textInput: $root.toBeEdited
                                     " 
                             />
                         </div>
