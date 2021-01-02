@@ -451,8 +451,9 @@
                 
             <!-- /ko -->
         </script>
-
-        <script type="text/html" id="inner-card-template">
+        
+        <script type="text/html" id="card-template">
+                <div class="w3-col w3-container s12 m12 l12">
                     <div 
                         style="font-size: 1.3rem;" 
                         class="webpad-card w3-animate-opacity" 
@@ -548,25 +549,6 @@
         
                         
                         
-                    </div>
-        </script>
-        
-        <script type="text/html" id="card-template">
-                <div class="w3-col w3-container s12 m12 l12">
-                    <div  data-bind="if: $data.isTopOfStack" >
-                        <div class="webpad-top-of-stack" data-bind="template: { name: 'inner-card-template' } ">
-                        </div>
-                    </div>
-        
-                    <div data-bind="ifnot: $data.isTopOfStack" >
-                        <div data-bind="if: $data.isInStack" >
-                            <div class="webpad-border-in-stack" data-bind="template: { name: 'inner-card-template' } ">
-                            </div>
-                        </div>
-                        <div data-bind="ifnot: $data.isInStack" >
-                            <div data-bind="template: { name: 'inner-card-template' } ">
-                            </div>
-                        </div>
                     </div>
                     
                     
