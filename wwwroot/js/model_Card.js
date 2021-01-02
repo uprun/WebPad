@@ -61,10 +61,7 @@ function model_Card(data)
         return referencedByPassed;
     };
     self.underEdit = ko.observable(false);
-    self.blurHandler = function()
-    {
-        self.AdditionalInformationTextFocus(false);
-    };
+    
     self.AdditionalInformationTextColor = ko.observable(lookup.GetRandomColor().Color());
     self.toolBoxVisible = ko.observable(false);
     self.switchToolBoxVisibility = function()

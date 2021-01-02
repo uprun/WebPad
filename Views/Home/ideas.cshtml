@@ -123,6 +123,7 @@
         <script language="JavaScript" type="text/javascript" src="js/recalculateColumnsCount.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/loadNotes.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/toBeEdited.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/taggedOrQuotedCard.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/mainPage.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/document_ready_ideas.js" asp-append-version="true"></script>
         
@@ -273,6 +274,7 @@
         <script type="text/html" id="additional-toolbox-template">
             
             <span class="webpad-extra-information-plus-icon" data-bind="ifnot: $data.AdditionalInformationTextVisible">
+                &nbsp;
                 <span>
                     <div
                         class="webpad-brightness-dimmed webpad-button-no-border" 
@@ -299,16 +301,10 @@
                         class="webpad-brightness-dimmed webpad-button-no-border" 
                         style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
                         data-bind=" click: $root.switchAdditionalInformationText">
+                        <span class="" style="color: #84bfff; vertical-align: middle; " alt="hashTagBeginSymbol"></span>
                         <img src="svg/quote-left.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Add information" /> 
                         <img src="svg/plus.svg" class="webpad-edit-pencil"  style="margin-right: 0.5rem;" alt="Edit"/> 
                     </div>
-                </span>
-            </span>
-            <span style="" data-bind="if: $data.AdditionalInformationTextVisible">
-                <span  class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button"  data-bind=" click: $root.switchAdditionalInformationText">
-                    <span style="margin-left: 0.5rem; margin-right: 0.5rem;">
-                        <img src="svg/chevron-up-orange.svg" class="webpad-edit-pencil" alt="Cancel edit" /> 
-                    </span>
                 </span>
             </span>
             &nbsp;
@@ -335,50 +331,6 @@
                 
             </div>
             <br/>
-            
-            <span style="font-size: 1.6rem;" data-bind="if: $data.AdditionalInformationTextVisible">
-                
-                        
-                        
-                    <!-- ko if:  $data.AdditionalInformationText().trim().length < 20 -->
-                        <span class="webpad-brightness-dimmed" style="color: #84bfff;" alt="hashTagBeginSymbol">#</span>
-                    <!-- /ko -->
-                    <!-- ko ifnot:  $data.AdditionalInformationText().trim().length < 20 -->
-                        <span class="webpad-brightness-dimmed webpad-button-no-border" >
-                            <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="Add information" /> 
-                        </span>
-                    <!-- /ko -->
-                    <span style="width: calc(100% - 2em);" class="webpad-break-words-node"
-                        data-bind="
-                                style:
-                                {
-                                    color: $data.AdditionalInformationTextColor,
-                                },">
-                        <input 
-                            placeholder="add tag or comment" 
-                            class="webpad-extra-information w3-animate-opacity"
-                            type="text" 
-                            data-bind="
-                                textInput:  $data.AdditionalInformationText,
-                                event: {keypress: $root.additionalInfoKeyPress, blur: $data.blurHandler}, 
-                                hasFocus: $data.AdditionalInformationTextFocus(),
-                                attr: {id:  'exi' + $data.Note.id}
-                                " 
-                        />
-                    </span>
-                    
-                    <span 
-                        data-bind="
-                                if: $data.AdditionalInformationText().trim().length > 0">
-                        <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.AddNoteToExistingOne">
-                            <img src="svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" /> 
-                            <span style="color: aliceblue;">
-                            [Enter]
-                            </span>
-                        </div>
-                    </span>
-                
-            </span>
         </script>
 
         <script type="text/html" id="to-be-removed-template">
@@ -837,6 +789,110 @@
             
             
         
+        </div>
+
+        <div 
+            class="webpad-search-absolute-position" 
+            style="display: none; bottom: 0rem; margin-bottom: 0.2em;"
+             data-bind="if: typeof($root.taggedOrQuotedCard()) !== 'undefined', visible: typeof($root.taggedOrQuotedCard()) !== 'undefined'">
+            <div class="w3-row">
+                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
+                    &NonBreakingSpace;
+                    <span style="float: right;">
+                        <div class="webpad-button-no-border" data-bind=" click: $root.cancelAddingTagOrQuote">
+                            <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
+                        </div>
+                    </span>
+                </div>
+                <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-small-screen" style="font-size: 1.4rem;">
+                    <!-- ko if: typeof($root.taggedOrQuotedCard()) !== 'undefined' && $root.taggedOrQuotedCard().AdditionalInformationText().trim().length < 20 -->
+                        <span class="webpad-brightness-dimmed" style="color: #84bfff;" alt="hashTagBeginSymbol">#</span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: typeof($root.taggedOrQuotedCard()) !== 'undefined' && $root.taggedOrQuotedCard().AdditionalInformationText().trim().length < 20 -->
+                        <span class="webpad-brightness-dimmed webpad-button-no-border" >
+                            <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                        </span>
+                    <!-- /ko -->
+                    <span style="width: calc(100% - 2em);" class="webpad-break-words-node"
+                        data-bind="
+                                style:
+                                {
+                                    color: $root.taggedOrQuotedCard().AdditionalInformationTextColor,
+                                },">
+                        <input 
+                            placeholder="add tag or comment" 
+                            class="webpad-extra-information w3-animate-opacity"
+                            type="text" 
+                            data-bind="
+                                textInput:  $root.taggedOrQuotedCard().AdditionalInformationText,
+                                event: {keypress: $root.additionalInfoKeyPress}, 
+                                hasFocus: true
+                                " 
+                        />
+                    </span>                    
+                </div>
+                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
+                    <span style="float: left;" data-bind="if: $root.taggedOrQuotedCard().AdditionalInformationText().trim().length > 0">
+                        <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.AddNoteToExistingOne">
+                            <img src="svg/check.svg"  class="webpad-edit-pencil" alt="Apply edit" /> 
+                            <span style="color: aliceblue; font-size: 1.4rem;">
+                            [Enter]
+                            </span>
+                        </div>
+                    </span>
+                    &NonBreakingSpace;
+
+                </div>
+                <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-large-screen" style="font-size: 1.4rem; margin: 0px; padding: 0px;">
+                    <div class="w3-row">
+                        <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 2rem;">
+                            <span >
+                                <div class="webpad-button-no-border" data-bind=" click: $root.cancelAddingTagOrQuote">
+                                    <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
+                                </div>
+                            </span>
+                           
+                        </div>
+                        <div class="w3-col w3-container s6  webpad-hide-on-large-screen" style="font-size: 2rem;">
+                            <span data-bind="if: $root.taggedOrQuotedCard().AdditionalInformationText().trim().length > 0">
+                                <div class="webpad-brightness-dimmed webpad-button-no-border" style="float: right;" data-bind=" click: $root.AddNoteToExistingOne">
+                                    <img src="svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" /> 
+                                    <span style="color: aliceblue; font-size: 1.4rem; margin-right: 0.5rem;">
+                                    [Enter]
+                                    </span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="w3-col w3-container s12 webpad-hide-on-large-screen" style="font-size: 1.4rem;">
+                            <!-- ko if:  $root.taggedOrQuotedCard().AdditionalInformationText().trim().length < 20 -->
+                                <span class="webpad-brightness-dimmed" style="color: #84bfff;" alt="hashTagBeginSymbol">#</span>
+                            <!-- /ko -->
+                            <!-- ko ifnot: $root.taggedOrQuotedCard().AdditionalInformationText().trim().length < 20 -->
+                                <span class="webpad-brightness-dimmed webpad-button-no-border" >
+                                    <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                                </span>
+                            <!-- /ko -->
+                            <span style="width: calc(100% - 2em);" class="webpad-break-words-node"
+                                data-bind="
+                                        style:
+                                        {
+                                            color: $root.taggedOrQuotedCard().AdditionalInformationTextColor,
+                                        },">
+                                <input 
+                                    placeholder="add tag or comment" 
+                                    class="webpad-extra-information w3-animate-opacity"
+                                    type="text" 
+                                    data-bind="
+                                        textInput:  $root.taggedOrQuotedCard().AdditionalInformationText,
+                                        event: {keypress: $root.additionalInfoKeyPress}, 
+                                        hasFocus: true
+                                        " 
+                                />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
 </body>

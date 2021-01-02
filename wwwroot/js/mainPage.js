@@ -887,7 +887,10 @@ function ConnectedNotesViewModel()
     };
 
     
-    lookup.AddNoteToExistingOne = function(existing) {
+    lookup.AddNoteToExistingOne = function() {
+        var existing = lookup.taggedOrQuotedCard();
+        
+        lookup.cancelAddingTagOrQuote();
         var extraText = existing.AdditionalInformationText();
         if(typeof(extraText) !== "undefined")
         {

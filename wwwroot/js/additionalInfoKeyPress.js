@@ -8,7 +8,7 @@ lookup.additionalInfoKeyPress = function(data, event)
     {
         if(event.keyCode == 13)
         {
-            lookup.AddNoteToExistingOne(data);
+            lookup.AddNoteToExistingOne();
         }
     }
     return true;
