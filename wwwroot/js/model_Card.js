@@ -157,8 +157,8 @@ function model_Card(data)
 
     self.removeTag = function(item)
     {
-        lookup.RemoveConnection(item);
-        lookup.RemoveNote({Note: item.Destination });
+        lookup.RemoveConnection(item.originalTag);
+        lookup.RemoveNote({Note: item.originalTag.Destination });
     };
 
     self.convertToTask = function()
@@ -193,6 +193,7 @@ function model_Card(data)
         {
             var item = elem.Destination;
             var result = {
+                originalTag: elem,
                 color: item.color,
                 id: item.id,
                 parentNodeId: self.Note.id,
