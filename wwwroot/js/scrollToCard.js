@@ -1,4 +1,5 @@
-lookup.scrollToCard = function(id) {
+lookup.scrollToCard_queue = [];
+lookup.scrollToCard = function(id, number_of_retries_left) {
     var cards = $('#' + id).parent();
 
     if(typeof(cards) !== "undefined" && cards.length > 0)
@@ -12,5 +13,31 @@ lookup.scrollToCard = function(id) {
             }, 300);
         
     }
+    else
+    {
+        if(typeof(number_of_retries_left) === "undefined")
+        {
+            lookup.scrollToCard_queue.push({id: id, retries: 5});
+        }
+        else
+        {
+            if(number_of_retries_left > 0)
+            {
+                lookup.scrollToCard_queue.push({id: id, retries: number_of_retries_left });
+            }
+        }
+    }
     
 };
+
+lookup.scrollToCard_processQueue = function()
+{
+    if(lookup.scrollToCard_queue.length > 0)
+    {
+        var toScrollTo = lookup.scrollToCard_queue.shift();
+        lookup.scrollToCard(toScrollTo.id, toScrollTo.number_of_retries_left - 1 );
+    }
+    setTimeout(lookup.scrollToCard_processQueue, 300);
+}
+
+

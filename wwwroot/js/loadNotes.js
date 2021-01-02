@@ -217,4 +217,5 @@ lookup.loadNotes = function()
             data.connections = [{"id":"_local_5","SourceId":"_local_1","DestinationId":"_local_3","label":""},{"id":"_local_9","SourceId":"_local_1","DestinationId":"_local_7","label":""},{"id":"_local_15","SourceId":"_local_11","DestinationId":"_local_13","label":""},{"id":"_local_23","SourceId":"_local_19","DestinationId":"_local_21","label":""},{"id":"_local_28","SourceId":"_local_1","DestinationId":"_local_26","label":""},{"id":"_local_32","SourceId":"_local_26","DestinationId":"_local_30","label":""},{"id":"_local_38","SourceId":"_local_34","DestinationId":"_local_36","label":""},{"id":"_local_44","SourceId":"_local_40","DestinationId":"_local_42","label":""},{"id":"_local_48","SourceId":"_local_40","DestinationId":"_local_46","label":""}];
             lookup.populate(data);
         }
+        lookup.scrollToCard_processQueue();
     };

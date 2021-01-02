@@ -465,6 +465,12 @@ function ConnectedNotesViewModel()
 
     lookup.ReversedListOfCards = ko.pureComputed(function()
     {
+        if(lookup.FilteredCards().length > 0)
+        {
+
+            var topCard = lookup.FilteredCards()[0];
+            lookup.scrollToCard(topCard.Note.id);
+        }
         return lookup.LimitedFilteredCards().reverse();
     });
 
