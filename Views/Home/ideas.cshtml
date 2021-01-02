@@ -695,8 +695,8 @@
                 <div class="w3-row" >
                     <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen">
                     </div>
-                    <div  class="w3-col w3-container s12 m8 l6 webpad-text-column"  data-bind="if: columnsCount() && cardsByColumns().length > 0">
-                        <div class="w3-row"  data-bind="template: { name: 'card-template', foreach: cardsByColumns()[0] } ">
+                    <div  class="w3-col w3-container s12 m8 l6 webpad-text-column"  data-bind="if: LimitedFilteredCards() && LimitedFilteredCards().length > 0">
+                        <div class="w3-row"  data-bind="template: { name: 'card-template', foreach: LimitedFilteredCards() } ">
 
                         </div>
                         <div style="" data-bind="template: { name: 'show-more-template' } " ></div>
