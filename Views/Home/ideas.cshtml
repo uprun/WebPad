@@ -273,15 +273,36 @@
         <script type="text/html" id="additional-toolbox-template">
             
             <span class="webpad-extra-information-plus-icon" data-bind="ifnot: $data.AdditionalInformationTextVisible">
-                
-                    <span class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button" style="" data-bind=" click: $root.switchAdditionalInformationText">
-                        <span style="margin-left: 0.5rem; margin-right: 0.5rem;">
-                            <span class="" style="color: aliceblue;" alt="hashTagBeginSymbol">#</span>
-                            <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="Add information" /> 
-                            <img src="svg/plus.svg" class="webpad-edit-pencil" alt="Add information" /> 
-                        </span>
-                        
-                    </span>
+                <span>
+                    <div
+                        class="webpad-brightness-dimmed webpad-button-no-border" 
+                        style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
+                        data-bind=" click: $root.switchAdditionalInformationText">
+                        <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol">#</span>
+                        <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="Edit"/> 
+                    </div>
+                </span>
+                &nbsp;
+                <span
+                    data-bind="ifnot: $data.isTask()" >
+                    <div
+                        class="webpad-brightness-dimmed webpad-button-no-border" 
+                        style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
+                        data-bind=" click: $data.convertToTask">
+                        <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Edit"/> 
+                        <span class="" style="color: #84bfff; vertical-align: middle; margin-right: 0.5rem;" alt="hashTagBeginSymbol"># task</span>
+                    </div>
+                </span>
+                &nbsp;
+                <span>
+                    <div
+                        class="webpad-brightness-dimmed webpad-button-no-border" 
+                        style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
+                        data-bind=" click: $root.switchAdditionalInformationText">
+                        <img src="svg/quote-left.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Add information" /> 
+                        <img src="svg/plus.svg" class="webpad-edit-pencil"  style="margin-right: 0.5rem;" alt="Edit"/> 
+                    </div>
+                </span>
             </span>
             <span style="" data-bind="if: $data.AdditionalInformationTextVisible">
                 <span  class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button"  data-bind=" click: $root.switchAdditionalInformationText">
@@ -510,6 +531,7 @@
                                         <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.prepareToBeRemoved">
                                             <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="remove"/> 
                                         </div>
+                                        &nbsp;
                                     </span>
                                     
                                 </span> 
@@ -525,19 +547,8 @@
                             
                             
 
-                            <div data-bind="if: $data.toolBoxVisible">
-                                <div style="font-size: 1.4rem;" class="w3-animate-opacity" data-bind="template: { name: 'additional-toolbox-template' } " >
-                                </div>
-                                &nbsp;
-                                <span
-                                    data-bind="ifnot: $data.isTask()" >
-                                    <div
-                                        class="webpad-brightness-dimmed webpad-button-no-border w3-animate-opacity" 
-                                        style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
-                                        data-bind=" click: $data.convertToTask">
-                                        <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Edit"/> 
-                                        <span class="" style="color: #84bfff; vertical-align: middle; margin-right: 0.5rem;" alt="hashTagBeginSymbol"># task</span>
-                                    </div>
+                            <span data-bind="if: $data.toolBoxVisible">
+                                <span style="font-size: 1.4rem;" class="w3-animate-opacity" data-bind="template: { name: 'additional-toolbox-template' } " >
                                 </span>
                             </div>
                             
