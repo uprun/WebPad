@@ -75,6 +75,7 @@ function model_Card(data)
 
     self.switchDone = function()
     {
+        event.stopPropagation();
         self.Note.switchDone();
     }
 
