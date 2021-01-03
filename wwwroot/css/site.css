@@ -432,3 +432,12 @@ div.webpad-hide-on-large-screen
     border-color: aliceblue;
     border-radius: 0.7rem;
 }
+
+@keyframes strike {
+    from { text-decoration-color: transparent; }
+    to { text-decoration-color: auto; }
+  }
+  .strike {  
+    text-decoration: line-through;
+    animation: strike 0.5s linear;
+  }

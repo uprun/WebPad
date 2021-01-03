@@ -460,7 +460,8 @@
                                     {
                                         'text-decoration-line': ($data.Note.isDone() && $data.isTask()) ? 'line-through' : 'none',
                                         'text-decoration-color': $data.Note.color
-                                    }">
+                                    }, 
+                                    css: {strike: ($data.Note.isDone() && $data.isTask()) }">
                                     <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Note }  -->
                                     <!-- /ko -->
                                 </span>

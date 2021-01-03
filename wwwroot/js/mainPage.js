@@ -385,11 +385,6 @@ function ConnectedNotesViewModel()
             );
     });
 
-    lookup.searchBarPosition = ko.pureComputed(function()
-    {
-        return lookup.sortedByDateCards().length === 0 ? "45%" : "0%" ;
-    });
-
     // the idea is that cards without tags should not be displayed unless they are root
     lookup.filteredOutLeafs = ko.pureComputed(
         function()
@@ -461,55 +456,28 @@ function ConnectedNotesViewModel()
 
     lookup.ReversedListOfCards = ko.pureComputed(function()
     {
-        if(lookup.FilteredCards().length > 0)
-        {
-
-            var topCard = lookup.FilteredCards()[0];
-            lookup.scrollToCard(topCard.Note.id);
-        }
         return lookup.LimitedFilteredCards().reverse();
     });
 
-    lookup.mergedOpenedAndFilteredCards = ko.pureComputed(function()
-    {
-        // there are 2 options 
-        // 1) cards in stackOfCards are not preseneted in filtration
-        // 2) first card present in filtration?
-        if(lookup.stackOfCards().length > 0)
-        {
-            var toWorkWith = lookup.stackOfCards();
-            var parent = null;
-            for(var k in toWorkWith)
+
+    lookup.ReversedListOfCards
+        .subscribe(function(changes)
             {
-                var x = toWorkWith[k];
-                var foundIndex = lookup.LimitedFilteredCards().indexOf(x);
-                if(foundIndex >= 0)
+                if(typeof(lookup.ReversedListOfCards_scroll_to_first) === 'undefined' 
+                || lookup.ReversedListOfCards_scroll_to_first === true)
                 {
-                    parent = x;
+                    if(lookup.FilteredCards().length > 0)
+                    {
+                        var topCard = lookup.FilteredCards()[0];
+                        lookup.scrollToCard(topCard.Note.id);
+                    }
+                    lookup.ReversedListOfCards_scroll_to_first = false;
                 }
-            }
+                
+                console.log("reversed list  changed")
 
-            if(parent !== null)
-            {
-                var indexInStack = lookup.stackOfCards.indexOf(parent);
-                var indexInFiltered = lookup.LimitedFilteredCards().indexOf(parent);
-                var left = lookup.LimitedFilteredCards().slice(0, indexInFiltered);
-                var right = lookup.LimitedFilteredCards().slice(indexInFiltered);
-                var middle = lookup.stackOfCards().slice(indexInStack + 1).reverse();
-                return left.concat(middle, right);
+            });
 
-            }
-            else
-            {
-                return lookup.stackOfCards().concat(lookup.LimitedFilteredCards());
-            }
-
-        }
-        else
-        {
-            return lookup.LimitedFilteredCards();
-        }
-    });
 
     lookup.ShowExtendCurrentResultLimit = ko.pureComputed(function()
     {
