@@ -112,19 +112,6 @@ function model_Card(data)
         lookup.RemoveNote(self);
     }
 
-    self.isInStack = ko.pureComputed(function()
-    {
-        var foundIndex = lookup.stackOfCards.indexOf(self);
-        return foundIndex >= 0;
-    });
-
-    self.isTopOfStack = ko.pureComputed(function()
-    {
-        var foundIndex = lookup.stackOfCards.indexOf(self);
-        var lastIndex = lookup.stackOfCards().length -1;
-        return lastIndex >= 0 && foundIndex === lastIndex;
-    });
-
     self.isTask = ko.pureComputed(function()
     {
         var foundTaskTag = ko.utils.arrayFirst(self.SmallTags(), function(item){
