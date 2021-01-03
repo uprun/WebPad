@@ -460,6 +460,13 @@
                                 </span>
                                 
                             </span>
+                            <span data-bind="if: $data.toolBoxVisible">
+                                <div style="font-size: 0.8rem;" class="w3-animate-opacity webpad-brightness-dimmed"  >
+                                    <span style="color: aliceblue;  vertical-align: middle;" data-bind="text: $data.Note.createDate">
+                                    </span>
+                                </div>
+
+                            </span>
                             <!-- tool-box menu-->
                             <span style="font-size: 2rem;">
 
@@ -496,7 +503,7 @@
                             <span data-bind="if: $data.toolBoxVisible">
                                 <span style="font-size: 1.4rem;" class="w3-animate-opacity" data-bind="template: { name: 'additional-toolbox-template' } " >
                                 </span>
-                            </div>
+                            </span>
                             
                             <div class="webpad-hide-on-small-screen" style="height: 2em;">
                             </div>
