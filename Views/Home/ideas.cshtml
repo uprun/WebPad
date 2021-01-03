@@ -288,42 +288,7 @@
                         <span class="" style="color: #84bfff; vertical-align: middle; margin-right: 0.5rem;" alt="hashTagBeginSymbol"># task</span>
                     </div>
                 </span>
-                &nbsp;
-                <span>
-                    <div
-                        class="webpad-brightness-dimmed webpad-button-no-border" 
-                        style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
-                        data-bind=" click: $root.switchAdditionalInformationText">
-                        <span class="" style="color: #84bfff; vertical-align: middle; " alt="hashTagBeginSymbol"></span>
-                        <img src="svg/quote-left.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Add information" /> 
-                        <img src="svg/plus.svg" class="webpad-edit-pencil"  style="margin-right: 0.5rem;" alt="Edit"/> 
-                    </div>
-                </span>
             </span>
-            &nbsp;
-            <div class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button" style="vertical-align: middle;" data-bind=" click: $root.pushToSearchNotesQuery">
-                <span style="margin-left: 0.5rem; margin-right: 0.5rem;">
-                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="" >
-                        <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
-                    </div>
-                    <!-- ko if: $data.BigTags().length > 0  -->
-                    &nbsp;
-                    <span lass="webpad-brightness-dimmed" style="color: aliceblue;  vertical-align: middle;" data-bind="text: $data.BigTags().length">
-
-                    </span>
-                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="  " >
-                        <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
-                    </div>
-                    <!-- /ko -->
-                    &nbsp;
-                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="  " >
-                        <img src="svg/comment-dots.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
-                    </div>
-                </span>
-                
-                
-            </div>
-            <br/>
         </script>
 
         <script type="text/html" id="to-be-removed-template">
@@ -458,6 +423,16 @@
                                     <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Note }  -->
                                     <!-- /ko -->
                                 </span>
+                                <span data-bind="if: $data.toolBoxVisible">
+                                    <span  class="w3-animate-opacity webpad-brightness-dimmed">
+                                        <div class="webpad-button-no-border webpad-brightness-dimmed" style="  " >
+                                            <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
+                                            <span style="color: #84bfff;  vertical-align: middle;" data-bind="text: ': ' + $data.BigTags().length">
+                                            </span>
+                                        </div>
+                                        
+                                    </span>
+                                </span>
                                 
                             </span>
                             <span data-bind="if: $data.toolBoxVisible">
@@ -465,6 +440,9 @@
                                     <span style="color: aliceblue;  vertical-align: middle;" data-bind="text: $data.Note.createDate">
                                     </span>
                                 </div>
+                                
+                                
+                                
 
                             </span>
                             <!-- tool-box menu-->
@@ -485,6 +463,27 @@
                                             <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="remove"/> 
                                         </div>
                                         &nbsp;
+                                        <span class="webpad-extra-information-plus-icon" data-bind="ifnot: $data.AdditionalInformationTextVisible">     
+                                            <span>
+                                                <div
+                                                    class="webpad-brightness-dimmed webpad-button-no-border" 
+                                                    style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
+                                                    data-bind=" click: $root.switchAdditionalInformationText">
+                                                    <span class="" style="color: #84bfff; vertical-align: middle; " alt="hashTagBeginSymbol"></span>
+                                                    <img src="svg/quote-left.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Add information" /> 
+                                                    <img src="svg/plus.svg" class="webpad-edit-pencil"  style="margin-right: 0.5rem;" alt="Edit"/> 
+                                                </div>
+                                            </span>
+                                        </span>
+                                        &nbsp;
+                                        <div 
+                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button" 
+                                            style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
+                                            data-bind=" click: $root.pushToSearchNotesQuery">   
+                                            <img src="svg/search.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;"  alt="jump to quote source"/> 
+                                            <span class="" style="color: #84bfff; vertical-align: middle;" alt="hashTagBeginSymbol"></span>
+                                            <img src="svg/quote-left.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="jump to quote source"/> 
+                                        </div>
                                     </span>
                                     
                                 </span> 
