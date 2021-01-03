@@ -1,1 +1,0 @@
-lookup.stackOfSearch = ko.observableArray([]);

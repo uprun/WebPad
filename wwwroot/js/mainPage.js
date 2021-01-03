@@ -421,17 +421,6 @@ function ConnectedNotesViewModel()
                     {
                         resultOfSearchQuery = item.IsForSearchResult(lookup.SearchNotesQuery().trim().toLowerCase())
                     }
-                    if(lookup.stackOfSearch().length > 0)
-                    {
-                        var stackResult = lookup.stackOfSearch().every( function (searchItem) 
-                        {
-                            var result = item.IsForSearchResult(searchItem);
-                            return result;
-
-                        });
-                        resultOfSearchQuery = resultOfSearchQuery && stackResult;
-
-                    }
                     return resultOfSearchQuery;
                     
                     
