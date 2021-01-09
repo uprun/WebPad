@@ -776,6 +776,10 @@
                         class="webpad-search-bar webpad-search-bar-adjusted"
                         type="text" 
                         data-bind="
+                            style:
+                            {
+                                color: $root.cardUnderEdit().Note.color,
+                            },
                             textInput: $root.toBeEdited,
                             " 
                     /> 
@@ -812,6 +816,10 @@
                                 class="webpad-search-bar webpad-search-bar-full-width"
                                 type="text" 
                                 data-bind="
+                                    style:
+                                    {
+                                        color: $root.cardUnderEdit().Note.color,
+                                    },
                                     textInput: $root.toBeEdited
                                     " 
                             />
