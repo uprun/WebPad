@@ -1,10 +1,5 @@
 importScripts(
-    'cryptico/jsbn.js', 
-    'cryptico/random.js', 
-    'cryptico/hash.js', 
-    'cryptico/rsa.js', 
-    'cryptico/aes.js', 
-    'cryptico/api.js'); 
+    ); 
 
 var GeneratePassPhrase = function(initialPhrase) {
     var prefix = "" + initialPhrase;
@@ -14,7 +9,7 @@ var GeneratePassPhrase = function(initialPhrase) {
     return prefix;
 };
 
-var rsaKey = cryptico.generateRSAKey(GeneratePassPhrase(), 2048);
+var rsaKey = undefined;// cryptico.generateRSAKey(GeneratePassPhrase(), 2048);
 
 var restoreFieldsOfObject = function(objectInstance, savedFields) {
     for( var a in objectInstance) {
@@ -35,33 +30,33 @@ var restoreFieldsOfObject = function(objectInstance, savedFields) {
 onmessage = function(e) {
     if(e.data.action == 'applySaveOfKey')
     {
-        rsaKey = restoreFieldsOfObject(rsaKey, e.data.data);
-        postMessage({ action: 'applySaveOfKey.Result', data: rsaKey});
+        // rsaKey = restoreFieldsOfObject(rsaKey, e.data.data);
+        // postMessage({ action: 'applySaveOfKey.Result', data: rsaKey});
     }
 
     if(e.data.action == 'getPublicKey')
     {
-        var publicKey = cryptico.publicKeyString(rsaKey);
-        postMessage({ action: 'getPublicKey.Result', data: publicKey});
+        // var publicKey = cryptico.publicKeyString(rsaKey);
+        // postMessage({ action: 'getPublicKey.Result', data: publicKey});
     }
 
     if(e.data.action == 'encrypt')
     {
-        var encryptedMessage = cryptico.encrypt(e.data.PlainText, e.data.ReceiverPublicKey, rsaKey);
-        postMessage({ 
-            action: 'encrypt.Result'
-            , encryptedText: encryptedMessage
-            , receiverPublicKey: e.data.ReceiverPublicKey
-            , id: e.data.Id });
+        // var encryptedMessage = cryptico.encrypt(e.data.PlainText, e.data.ReceiverPublicKey, rsaKey);
+        // postMessage({ 
+        //     action: 'encrypt.Result'
+        //     , encryptedText: encryptedMessage
+        //     , receiverPublicKey: e.data.ReceiverPublicKey
+        //     , id: e.data.Id });
     }
     if(e.data.action == 'decrypt')
     {
-        var DecryptionResult = cryptico.decrypt(e.data.CipherText, rsaKey);
-        postMessage(
-            { 
-                action: 'decrypt.Result'
-                , decryptionResult: DecryptionResult
-            });
+        // var DecryptionResult = cryptico.decrypt(e.data.CipherText, rsaKey);
+        // postMessage(
+        //     { 
+        //         action: 'decrypt.Result'
+        //         , decryptionResult: DecryptionResult
+        //     });
 
 
     }

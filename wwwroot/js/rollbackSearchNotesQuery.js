@@ -6,5 +6,7 @@ lookup.rollbackSearchNotesQuery = function()
     {
         previousQuery = lookup.stackSearchNotesQuery.pop();
     }
-    lookup.SearchNotesQuery(previousQuery);
+    lookup.onListChanged_setScrollTopOffset(previousQuery.scrollPosition);
+    lookup.SearchNotesQuery(previousQuery.query);
+    lookup.CurrentResultLimit(previousQuery.amountOfCardsLimit)
 };

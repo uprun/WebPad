@@ -463,6 +463,7 @@ function ConnectedNotesViewModel()
                     lookup.ReversedListOfCards_scroll_to_first = false;
                 }
                 
+                lookup.onListChanged_ScrollToDestination();
                 console.log("reversed list  changed")
 
             });
