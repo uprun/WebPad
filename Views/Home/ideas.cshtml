@@ -798,6 +798,38 @@
             <div class="w3-row">
                 <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
                     &NonBreakingSpace;
+                </div>
+                <div class="w3-col w3-container s12 m8 l6" data-bind="with: $root.taggedOrQuotedCard()">
+                    <div
+                        style="border-style: solid; border-image: linear-gradient(to bottom right, #3900d9, #d6920b) 1; border-width: 0.2rem; border-radius: 0.7rem; font-size: 1rem; margin-left: 1rem; margin-right: 1rem;"
+                    >
+                        <span data-bind="
+                            style:
+                            {
+                                'text-decoration-line': ($data.Note.isDone() && $data.isTask()) ? 'line-through' : 'none',
+                                'text-decoration-color': $data.Note.color
+                            }, 
+                            css: {strike: ($data.Note.isDone() && $data.isTask()) }">
+                            <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Note }  -->
+                            <!-- /ko -->
+                        </span>
+                        <!-- ko if: $data.SmallTagsWrapped().length > 0  -->
+                            <br/>
+                            <span data-bind="template: { name: 'tag-template', foreach: $data.SmallTagsWrapped } " >
+                            </span>
+                        <!-- /ko -->
+                    </div>
+                    <div class="webpad-hide-on-small-screen" style="height: 1rem;">
+                    </div>
+                </div>
+                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
+                    &NonBreakingSpace;
+                </div>
+                
+            </div>
+            <div class="w3-row">
+                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
+                    &NonBreakingSpace;
                     <span style="float: right;">
                         <div class="webpad-button-no-border" data-bind=" click: $root.cancelAddingTagOrQuote">
                             <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
