@@ -697,7 +697,6 @@ function ConnectedNotesViewModel()
     
     // No need to store publicCryptoKey in local storage because in order to receive and send messages we will need private key to be restored first
     lookup.publicCryptoKey.subscribe(function(changes) {
-        lookup.StatisticsOnLoad();
         lookup.RemoveOwnPublicKeyFromTrusted();
         lookup.processMessages();
 
@@ -763,24 +762,6 @@ function ConnectedNotesViewModel()
                 },
                 success: function(data){
                     lookup.TokenToShare(data);
-                },
-                dataType: "json"
-            });
-        }
-        
-
-    };
-
-    lookup.StatisticsOnLoad = function() {
-        if(navigator.onLine)
-        {
-            $.ajax({
-                type: "POST",
-                url: "Home/StatisticsOnLoad",
-                data: {
-                    publicKey: lookup.publicCryptoKey()
-                },
-                success: function(data){
                 },
                 dataType: "json"
             });

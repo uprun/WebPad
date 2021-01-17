@@ -14,16 +14,7 @@ namespace ConnectedNotes.Controllers
 
         public IActionResult ideas(string source)
         {
-            Console.WriteLine($"main ip: {HttpContext.Connection.RemoteIpAddress.ToString()}");
-            foreach(var header in Request.Headers)
-            {
-                if(header.Key == "User-Agent")
-                {
-                    Console.WriteLine($"main User-Agent: {header}");
-                }
-                
-            }
-            Console.WriteLine($"Source: {source ?? "undefined"}");
+            Console.WriteLine($"open of \"{nameof(ideas)}\" page");
             Console.WriteLine("===============================================");
             return View();
         }
@@ -141,17 +132,6 @@ namespace ConnectedNotes.Controllers
         [HttpPost]
         public JsonResult StatisticsOnLoad(string publicKey)
         {
-            Console.WriteLine($"StatisticsOnLoad ip: {HttpContext.Connection.RemoteIpAddress.ToString()}");
-            foreach(var header in Request.Headers)
-            {
-                if(header.Key == "User-Agent")
-                {
-                    Console.WriteLine($"About User-Agent: {header}");
-                }
-                
-            }
-            Console.WriteLine($"PublicKey: {publicKey}");
-            Console.WriteLine("===============================================");
 
             return new JsonResult(true);
         }
