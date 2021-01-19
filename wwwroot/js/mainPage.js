@@ -429,7 +429,7 @@ function ConnectedNotesViewModel()
     });
 
     lookup.FilteredCards
-        .extend({ rateLimit: 500 });
+        .extend({ rateLimit: 50 });
 
     lookup.CurrentResultLimit = ko.observable(45);
 

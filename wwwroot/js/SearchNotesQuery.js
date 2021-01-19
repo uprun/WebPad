@@ -1,3 +1,3 @@
 lookup.SearchNotesQuery = ko.observable("");
 lookup.SearchNotesQuery
-    .extend({ rateLimit: 200 });
+    .extend({ rateLimit: 50 });
