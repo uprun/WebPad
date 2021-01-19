@@ -239,7 +239,7 @@
                         style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
                         data-bind=" click: $parent.removeTag, with: $data.originalTag ">
                         <img src="svg/trash-orange.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Edit"/> 
-                        <span class="" style="color: #84bfff; vertical-align: middle;" alt="hashTagBeginSymbol">#</span>
+                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
                         <span class="" style=" vertical-align: middle; margin-right: 0.5rem;"
                             data-bind="style: 
                             {
@@ -253,7 +253,7 @@
                 </span>
                 <span data-bind="ifnot: $parent.toolBoxVisible ">
                     <span >
-                        <span class="" style="color: #84bfff;" alt="hashTagBeginSymbol">#</span>
+                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
                         <!-- ko template: { name: 'text-with-dictionary-template', data: $data }  -->
                         <!-- /ko -->
                     </span>
@@ -270,7 +270,8 @@
                         class="webpad-brightness-dimmed webpad-button-no-border" 
                         style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
                         data-bind=" click: $root.switchAdditionalInformationText">
-                        <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol">#</span>
+                        <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
+                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
                         <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="Edit"/> 
                     </div>
                 </span>
@@ -282,7 +283,8 @@
                         style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
                         data-bind=" click: $data.convertToTask">
                         <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Edit"/> 
-                        <span class="" style="color: #84bfff; vertical-align: middle; margin-right: 0.5rem;" alt="hashTagBeginSymbol"># task</span>
+                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                        <span class="" style="color: #84bfff; vertical-align: middle; margin-right: 0.5rem;" alt="hashTagBeginSymbol"> task</span>
                     </div>
                 </span>
             </span>
@@ -307,15 +309,15 @@
                         <div>
                             <h1 style="color: aliceblue;"  > 
                                 <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" ">
-                                    <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="rollback removal"/> 
+                                    <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="removal?"/> 
                                 </div>
                                 <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" ">?</span>
-                                <div class="webpad-button-no-border" data-bind=" click: $data.rollbackRemoval">
-                                    <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="rollback removal"/> 
+                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $data.rollbackRemoval">
+                                    <img src="svg/times-green.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="rollback removal"/> 
                                 </div>
                                 &nbsp;&nbsp;
-                                <div class="webpad-button-no-border" data-bind=" click: $data.reallyRemove">
-                                    <img src="svg/thumbs-up-orange.svg" class="webpad-edit-pencil" alt="really remove"/> 
+                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $data.reallyRemove">
+                                    <img src="svg/thumbs-up-orange.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="really remove"/> 
                                 </div>
                             </h1>
                         </div>
@@ -446,12 +448,20 @@
                                 </span>
                                 <span data-bind="if: $data.toolBoxVisible">
                                     <span  class="w3-animate-opacity webpad-brightness-dimmed">
-                                        <div class="webpad-button-no-border webpad-brightness-dimmed" style="  " >
+                                        <div class="webpad-button-no-border webpad-brightness-dimmed" style="  margin-left: 0.5rem;" >
                                             <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
                                             <span style="color: #84bfff;  vertical-align: middle;" data-bind="text: ': ' + $data.BigTags().length">
                                             </span>
                                         </div>
-                                        
+                                        &nbsp;
+                                        <div 
+                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button" 
+                                            style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
+                                            data-bind=" click: $root.pushToSearchNotesQuery">   
+                                            <img src="svg/search.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;"  alt="jump to quote source"/> 
+                                            <span class="" style="color: #84bfff; vertical-align: middle;" alt="hashTagBeginSymbol"></span>
+                                            <img src="svg/quote-left.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="jump to quote source"/> 
+                                        </div>
                                     </span>
                                 </span>
                                 
@@ -474,37 +484,16 @@
                                     data-bind="if: $data.toolBoxVisible">
                                     <span class="w3-animate-opacity" >
                                         <span>
-                                            <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.beginToEdit">
-                                                <img src="svg/pencil-alt.svg" class="webpad-edit-pencil" alt="Edit"/> 
+                                            <div class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.beginToEdit">
+                                                <img src="svg/pencil-alt.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="Edit"/> 
                                             </div>
                                         </span>
                                         
                                         &nbsp;
-                                        <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $data.prepareToBeRemoved">
-                                            <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="remove"/> 
+                                        <div class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" data-bind=" click: $data.prepareToBeRemoved">
+                                            <img src="svg/trash-orange.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="remove"/> 
                                         </div>
-                                        &nbsp;
-                                        <span class="webpad-extra-information-plus-icon" data-bind="ifnot: $data.AdditionalInformationTextVisible">     
-                                            <span>
-                                                <div
-                                                    class="webpad-brightness-dimmed webpad-button-no-border" 
-                                                    style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
-                                                    data-bind=" click: $root.switchAdditionalInformationText">
-                                                    <span class="" style="color: #84bfff; vertical-align: middle; " alt="hashTagBeginSymbol"></span>
-                                                    <img src="svg/quote-left.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Add information" /> 
-                                                    <img src="svg/plus.svg" class="webpad-edit-pencil"  style="margin-right: 0.5rem;" alt="Edit"/> 
-                                                </div>
-                                            </span>
-                                        </span>
-                                        &nbsp;
-                                        <div 
-                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button" 
-                                            style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
-                                            data-bind=" click: $root.pushToSearchNotesQuery">   
-                                            <img src="svg/search.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;"  alt="jump to quote source"/> 
-                                            <span class="" style="color: #84bfff; vertical-align: middle;" alt="hashTagBeginSymbol"></span>
-                                            <img src="svg/quote-left.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="jump to quote source"/> 
-                                        </div>
+                                        
                                     </span>
                                     
                                 </span> 
@@ -863,7 +852,9 @@
                 </div>
                 <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-small-screen" style="font-size: 1.4rem;">
                     <!-- ko if: typeof($root.taggedOrQuotedCard()) !== 'undefined' && $root.taggedOrQuotedCard().AdditionalInformationText().trim().length < 20 -->
-                        <span class="webpad-brightness-dimmed" style="color: #84bfff;" alt="hashTagBeginSymbol">#</span>
+                        <span class="webpad-brightness-dimmed webpad-button-no-border" >
+                            <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                        </span>
                     <!-- /ko -->
                     <!-- ko ifnot: typeof($root.taggedOrQuotedCard()) !== 'undefined' && $root.taggedOrQuotedCard().AdditionalInformationText().trim().length < 20 -->
                         <span class="webpad-brightness-dimmed webpad-button-no-border" >
@@ -877,7 +868,7 @@
                                     color: $root.taggedOrQuotedCard().AdditionalInformationTextColor,
                                 },">
                         <input 
-                            placeholder="add tag or comment" 
+                            placeholder="add quote" 
                             class="webpad-extra-information w3-animate-opacity"
                             type="text" 
                             data-bind="
@@ -922,7 +913,9 @@
                         </div>
                         <div class="w3-col w3-container s12 webpad-hide-on-large-screen" style="font-size: 1.4rem;">
                             <!-- ko if:  $root.taggedOrQuotedCard().AdditionalInformationText().trim().length < 20 -->
-                                <span class="webpad-brightness-dimmed" style="color: #84bfff;" alt="hashTagBeginSymbol">#</span>
+                                <span class="webpad-brightness-dimmed webpad-button-no-border" >
+                                    <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                                </span>
                             <!-- /ko -->
                             <!-- ko ifnot: $root.taggedOrQuotedCard().AdditionalInformationText().trim().length < 20 -->
                                 <span class="webpad-brightness-dimmed webpad-button-no-border" >
@@ -936,7 +929,7 @@
                                             color: $root.taggedOrQuotedCard().AdditionalInformationTextColor,
                                         },">
                                 <input 
-                                    placeholder="add tag or comment" 
+                                    placeholder="add quote" 
                                     class="webpad-extra-information w3-animate-opacity"
                                     type="text" 
                                     data-bind="

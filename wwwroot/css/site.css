@@ -441,3 +441,11 @@ div.webpad-hide-on-large-screen
     text-decoration: line-through;
     animation: strike 0.5s linear;
   }
+
+  .webpad-golden-frame
+  {
+    border-style: solid; 
+    border-width: 0.2rem;
+    border-color: #f8e755;
+    border-radius: 0.7rem;
+  }
