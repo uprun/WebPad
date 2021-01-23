@@ -26,6 +26,17 @@ lookup.onListChanged_set_scrollToLatestCard = function()
     lookup.scrollToDestinationCommand(commandValue);
 };
 
+lookup.onListChanged_set_scrollToCard = function(card)
+{
+    var commandValue = lookup.scrollToDestinationCommand();
+    if(typeof(commandValue) === 'undefined')
+    {
+        commandValue = {};
+    }
+    commandValue["scrollToCard"] = card;
+    lookup.scrollToDestinationCommand(commandValue);
+};
+
 lookup.onListChanged_ScrollToDestination = function()
 {
     var commandValue = lookup.scrollToDestinationCommand();
@@ -39,10 +50,19 @@ lookup.onListChanged_ScrollToDestination = function()
         }
         else
         {
-            if(typeof(commandValue.scrollToLatestCard) !== 'undefined')
+            if(typeof(commandValue.scrollToCard) !== 'undefined')
             {
-                lookup.scrollToLatestCard();
+                lookup.scrollToCard(card.Note.id);
             }
+            else
+            {
+                if(typeof(commandValue.scrollToLatestCard) !== 'undefined')
+                {
+                    lookup.scrollToLatestCard();
+                }
+            }
+            
+            
         }
         
         lookup.scrollToDestinationCommand(undefined);

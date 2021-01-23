@@ -478,6 +478,12 @@ function ConnectedNotesViewModel()
 
     lookup.ExtendCurrentResultLimit = function()
     {
+        var currentCards = lookup.FilteredCards();
+        if(currentCards.length > 0)
+        {
+            var bottomCard = currentCards[currentCards.length -1];
+            lookup.onListChanged_set_scrollToCard(bottomCard);
+        }
         lookup.CurrentResultLimit(lookup.CurrentResultLimit() + 45);
     };
 
