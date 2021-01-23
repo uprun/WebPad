@@ -120,7 +120,8 @@
         <script language="JavaScript" type="text/javascript" src="js/loadNotes.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/toBeEdited.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/taggedOrQuotedCard.js" asp-append-version="true"></script>
-        <script language="JavaScript" type="text/javascript" src="js/export-import.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/export.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/import.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/mainPage.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/scrollToLatestCard.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/document_ready_ideas.js" asp-append-version="true"></script>
@@ -615,8 +616,13 @@
                             data-bind="click: $root.export">
                             export
                     </button>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <label for="importSnapshotFile" style="color: yellow;">Select a snapshot file to import:</label>
+                    <br/>
+                    <input type="file" id="importSnapshotFile" style="width: 20rem; color: yellow;" >
                     <button style="font-size: 1.4rem;" class="webpad-node webpad-yellow" 
-                            data-bind="click: $root.changeBackgroundToDefault">
+                            data-bind="click: $root.import">
                             import
                     </button>
                 </div>

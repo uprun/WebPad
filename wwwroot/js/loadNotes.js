@@ -201,6 +201,13 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
         
     };
 
+lookup.populate_reset_helpers = function()
+{
+    lookup.populate_incoming_outgoing_connections_index = undefined;
+    lookup.populateNotes_startIndex = undefined;
+    lookup.populateConnections_startIndex = undefined;
+};
+
 lookup.loadNotes = function()
     {
         if(lookup.localStorage["Notes"]){
