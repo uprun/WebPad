@@ -52,7 +52,7 @@ lookup.onListChanged_ScrollToDestination = function()
         {
             if(typeof(commandValue.scrollToCard) !== 'undefined')
             {
-                lookup.scrollToCard(card.Note.id);
+                lookup.scrollToCard(commandValue.scrollToCard.Note.id);
             }
             else
             {
