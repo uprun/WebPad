@@ -14,8 +14,12 @@ namespace ConnectedNotes.Controllers
 
         public IActionResult ideas(string source)
         {
-            Console.WriteLine($"open of \"{nameof(ideas)}\" page");
-            Console.WriteLine("===============================================");
+            lock(pageLocker)
+            {
+                homePageCounter++;
+                Console.WriteLine($"#{homePageCounter} open of \"{nameof(ideas)}\" page");
+            }
+            
             return View();
         }
 
@@ -24,6 +28,10 @@ namespace ConnectedNotes.Controllers
         private static Dictionary<string, string> synchronization = new Dictionary<string, string>();
 
         private static Dictionary<(string Receiver, string Sender), List<string> > messageBox = new Dictionary<(string Receiver, string Sender), List<string> > ();
+
+        private static object pageLocker = new object();
+
+        private static int homePageCounter = 0;
 
         private string GenerateToken()
         {
