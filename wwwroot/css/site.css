@@ -439,7 +439,7 @@ div.webpad-hide-on-large-screen
   }
   .strike {  
     text-decoration: line-through;
-    animation: strike 0.5s linear;
+    animation: strike 0.2s linear;
   }
 
   .webpad-golden-frame
