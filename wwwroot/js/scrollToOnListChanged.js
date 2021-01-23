@@ -6,34 +6,45 @@ lookup.getViewPortScrollPosition = function() {
 
 lookup.onListChanged_setScrollTopOffset = function(offsetTop)
 {
-    lookup.scrollToDestinationCommand(
-        {
-            offsetTop: offsetTop
-        });
+    var commandValue = lookup.scrollToDestinationCommand();
+    if(typeof(commandValue) === 'undefined')
+    {
+        commandValue = {};
+    }
+    commandValue["offsetTop"] = offsetTop;
+    lookup.scrollToDestinationCommand(commandValue);
 };
+
 lookup.onListChanged_set_scrollToLatestCard = function()
 {
-    lookup.scrollToDestinationCommand(
-        {
-            scrollToLatestCard: true
-        }
-    );
+    var commandValue = lookup.scrollToDestinationCommand();
+    if(typeof(commandValue) === 'undefined')
+    {
+        commandValue = {};
+    }
+    commandValue["scrollToLatestCard"] = true;
+    lookup.scrollToDestinationCommand(commandValue);
 };
+
 lookup.onListChanged_ScrollToDestination = function()
 {
-    if(typeof(lookup.scrollToDestinationCommand())!== 'undefined')
+    var commandValue = lookup.scrollToDestinationCommand();
+    if(typeof(commandValue)!== 'undefined')
     {
-        if(typeof(lookup.scrollToDestinationCommand().offsetTop) !== 'undefined')
+        if(typeof(commandValue.offsetTop) !== 'undefined')
         {
             $("body,html").stop().animate({
                 scrollTop: lookup.scrollToDestinationCommand().offsetTop
             }, 300);
-
         }
-        if(typeof(lookup.scrollToDestinationCommand().scrollToLatestCard) !== 'undefined')
+        else
         {
-            lookup.scrollToLatestCard();
+            if(typeof(commandValue.scrollToLatestCard) !== 'undefined')
+            {
+                lookup.scrollToLatestCard();
+            }
         }
+        
         lookup.scrollToDestinationCommand(undefined);
     }
 };
