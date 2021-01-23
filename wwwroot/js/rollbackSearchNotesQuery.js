@@ -11,6 +11,7 @@ lookup.rollbackSearchNotesQuery = function()
     else
     {
         lookup.SearchNotesQuery("");
+        lookup.onListChanged_set_scrollToLatestCard();
     }
     
 };

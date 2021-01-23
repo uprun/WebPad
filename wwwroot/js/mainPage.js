@@ -455,11 +455,7 @@ function ConnectedNotesViewModel()
                 if(typeof(lookup.ReversedListOfCards_scroll_to_first) === 'undefined' 
                 || lookup.ReversedListOfCards_scroll_to_first === true)
                 {
-                    if(lookup.FilteredCards().length > 0)
-                    {
-                        var topCard = lookup.FilteredCards()[0];
-                        lookup.scrollToCard(topCard.Note.id);
-                    }
+                    lookup.scrollToLatestCard();
                     lookup.ReversedListOfCards_scroll_to_first = false;
                 }
                 
