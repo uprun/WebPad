@@ -1,8 +1,16 @@
 lookup.scrollToCard_queue = [];
 lookup.scrollToCard = function(id, number_of_retries_left) {
     var searchQuery = '#' + id;
-    console.log('scrollToCard query: ' +searchQuery);
-    var cards = $(searchQuery);
+    var cards = undefined; 
+    try
+    {
+        cards = $(searchQuery);
+    }
+    catch(error)
+    {
+        console.log("failed search query was : " + searchQuery)
+    }
+    
 
     if(typeof(cards) !== "undefined" && cards.length > 0)
     {

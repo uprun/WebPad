@@ -1006,7 +1006,6 @@ function ConnectedNotesViewModel()
                 console.log('create');
                 lookup.SearchNotesQuery("");
                 lookup.jumpToCardOnCreate(added);
-                lookup.assign_labels_by_dictionary(added);
             }
         );
     };

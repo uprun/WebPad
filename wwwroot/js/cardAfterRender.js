@@ -19,8 +19,17 @@ lookup.cardAfterRender = function()
     var renderedItems = ko.utils.arrayFilter(cards, 
         function(item)
         { 
-            var searchResult = $('#'+item.Note.id);
-            return searchResult.length > 0;
+            try
+            {
+                var searchResult = $('#'+item.Note.id);
+                return searchResult.length > 0;
+
+            }
+            catch(error)
+            {
+                console.log("failed search query was : " + '#'+item.Note.id)
+            }
+            return true;
         } );
     var isCompletelyRendered = renderedItems.length === cards.length;
     if(isCompletelyRendered)
