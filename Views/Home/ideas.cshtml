@@ -391,10 +391,10 @@
                 <span data-bind="
                     style:
                     {
-                        'text-decoration-line': ($data.Note.isDone() && $data.isTask()) ? 'line-through' : 'none',
+                        'text-decoration-line': ($data.isDone() && $data.isTask()) ? 'line-through' : 'none',
                         'text-decoration-color': $data.Note.color
                     }, 
-                    css: {strike: ($data.Note.isDone() && $data.isTask()) }">
+                    css: {strike: ($data.isDone() && $data.isTask()) }">
                     <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Note }  -->
                     <!-- /ko -->
                 </span>
@@ -430,21 +430,21 @@
                             <!-- /ko -->
                             <span>
                                 <span data-bind="if: $data.isTask()" style="font-size: 1.4em;">
-                                    <span data-bind="if: $data.Note.isDone">
-                                        <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.switchDone">[x]</span>
+                                    <span data-bind="if: $data.isDone()">
+                                        <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.removeDone">[x]</span>
                                     </span>
-                                    <span data-bind="ifnot: $data.Note.isDone">
-                                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.switchDone">[o]</span>
+                                    <span data-bind="ifnot: $data.isDone()">
+                                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.markAsDone">[o]</span>
                                     </span>
                                 </span>
                                 
                                 <span data-bind="
                                     style:
                                     {
-                                        'text-decoration-line': ($data.Note.isDone() && $data.isTask()) ? 'line-through' : 'none',
+                                        'text-decoration-line': ($data.isDone() && $data.isTask()) ? 'line-through' : 'none',
                                         'text-decoration-color': $data.Note.color
                                     }, 
-                                    css: {strike: ($data.Note.isDone() && $data.isTask()) }">
+                                    css: {strike: ($data.isDone() && $data.isTask()) }">
                                     <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Note }  -->
                                     <!-- /ko -->
                                 </span>

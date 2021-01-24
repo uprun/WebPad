@@ -70,10 +70,15 @@ function model_Card(data)
         return true;
     };
 
-    self.switchDone = function()
+    self.markAsDone = function()
     {
         event.stopPropagation();
-        self.Note.switchDone();
+        self.convertTo("done");
+    };
+    self.removeDone = function()
+    {
+        event.stopPropagation();
+        self.convertFrom("done");
     }
 
     self.toBeRemoved = ko.observable(false);
@@ -120,6 +125,15 @@ function model_Card(data)
         return  typeof(foundTaskTag) !== 'undefined';
     });
 
+    self.isDone = ko.pureComputed(function()
+    {
+        var foundTaskTag = ko.utils.arrayFirst(self.SmallTags(), function(item){
+            return item.Destination.text().toLowerCase().trim() === "done";
+        });
+        return  typeof(foundTaskTag) !== 'undefined';
+    });
+
+
     self.convertFromTask = function()
     {
         var foundTaskTags = 
@@ -127,6 +141,27 @@ function model_Card(data)
             function(item)
             {
                 return item.Destination.text().toLowerCase().trim() === "task";
+            });
+        ko.utils.arrayForEach
+        (
+            foundTaskTags, 
+            function(item) 
+            {
+                lookup.RemoveConnection(item);
+                lookup.RemoveNote({Note: item.Destination });
+            }
+        );
+        
+    };
+
+    self.convertFrom = function(tag)
+    {
+        tag = tag.toLowerCase().trim();
+        var foundTaskTags = 
+        ko.utils.arrayFilter(self.SmallTags(),
+            function(item)
+            {
+                return item.Destination.text().toLowerCase().trim() === tag;
             });
         ko.utils.arrayForEach
         (
@@ -149,6 +184,12 @@ function model_Card(data)
     self.convertToTask = function()
     {
         lookup.AddInformationToExistingOne(self, "task");
+    };
+
+    self.convertTo = function(tag)
+    {
+        tag = tag.toLowerCase().trim();
+        lookup.AddInformationToExistingOne(self, tag);
     };
 
     self.isSmallTagChecker = function(item)

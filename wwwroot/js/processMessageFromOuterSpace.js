@@ -1,5 +1,6 @@
 lookup.processMessageFromOuterSpace = function(item)
     {
+        console.log("processMessageFromOuterSpace");
         var current_action = item.action;
         var current_data = item.data;
         if(current_action == lookup.actions.NoteUpdated)
@@ -93,7 +94,7 @@ lookup.processMessageFromOuterSpace = function(item)
         if(current_action == lookup.actions.ConnectionAdded)
         {
             var found = lookup.findEdgeById(current_data.id);
-            if(!found)
+            if(typeof(found) === 'undefined')
             {
                 var connectionToAdd = 
                 lookup.Instanciate_model_connection
@@ -108,7 +109,8 @@ lookup.processMessageFromOuterSpace = function(item)
                         }
                     );
                 lookup.findEdgeById_buffer[connectionToAdd.id] = connectionToAdd;
-                lookup.Connections.push(connectionToAdd)
+                lookup.Connections.push(connectionToAdd);
+                console.log("connection was added #" + current_data.id);
                 var foundHashCard = lookup.hashCards[connectionToAdd.SourceId];
                 if(foundHashCard)
                 {
@@ -117,6 +119,7 @@ lookup.processMessageFromOuterSpace = function(item)
             }
             else
             {
+                console.log("connection already exists #" + current_data.id);
                 if(!found.id.startsWith(lookup.localPrefix))
                 {
                     found.label(current_data.label);

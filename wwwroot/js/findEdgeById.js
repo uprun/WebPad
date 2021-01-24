@@ -17,7 +17,7 @@ lookup.findEdgeById = function(id)
     if(typeof(result) == "undefined")
     {
         var filtered = ko.utils.arrayFilter(lookup.Connections(), function(item){ return item.id == id;} );
-        result = filtered.length > 0 ? filtered[0] : null;
+        result = filtered.length > 0 ? filtered[0] : undefined;
     }
 
     

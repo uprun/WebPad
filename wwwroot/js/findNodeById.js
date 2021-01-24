@@ -19,9 +19,9 @@ lookup.findNodeById = function(id)
     if(typeof(result) == "undefined")
     {
         var filtered = ko.utils.arrayFilter(lookup.Notes(), function(item){ return item.id == id;} );
-        result = filtered.length > 0 ? filtered[0] : null;
+        result = filtered.length > 0 ? filtered[0] : undefined;
     }
-    if(result == null)
+    if(typeof(result) === 'undefined')
     {
         result = lookup.findNodeById_notFound;
     }

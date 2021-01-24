@@ -19,15 +19,18 @@ lookup.ConnectNotes = function(from, to, label, generated) {
                     item.label() == connectionToAdd.label();
             } 
         );
-    var searchResult = filtered.length > 0 ? filtered[0] : null;
     // don't allow to create duplicate connections
-    if(!searchResult)
+    if(filtered.length === 0)
     {
-        
+        console.log("adding connection #" + connectionToAdd.id );
         lookup.pushToHistory({
             action: lookup.actions.ConnectionAdded,
             data: added
         });
+    }
+    else
+    {
+        console.log("it is not allowed to create duplicate connections");
     }
     
 };
