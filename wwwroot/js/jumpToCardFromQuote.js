@@ -4,7 +4,7 @@ lookup.jumpToCardFromQuote = function(data)
     if(destinationCard != null)
     {
         lookup.pushToSearchNotesQuery(destinationCard);
-        lookup.scrollToCard(destinationCard.Note.id);
+        lookup.onListChanged_set_scrollToLatestCard();
     }
     event.stopPropagation();
 

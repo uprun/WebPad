@@ -1,10 +1,12 @@
 lookup.scrollToCard_queue = [];
 lookup.scrollToCard = function(id, number_of_retries_left) {
-    var cards = $('#' + id).parent();
+    var searchQuery = '#' + id;
+    console.log('scrollToCard query: ' +searchQuery);
+    var cards = $(searchQuery);
 
     if(typeof(cards) !== "undefined" && cards.length > 0)
     {
-        var target = cards[0];
+        var target = cards.parent()[0];
         //target.scrollIntoView();
 
         var scrollAreas = $('.webpad-search-result-area');

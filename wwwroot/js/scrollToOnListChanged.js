@@ -80,7 +80,11 @@ lookup.onListChanged_ScrollToDestination = function()
                 {
                     if(typeof(commandValue.scrollToLatestCard) !== 'undefined')
                     {
-                        lookup.scrollToLatestCard();
+                        console.log('onListChanged_ScrollToDestination=scrollToLatestCard')
+                        var totalHeight = $("body,html").height();
+                        $("body,html").stop().animate({
+                            scrollTop: totalHeight
+                        }, 300);
                     }
                 }
             }
