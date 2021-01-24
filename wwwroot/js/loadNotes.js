@@ -15,19 +15,42 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
         
         ko.utils.arrayForEach(lookup.composedCards(), function(item) {
             
-            if(item.isRoot)
-            {
-                var key = 
-                    item
-                    .Note
-                    .text()
-                    .replace("\r", " ")
-                    .replace("\n", " ")
-                    .replace("\t", " ")
-                    .toLowerCase()
-                    .trim();
-                lookup.dictionary_of_notes[key] = item.Note;
-            }
+            
+            var key = 
+                item
+                .Note
+                .text()
+                .replace("\r", " ")
+                .replace("\n", " ")
+                .replace("\t", " ")
+                .toLowerCase()
+                .trim();
+            lookup.dictionary_of_notes[key] = item.Note;
+
+            var splittedText = key.split(" ");
+            ko.utils.arrayForEach(splittedText, function(word)
+                {
+                    var toSearch = 
+                        word
+                        .replace("\r", " ")
+                        .replace("\n", " ")
+                        .replace("\t", " ")
+                        .toLowerCase()
+                        .trim();
+                    
+                    if(
+                        toSearch.endsWith(",") 
+                        || toSearch.endsWith(".") 
+                        || toSearch.endsWith("?")
+                        || toSearch.endsWith("!")
+                    )
+                    {
+                        toSearch = toSearch.substring(0, toSearch.length - 1);
+                    }
+
+                    lookup.dictionary_of_notes[toSearch] = item.Note;
+                }
+            );
         });
         var val = lookup.dictionary_of_notes_updated();
         lookup.dictionary_of_notes_updated(val + 1);
@@ -45,7 +68,31 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
                     .replace("\t", " ")
                     .toLowerCase()
                     .trim();
-                lookup.dictionary_of_notes[key] = note;
+            lookup.dictionary_of_notes[key] = note;
+            var splittedText = key.split(" ");
+            ko.utils.arrayForEach(splittedText, function(word)
+                {
+                    var toSearch = 
+                        word
+                        .replace("\r", " ")
+                        .replace("\n", " ")
+                        .replace("\t", " ")
+                        .toLowerCase()
+                        .trim();
+                    
+                    if(
+                        toSearch.endsWith(",") 
+                        || toSearch.endsWith(".") 
+                        || toSearch.endsWith("?")
+                        || toSearch.endsWith("!")
+                    )
+                    {
+                        toSearch = toSearch.substring(0, toSearch.length - 1);
+                    }
+
+                    lookup.dictionary_of_notes[toSearch] = note;
+                }
+            );
             var val = lookup.dictionary_of_notes_updated();
             lookup.dictionary_of_notes_updated(val + 1);
         }

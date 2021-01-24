@@ -52,6 +52,7 @@ function model_Node(data)
                         return {
                             word: elemWord.word,
                             wordNode: elemWord.wordNode,
+                            wordQuery: elemWord.wordQuery,
                             exists: elemWord.exists,
                             isUrl: elemWord.isUrl,
                             parentNodeId: self.id
@@ -145,8 +146,9 @@ function model_Node(data)
                 var found = lookup.dictionary_of_notes[toSearch];
                 return {
                     word: item,
+                    wordQuery: toSearch,
                     wordNode: found,
-                    exists: typeof(found) !== 'undefined' && self !== found,
+                    exists: typeof(found) !== 'undefined',
                     isUrl: item.startsWith("https://"),
                     parentNodeId: self.id
                 };

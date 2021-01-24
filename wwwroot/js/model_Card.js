@@ -189,6 +189,7 @@ function model_Card(data)
                         return {
                             word: elemWord.word,
                             wordNode: elemWord.wordNode,
+                            wordQuery: elemWord.wordQuery,
                             exists: elemWord.exists,
                             isUrl: elemWord.isUrl,
                             parentNodeId: self.Note.id
