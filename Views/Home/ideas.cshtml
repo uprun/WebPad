@@ -57,18 +57,7 @@
 </head>
 <body class='night' style="background-color: #000000; margin: 0; " data-bind="style: { background: $root.backgroundColor() }">
 
-        @* <script>
-        if('serviceWorker' in navigator) {
-          navigator.serviceWorker
-                   .register('service-worker-offline.js', { scope: '/' })
-                   .then(
-                    function(registration) 
-                    {
-                        // Registration was successful
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                    });
-        }
-        </script> *@
+
         
         <link rel="stylesheet" href="css/w3-4.13.css" asp-append-version="true"> 
         
@@ -115,6 +104,16 @@
         <script language="JavaScript" type="text/javascript" src="js/toggleMenu.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/getViewPortSize.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/getViewPortScrollPosition.js" asp-append-version="true"></script>
+
+
+        <script language="JavaScript" type="text/javascript" src="js/AddInformationToExistingOne.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/AddNoteToExistingOne.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/ColorNode.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/ColorNodeFromCode.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/CreateNoteFromSearchQuery.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/getLocalIndex.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/populateColorPresets.js" asp-append-version="true"></script>
+
         
         <script language="JavaScript" type="text/javascript" src="js/loadNotes.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/toBeEdited.js" asp-append-version="true"></script>
@@ -150,89 +149,6 @@
             <span property="url" >https://webpad.com.ua</span>
             <span property="logo">https://webpad.com.ua/WebPad_logo_500.png</span>
         </div>
-        
-        <!-- <div  style="text-align: center; width: 100%; margin-top: 0px; display: inline-block; display: none;" data-bind="visible: !$root.PromoVisible()">
-            <span class="webpad-node webpad-green">WebPad</span> <span class="webpad-node webpad-orange" data-bind="click: $root.ShowPromo"><a href="#">about</a></span>
-            <span data-bind="if: $root.isOnLine" >
-                <span class="webpad-node webpad-green">[online]</span>
-            </span>
-            <span data-bind="ifnot: $root.isOnLine" >
-                <span class="webpad-node webpad-orange">[offline]</span>
-            </span>
-            <span data-bind="if: $root.publicCryptoKey() != null  &&
-                        $root.publicCryptoKey() != undefined &&
-                        $root.publicCryptoKey().trim() != '' ">
-        
-                        <span data-bind="ifnot: $root.SyncOptionsVisible" >
-                            <button class="webpad-node webpad-green" data-bind="click: $root.OpenSyncOptions">Open Sync</button>
-                        </span>
-                        <span data-bind="if: $root.SyncOptionsVisible" >
-                            <button class="webpad-node webpad-orange" data-bind="click: $root.HideSyncOptions">Hide Sync</button>
-                        </span>
-                        <div data-bind="if: $root.SyncOptionsVisible" >
-                            <button class="webpad-node webpad-green" data-bind="click: $root.iHaveSyncToken">I already have sync token</button>
-                            <button class="webpad-node webpad-blue-print" data-bind="click: $root.GetOneTimeSynchronizationToken">What sync token? Generate one.</button>
-                            <div data-bind="if: $root.OpenTokenGenerationMenu">
-                                <br/>
-                                <span class="webpad-node webpad-green" >Share this sync token:&nbsp;</span>
-                                <span class="webpad-node webpad-blue-print" data-bind="text: $root.TokenToShare"></span>
-                                <br/>
-                                <span class="webpad-node webpad-orange">You have to receive this check code:&nbsp;</span>
-                                <span class="webpad-node webpad-yellow" data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
-                                <br/>
-        
-                            </div>
-                            <div data-bind="if: $root.OpenTokenConsumptionMenu">
-                                <span class="webpad-node webpad-orange">
-                                    <input 
-                                        placeholder="Input sync token..." 
-                                        style="width: 30vw; min-width: 150px;" 
-                                        type="text" 
-                                        data-bind="
-                                            textInput: $root.SynchronizationToken,
-                                            " />
-        
-                                </span>
-                                
-                                <br/>
-                                <button class="webpad-node webpad-blue-print" data-bind="click: $root.SynchronizeUsingToken"> Use sync token</button>
-                                <br/>
-                                
-                                <span class="webpad-node webpad-orange">Code for other side:&nbsp;</span>
-                                <span class="webpad-node webpad-yellow" data-bind="text: $root.publicCryptoKey().substring(0, 10) + '...' "></span>
-                                
-        
-                            </div>
-                            <div data-bind="if: $root.ReceivedPublicKey() != null  &&
-                                    $root.ReceivedPublicKey() != undefined &&
-                                    $root.ReceivedPublicKey().trim() != '' " >
-                                <span class="webpad-node webpad-green">Received check code:&nbsp;</span>
-                                <span class="webpad-node webpad-yellow" data-bind="text: $root.ReceivedPublicKey().substring(0, 10) + '...' "></span>
-                                <br/>
-                                <span class="webpad-node webpad-blue-print" data-bind=>
-                                    Do you trust to this ? 
-                                </span>
-                                <button class="webpad-node webpad-green" data-bind="click: $root.AddReceivedPublicKeyToTrusted"> Trust</button>
-                                <button class="webpad-node webpad-orange" data-bind="click: $root.RemoveReceivedPublicKey"> No-no-no</button>
-        
-                            </div>
-                        </div>
-        
-            </span>
-            
-        </div> -->
-        
-        <!-- background-image: linear-gradient(to bottom right, #3900d9, #d6920b); -->
-        
-        <!-- border-color: aliceblue;
-        border-width: 5px;
-        border-style: dashed; -->
-        
-        <!-- border-width: 5px;
-            border-style: dashed;
-            border-image: linear-gradient(to bottom right, #3900d9, #d6920b) 1;
-        
-        } -->
         
         <script type="text/html" id="tag-template">
                 <span data-bind="if: $parent.toolBoxVisible">
@@ -545,7 +461,7 @@
                    </div>
                 </div>
         </script>
-        <div id="webpad-header-absolute-position" class="webpad-header-absolute-position" style="display: none;" data-bind="visible: !$root.PromoVisible() && !$root.menuIsOpen()">
+        <div id="webpad-header-absolute-position" class="webpad-header-absolute-position" style="display: none;" data-bind="visible: !$root.menuIsOpen()">
             <div class="w3-row">
                 <div class="w3-col w3-container s12 m12 l12">
                     <div class=" webpad-button-no-border" data-bind="click: $root.toggleMenu">
@@ -574,7 +490,7 @@
             class="webpad-menu-absolute-position webpad-menu-animate-left" 
             style="display: none;" 
             data-bind="
-                visible: !$root.PromoVisible() && $root.menuWasAlreadyOpen(),
+                visible:  $root.menuWasAlreadyOpen(),
                 css: { 
                     'webpad-menu-animate-show-from-left': $root.menuIsOpen(),
                     'webpad-menu-animate-fade-back': !$root.menuIsOpen()
@@ -642,12 +558,12 @@
                 
             </div>
         </div>
-        <div class="" style="display: none; width: 100%;" data-bind="visible: !$root.PromoVisible()">
+        <div class="" style="width: 100%;" >
             <div style="width: 100%; padding-top: 3rem; padding-bottom: 10rem;" class="webpad-search-result-area">
                 <div class="w3-row" >
                     <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen">
                     </div>
-                    <div  class="w3-col w3-container s12 m8 l6 webpad-text-column"  data-bind="if: ReversedListOfCards()">
+                    <div  class="w3-col w3-container s12 m8 l6 webpad-text-column" >
                         <div style="" data-bind="template: { name: 'show-more-template' } " ></div>
                         <div class="w3-row" id="cards-list-reversed"  
                             data-bind="template: 
@@ -667,7 +583,7 @@
         <div 
             class="webpad-search-absolute-position" 
             style="display: none; bottom: 0rem; margin-bottom: 0.2em;" 
-            data-bind="visible: !$root.PromoVisible() && typeof($root.toBeEdited()) === 'undefined'">
+            data-bind="visible:  typeof($root.toBeEdited()) === 'undefined'">
             <div class="w3-row">
                 <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
                     &NonBreakingSpace;
