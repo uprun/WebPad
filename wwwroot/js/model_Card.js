@@ -74,11 +74,13 @@ function model_Card(data)
     {
         event.stopPropagation();
         self.convertTo("done");
+        self.convertFrom("not-done");
     };
     self.removeDone = function()
     {
         event.stopPropagation();
         self.convertFrom("done");
+        self.convertTo("not-done");
     }
 
     self.toBeRemoved = ko.observable(false);
@@ -119,39 +121,27 @@ function model_Card(data)
 
     self.isTask = ko.pureComputed(function()
     {
-        var foundTaskTag = ko.utils.arrayFirst(self.SmallTags(), function(item){
-            return item.Destination.text().toLowerCase().trim() === "task";
-        });
-        return  typeof(foundTaskTag) !== 'undefined';
+        return self.hasSmallTag("task");
     });
 
     self.isDone = ko.pureComputed(function()
     {
+        return self.hasSmallTag("done");
+    });
+
+    self.hasSmallTag = function(tag)
+    {
+        tag = tag.toLowerCase().trim();
         var foundTaskTag = ko.utils.arrayFirst(self.SmallTags(), function(item){
-            return item.Destination.text().toLowerCase().trim() === "done";
+            return item.Destination.text().toLowerCase().trim() === tag;
         });
         return  typeof(foundTaskTag) !== 'undefined';
-    });
+    };
 
 
     self.convertFromTask = function()
     {
-        var foundTaskTags = 
-        ko.utils.arrayFilter(self.SmallTags(),
-            function(item)
-            {
-                return item.Destination.text().toLowerCase().trim() === "task";
-            });
-        ko.utils.arrayForEach
-        (
-            foundTaskTags, 
-            function(item) 
-            {
-                lookup.RemoveConnection(item);
-                lookup.RemoveNote({Note: item.Destination });
-            }
-        );
-        
+        self.convertFrom("task");
     };
 
     self.convertFrom = function(tag)
@@ -183,13 +173,16 @@ function model_Card(data)
 
     self.convertToTask = function()
     {
-        lookup.AddInformationToExistingOne(self, "task");
+        self.convertTo("task");
     };
 
     self.convertTo = function(tag)
     {
         tag = tag.toLowerCase().trim();
-        lookup.AddInformationToExistingOne(self, tag);
+        if(self.hasSmallTag(tag) === false)
+        {
+            lookup.AddInformationToExistingOne(self, tag);
+        }
     };
 
     self.isSmallTagChecker = function(item)
