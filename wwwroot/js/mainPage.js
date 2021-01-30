@@ -404,14 +404,7 @@ function ConnectedNotesViewModel()
                 function(item, index)
                 {
                     return item.isRoot || item.hasTags || item.Note.text().length >= 20;
-                    // if(item.Tags().length == 0 && item.Note.text().length < 20)
-                    // {
-                    //     return !item.Note.isReferenced();
-                    // }
-                    // else
-                    // {
-                    //     return true;
-                    // }
+                    
                 }
 
 
@@ -420,16 +413,27 @@ function ConnectedNotesViewModel()
         }
     );
     lookup.FilteredCards = ko.pureComputed(function() {
+        var taken = 0;
         return ko.utils.arrayFilter
         (
             lookup.filteredOutLeafs(), 
             function(item, index)
                 { 
+                    if(taken >=  lookup.CurrentResultLimit() + lookup.ExtendAmountForCurrentResultLimit)
+                    {
+                        return false;
+                    }
                     var resultOfSearchQuery = true;
                     if(lookup.SearchNotesQuery() && lookup.SearchNotesQuery().trim().length > 0)
                     {
                         resultOfSearchQuery = item.IsForSearchResult(lookup.SearchNotesQuery().trim().toLowerCase())
                     }
+                    if(resultOfSearchQuery)
+                    {
+                        taken++;
+                        console.log("taken")
+                    }
+                    
                     return resultOfSearchQuery;
                     
                     
@@ -477,6 +481,8 @@ function ConnectedNotesViewModel()
         return lookup.FilteredCards().length - lookup.CurrentResultLimit();
     });
 
+    lookup.ExtendAmountForCurrentResultLimit = 45;
+
 
     lookup.ExtendCurrentResultLimit = function()
     {
@@ -486,7 +492,7 @@ function ConnectedNotesViewModel()
             var bottomCard = currentCards[0];
             lookup.onListChanged_set_scrollToCardAfter(bottomCard);
         }
-        lookup.CurrentResultLimit(lookup.CurrentResultLimit() + 45);
+        lookup.CurrentResultLimit(lookup.CurrentResultLimit() + lookup.ExtendAmountForCurrentResultLimit);
     };
 
     lookup.SendMessage = function(item) {

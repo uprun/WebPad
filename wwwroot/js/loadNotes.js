@@ -35,9 +35,8 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
     lookup.generateDictionary = function()
     {
         
-        ko.utils.arrayForEach(lookup.composedCards(), function(item) {
-            
-            
+        ko.utils.arrayForEach(lookup.composedCards(), function(item) 
+        {    
             var key = 
                 item
                 .Note
@@ -47,39 +46,9 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
                 .replace("\t", " ")
                 .toLowerCase()
                 .trim();
-            var entry = lookup.dictionary_of_notes[key];
-            if(typeof(entry) === 'undefined')
-            {
-                lookup.dictionary_of_notes[key] = {};
-                entry = lookup.dictionary_of_notes[key];
-            }
+            
+            lookup.split_search_key_and_add_to_dictionary(key, item.Note.id, true);
 
-            entry[item.Note.id] = true;
-
-            var splittedText = key.split(" ");
-            ko.utils.arrayForEach(splittedText, function(word)
-                {
-                    var toSearch = 
-                        word
-                        .replace("\r", " ")
-                        .replace("\n", " ")
-                        .replace("\t", " ")
-                        .toLowerCase()
-                        .trim();
-                    
-                    if(
-                        toSearch.endsWith(",") 
-                        || toSearch.endsWith(".") 
-                        || toSearch.endsWith("?")
-                        || toSearch.endsWith("!")
-                    )
-                    {
-                        toSearch = toSearch.substring(0, toSearch.length - 1);
-                    }
-
-                    lookup.split_search_key_and_add_to_dictionary(toSearch, item.Note.id, true);
-                }
-            );
         });
         var val = lookup.dictionary_of_notes_updated();
         lookup.dictionary_of_notes_updated(val + 1);
@@ -87,44 +56,18 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
 
     lookup.generateDictionary_NoteAdded = function(note)
     {
-        if(typeof(note.hasIncomingConnection) === 'undefined' || note.hasIncomingConnection === false)
-        {
-            var key = 
-                    note
-                    .text()
-                    .replace("\r", " ")
-                    .replace("\n", " ")
-                    .replace("\t", " ")
-                    .toLowerCase()
-                    .trim();
-            lookup.dictionary_of_notes[key] = note;
-            var splittedText = key.split(" ");
-            ko.utils.arrayForEach(splittedText, function(word)
-                {
-                    var toSearch = 
-                        word
-                        .replace("\r", " ")
-                        .replace("\n", " ")
-                        .replace("\t", " ")
-                        .toLowerCase()
-                        .trim();
-                    
-                    if(
-                        toSearch.endsWith(",") 
-                        || toSearch.endsWith(".") 
-                        || toSearch.endsWith("?")
-                        || toSearch.endsWith("!")
-                    )
-                    {
-                        toSearch = toSearch.substring(0, toSearch.length - 1);
-                    }
-
-                    lookup.dictionary_of_notes[toSearch] = note;
-                }
-            );
-            var val = lookup.dictionary_of_notes_updated();
-            lookup.dictionary_of_notes_updated(val + 1);
-        }
+        
+        var key = 
+                note
+                .text()
+                .replace("\r", " ")
+                .replace("\n", " ")
+                .replace("\t", " ")
+                .toLowerCase()
+                .trim();
+        lookup.split_search_key_and_add_to_dictionary(key, note.id, true);
+        var val = lookup.dictionary_of_notes_updated();
+        lookup.dictionary_of_notes_updated(val + 1);
 
     };
 

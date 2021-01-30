@@ -35,7 +35,6 @@ function model_Card(data)
                 function(item)
                 { 
                     var result = 
-                        self.AnalyzeText(item.label(), query) ||
                         item.Destination.IsForSearchResult(query)
                     return result; 
                 } 

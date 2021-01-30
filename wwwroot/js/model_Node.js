@@ -34,6 +34,7 @@ function model_Node(data)
 
     self.IsForSearchResult = function(query)
     {
+        
         var entry = lookup.dictionary_of_notes[query];
         if(typeof(entry) !== 'undefined')
         {
