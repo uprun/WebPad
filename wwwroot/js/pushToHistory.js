@@ -1,6 +1,5 @@
 lookup.pushToHistory = function(item) {
     
-    item = lookup.ConvertToLocalId(item);
     
     lookup.processMessageFromOuterSpace(item);
     

@@ -74,8 +74,7 @@ function ConnectedNotesViewModel()
                         
                         lookup.localStorage.setItem("Notes", JSON.stringify(toStoreNotes));
                         lookup.localStorage.setItem("Connections", JSON.stringify(toStoreConnections));
-                        lookup.localStorage.setItem("localFreeIndex", JSON.stringify(lookup.freeLocalIndex));
-                        lookup.localStorage.setItem("viewPosition", JSON.stringify({}))
+
 
                         var filteredChanges = ko.utils.arrayFilter(addedChanges, function(item){ 
                                 return item.value.action != lookup.actions.PositionsUpdated 
@@ -87,9 +86,9 @@ function ConnectedNotesViewModel()
                         console.log("before filter: " + filteredChanges.length);
 
                          // filter changes here by same id
-                         var filter = {};
+                        var filter = {};
                          // if foreach is sequential filter will keep latest index available for id
-                         ko.utils.arrayForEach(filteredChanges,
+                        ko.utils.arrayForEach(filteredChanges,
                              function(item, index)
                              {
                                  if(item.value.data && item.value.data.id)
@@ -99,7 +98,7 @@ function ConnectedNotesViewModel()
                              }
                          );
                          // therefore need to keep only latest item with same id, because there is rateLimit not all values will be published to other devices
-                         filteredChanges = ko.utils.arrayFilter(filteredChanges,
+                        filteredChanges = ko.utils.arrayFilter(filteredChanges,
                              function(item, index)
                              {
                                  if(item.value.data && item.value.data.id)
@@ -107,21 +106,10 @@ function ConnectedNotesViewModel()
                                      return filter[item.value.action + item.value.data.id] == index;
                                  }
                              }
-                         );
+                        );
 
-                         console.log("after filter: " + filteredChanges.length);
+                        console.log("after filter: " + filteredChanges.length);
 
-
-
-                        var messagesToAdd = ko.utils.arrayMap(filteredChanges, function(item) {
-                            return item.value;
-                        });
-
-                        ko.utils.arrayForEach(lookup.TrustedPublicKeysToSendTo(), function(item) {
-                            item.messagesPrepared = item.messagesPrepared.concat(messagesToAdd);
-                        });
-
-                        lookup.saveTrustedPublicKeys();
                         lookup.history.removeAll();
                     
 
