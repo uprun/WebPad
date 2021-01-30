@@ -10,6 +10,28 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
 
     lookup.dictionary_of_notes_updated = ko.observable(0);
 
+    lookup.split_search_key_and_add_to_dictionary = function(key, note_id, flag)
+    {
+        var index = 0;
+        
+        while(key.length > 0)
+        {
+            for(index = 0; index < key.length; index++)
+            {
+                var to_work_with = key.substring(index);
+                var entry = lookup.dictionary_of_notes[to_work_with];
+                if(typeof(entry) === 'undefined')
+                {
+                    lookup.dictionary_of_notes[to_work_with] = {};
+                    entry = lookup.dictionary_of_notes[to_work_with];
+                }
+                entry[note_id] = flag;
+                
+            }
+            key = key.substring(0, key.length - 1);
+        }
+    };
+
     lookup.generateDictionary = function()
     {
         
@@ -25,7 +47,14 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
                 .replace("\t", " ")
                 .toLowerCase()
                 .trim();
-            lookup.dictionary_of_notes[key] = item.Note;
+            var entry = lookup.dictionary_of_notes[key];
+            if(typeof(entry) === 'undefined')
+            {
+                lookup.dictionary_of_notes[key] = {};
+                entry = lookup.dictionary_of_notes[key];
+            }
+
+            entry[item.Note.id] = true;
 
             var splittedText = key.split(" ");
             ko.utils.arrayForEach(splittedText, function(word)
@@ -48,7 +77,7 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
                         toSearch = toSearch.substring(0, toSearch.length - 1);
                     }
 
-                    lookup.dictionary_of_notes[toSearch] = item.Note;
+                    lookup.split_search_key_and_add_to_dictionary(toSearch, item.Note.id, true);
                 }
             );
         });

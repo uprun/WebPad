@@ -23,7 +23,7 @@ function model_Card(data)
     };
     self.IsForSearchResult = function(query)
     {
-        var result = self.AnalyzeText(self.Note.text(), query);
+        var result = self.Note.IsForSearchResult(query);
         if(result)
         {
             return result;
@@ -36,7 +36,7 @@ function model_Card(data)
                 { 
                     var result = 
                         self.AnalyzeText(item.label(), query) ||
-                        self.AnalyzeText(item.Destination.text(), query)
+                        item.Destination.IsForSearchResult(query)
                     return result; 
                 } 
             );
@@ -52,7 +52,7 @@ function model_Card(data)
                 function(item)
                 { 
                     var result = 
-                        self.AnalyzeText(item.Source.text(), query);
+                        item.Source.IsForSearchResult(query);
                     return result; 
                 } 
             );

@@ -32,6 +32,28 @@ function model_Node(data)
 
     }
 
+    self.IsForSearchResult = function(query)
+    {
+        var entry = lookup.dictionary_of_notes[query];
+        if(typeof(entry) !== 'undefined')
+        {
+            var own_id_entry = entry[self.id];
+            if(typeof(own_id_entry) !== 'undefined' )
+            {
+                return own_id_entry;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        
+    };
+
     self.hasIncomingConnection = data.hasIncomingConnection;
 
     self.isReferenced = ko.observable(false);
