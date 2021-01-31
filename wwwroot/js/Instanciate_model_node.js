@@ -16,6 +16,6 @@ lookup.Instanciate_model_node = function(data)
                 );
             }
         };
-        var result = new model_Node(data);
+        var result = new lookup.model_Node(data);
         return result;
     };

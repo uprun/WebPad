@@ -1,5 +1,5 @@
 lookup.findNodeById_buffer = undefined;
-lookup.findNodeById_notFound = new model_Node({id: -1, text: 'not found'});
+lookup.findNodeById_notFound = new lookup.model_Node({id: -1, text: 'not found'});
 lookup.findNodeById = function(id)
 {
     if(typeof(lookup.findNodeById_buffer) == "undefined")

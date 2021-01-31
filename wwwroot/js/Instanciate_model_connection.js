@@ -14,6 +14,6 @@ lookup.Instanciate_model_connection = function(data)
                 });
             }
         };
-        var result = new model_Connection(data);
+        var result = new lookup.model_Connection(data);
         return result;
     };

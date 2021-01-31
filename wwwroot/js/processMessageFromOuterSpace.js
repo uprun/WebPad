@@ -62,7 +62,7 @@ lookup.processMessageFromOuterSpace = function(item)
                     obj.connections_incoming = [];
                 }
 
-                var cardToAdd = new model_Card(obj);
+                var cardToAdd = new lookup.model_Card(obj);
                 lookup.hashCards[noteToAdd.id] = cardToAdd;
                 lookup.composedCards.push(cardToAdd);
                 lookup.generateDictionary_NoteAdded(noteToAdd);

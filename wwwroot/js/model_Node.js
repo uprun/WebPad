@@ -1,4 +1,4 @@
-function model_Node(data)
+lookup.model_Node = function(data)
 {
     var self = this;
     self.id = data.id;

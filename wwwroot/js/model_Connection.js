@@ -1,4 +1,4 @@
-function model_Connection(data)
+lookup.model_Connection = function(data)
 {
     var id = data.id;
     var sourceId = data.sourceId;

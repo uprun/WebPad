@@ -1,4 +1,4 @@
-function model_Card(data)
+lookup.model_Card = function(data)
 {
     var self = this;
     self.Note = data.Note;
@@ -242,4 +242,4 @@ function model_Card(data)
             return self.isSmallTagChecker(item) === false;
         })
     });
-}
+};

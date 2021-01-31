@@ -23,6 +23,8 @@ function ConnectedNotesViewModel()
 
     lookup.populateColorPresets();
 
+    lookup.backendWorker = new lookup.QueryableWorker("js/backend-worker.js");
+
     lookup
         .history
         .extend(

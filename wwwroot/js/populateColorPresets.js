@@ -37,7 +37,7 @@ lookup.populateColorPresets = function()
 {
     var toAddColors = ko.utils.arrayMap(lookup.data_color_presets, function(elem) 
     {
-        var toReturn = new model_ColorPreset(elem);
+        var toReturn = new lookup.model_ColorPreset(elem);
         return toReturn;
     });
 

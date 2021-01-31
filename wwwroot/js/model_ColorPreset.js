@@ -1,4 +1,4 @@
-function model_ColorPreset(data)
+lookup.model_ColorPreset = function(data)
 {
 
     var self = this;
