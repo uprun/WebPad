@@ -1,4 +1,4 @@
 lookup.jumpToCardOnCreate = function(data)
 {
-    lookup.scrollToCard(data.id);
+    lookup.onListChanged_set_scrollToCard(lookup.findCardByMainNodeId(data.id));
 };
