@@ -5,6 +5,16 @@ lookup.model_Card = function(data)
     self.isRoot = typeof(data.connections_incoming) === 'undefined';
     self.hasTags = typeof(data.connections_outgoing) !== 'undefined';
     self.Tags = ko.observableArray([]);
+
+    self.ConvertToJs = function()
+    {
+        var data = {};
+        data.Note_serialized = self.Note.ConvertToJs();
+        data.connections_incoming = self.isRoot ? undefined : [];
+        data.connections_outgoing = self.hasTags ? [] : undefined;
+        return data;
+    }
+
     self.AdditionalInformationText = ko.observable("");
     self.AdditionalInformationTextVisible = ko.observable(false);
     self
