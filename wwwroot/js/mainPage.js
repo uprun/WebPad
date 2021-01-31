@@ -34,15 +34,21 @@ function ConnectedNotesViewModel()
     lookup.LimitedFilteredCards = ko.observableArray([]);
     lookup.backendWorker.addListener('LimitedFilteredCards.changed.event', function(cards) 
     {
+        console.log('LimitedFilteredCards.changed.event: ' + cards.length)
+        //return;
         var processed = ko.utils.arrayMap(cards, function(item) {
             var node = new lookup.model_Node(item.Note_serialized)
             item.Note = node;
             var card = new lookup.model_Card(item);
             return card;
         });
+        
         lookup.LimitedFilteredCards.removeAll();
         ko.utils.arrayPushAll(lookup.LimitedFilteredCards, processed);
     });
+
+    lookup.LimitedFilteredCards
+        .extend({ rateLimit: 150 });
 
 
     lookup.ReversedListOfCards = ko.pureComputed(function()
