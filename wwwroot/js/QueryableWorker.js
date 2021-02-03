@@ -43,10 +43,21 @@ lookup.QueryableWorker = function (url, defaultListener, onError)
     worker.onmessage = function(event) {
       if (event.data instanceof Object &&
         event.data.hasOwnProperty('queryMethodListener') &&
-        event.data.hasOwnProperty('queryMethodArguments')) {
-        listeners[event.data.queryMethodListener].apply(instance, event.data.queryMethodArguments);
-      } else {
-        self.defaultListener.call(instance, event.data);
-      }
+        event.data.hasOwnProperty('queryMethodArguments')) 
+        {
+          if(typeof(listeners[event.data.queryMethodListener]) !== 'undefined')
+          {
+            listeners[event.data.queryMethodListener].apply(instance, event.data.queryMethodArguments);
+          }
+          else
+          {
+            console.log("did not find listener for: " + event.data.queryMethodListener);
+          }
+
+          
+        } else 
+        {
+          self.defaultListener.call(instance, event.data);
+        }
     }
 };

@@ -23,7 +23,7 @@ function ConnectedNotesViewModel()
 
     lookup.populateColorPresets();
 
-    lookup.backendWorker = new lookup.QueryableWorker("js/backend-worker.js");
+    lookup.backendWorker = new lookup.QueryableWorker("js/backend-worker.js?v=" + new Date().toString());
 
 
     lookup.backendWorker.addListener('saveItemsToStorage.event', function(toStoreNotes, toStoreConnections) 
@@ -34,8 +34,7 @@ function ConnectedNotesViewModel()
     lookup.LimitedFilteredCards = ko.observableArray([]);
     lookup.backendWorker.addListener('LimitedFilteredCards.changed.event', function(cards) 
     {
-        console.log('LimitedFilteredCards.changed.event: ' + cards.length)
-        //return;
+        lookup.LimitedFilteredCards.removeAll();
         var processed = ko.utils.arrayMap(cards, function(item) {
             var node = new lookup.model_Node(item.Note_serialized)
             item.Note = node;
@@ -43,7 +42,6 @@ function ConnectedNotesViewModel()
             return card;
         });
         
-        lookup.LimitedFilteredCards.removeAll();
         ko.utils.arrayPushAll(lookup.LimitedFilteredCards, processed);
     });
 

@@ -110,12 +110,6 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
 
     lookup.populateNotes = function()
     {
-        
-        // time consuming
-        if(typeof(lookup.populateNotes_startIndex) === 'undefined')
-        {
-            
-        }
         lookup.populateNotes_startIndex = lookup.data.notes.length -1;
         while(lookup.populateNotes_startIndex >= 0)
         {
@@ -137,8 +131,7 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
             ko.utils.arrayPushAll(lookup.composedCards, cardsBatch);
 
         }
-        
-        setTimeout(lookup.populateConnections, 1);
+        lookup.populateConnections();
 
 
         
@@ -151,12 +144,6 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
 
     lookup.populate_incoming_outgoing_connections = function()
     {
-        
-        // time consuming
-        if(typeof(lookup.populate_incoming_outgoing_connections_index) === 'undefined')
-        {
-            
-        }
         lookup.populate_incoming_outgoing_connections_index = lookup.data.connections.length -1;
         console.log('populate_incoming_outgoing_connections: ' + lookup.populate_incoming_outgoing_connections_index);
 
@@ -181,11 +168,7 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
             
         }
 
-        
-        setTimeout(lookup.populateNotes, 1);
-
-
-        
+        lookup.populateNotes();       
 
     };
 
@@ -196,17 +179,7 @@ lookup.CheckIfEveryNodeHasMigratedColor = function()
         });
         lookup.data = data;
 
-        //setTimeout(lookup.populateNotes, 30);
-
-        lookup.populate_incoming_outgoing_connections();
-        //lookup.populateConnections();
-        //lookup.populateCards();
-
-        
-        
-
-        
-        
+        lookup.populate_incoming_outgoing_connections();    
     };
 
 lookup.populate_reset_helpers = function()

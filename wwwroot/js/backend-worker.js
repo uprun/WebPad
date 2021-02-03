@@ -11,6 +11,8 @@ importScripts("GetRandomColor.js")
 importScripts("Instanciate_model_connection.js")
 importScripts("findNodeById.js")
 importScripts("SearchNotesQuery.js")
+importScripts("findCardByMainNodeId.js")
+
 
 
 importScripts("populate.js")
@@ -137,34 +139,61 @@ lookup
         var taken = 0;
         // dummy call to get updates for dictionary
         var version_of_dictionary = lookup.dictionary_of_notes_updated();
-        var search_query = lookup.SearchNotesQuery().trim();
+        var search_query = lookup.SearchNotesQuery().trim().toLowerCase();
         if(search_query.length === 0)
         {
             return lookup.composedCards();
         }
         else
         {
-            var found = lookup.dictionary_of_notes[search_query];
-            if(typeof(found) !== 'undefined')
+            if(version_of_dictionary === 0)
             {
-                var result = [];
-                for( var note_id in found) {
-                    if(found[note_id])
-                    {
-                        result.push(lookup.findCardByMainNodeId(note_id));
-                    }
-                }
-                return result;
+                // classic approach
+                return ko.utils.arrayFilter
+                (
+                    lookup.composedCards(), 
+                    function(item, index)
+                        { 
+                            if(taken >=  lookup.CurrentResultLimit() + lookup.ExtendAmountForCurrentResultLimit)
+                            {
+                                return false;
+                            }
+                            var resultOfSearchQuery = item.IsForSearchResult(search_query);
+                            if(resultOfSearchQuery)
+                            {
+                                taken++;
+                            }
+                            
+                            return resultOfSearchQuery;
+                            
+                            
+                        }
+                );
+
             }
             else
             {
-                return [];
+                // dictionary approach
+                var found = lookup.dictionary_of_notes[search_query];
+                if(typeof(found) !== 'undefined')
+                {
+                    var result = [];
+                    for( var note_id in found) {
+                        if(found[note_id])
+                        {
+                            result.push(lookup.findCardByMainNodeId(note_id));
+                        }
+                    }
+                    return result;
+                }
+                else
+                {
+                    return [];
+                }
             }
-
-            
-
-
         }
+
+        
         
     });
     
@@ -235,8 +264,12 @@ lookup
     });
 
     lookup.LimitedFilteredCards
+        .extend({ rateLimit: 150 });
+
+    lookup.LimitedFilteredCards
         .subscribe(function(changes)
             {
+                console.log('LimitedFilteredCards changed');
                 var toProcess = lookup.LimitedFilteredCards();
                 var toSend = ko.utils.arrayMap(toProcess, function(item) {
                   return item.ConvertToJs();
