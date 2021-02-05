@@ -45,8 +45,8 @@ function ConnectedNotesViewModel()
         ko.utils.arrayPushAll(lookup.LimitedFilteredCards, processed);
     });
 
-    lookup.LimitedFilteredCards
-        .extend({ rateLimit: 150 });
+    // lookup.LimitedFilteredCards
+    //     .extend({ rateLimit: 150 });
 
 
     lookup.ReversedListOfCards = ko.pureComputed(function()

@@ -290,20 +290,26 @@
                                 ">
                         </span>
                     <!-- /ko -->
-                    <!-- ko ifnot: $data.exists -->
-                        <span class="webpad-break-words-node" data-bind="
-                            text: word,
-                            style:
-                            {
-                                color: $parent.color,
-                                'word-break': word.length < 20 ? 'break-word' : 'break-all',
-                            },
-                                ">
-                        </span>
-                    <!-- /ko -->
                 <!-- /ko -->
                 
                 
+            <!-- /ko -->
+        </script>
+
+        <script type="text/html" id="text-with-dictionary-light-template">
+            <!-- ko foreach: $data.textSplitted -->            
+                    <span class="webpad-break-words-node webpad-border-bottom-dotted" data-bind="
+                        text: word,
+                        style:
+                        {
+                            color: $parent.color,
+                            'border-color': $parent.color,
+                            'border-bottom-style': word.length < 3 ? 'solid' : 'dotted',
+                            'word-break': word.length < 20 ? 'break-word' : 'break-all',
+                        },
+                        click: $root.jumpToCardFromWord
+                            ">
+                    </span>            
             <!-- /ko -->
         </script>
 
@@ -455,6 +461,40 @@
                 </div>
         </script>
 
+        <script type="text/html" id="card-template-light">
+                <div class="w3-col w3-container s12 m12 l12">
+                    <div 
+                        style="font-size: 1.3rem;" 
+                        class="webpad-card w3-animate-opacity" 
+                        data-bind="attr: {id: $data.Note.id }">
+                        <span>
+                            <span data-bind="if: $data.isTask()" style="font-size: 1.4em;">
+                                <span data-bind="if: $data.isDone()">
+                                    <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.removeDone">[x]</span>
+                                </span>
+                                <span data-bind="ifnot: $data.isDone()">
+                                    <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.markAsDone">[o]</span>
+                                </span>
+                            </span>
+                            
+                            <span data-bind="
+                                style:
+                                {
+                                    'text-decoration-line': ($data.isDone() && $data.isTask()) ? 'line-through' : 'none',
+                                    'text-decoration-color': $data.Note.color
+                                }, 
+                                css: {strike: ($data.isDone() && $data.isTask()) }">
+                                <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data.Note }  -->
+                                <!-- /ko -->
+                            </span>
+                        </span>
+                    </div>
+                    
+                    
+                    
+                </div>
+        </script>
+
         <script type="text/html" id="show-more-template">
                 <div class="w3-row" data-bind="if: $root.ShowExtendCurrentResultLimit">
                    <div class="w3-col w3-container s12 m12 l12">
@@ -575,7 +615,7 @@
                         <div class="w3-row" id="cards-list-reversed"  
                             data-bind="template: 
                                 { 
-                                    name: 'card-template',
+                                    name: 'card-template-light',
                                     foreach: ReversedListOfCards(),
                                     afterRender: $root.cardAfterRender
                                 } ">

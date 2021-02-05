@@ -47,7 +47,9 @@ lookup.QueryableWorker = function (url, defaultListener, onError)
         {
           if(typeof(listeners[event.data.queryMethodListener]) !== 'undefined')
           {
-            listeners[event.data.queryMethodListener].apply(instance, event.data.queryMethodArguments);
+            setTimeout(function() {
+              listeners[event.data.queryMethodListener].apply(instance, event.data.queryMethodArguments);
+            }, 1);
           }
           else
           {
