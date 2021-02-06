@@ -1,0 +1,21 @@
+lookup.populate_Operations = function(data) {
+    lookup.for_code_access_hash_of_color_presets = {};
+    lookup.data_color_presets.forEach(element => {
+        lookup.for_code_access_hash_of_color_presets[element.color] = true;
+    });
+
+    lookup.free_Operation_Index = data.free_Operation_Index;
+
+    var buffer = [];
+    
+    ko.utils.arrayForEach(
+        data.Operations, 
+        function(elem)
+        {
+            return new lookup.model_Operation(elem);
+        }
+    );
+
+    ko.utils.arrayPushAll(lookup.Operations, buffer);
+
+};

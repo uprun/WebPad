@@ -31,6 +31,11 @@ function ConnectedNotesViewModel()
         lookup.saveItemsToStorage(toStoreNotes, toStoreConnections);
     });
 
+    lookup.backendWorker.addListener('saveOperationsToStorage.event', function(toStoreOperations, free_Operation_Index) 
+    {
+        lookup.save_Operations_to_storage(toStoreOperations, free_Operation_Index);
+    });
+
     lookup.LimitedFilteredCards = ko.observableArray([]);
     lookup.backendWorker.addListener('LimitedFilteredCards.changed.event', function(cards) 
     {

@@ -6,12 +6,16 @@ importScripts("model_Card.js")
 importScripts("model_ColorPreset.js")
 importScripts("model_Connection.js")
 importScripts("model_Node.js")
+importScripts("model_Operation.js")
+importScripts("get_Operation_Index.js")
+importScripts("migrate_to_Operations.js")
 importScripts("Instanciate_model_node.js")
 importScripts("GetRandomColor.js")
 importScripts("Instanciate_model_connection.js")
 importScripts("findNodeById.js")
 importScripts("SearchNotesQuery.js")
 importScripts("findCardByMainNodeId.js")
+importScripts("populate_Operations.js")
 
 
 
@@ -35,6 +39,59 @@ lookup.hashCards = {};
 
 lookup.populateColorPresets();
 
+
+lookup
+    .Operations
+    .extend(
+        { 
+            rateLimit: 500 
+        }
+    )
+    .subscribe(
+        function(changes)
+        {
+            if(changes && changes.length > 0)
+            {
+                var addedChanges = ko.utils.arrayFilter(changes, function(item){ 
+                        return item.status == "added";
+                    } 
+                );
+
+                if(addedChanges && addedChanges.length > 0 ) 
+                {
+                    var toStoreOperations = ko.utils.arrayMap(lookup.Operations(), function(item) {
+                        return item.ConvertToJs();
+                    });
+        
+                    toStoreOperations = toStoreOperations
+                        .sort(
+                            function(left, right)
+                            {
+                                if(left.time === right.time)
+                                {
+                                    return 0;
+                                }
+                                else
+                                {
+                                    if(left.time < right.time)
+                                    {
+                                        return -1;
+                                    }
+                                    else
+                                    {
+                                        return 1;
+                                    }
+                                }
+                            }
+                        );
+                
+                    
+                    reply('saveOperationsToStorage.event', toStoreOperations, lookup.free_Operation_Index);
+                }
+            }
+            
+        }
+    );
 
 lookup
         .history

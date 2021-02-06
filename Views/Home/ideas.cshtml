@@ -127,6 +127,8 @@
         <script language="JavaScript" type="text/javascript" src="js/saveItemsToStorage.js" asp-append-version="true"></script>
 
 
+        <script language="JavaScript" type="text/javascript" src="js/save_Operations_to_storage.js" asp-append-version="true"></script>
+
         <script language="JavaScript" type="text/javascript" src="js/mainPage.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/cardAfterRender.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/document_ready_ideas.js" asp-append-version="true"></script>
@@ -465,25 +467,11 @@
                 <div class="w3-col w3-container s12 m12 l12">
                     <div 
                         style="font-size: 1.3rem;" 
-                        class="webpad-card w3-animate-opacity" 
-                        data-bind="attr: {id: $data.Note.id }">
+                        class="webpad-card w3-animate-opacity" >
                         <span>
-                            <span data-bind="if: $data.isTask()" style="font-size: 1.4em;">
-                                <span data-bind="if: $data.isDone()">
-                                    <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.removeDone">[x]</span>
-                                </span>
-                                <span data-bind="ifnot: $data.isDone()">
-                                    <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.markAsDone">[o]</span>
-                                </span>
-                            </span>
                             
-                            <span data-bind="
-                                style:
-                                {
-                                    'text-decoration-line': ($data.isDone() && $data.isTask()) ? 'line-through' : 'none',
-                                    'text-decoration-color': $data.Note.color
-                                }, 
-                                css: {strike: ($data.isDone() && $data.isTask()) }">
+                            
+                            <span>
                                 <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data.Note }  -->
                                 <!-- /ko -->
                             </span>
