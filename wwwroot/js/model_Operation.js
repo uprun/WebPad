@@ -6,6 +6,17 @@ lookup.model_Operation = function(data)
     self.data = data.data;
     self.time = data.time;
 
+    if(self.name === 'create')
+    {
+        lookup.prefill_Operation(self, self.data);
+    }
+    if(self.name === 'quote')
+    {
+        lookup.prefill_Operation(self, self.data.current);
+        self.quoted = {};
+        lookup.prefill_Operation(self.quoted, self.data.quoted);
+    }
+
     self.ConvertToJs = function()
     {
         var toReturn =
@@ -18,3 +29,29 @@ lookup.model_Operation = function(data)
         return toReturn;
     };
 };
+
+lookup.prefill_Operation = function(self, abc) {
+
+    self.color = abc.color;
+    var test = abc.text.split(" ");
+    self.textSplitted = ko.utils.arrayMap(test, function (item) {
+        var toSearch = item
+            .replace("\r", " ")
+            .replace("\n", " ")
+            .replace("\t", " ")
+            .toLowerCase()
+            .trim();
+
+        if (toSearch.endsWith(",")
+            || toSearch.endsWith(".")
+            || toSearch.endsWith("?")
+            || toSearch.endsWith("!")) {
+            toSearch = toSearch.substring(0, toSearch.length - 1);
+        }
+        return {
+            word: item,
+            wordQuery: toSearch
+        };
+    }
+    );
+}

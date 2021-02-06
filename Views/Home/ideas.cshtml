@@ -128,6 +128,7 @@
 
 
         <script language="JavaScript" type="text/javascript" src="js/save_Operations_to_storage.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/model_Operation.js" asp-append-version="true"></script>
 
         <script language="JavaScript" type="text/javascript" src="js/mainPage.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/cardAfterRender.js" asp-append-version="true"></script>
@@ -483,6 +484,26 @@
                 </div>
         </script>
 
+        <script type="text/html" id="operation-template">
+                <div class="w3-col w3-container s12 m12 l12">
+                    <div 
+                        style="font-size: 1.3rem;" 
+                        class="webpad-card w3-animate-opacity" >
+                        <span>
+                            
+                            
+                            <span >
+                                <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data }  -->
+                                <!-- /ko -->
+                            </span>
+                        </span>
+                    </div>
+                    
+                    
+                    
+                </div>
+        </script>
+
         <script type="text/html" id="show-more-template">
                 <div class="w3-row" data-bind="if: $root.ShowExtendCurrentResultLimit">
                    <div class="w3-col w3-container s12 m12 l12">
@@ -603,8 +624,8 @@
                         <div class="w3-row" id="cards-list-reversed"  
                             data-bind="template: 
                                 { 
-                                    name: 'card-template-light',
-                                    foreach: ReversedListOfCards(),
+                                    name: 'operation-template',
+                                    foreach: ReversedListOfOperations(),
                                     afterRender: $root.cardAfterRender
                                 } ">
 

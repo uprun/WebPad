@@ -8,7 +8,7 @@ lookup.populate_Operations = function(data) {
 
     var buffer = [];
     
-    ko.utils.arrayForEach(
+    buffer = ko.utils.arrayMap(
         data.Operations, 
         function(elem)
         {

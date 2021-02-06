@@ -39,6 +39,8 @@ lookup.hashCards = {};
 
 lookup.populateColorPresets();
 
+lookup.CurrentResultLimit = ko.observable(45);
+
 
 lookup
     .Operations
@@ -48,146 +50,74 @@ lookup
         }
     )
     .subscribe(
-        function(changes)
-        {
-            if(changes && changes.length > 0)
-            {
-                var addedChanges = ko.utils.arrayFilter(changes, function(item){ 
-                        return item.status == "added";
-                    } 
-                );
+        on_operations_changed,
+        null, 
+        "arrayChange"
+    );
 
-                if(addedChanges && addedChanges.length > 0 ) 
+    lookup.FilteredOperations = ko.pureComputed
+        (
+            function()
+            {
+                var search_query = lookup.SearchNotesQuery().trim().toLowerCase();
+                if(search_query.length === 0)
                 {
-                    var toStoreOperations = ko.utils.arrayMap(lookup.Operations(), function(item) {
-                        return item.ConvertToJs();
-                    });
-        
-                    toStoreOperations = toStoreOperations
-                        .sort(
-                            function(left, right)
+                    return lookup.Operations();
+                }
+                else
+                {
+                    // classic approach
+                    return ko.utils.arrayFilter
+                        (
+                            lookup.Operations(),
+                            function(item, index)
                             {
-                                if(left.time === right.time)
+                                if(item.name === 'create')
                                 {
-                                    return 0;
+                                    var searchResult = item.data.text.toLowerCase().indexOf(search_query) >= 0;
+                                    return searchResult;
                                 }
                                 else
                                 {
-                                    if(left.time < right.time)
+                                    if(item.name === 'quote')
                                     {
-                                        return -1;
+                                        var searchResult1 = item.data.quoted.text.toLowerCase().indexOf(search_query) >= 0;
+                                        var searchResult2 = item.data.current.text.toLowerCase().indexOf(search_query) >= 0;
+                                        return searchResult1 || searchResult2;
                                     }
                                     else
                                     {
-                                        return 1;
+                                        return false;
                                     }
                                 }
                             }
                         );
-                
-                    
-                    reply('saveOperationsToStorage.event', toStoreOperations, lookup.free_Operation_Index);
                 }
             }
-            
-        }
-    );
-
-lookup
-        .history
-        .extend(
-            { 
-                rateLimit: 500 
-            }
-        )
-        .subscribe(
-            function(changes) {
-                if(changes && changes.length > 0)
-                {
-
-                    var addedChanges = ko.utils.arrayFilter(changes, function(item){ 
-                            return item.status == "added";
-                        } 
-                    );
-
-                    if(addedChanges && addedChanges.length > 0 ) {
-
-                        var toStoreNotes = ko.utils.arrayMap(lookup.Notes(), function(item) {
-                            return item.ConvertToJs();
-                        });
-                        var toStoreConnections = ko.utils.arrayMap(lookup.Connections(), function(item) {
-                            return item.ConvertToJs();
-                        });
-
-                        toStoreNotes = toStoreNotes
-                            .sort(
-                                function(left, right)
-                                {
-                                    if(left.createDate === right.createDate)
-                                    {
-                                        return 0;
-                                    }
-                                    else
-                                    {
-                                        if(left.createDate < right.createDate)
-                                        {
-                                            return -1;
-                                        }
-                                        else
-                                        {
-                                            return 1;
-                                        }
-                                    }
-                                }
-                            );
-                       
-                        
-                        reply('saveItemsToStorage.event', toStoreNotes, toStoreConnections);
-
-
-                        var filteredChanges = ko.utils.arrayFilter(addedChanges, function(item){ 
-                                return item.value.action != lookup.actions.PositionsUpdated 
-                                    && item.value.action != ""
-                                    && !item.value.isFromOuterSpace;
-                            } 
-                        );
-
-                        console.log("before filter: " + filteredChanges.length);
-
-                         // filter changes here by same id
-                        var filter = {};
-                         // if foreach is sequential filter will keep latest index available for id
-                        ko.utils.arrayForEach(filteredChanges,
-                             function(item, index)
-                             {
-                                 if(item.value.data && item.value.data.id)
-                                 {
-                                     filter[item.value.action + item.value.data.id] = index;
-                                 }
-                             }
-                         );
-                         // therefore need to keep only latest item with same id, because there is rateLimit not all values will be published to other devices
-                        filteredChanges = ko.utils.arrayFilter(filteredChanges,
-                             function(item, index)
-                             {
-                                 if(item.value.data && item.value.data.id)
-                                 {
-                                     return filter[item.value.action + item.value.data.id] == index;
-                                 }
-                             }
-                        );
-
-                        console.log("after filter: " + filteredChanges.length);
-
-                        lookup.history.removeAll();
-                    
-
-                    }
-                }
-            }
-            ,null
-            ,"arrayChange"
         );
+
+    lookup.FilteredOperations
+        .subscribe(function(changes)
+            {
+              reply('FilteredCards.length.changed', lookup.FilteredOperations().length);
+            });
+    
+    lookup.LimitedFilteredOperations = ko.pureComputed(function()
+            {
+                return lookup.FilteredOperations().slice(0, lookup.CurrentResultLimit());
+            });
+
+    lookup.LimitedFilteredOperations
+        .subscribe(function(changes)
+            {
+                console.log('LimitedFilteredOperations changed');
+                var toProcess = lookup.LimitedFilteredOperations();
+                var toSend = ko.utils.arrayMap(toProcess, function(item) {
+                    return item.ConvertToJs();
+                });
+                reply('LimitedFilteredOperations.changed.event', toSend);
+
+            });
 
 
 
@@ -308,7 +238,7 @@ lookup
 
     
 
-    lookup.CurrentResultLimit = ko.observable(45);
+    
 
     lookup.ResetCurrentResultLimit = function()
     {
@@ -354,6 +284,49 @@ lookup
         lookup.CurrentResultLimit(lookup.CurrentResultLimit() + lookup.ExtendAmountForCurrentResultLimit);
     };
 
+
+
+function on_operations_changed(changes)
+{
+    if (changes && changes.length > 0) {
+        var addedChanges = ko.utils.arrayFilter
+            (
+                changes, 
+                function (item) 
+                {
+                    return item.status == "added"
+                }
+            );
+
+        if (addedChanges && addedChanges.length > 0) {
+            var toStoreOperations = ko.utils.arrayMap(lookup.Operations(), function (item) {
+                return item.ConvertToJs()
+            })
+
+            toStoreOperations = toStoreOperations
+                .sort(
+                    function (left, right) {
+                        if (left.time === right.time) {
+                            return 0
+                        }
+
+                        else {
+                            if (left.time < right.time) {
+                                return -1
+                            }
+
+                            else {
+                                return 1
+                            }
+                        }
+                    }
+                )
+
+
+            reply('saveOperationsToStorage.event', toStoreOperations, lookup.free_Operation_Index)
+        }
+    }
+};
 
 
 // system functions

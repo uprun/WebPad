@@ -37,6 +37,10 @@ function ConnectedNotesViewModel()
     });
 
     lookup.LimitedFilteredCards = ko.observableArray([]);
+
+    
+    
+
     lookup.backendWorker.addListener('LimitedFilteredCards.changed.event', function(cards) 
     {
         lookup.LimitedFilteredCards.removeAll();
@@ -57,6 +61,24 @@ function ConnectedNotesViewModel()
     lookup.ReversedListOfCards = ko.pureComputed(function()
     {
         return lookup.LimitedFilteredCards().reverse();
+    });
+
+
+    lookup.LimitedFilteredOperations = ko.observableArray([]);
+    lookup.backendWorker.addListener('LimitedFilteredOperations.changed.event', function(cards) 
+    {
+        lookup.LimitedFilteredOperations.removeAll();
+        var processed = ko.utils.arrayMap(cards, function(item) {
+            var operation = new lookup.model_Operation(item)
+            return operation;
+        });
+        
+        ko.utils.arrayPushAll(lookup.LimitedFilteredOperations, processed);
+    });
+
+    lookup.ReversedListOfOperations = ko.pureComputed(function()
+    {
+        return lookup.LimitedFilteredOperations().reverse();
     });
 
 
