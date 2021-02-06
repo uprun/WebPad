@@ -471,7 +471,6 @@
                         class="webpad-card w3-animate-opacity" >
                         <span>
                             
-                            
                             <span>
                                 <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data.Note }  -->
                                 <!-- /ko -->
@@ -491,7 +490,16 @@
                         class="webpad-card w3-animate-opacity" >
                         <span>
                             
-                            
+                            <span data-bind="if: name === 'quote'" >
+                                <div class="webpad-quote webpad-brightness-dimmed ">
+                                    <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data.quoted }  -->
+                                    <!-- /ko -->
+                                    &nbsp;
+                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;" data-bind=" click: $root.jumpToCardFromQuote">
+                                        <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
+                                    </div>
+                                </div>
+                            </span>
                             <span >
                                 <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data }  -->
                                 <!-- /ko -->
