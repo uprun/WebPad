@@ -449,3 +449,13 @@ div.webpad-hide-on-large-screen
     border-color: #f8e755;
     border-radius: 0.7rem;
   }
+
+  .webpad-sky-frame
+  {
+    border-style: solid; 
+    border-width: 0.2rem;
+    border-color: #84bfff;
+    border-radius: 0.7rem;
+  }
+
+  

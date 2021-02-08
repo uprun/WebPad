@@ -7,12 +7,21 @@ lookup.beginToQuoteText = function(data)
     lookup.colorOfNextQuote(lookup.GetRandomColor().Color());
     lookup.actualTextOfQuote("");
     lookup.operationToBeQuoted(data);
+    event.stopPropagation();
+};
+lookup.beginToQuoteQuotedText = function(data)
+{
+    lookup.colorOfNextQuote(lookup.GetRandomColor().Color());
+    lookup.actualTextOfQuote("");
+    lookup.operationToBeQuoted(data.quoted);
+    event.stopPropagation();
 };
 lookup.beginToQuoteEditText = function(data)
 {
     lookup.colorOfNextQuote(lookup.GetRandomColor().Color());
     lookup.actualTextOfQuote(data.text);
     lookup.operationToBeQuoted(data);
+    event.stopPropagation();
     
 };
 lookup.cancelAddingQuote = function()
