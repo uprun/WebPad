@@ -129,6 +129,8 @@
 
         <script language="JavaScript" type="text/javascript" src="js/jumpToCardFromOperation.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/jumpToCardFromQuotedOperation.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/operationToBeQuoted.js" asp-append-version="true"></script>
+        
         
         
 
@@ -166,34 +168,6 @@
             <span property="logo">https://webpad.com.ua/WebPad_logo_500.png</span>
         </div>
         
-        <script type="text/html" id="tag-template">
-                <span data-bind="if: $parent.toolBoxVisible">
-                    <div 
-                        class="webpad-brightness-dimmed webpad-button-no-border" 
-                        style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
-                        data-bind=" click: $parent.removeTag, with: $data.originalTag ">
-                        <img src="svg/trash-orange.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Edit"/> 
-                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
-                        <span class="" style=" vertical-align: middle; margin-right: 0.5rem;"
-                            data-bind="style: 
-                            {
-                                color: $data.Destination.color
-                            },
-                            text: $data.Destination.text
-                            "
-                            alt="hashTagBeginSymbol"></span>
-                        
-                    </div>
-                </span>
-                <span data-bind="ifnot: $parent.toolBoxVisible ">
-                    <span >
-                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
-                        <!-- ko template: { name: 'text-with-dictionary-template', data: $data }  -->
-                        <!-- /ko -->
-                    </span>
-                </span>
-                
-        </script>
         
         <script type="text/html" id="additional-toolbox-template">
             
@@ -322,172 +296,19 @@
             <!-- /ko -->
         </script>
 
-        <script type="text/html" id="referenced-card-template">
+        <script type="text/html" id="referenced-operation-template">
             <div
-                style="border-style: solid; border-image: linear-gradient(to bottom right, #3900d9, #d6920b) 1; border-width: 0.2rem; border-radius: 0.7rem; font-size: 1rem; margin-left: 1rem; margin-right: 1rem;"
-            >
-                <span data-bind="
-                    style:
-                    {
-                        'text-decoration-line': ($data.isDone() && $data.isTask()) ? 'line-through' : 'none',
-                        'text-decoration-color': $data.Note.color
-                    }, 
-                    css: {strike: ($data.isDone() && $data.isTask()) }">
-                    <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Note }  -->
+                class="webpad-golden-frame webpad-brightness-dimmed"
+                style=" font-size: 1rem; margin-left: 1rem; margin-right: 1rem; padding-right: 0.5rem; padding-left: 0.5rem;" >
+                    <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data }  -->
                     <!-- /ko -->
-                </span>
-                <!-- ko if: $data.SmallTagsWrapped().length > 0  -->
-                    <br/>
-                    <span data-bind="template: { name: 'tag-template', foreach: $data.SmallTagsWrapped } " >
-                    </span>
-                <!-- /ko -->
             </div>
             <div class="webpad-hide-on-small-screen" style="height: 1rem;">
             </div>
         </script>
         
-        <script type="text/html" id="card-template">
-                <div class="w3-col w3-container s12 m12 l12">
-                    <div 
-                        style="font-size: 1.3rem;" 
-                        class="webpad-card w3-animate-opacity" 
-                        data-bind="attr: {id: $data.Note.id }, click: $data.switchToolBoxVisibility">
-                        <!-- ko template: { name: 'to-be-removed-template' }  -->
-                        <!-- /ko -->
-                        <span data-bind="ifnot: $data.toBeRemoved">
-                            <!-- ko foreach: $data.Note.ReferencedByWrapped  -->
-                                <div class="webpad-quote webpad-brightness-dimmed ">
-                                    <!-- ko template: { name: 'text-with-dictionary-template', data: $data }  -->
-                                    <!-- /ko -->
-                                    &nbsp;
-                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;" data-bind=" click: $root.jumpToCardFromQuote">
-                                        <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
-                                    </div>
-                                </div>
-                                
-                            <!-- /ko -->
-                            <span>
-                                <span data-bind="if: $data.isTask()" style="font-size: 1.4em;">
-                                    <span data-bind="if: $data.isDone()">
-                                        <span class="webpad-brightness-dimmed" style="color: #64e05e;" data-bind=" click: $data.removeDone">[x]</span>
-                                    </span>
-                                    <span data-bind="ifnot: $data.isDone()">
-                                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" click: $data.markAsDone">[o]</span>
-                                    </span>
-                                </span>
-                                
-                                <span data-bind="
-                                    style:
-                                    {
-                                        'text-decoration-line': ($data.isDone() && $data.isTask()) ? 'line-through' : 'none',
-                                        'text-decoration-color': $data.Note.color
-                                    }, 
-                                    css: {strike: ($data.isDone() && $data.isTask()) }">
-                                    <!-- ko template: { name: 'text-with-dictionary-template', data: $data.Note }  -->
-                                    <!-- /ko -->
-                                </span>
-                                <span data-bind="if: $data.toolBoxVisible">
-                                    <span  class="w3-animate-opacity webpad-brightness-dimmed">
-                                        <div class="webpad-button-no-border webpad-brightness-dimmed" style="  margin-left: 0.5rem;" >
-                                            <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
-                                            <span style="color: #84bfff;  vertical-align: middle;" data-bind="text: ': ' + $data.BigTags().length">
-                                            </span>
-                                        </div>
-                                        &nbsp;
-                                        <div 
-                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button" 
-                                            style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
-                                            data-bind=" click: $root.pushToSearchNotesQuery">   
-                                            <img src="svg/search.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;"  alt="jump to quote source"/> 
-                                            <span class="" style="color: #84bfff; vertical-align: middle;" alt="hashTagBeginSymbol"></span>
-                                            <img src="svg/quote-left.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="jump to quote source"/> 
-                                        </div>
-                                    </span>
-                                </span>
-                                
-                            </span>
-                            <span data-bind="if: $data.toolBoxVisible">
-                                <div style="font-size: 0.8rem;" class="w3-animate-opacity webpad-brightness-dimmed"  >
-                                    <span style="color: aliceblue;  vertical-align: middle;" data-bind="text: $data.Note.createDate">
-                                    </span>
-                                </div>
-                                
-                                
-                                
-
-                            </span>
-                            <!-- tool-box menu-->
-                            <span style="font-size: 2rem;">
-
-                                <span
-                                    
-                                    data-bind="if: $data.toolBoxVisible">
-                                    <span class="w3-animate-opacity" >
-                                        <span>
-                                            <div class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.beginToEdit">
-                                                <img src="svg/pencil-alt.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="Edit"/> 
-                                            </div>
-                                        </span>
-                                        
-                                        &nbsp;
-                                        <div class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" data-bind=" click: $data.prepareToBeRemoved">
-                                            <img src="svg/trash-orange.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="remove"/> 
-                                        </div>
-                                        
-                                    </span>
-                                    
-                                </span> 
-                            </span>
-                            <!-- tool-box menu: end -->
-                            <!-- ko if: $data.SmallTagsWrapped().length > 0  -->
-                                <br/>
-                                <span data-bind="template: { name: 'tag-template', foreach: $data.SmallTagsWrapped } " >
-                                </span>
-                            <!-- /ko -->
-                            
-                            
-                            
-                            
-
-                            <span data-bind="if: $data.toolBoxVisible">
-                                <span style="font-size: 1.4rem;" class="w3-animate-opacity" data-bind="template: { name: 'additional-toolbox-template' } " >
-                                </span>
-                            </span>
-                            
-                            <div class="webpad-hide-on-small-screen" style="height: 2em;">
-                            </div>
-                            
-                            
-                        </span>
-                       
         
-                        
-                        
-                    </div>
-                    
-                    
-                    
-                </div>
-        </script>
-
-        <script type="text/html" id="card-template-light">
-                <div class="w3-col w3-container s12 m12 l12">
-                    <div 
-                        style="font-size: 1.3rem;" 
-                        class="webpad-card w3-animate-opacity" >
-                        <span>
-                            
-                            <span>
-                                <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data.Note }  -->
-                                <!-- /ko -->
-                            </span>
-                        </span>
-                    </div>
-                    
-                    
-                    
-                </div>
-        </script>
+       
 
         <script type="text/html" id="operation-template">
                 <div class="w3-col w3-container s12 m12 l12">
@@ -510,21 +331,36 @@
                             <span >
                                 <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data }  -->
                                 <!-- /ko -->
-                                <span data-bind="if: $data.toolBoxVisible">
+                                <span data-bind="visible: $data.toolBoxVisible">
                                     <span  class="w3-animate-opacity webpad-brightness-dimmed">
-                                        <div 
-                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button" 
-                                            style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
+                                        <span 
+                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button webpad-golden-frame" 
+                                            style="font-size: 1.4rem;"
                                             data-bind=" click: $root.jumpToCardFromOperation">   
                                             <img src="svg/search.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;"  alt="jump to quote source"/> 
                                             <span class="" style="color: #84bfff; vertical-align: middle;" alt="hashTagBeginSymbol"></span>
                                             <img src="svg/quote-left.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="jump to quote source"/> 
-                                        </div>
-                                        <div style="font-size: 0.8rem;" class="w3-animate-opacity webpad-brightness-dimmed"  >
+                                        </span>
+                                        <span class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" 
+                                            style="font-size: 1.4rem;"
+                                            data-bind=" click: $root.beginToQuoteEditText">
+                                            <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
+                                            <img src="svg/pencil-alt.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="Edit"/> 
+                                        </span>
+                                        <span
+                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" 
+                                            style="font-size: 1.4rem;"
+                                            data-bind=" click: $root.beginToQuoteText">
+                                            <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
+                                            <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                                            <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="Edit"/> 
+                                        </span>
+                                        
+                                    </span>
+                                    <div style="font-size: 0.8rem;" class="w3-animate-opacity webpad-brightness-dimmed"  >
                                             <span style="color: aliceblue;  vertical-align: middle;" data-bind="text: $data.createDate">
                                             </span>
                                         </div>
-                                    </span>
                                 </span>
                             </span>
                         </span>
@@ -645,6 +481,7 @@
                 
             </div>
         </div>
+
         <div class="" style="width: 100%;" >
             <div style="width: 100%; padding-top: 3rem; padding-bottom: 10rem;" class="webpad-search-result-area">
                 <div class="w3-row" >
@@ -665,8 +502,8 @@
                     </div>
                 </div>
             </div>
-            
         </div>
+
         <div 
             class="webpad-search-absolute-position" 
             style="display: none; bottom: 0rem; margin-bottom: 0.2em;" 
@@ -742,30 +579,20 @@
                             />
                         </div>
                     </div>
-                    
-                    
-                    
-                            
-        
-                    
                 </div>
             </div>
-            
-            
-        
         </div>
+
         <div 
             class="webpad-search-absolute-position" 
             style="display: none; bottom: 0rem; margin-bottom: 0.2em;"
-             data-bind="
-                if: typeof($root.cardUnderEdit()) !== 'undefined' && typeof($root.toBeEdited()) !== 'undefined',
-                visible: typeof($root.toBeEdited()) !== 'undefined'">
-             <div class="w3-row">
+             data-bind="if: typeof($root.operationToBeQuoted()) !== 'undefined', visible: typeof($root.operationToBeQuoted()) !== 'undefined'">
+            <div class="w3-row">
                 <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
                     &NonBreakingSpace;
                 </div>
-                <div class="w3-col w3-container s12 m8 l6" data-bind="with: $root.cardUnderEdit()">
-                    <!-- ko template: { name: 'referenced-card-template', data: $data }  -->
+                <div class="w3-col w3-container s12 m8 l6" >
+                    <!-- ko template: { name: 'referenced-operation-template', data: $root.operationToBeQuoted() }  -->
                     <!-- /ko -->
                 </div>
                 <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
@@ -777,128 +604,29 @@
                 <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
                     &NonBreakingSpace;
                     <span style="float: right;">
-                        <div class="webpad-button-no-border" data-bind=" click: $root.cancelEdit">
-                            <img src="svg/times-close-menu.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
-                        </div>
-                    </span>
-                </div>
-                <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-small-screen" style="font-size: 1.4rem;">
-                    <input 
-                        placeholder="edit note ..." 
-                        class="webpad-search-bar webpad-search-bar-adjusted"
-                        type="text" 
-                        data-bind="
-                            style:
-                            {
-                                color: $root.cardUnderEdit().Note.color,
-                            },
-                            textInput: $root.toBeEdited,
-                            " 
-                    /> 
-                </div>
-                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
-                    <span style="float: left;" data-bind="if: typeof($root.toBeEdited()) !== 'undefined' && $root.toBeEdited() !== $root.cardUnderEdit().Note.text()">
-                        <div class="webpad-button-no-border" data-bind=" click: $root.applyChanges">
-                            <img src="svg/check.svg" class="webpad-edit-pencil" alt="apply changes"/> 
-                        </div>
-                    </span>
-                    &NonBreakingSpace;
-
-                </div>
-                <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-large-screen" style="font-size: 1.4rem; margin: 0px; padding: 0px;">
-                    <div class="w3-row">
-                        <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 2rem;">
-                            <span >
-                                <div class="webpad-button-no-border" data-bind=" click: $root.cancelEdit">
-                                    <img src="svg/times-close-menu.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
-                                </div>
-                            </span>
-                           
-                        </div>
-                        <div class="w3-col w3-container s6  webpad-hide-on-large-screen" style="font-size: 2rem;">
-                            <span data-bind="if: typeof($root.toBeEdited()) !== 'undefined' && $root.toBeEdited() !== $root.cardUnderEdit().Note.text()">
-                                <div class="webpad-button-no-border" style="float: right;" data-bind=" click: $root.applyChanges">
-                                    <img src="svg/check.svg" class="webpad-edit-pencil" alt="apply changes"/> 
-                                </div>
-                            </span>
-                        </div>
-                        <div class="w3-col w3-container s12 webpad-hide-on-large-screen" style="font-size: 1.4rem;">
-                            <input 
-                                placeholder="edit note ..." 
-                                class="webpad-search-bar webpad-search-bar-full-width"
-                                type="text" 
-                                data-bind="
-                                    style:
-                                    {
-                                        color: $root.cardUnderEdit().Note.color,
-                                    },
-                                    textInput: $root.toBeEdited
-                                    " 
-                            />
-                        </div>
-                    </div>
-                    
-                    
-                    
-                            
-        
-                    
-                </div>
-            </div>
-            
-            
-        
-        </div>
-
-        <div 
-            class="webpad-search-absolute-position" 
-            style="display: none; bottom: 0rem; margin-bottom: 0.2em;"
-             data-bind="if: typeof($root.taggedOrQuotedCard()) !== 'undefined', visible: typeof($root.taggedOrQuotedCard()) !== 'undefined'">
-            <div class="w3-row">
-                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
-                    &NonBreakingSpace;
-                </div>
-                <div class="w3-col w3-container s12 m8 l6" data-bind="with: $root.taggedOrQuotedCard()">
-                    <!-- ko template: { name: 'referenced-card-template', data: $data }  -->
-                    <!-- /ko -->
-                </div>
-                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
-                    &NonBreakingSpace;
-                </div>
-                
-            </div>
-            <div class="w3-row">
-                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
-                    &NonBreakingSpace;
-                    <span style="float: right;">
-                        <div class="webpad-button-no-border" data-bind=" click: $root.cancelAddingTagOrQuote">
+                        <div class="webpad-button-no-border" data-bind=" click: $root.cancelAddingQuote">
                             <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
                         </div>
                     </span>
                 </div>
                 <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-small-screen" style="font-size: 1.4rem;">
-                    <!-- ko if: typeof($root.taggedOrQuotedCard()) !== 'undefined' && $root.taggedOrQuotedCard().AdditionalInformationText().trim().length < 20 -->
-                        <span class="webpad-brightness-dimmed webpad-button-no-border" >
-                            <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
-                        </span>
-                    <!-- /ko -->
-                    <!-- ko ifnot: typeof($root.taggedOrQuotedCard()) !== 'undefined' && $root.taggedOrQuotedCard().AdditionalInformationText().trim().length < 20 -->
-                        <span class="webpad-brightness-dimmed webpad-button-no-border" >
-                            <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="Add information" /> 
-                        </span>
-                    <!-- /ko -->
+                    
+                    <span class="webpad-brightness-dimmed webpad-button-no-border" >
+                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                    </span>
+                    
                     <span style="width: calc(100% - 2em);" class="webpad-break-words-node"
                         data-bind="
                                 style:
                                 {
-                                    color: $root.taggedOrQuotedCard().AdditionalInformationTextColor,
+                                    color: $root.colorOfNextQuote,
                                 },">
                         <input 
                             placeholder="add quote" 
                             class="webpad-extra-information w3-animate-opacity"
                             type="text" 
                             data-bind="
-                                textInput:  $root.taggedOrQuotedCard().AdditionalInformationText,
+                                textInput:  $root.actualTextOfQuote,
                                 event: {keypress: $root.additionalInfoKeyPress}, 
                                 hasFocus: true
                                 " 
@@ -906,7 +634,7 @@
                     </span>                    
                 </div>
                 <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
-                    <span style="float: left;" data-bind="if: $root.taggedOrQuotedCard().AdditionalInformationText().trim().length > 0">
+                    <span style="float: left;" data-bind="if: $root.actualTextOfQuote().trim().length > 0 && $root.actualTextOfQuote().trim() !== $root.operationToBeQuoted().text.trim() ">
                         <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" click: $root.AddNoteToExistingOne">
                             <img src="svg/check.svg"  class="webpad-edit-pencil" alt="Apply edit" /> 
                             <span style="color: aliceblue; font-size: 1.4rem;">
@@ -921,14 +649,14 @@
                     <div class="w3-row">
                         <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 2rem;">
                             <span >
-                                <div class="webpad-button-no-border" data-bind=" click: $root.cancelAddingTagOrQuote">
+                                <div class="webpad-button-no-border" data-bind=" click: $root.cancelAddingQuote">
                                     <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
                                 </div>
                             </span>
                            
                         </div>
                         <div class="w3-col w3-container s6  webpad-hide-on-large-screen" style="font-size: 2rem;">
-                            <span data-bind="if: $root.taggedOrQuotedCard().AdditionalInformationText().trim().length > 0">
+                            <span data-bind="if: $root.actualTextOfQuote().trim().length > 0 && $root.actualTextOfQuote().trim() !== $root.operationToBeQuoted().text.trim() ">
                                 <div class="webpad-brightness-dimmed webpad-button-no-border" style="float: right;" data-bind=" click: $root.AddNoteToExistingOne">
                                     <img src="svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" /> 
                                     <span style="color: aliceblue; font-size: 1.4rem; margin-right: 0.5rem;">
@@ -938,28 +666,23 @@
                             </span>
                         </div>
                         <div class="w3-col w3-container s12 webpad-hide-on-large-screen" style="font-size: 1.4rem;">
-                            <!-- ko if:  $root.taggedOrQuotedCard().AdditionalInformationText().trim().length < 20 -->
-                                <span class="webpad-brightness-dimmed webpad-button-no-border" >
-                                    <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
-                                </span>
-                            <!-- /ko -->
-                            <!-- ko ifnot: $root.taggedOrQuotedCard().AdditionalInformationText().trim().length < 20 -->
-                                <span class="webpad-brightness-dimmed webpad-button-no-border" >
-                                    <img src="svg/quote-left.svg" class="webpad-edit-pencil" alt="Add information" /> 
-                                </span>
-                            <!-- /ko -->
+                            
+                            <span class="webpad-brightness-dimmed webpad-button-no-border" >
+                                <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                            </span>
+                            
                             <span style="width: calc(100% - 2em);" class="webpad-break-words-node"
                                 data-bind="
                                         style:
                                         {
-                                            color: $root.taggedOrQuotedCard().AdditionalInformationTextColor,
+                                            color: $root.colorOfNextQuote,
                                         },">
                                 <input 
                                     placeholder="add quote" 
                                     class="webpad-extra-information w3-animate-opacity"
                                     type="text" 
                                     data-bind="
-                                        textInput:  $root.taggedOrQuotedCard().AdditionalInformationText,
+                                        textInput:  $root.actualTextOfQuote,
                                         event: {keypress: $root.additionalInfoKeyPress}, 
                                         hasFocus: true
                                         " 
