@@ -127,6 +127,12 @@
         <script language="JavaScript" type="text/javascript" src="js/saveItemsToStorage.js" asp-append-version="true"></script>
 
 
+        <script language="JavaScript" type="text/javascript" src="js/jumpToCardFromOperation.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/jumpToCardFromQuotedOperation.js" asp-append-version="true"></script>
+        
+        
+
+
         <script language="JavaScript" type="text/javascript" src="js/save_Operations_to_storage.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/model_Operation.js" asp-append-version="true"></script>
 
@@ -487,7 +493,8 @@
                 <div class="w3-col w3-container s12 m12 l12">
                     <div 
                         style="font-size: 1.3rem;" 
-                        class="webpad-card w3-animate-opacity" >
+                        class="webpad-card w3-animate-opacity" 
+                        data-bind="click: $data.switchToolBoxVisibility" >
                         <span>
                             
                             <span data-bind="if: name === 'quote'" >
@@ -495,7 +502,7 @@
                                     <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data.quoted }  -->
                                     <!-- /ko -->
                                     &nbsp;
-                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;" data-bind=" click: $root.jumpToCardFromQuote">
+                                    <div class="webpad-button-no-border webpad-brightness-dimmed" style="font-size: 1.4em;" data-bind=" click: $root.jumpToCardFromQuotedOperation">
                                         <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
                                     </div>
                                 </div>
@@ -503,6 +510,22 @@
                             <span >
                                 <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data }  -->
                                 <!-- /ko -->
+                                <span data-bind="if: $data.toolBoxVisible">
+                                    <span  class="w3-animate-opacity webpad-brightness-dimmed">
+                                        <div 
+                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button" 
+                                            style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
+                                            data-bind=" click: $root.jumpToCardFromOperation">   
+                                            <img src="svg/search.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;"  alt="jump to quote source"/> 
+                                            <span class="" style="color: #84bfff; vertical-align: middle;" alt="hashTagBeginSymbol"></span>
+                                            <img src="svg/quote-left.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="jump to quote source"/> 
+                                        </div>
+                                        <div style="font-size: 0.8rem;" class="w3-animate-opacity webpad-brightness-dimmed"  >
+                                            <span style="color: aliceblue;  vertical-align: middle;" data-bind="text: $data.createDate">
+                                            </span>
+                                        </div>
+                                    </span>
+                                </span>
                             </span>
                         </span>
                     </div>

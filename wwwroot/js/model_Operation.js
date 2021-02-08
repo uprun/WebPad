@@ -6,6 +6,8 @@ lookup.model_Operation = function(data)
     self.data = data.data;
     self.time = data.time;
 
+    self.createDate = new Date(self.time);
+
     if(self.name === 'create')
     {
         lookup.prefill_Operation(self, self.data);
@@ -28,11 +30,19 @@ lookup.model_Operation = function(data)
         };
         return toReturn;
     };
+
+    self.toolBoxVisible = ko.observable(false);
+    self.switchToolBoxVisibility = function()
+    {
+        self.toolBoxVisible(!self.toolBoxVisible());
+
+    };
 };
 
 lookup.prefill_Operation = function(self, abc) {
 
     self.color = abc.color;
+    self.text = abc.text;
     var test = abc.text.split(" ");
     self.textSplitted = ko.utils.arrayMap(test, function (item) {
         var toSearch = item
@@ -41,13 +51,21 @@ lookup.prefill_Operation = function(self, abc) {
             .replace("\t", " ")
             .toLowerCase()
             .trim();
+        
+        // if url then do nothing
+        if(!toSearch.startsWith("https://"))
+        {
+            if (
+                toSearch.endsWith(",")
+                || toSearch.endsWith(".")
+                || toSearch.endsWith("?")
+                || toSearch.endsWith("!")) 
+            {
+                toSearch = toSearch.substring(0, toSearch.length - 1);
+            }
 
-        if (toSearch.endsWith(",")
-            || toSearch.endsWith(".")
-            || toSearch.endsWith("?")
-            || toSearch.endsWith("!")) {
-            toSearch = toSearch.substring(0, toSearch.length - 1);
         }
+        
         return {
             word: item,
             wordQuery: toSearch
