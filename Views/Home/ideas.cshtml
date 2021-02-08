@@ -445,7 +445,7 @@
                     <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
                         : options
                     </span>
-                    <div style="float: right;" class=" webpad-button-no-border" data-bind="click: $root.toggleMenu">
+                    <div style="float: right;" class=" webpad-button-no-border webpad-golden-frame" data-bind="click: $root.toggleMenu">
                         <span style="font-size: 2rem;">
                             <img src="svg/times-close-menu.svg" class="webpad-edit-pencil" alt="close menu"/> 
                         </span>
@@ -525,14 +525,14 @@
                 <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
                     &NonBreakingSpace;
                     <span style="float: right;" data-bind="if: $root.stackSearchNotesQuery().length > 0">
-                        <div class="webpad-button-no-border" data-bind=" click: $root.rollbackSearchNotesQuery">
+                        <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.rollbackSearchNotesQuery">
                             <span lass="webpad-brightness-dimmed" style="color: aliceblue; vertical-align: middle;" data-bind="text: $root.stackSearchNotesQuery().length">
                             </span>
                             <img src="svg/history.svg" class="webpad-edit-pencil" alt="create"/> 
                         </div>
                     </span>
                     <span style="float: right;" data-bind="if: $root.stackSearchNotesQuery().length === 0 && $root.SearchNotesQuery().trim().length > 0">
-                        <div class="webpad-button-no-border" data-bind=" click: $root.rollbackSearchNotesQuery">
+                        <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.rollbackSearchNotesQuery">
                             <img src="svg/history.svg" class="webpad-edit-pencil" alt="create"/> 
                         </div>
                     </span>
@@ -550,7 +550,7 @@
                 </div>
                 <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
                     <span style="float: left;" data-bind="if: $root.SearchNotesQuery().trim().length > 0">
-                        <div class="webpad-button-no-border" data-bind=" click: $root.CreateNoteFromSearchQuery">
+                        <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.CreateNoteFromSearchQuery">
                             <img src="svg/plus.svg" class="webpad-edit-pencil" alt="create"/> 
                         </div>
                     </span>
@@ -561,21 +561,21 @@
                     <div class="w3-row">
                         <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 2rem;">
                             <span data-bind="if: $root.stackSearchNotesQuery().length > 0">
-                                <div class="webpad-button-no-border" data-bind=" click: $root.rollbackSearchNotesQuery">
+                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.rollbackSearchNotesQuery">
                                     <span lass="webpad-brightness-dimmed" style="color: aliceblue; vertical-align: middle;" data-bind="text: $root.stackSearchNotesQuery().length">
                                     </span>
                                     <img src="svg/history.svg" class="webpad-edit-pencil" alt="create"/> 
                                 </div>
                             </span>
                             <span data-bind="if: $root.stackSearchNotesQuery().length === 0 && $root.SearchNotesQuery().trim().length > 0">
-                                <div class="webpad-button-no-border" data-bind=" click: $root.rollbackSearchNotesQuery">
+                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.rollbackSearchNotesQuery">
                                     <img src="svg/history.svg" class="webpad-edit-pencil" alt="create"/> 
                                 </div>
                             </span>
                         </div>
                         <div class="w3-col w3-container s6  webpad-hide-on-large-screen" style="font-size: 2rem;">
                             <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
-                                <div class="webpad-button-no-border" style="float: right;" data-bind=" click: $root.CreateNoteFromSearchQuery">
+                                <div class="webpad-button-no-border webpad-golden-frame" style="float: right;" data-bind=" click: $root.CreateNoteFromSearchQuery">
                                     <img src="svg/plus.svg" class="webpad-edit-pencil" alt="create"/> 
                                 </div>
                             </span>
