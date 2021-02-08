@@ -76,20 +76,6 @@ function ConnectedNotesViewModel()
         ko.utils.arrayPushAll(lookup.LimitedFilteredOperations, processed);
     });
 
-    lookup.ReversedListOfOperations = ko.pureComputed(function()
-    {
-        return lookup.LimitedFilteredOperations().reverse();
-    });
-
-
-    lookup.ReversedListOfCards
-        .subscribe(function(changes)
-            {
-                
-                console.log("reversed list  changed")
-
-            });
-
     
 
     lookup.filtered_cards_length = ko.observable(0);

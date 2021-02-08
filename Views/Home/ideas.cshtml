@@ -633,7 +633,7 @@
                             data-bind="template: 
                                 { 
                                     name: 'operation-template',
-                                    foreach: ReversedListOfOperations(),
+                                    foreach: LimitedFilteredOperations,
                                     afterRender: $root.cardAfterRender
                                 } ">
 

@@ -42,6 +42,8 @@ lookup.populateColorPresets();
 lookup.CurrentResultLimit = ko.observable(45);
 
 
+// in Operations fisrt ones are the oldest one, or at least they will be after first save
+
 lookup
     .Operations
     .extend(
@@ -104,7 +106,12 @@ lookup
     
     lookup.LimitedFilteredOperations = ko.pureComputed(function()
             {
-                return lookup.FilteredOperations().slice(0, lookup.CurrentResultLimit());
+                var startIndex = lookup.FilteredOperations().length - lookup.CurrentResultLimit()
+                if(startIndex < 0)
+                {
+                    startIndex = 0;
+                }
+                return lookup.FilteredOperations().slice(startIndex);
             });
 
     lookup.LimitedFilteredOperations
@@ -122,119 +129,7 @@ lookup
 
 
 
-    lookup.FilteredCards = ko.pureComputed(function() {
-        var taken = 0;
-        // dummy call to get updates for dictionary
-        var version_of_dictionary = lookup.dictionary_of_notes_updated();
-        var search_query = lookup.SearchNotesQuery().trim().toLowerCase();
-        if(search_query.length === 0)
-        {
-            return lookup.composedCards();
-        }
-        else
-        {
-            if(version_of_dictionary === 0)
-            {
-                // classic approach
-                return ko.utils.arrayFilter
-                (
-                    lookup.composedCards(), 
-                    function(item, index)
-                        { 
-                            if(taken >=  lookup.CurrentResultLimit() + lookup.ExtendAmountForCurrentResultLimit)
-                            {
-                                return false;
-                            }
-                            var resultOfSearchQuery = item.IsForSearchResult(search_query);
-                            if(resultOfSearchQuery)
-                            {
-                                taken++;
-                            }
-                            
-                            return resultOfSearchQuery;
-                            
-                            
-                        }
-                );
 
-            }
-            else
-            {
-                // dictionary approach
-                var found = lookup.dictionary_of_notes[search_query];
-                if(typeof(found) !== 'undefined')
-                {
-                    var result = [];
-                    for( var note_id in found) {
-                        if(found[note_id])
-                        {
-                            result.push(lookup.findCardByMainNodeId(note_id));
-                        }
-                    }
-                    return result;
-                }
-                else
-                {
-                    return [];
-                }
-            }
-        }
-
-        
-        
-    });
-    
-    lookup.sortedByDateCards = ko.pureComputed(function()
-    {
-        return lookup
-            .FilteredCards()
-            .sort(
-                function(left, right)
-                {
-                    if(left.Note.createDate === right.Note.createDate)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        if(left.Note.createDate < right.Note.createDate)
-                        {
-                            return 1;
-                        }
-                        else
-                        {
-                            return -1;
-                        }
-                    }
-                }
-            );
-    });
-
-    // the idea is that cards without tags should not be displayed unless they are root
-    lookup.filteredOutLeafs = ko.pureComputed(
-        function()
-        {
-            return ko.utils.arrayFilter
-            (
-                lookup.sortedByDateCards(),
-                function(item, index)
-                {
-                    return item.isRoot || item.hasTags || item.Note.text().length >= 20;
-                    
-                }
-
-
-            );
-
-        }
-    );
-   
-
-    lookup.FilteredCards
-        .subscribe(function(changes)
-            {
-              reply('FilteredCards.length.changed', lookup.FilteredCards().length);
-            });
 
     
 
@@ -244,31 +139,6 @@ lookup
     {
         lookup.CurrentResultLimit(45);
     };
-
-    lookup.LimitedFilteredCards = ko.pureComputed(function()
-    {
-        return lookup.filteredOutLeafs().slice(0, lookup.CurrentResultLimit());
-    });
-
-    lookup.LimitedFilteredCards
-        .extend({ rateLimit: 150 });
-
-    lookup.LimitedFilteredCards
-        .subscribe(function(changes)
-            {
-                console.log('LimitedFilteredCards changed');
-                var toProcess = lookup.LimitedFilteredCards();
-                var toSend = ko.utils.arrayMap(toProcess, function(item) {
-                  return item.ConvertToJs();
-                });
-                reply('LimitedFilteredCards.changed.event', toSend);
-
-            });
-
-    lookup.ReversedListOfCards = ko.pureComputed(function()
-    {
-        return lookup.LimitedFilteredCards().reverse();
-    });
 
     lookup.ExtendAmountForCurrentResultLimit = 45;
 
