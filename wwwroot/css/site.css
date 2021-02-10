@@ -274,8 +274,8 @@ a
 .webpad-quote-edit
 {
     border-left-color: #f8e755;
-    border-left-style: solid;
-    border-left-width: .2em;
+    border-left-style: dotted;
+    border-left-width: .4em;
     font-style: italic;
     padding-left: .5em;
 }
