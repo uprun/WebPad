@@ -19,6 +19,8 @@ function ConnectedNotesViewModel()
 
     lookup.defineLocalStorage();
 
+    lookup.backgroundApplySaved();
+
     lookup.hashCards = {};
 
     lookup.populateColorPresets();
