@@ -15,7 +15,7 @@ lookup.listRenderedCompletely = function()
 
 lookup.cardAfterRender = function()
 {
-    var cards = lookup.LimitedFilteredCards();
+    var cards = lookup.LimitedFilteredOperations();
     // var renderedItems = ko.utils.arrayFilter(cards, 
     //     function(item)
     //     { 
@@ -32,7 +32,8 @@ lookup.cardAfterRender = function()
     //         return true;
     //     } );
     // var isCompletelyRendered = renderedItems.length === cards.length;
-    var isCompletelyRendered = cards.length == $(".webpad-card").length;
+    var numberOfRenderedCards = $(".webpad-card").length;
+    var isCompletelyRendered = cards.length === numberOfRenderedCards;
     if(isCompletelyRendered)
     {
         lookup.listRenderedCompletely();
