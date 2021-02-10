@@ -15,23 +15,24 @@ lookup.listRenderedCompletely = function()
 
 lookup.cardAfterRender = function()
 {
-    var cards = lookup.ReversedListOfCards();
-    var renderedItems = ko.utils.arrayFilter(cards, 
-        function(item)
-        { 
-            try
-            {
-                var searchResult = $('#'+item.Note.id);
-                return searchResult.length > 0;
+    var cards = lookup.LimitedFilteredCards();
+    // var renderedItems = ko.utils.arrayFilter(cards, 
+    //     function(item)
+    //     { 
+    //         try
+    //         {
+    //             var searchResult = $('#'+item.Note.id);
+    //             return searchResult.length > 0;
 
-            }
-            catch(error)
-            {
-                console.log("failed search query was : " + '#'+item.Note.id)
-            }
-            return true;
-        } );
-    var isCompletelyRendered = renderedItems.length === cards.length;
+    //         }
+    //         catch(error)
+    //         {
+    //             console.log("failed search query was : " + '#'+item.Note.id)
+    //         }
+    //         return true;
+    //     } );
+    // var isCompletelyRendered = renderedItems.length === cards.length;
+    var isCompletelyRendered = cards.length == $(".webpad-card").length;
     if(isCompletelyRendered)
     {
         lookup.listRenderedCompletely();
