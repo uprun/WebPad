@@ -12,7 +12,7 @@ lookup.model_Operation = function(data)
     {
         lookup.prefill_Operation(self, self.data);
     }
-    if(self.name === 'quote')
+    if(self.name === 'quote' || self.name === 'quote-edit')
     {
         lookup.prefill_Operation(self, self.data.current);
         self.quoted = {};

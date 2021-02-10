@@ -271,14 +271,24 @@ a
     filter: brightness(70%);
 }
 
-.webpad-quote
+.webpad-quote-edit
 {
-    border-left-color: aliceblue;
+    border-left-color: #f8e755;
     border-left-style: solid;
     border-left-width: .2em;
     font-style: italic;
     padding-left: .5em;
 }
+
+.webpad-quote
+{
+    border-left-color: #84bfff;
+    border-left-style: solid;
+    border-left-width: .2em;
+    font-style: italic;
+    padding-left: .5em;
+}
+
 
 
 .webpad-contenteditable

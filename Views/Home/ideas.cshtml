@@ -318,8 +318,8 @@
                         data-bind="click: $data.switchToolBoxVisibility" >
                         <span>
                             
-                            <span data-bind="if: name === 'quote'" >
-                                <div class="webpad-quote webpad-brightness-dimmed ">
+                            <span data-bind="if: name === 'quote' || name === 'quote-edit' " >
+                                <div class="webpad-brightness-dimmed " data-bind="css:{ 'webpad-quote-edit' : name === 'quote-edit', 'webpad-quote' : name === 'quote'}">
                                     <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data.quoted }  -->
                                     <!-- /ko -->
                                     &nbsp;
@@ -357,7 +357,7 @@
                                             style="font-size: 1.4rem;"
                                             data-bind=" click: $root.beginToQuoteEditText">
                                             <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
-                                            <img src="svg/pencil-alt.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="Edit"/> 
+                                            <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="Edit"/> 
                                         </span>
                                         <span
                                             class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" 
@@ -624,7 +624,12 @@
                 <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-small-screen" style="font-size: 1.4rem;">
                     
                     <span class="webpad-brightness-dimmed webpad-button-no-border" >
+                        <!-- ko ifnot: $root.isQuoteEdit -->
                         <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                        <!-- /ko -->
+                        <!-- ko if: $root.isQuoteEdit -->
+                        <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil" alt="Edit"/> 
+                        <!-- /ko -->
                     </span>
                     
                     <span style="width: calc(100% - 2em);" class="webpad-break-words-node"
@@ -678,7 +683,12 @@
                         <div class="w3-col w3-container s12 webpad-hide-on-large-screen" style="font-size: 1.4rem;">
                             
                             <span class="webpad-brightness-dimmed webpad-button-no-border" >
+                                <!-- ko ifnot: $root.isQuoteEdit -->
                                 <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                                <!-- /ko -->
+                                <!-- ko if: $root.isQuoteEdit -->
+                                <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil" alt="Edit"/> 
+                                <!-- /ko -->
                             </span>
                             
                             <span style="width: calc(100% - 2em);" class="webpad-break-words-node"
