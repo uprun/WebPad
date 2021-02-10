@@ -5,7 +5,6 @@ lookup.loadNotes = function()
         if(typeof(lookup.localStorage["Operations"]) !== 'undefined')
         {
             data.Operations = JSON.parse(lookup.localStorage.getItem("Operations"));
-            data.free_Operation_Index = JSON.parse(lookup.localStorage.getItem("free_Operation_Index"));
             lookup.backendWorker.sendQuery('populate_Operations', data);
         }
         else

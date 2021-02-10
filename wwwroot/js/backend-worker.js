@@ -16,6 +16,7 @@ importScripts("findNodeById.js")
 importScripts("SearchNotesQuery.js")
 importScripts("findCardByMainNodeId.js")
 importScripts("populate_Operations.js")
+importScripts("Operation_was_added.js")
 
 
 
@@ -81,7 +82,7 @@ lookup
                                 }
                                 else
                                 {
-                                    if(item.name === 'quote')
+                                    if(item.name === 'quote' || item.name === 'quote-edit')
                                     {
                                         var searchResult1 = item.data.quoted.text.toLowerCase().indexOf(search_query) >= 0;
                                         var searchResult2 = item.data.current.text.toLowerCase().indexOf(search_query) >= 0;
@@ -193,7 +194,7 @@ function on_operations_changed(changes)
                 )
 
 
-            reply('saveOperationsToStorage.event', toStoreOperations, lookup.free_Operation_Index)
+            reply('saveOperationsToStorage.event', toStoreOperations)
         }
     }
 };

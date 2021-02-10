@@ -4,8 +4,6 @@ lookup.populate_Operations = function(data) {
         lookup.for_code_access_hash_of_color_presets[element.color] = true;
     });
 
-    lookup.free_Operation_Index = data.free_Operation_Index;
-
     var buffer = [];
     
     buffer = ko.utils.arrayMap(
