@@ -1,12 +1,23 @@
 lookup.CreateNoteFromSearchQuery = function() {
-    var obj = {
-        text: lookup.SearchNotesQuery().trim()
-        };
-    lookup.CreateNote(obj, function(added)
+    var data = 
+    {
+        text: lookup.SearchNotesQuery().trim(),
+        color: lookup.GetRandomColor().Color()
+    };
+    lookup.SearchNotesQuery("");
+    if(data.text.length > 0)
+    {
+        var operation = 
         {
-            console.log('create');
-            lookup.SearchNotesQuery("");
-            lookup.jumpToCardOnCreate(added);
-        }
-    );
+            id: 
+            {
+                is_local: true,
+                prefix: "to-be-defined"
+            },
+            name: 'create',
+            data: data,
+            time: new Date().toISOString()
+        };
+        lookup.backendWorker.sendQuery('Operation_was_added', operation);
+    }
 };
