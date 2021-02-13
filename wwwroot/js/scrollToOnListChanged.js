@@ -26,25 +26,15 @@ lookup.onListChanged_set_scrollToLatestCard = function()
     lookup.scrollToDestinationCommand(commandValue);
 };
 
-lookup.onListChanged_set_scrollToCard = function(card)
+lookup.onListChanged_keepHeightOffset = function()
 {
     var commandValue = lookup.scrollToDestinationCommand();
     if(typeof(commandValue) === 'undefined')
     {
         commandValue = {};
     }
-    commandValue["scrollToCard"] = card;
-    lookup.scrollToDestinationCommand(commandValue);
-};
-
-lookup.onListChanged_set_scrollToCardAfter = function(card)
-{
-    var commandValue = lookup.scrollToDestinationCommand();
-    if(typeof(commandValue) === 'undefined')
-    {
-        commandValue = {};
-    }
-    commandValue["scrollToCardAfter"] = card;
+    var totalHeight = $("body,html").height();
+    commandValue["previousHeight"] = totalHeight;
     lookup.scrollToDestinationCommand(commandValue);
 };
 
@@ -66,6 +56,19 @@ lookup.onListChanged_ScrollToDestination = function()
             $("body,html").stop().animate({
                 scrollTop: totalHeight
             }, 300);
+        }
+        if(typeof(commandValue.previousHeight) !== 'undefined')
+        {
+            var totalHeightNow = $("body,html").height();
+            var previousHeight = commandValue.previousHeight;
+            var offset = totalHeightNow - previousHeight;
+            if(offset < 0)
+            {
+                offset = 0;
+            }
+            $("body,html").stop().animate({
+                scrollTop: offset
+            }, 1);
         }
         
         lookup.scrollToDestinationCommand(undefined);

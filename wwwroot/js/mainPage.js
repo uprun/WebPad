@@ -59,6 +59,7 @@ function ConnectedNotesViewModel()
 
     lookup.ExtendCurrentResultLimit = function()
     {
+        lookup.onListChanged_keepHeightOffset();
         lookup.backendWorker.sendQuery("ExtendCurrentResultLimit");
     };
 
