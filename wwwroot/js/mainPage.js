@@ -57,10 +57,27 @@ function ConnectedNotesViewModel()
         lookup.hidden_operations_count(length);
     });
 
+    lookup.CurrentResultLimit = ko.observable(45);
+
+    lookup.backendWorker.addListener('CurrentResultLimit.changed', function(length) 
+    {
+        lookup.CurrentResultLimit(length);
+    });
+
     lookup.ExtendCurrentResultLimit = function()
     {
         lookup.onListChanged_keepHeightOffset();
         lookup.backendWorker.sendQuery("ExtendCurrentResultLimit");
+    };
+
+    lookup.ResetCurrentResultLimit = function()
+    {
+        lookup.backendWorker.sendQuery("ResetCurrentResultLimit");
+    };
+
+    lookup.SetCurrentResultLimit = function(value)
+    {
+        lookup.backendWorker.sendQuery("SetCurrentResultLimit", value);
     };
 
     if(typeof(Worker) == "undefined") {

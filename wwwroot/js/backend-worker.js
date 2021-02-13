@@ -151,6 +151,17 @@ lookup
         lookup.CurrentResultLimit(lookup.CurrentResultLimit() + lookup.ExtendAmountForCurrentResultLimit);
     };
 
+    lookup.SetCurrentResultLimit = function(value)
+    {
+        lookup.CurrentResultLimit(value);
+    };
+
+    lookup.CurrentResultLimit
+        .subscribe(function(changes)
+            {
+                reply('CurrentResultLimit.changed', lookup.CurrentResultLimit());
+            });
+
 
 
 function on_operations_changed(changes)
