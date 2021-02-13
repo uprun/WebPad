@@ -115,6 +115,17 @@ lookup
                 return lookup.FilteredOperations().slice(startIndex);
             });
 
+    lookup.NumberOfHiddenOperations = ko.pureComputed(function()
+    {
+        return lookup.FilteredOperations().length - lookup.LimitedFilteredOperations().length;
+    });
+
+    lookup.NumberOfHiddenOperations
+        .subscribe(function(changes)
+            {
+                reply('NumberOfHiddenOperations.changed', lookup.NumberOfHiddenOperations());
+            });
+
     lookup.LimitedFilteredOperations
         .subscribe(function(changes)
             {
@@ -127,15 +138,6 @@ lookup
 
             });
 
-
-
-
-
-
-    
-
-    
-
     lookup.ResetCurrentResultLimit = function()
     {
         lookup.CurrentResultLimit(45);
@@ -146,12 +148,6 @@ lookup
 
     lookup.ExtendCurrentResultLimit = function()
     {
-        var currentCards = lookup.LimitedFilteredCards();
-        if(currentCards.length > 0)
-        {
-            var bottomCard = currentCards[0];
-            lookup.onListChanged_set_scrollToCardAfter(bottomCard);
-        }
         lookup.CurrentResultLimit(lookup.CurrentResultLimit() + lookup.ExtendAmountForCurrentResultLimit);
     };
 

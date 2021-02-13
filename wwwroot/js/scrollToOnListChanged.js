@@ -59,37 +59,13 @@ lookup.onListChanged_ScrollToDestination = function()
                 scrollTop: lookup.scrollToDestinationCommand().offsetTop
             }, 300);
         }
-        else
+        if(typeof(commandValue.scrollToLatestCard) !== 'undefined')
         {
-            if(typeof(commandValue.scrollToCard) !== 'undefined')
-            {
-                lookup.scrollToCard(commandValue.scrollToCard.Note.id);
-            }
-            else
-            {
-                if(typeof(commandValue.scrollToCardAfter) !== 'undefined')
-                {
-                    var cards = lookup.LimitedFilteredCards();
-                    var index = cards.indexOf(commandValue.scrollToCardAfter);
-                    index = Math.max(0, index - 1);
-                    var toScrollTo = cards[index];
-
-                    lookup.scrollToCard(toScrollTo.Note.id);
-                }
-                else
-                {
-                    if(typeof(commandValue.scrollToLatestCard) !== 'undefined')
-                    {
-                        console.log('onListChanged_ScrollToDestination=scrollToLatestCard')
-                        var totalHeight = $("body,html").height();
-                        $("body,html").stop().animate({
-                            scrollTop: totalHeight
-                        }, 300);
-                    }
-                }
-            }
-            
-            
+            console.log('onListChanged_ScrollToDestination=scrollToLatestCard')
+            var totalHeight = $("body,html").height();
+            $("body,html").stop().animate({
+                scrollTop: totalHeight
+            }, 300);
         }
         
         lookup.scrollToDestinationCommand(undefined);

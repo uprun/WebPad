@@ -74,7 +74,6 @@
         <script language="JavaScript" type="text/javascript" src="js/scrollToCard.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/findNodeById.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/findEdgeById.js" asp-append-version="true"></script>
-        <script language="JavaScript" type="text/javascript" src="js/processMessageFromOuterSpace.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/defineLocalStorage.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/findCardByMainNodeId.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/jumpToCardOnCreate.js" asp-append-version="true"></script>
@@ -384,13 +383,13 @@
         </script>
 
         <script type="text/html" id="show-more-template">
-                <div class="w3-row" data-bind="if: $root.ShowExtendCurrentResultLimit">
+                <div class="w3-row" data-bind="if: $root.hidden_operations_count() > 0">
                    <div class="w3-col w3-container s12 m12 l12">
                        <span style="font-size: 2rem;">                    
                             <button  class="webpad-node webpad-green" 
                                 data-bind=
                                     "click: $root.ExtendCurrentResultLimit,
-                                    text: 'Show more items ( ' + $root.NumberOfHiddenSearhItems() + ' hidden)'">
+                                    text: 'Show more items ( ' + $root.hidden_operations_count() + ' hidden)'">
                             </button>
                         </span>
                    </div>

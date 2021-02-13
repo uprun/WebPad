@@ -38,24 +38,6 @@ function ConnectedNotesViewModel()
         lookup.save_Operations_to_storage(toStoreOperations, free_Operation_Index);
     });
 
-    lookup.LimitedFilteredCards = ko.observableArray([]);
-
-    
-    
-
-    lookup.backendWorker.addListener('LimitedFilteredCards.changed.event', function(cards) 
-    {
-        lookup.LimitedFilteredCards.removeAll();
-        var processed = ko.utils.arrayMap(cards, function(item) {
-            var node = new lookup.model_Node(item.Note_serialized)
-            item.Note = node;
-            var card = new lookup.model_Card(item);
-            return card;
-        });
-        
-        ko.utils.arrayPushAll(lookup.LimitedFilteredCards, processed);
-    });
-
 
     lookup.LimitedFilteredOperations = ko.observableArray([]);
     lookup.backendWorker.addListener('LimitedFilteredOperations.changed.event', function(cards) 
@@ -69,50 +51,15 @@ function ConnectedNotesViewModel()
         ko.utils.arrayPushAll(lookup.LimitedFilteredOperations, processed);
     });
 
-    
-
-    lookup.filtered_cards_length = ko.observable(0);
-
-
-    
-
-    lookup.backendWorker.addListener('FilteredCards.length.changed', function(length) 
+    lookup.hidden_operations_count = ko.observable(0);
+    lookup.backendWorker.addListener('NumberOfHiddenOperations.changed', function(length) 
     {
-        console.log('FilteredCards.length.changed: ' + length);
-        lookup.filtered_cards_length(length);
+        lookup.hidden_operations_count(length);
     });
-
-
-    lookup.ShowExtendCurrentResultLimit = ko.pureComputed(function()
-    {
-        return lookup.filtered_cards_length() > lookup.CurrentResultLimit();
-    });
-
-    lookup.NumberOfHiddenSearhItems = ko.pureComputed(function()
-    {
-        return lookup.filtered_cards_length() - lookup.CurrentResultLimit();
-    });
-
-
-    lookup.CurrentResultLimit = ko.observable(45);
-
-    lookup.ResetCurrentResultLimit = function()
-    {
-        lookup.CurrentResultLimit(45);
-    };
-
-    lookup.ExtendAmountForCurrentResultLimit = 45;
-
 
     lookup.ExtendCurrentResultLimit = function()
     {
-        var currentCards = lookup.LimitedFilteredCards();
-        if(currentCards.length > 0)
-        {
-            var bottomCard = currentCards[0];
-            lookup.onListChanged_set_scrollToCardAfter(bottomCard);
-        }
-        lookup.CurrentResultLimit(lookup.CurrentResultLimit() + lookup.ExtendAmountForCurrentResultLimit);
+        lookup.backendWorker.sendQuery("ExtendCurrentResultLimit");
     };
 
     if(typeof(Worker) == "undefined") {
