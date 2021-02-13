@@ -1,43 +1,23 @@
 lookup.export = function()
 {
-    var toStoreNotes = ko.utils.arrayMap(lookup.Notes(), function(item) {
-        return item.ConvertToJs();
-    });
-    var toStoreConnections = ko.utils.arrayMap(lookup.Connections(), function(item) {
-        return item.ConvertToJs();
-    });
+    var toExport = {};
 
-    toStoreNotes = toStoreNotes
-        .sort(
-            function(left, right)
-            {
-                if(left.createDate === right.createDate)
-                {
-                    return 0;
-                }
-                else
-                {
-                    if(left.createDate < right.createDate)
-                    {
-                        return -1;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
-                }
-            }
-        );
+    if(typeof(lookup.localStorage["Notes"]) !== 'undefined')
+    {
+        toExport.Notes = JSON.parse(lookup.localStorage.getItem("Notes"));
+        toExport.Connections = JSON.parse(lookup.localStorage.getItem("Connections"));
+    }
+    if(typeof(lookup.localStorage["Operations"]) !== 'undefined')
+    {
+        toExport.Operations = JSON.parse(lookup.localStorage.getItem("Operations"));
+    }
 
-    var toExport = {
-        Notes: toStoreNotes,
-        Connections: toStoreConnections,
-        localFreeIndex: lookup.freeLocalIndex
-
-    };
-
+    
     var content = JSON.stringify(toExport);
     lookup.download(content, 'snapshot.txt', 'text/plain');
+
+    
+    
 
 
 };

@@ -17,7 +17,7 @@ lookup.loadNotes = function()
                 lookup.backendWorker.addListener('populate.finished', function()
                 {
                     console.log('populate.finished');
-                    lookup.backendWorker.sendQuery('migrate_to_Operations', data);
+                    lookup.backendWorker.sendQuery('migrate_to_Operations');
                 });
                 lookup.backendWorker.sendQuery('populate', data);
             }

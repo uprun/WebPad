@@ -11,14 +11,29 @@ lookup.import = function()
             { 
                 var result = e.target.result; 
                 var parsed = JSON.parse(result);
-                if(typeof(parsed.Notes) !== 'undefined' && 
-                typeof(parsed.Connections) !== 'undefined')
+                if
+                (
+                    typeof(parsed.Notes) !== 'undefined' && 
+                    typeof(parsed.Connections) !== 'undefined'
+                )
                 {
                     var data = {};
                     data.notes = parsed.Notes;
                     data.connections = parsed.Connections
-                    lookup.populate_reset_helpers();
-                    lookup.populate(data);
+                    lookup.backendWorker.addListener('populate.finished', function()
+                    {
+                        console.log('populate.finished');
+                        lookup.backendWorker.sendQuery('migrate_to_Operations');
+                    });
+                    lookup.backendWorker.sendQuery('populate', data);
+                }
+                if(typeof(parsed.Operations) !== 'undefined')
+                {
+                    var operationsData = 
+                    {
+                        Operations: parsed.Operations
+                    };
+                    lookup.backendWorker.sendQuery('populate_Operations', operationsData);
                 }
                 
             }; 
