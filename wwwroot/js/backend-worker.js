@@ -201,31 +201,35 @@ function on_operations_changed(changes)
             );
 
         if (addedChanges && addedChanges.length > 0) {
-            var toStoreOperations = ko.utils.arrayMap(lookup.Operations(), function (item) {
+            var toStoreOperations = ko.utils.arrayMap
+            (
+                lookup.Operations(), 
+                function (item) {
                 return item.ConvertToJs()
-            })
+                }
+            );
 
             toStoreOperations = toStoreOperations
                 .sort(
                     function (left, right) {
                         if (left.time === right.time) {
-                            return 0
+                            return 0;
                         }
 
                         else {
                             if (left.time < right.time) {
-                                return -1
+                                return -1;
                             }
 
                             else {
-                                return 1
+                                return 1;
                             }
                         }
                     }
-                )
+                );
 
 
-            reply('saveOperationsToStorage.event', toStoreOperations)
+            reply('saveOperationsToStorage.event', toStoreOperations);
         }
     }
 };

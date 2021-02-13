@@ -35,6 +35,24 @@ lookup.migrate_to_Operations = function()
         }
     );
 
+    buffer = buffer.sort(
+        function (left, right) {
+            if (left.time === right.time) {
+                return 0;
+            }
+
+            else {
+                if (left.time < right.time) {
+                    return -1;
+                }
+
+                else {
+                    return 1;
+                }
+            }
+        }
+    );
+
     ko.utils.arrayPushAll(lookup.Operations, buffer);
 };
 
