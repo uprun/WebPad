@@ -278,7 +278,23 @@
         </script>
 
         <script type="text/html" id="text-with-dictionary-light-template">
-            <!-- ko foreach: $data.textSplitted -->            
+            <!-- ko foreach: $data.textSplitted -->  
+                <!-- ko if: $data.word.startsWith('https://') -->
+                    <a class="webpad-break-words-node" target="_blank" data-bind="
+                        text: word,
+                        style:
+                        {
+                            color: $parent.color,
+                            'word-break': word.length < 20 ? 'break-word' : 'break-all',
+                        },
+                        attr:
+                        {
+                            href: word
+                        }
+                            ">
+                    </a>
+                <!-- /ko -->
+                <!-- ko ifnot: $data.word.startsWith('https://') -->         
                     <span class="webpad-break-words-node webpad-border-bottom-dotted" data-bind="
                         text: word,
                         style:
@@ -290,7 +306,8 @@
                         },
                         click: $root.jumpToCardFromWord
                             ">
-                    </span>            
+                    </span>
+                <!-- /ko -->            
             <!-- /ko -->
         </script>
 
@@ -324,7 +341,7 @@
                                     <span data-bind="visible: $data.toolBoxVisible">
                                         <span  class="w3-animate-opacity webpad-brightness-dimmed">
                                             <span class="webpad-button-no-border webpad-brightness-dimmed webpad-golden-frame" 
-                                                style="font-size: 1.4em; padding-left: 0.5em; padding-right: 0.5em; " data-bind=" click: $root.jumpToCardFromQuotedOperation">
+                                                style="font-size: 1.4rem; padding-left: 0.5rem; padding-right: 0.5rem; " data-bind=" click: $root.jumpToCardFromQuotedOperation">
                                                 <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
                                             </span>
                                             <span

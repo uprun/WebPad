@@ -17,6 +17,7 @@ importScripts("SearchNotesQuery.js")
 importScripts("findCardByMainNodeId.js")
 importScripts("populate_Operations.js")
 importScripts("Operation_was_added.js")
+importScripts("demo_notes_en.js")
 
 
 
@@ -44,6 +45,7 @@ lookup.CurrentResultLimit = ko.observable(45);
 
 
 // in Operations fisrt ones are the oldest one, or at least they will be after first save
+lookup.Operations = ko.observableArray([]);
 
 lookup
     .Operations
@@ -58,43 +60,65 @@ lookup
         "arrayChange"
     );
 
+    lookup.Operations_And_Demo = ko.pureComputed(
+        function()
+        {
+            if(lookup.Operations().length == 0)
+            {
+                return ko.utils.arrayMap(
+                    lookup.demo_notes_en,
+                    function(item)
+                    {
+                        return new lookup.model_Operation(item);
+                    }
+                );
+            }
+            else
+            {
+                return lookup.Operations();
+            }
+
+        }
+    );
+
     lookup.FilteredOperations = ko.pureComputed
         (
             function()
-            {
+            {                
                 var search_query = lookup.SearchNotesQuery().trim().toLowerCase();
+                var operationsToWorkWith = lookup.Operations_And_Demo();
                 if(search_query.length === 0)
                 {
-                    return lookup.Operations();
+                    return operationsToWorkWith;
                 }
                 else
                 {
-                    // classic approach
+                    // classic search approach
                     return ko.utils.arrayFilter
-                        (
-                            lookup.Operations(),
-                            function(item, index)
+                    (
+                        operationsToWorkWith,
+                        function(item, index)
+                        {
+                            if(item.name === 'create')
                             {
-                                if(item.name === 'create')
+                                var searchResult = item.data.text.toLowerCase().indexOf(search_query) >= 0;
+                                return searchResult;
+                            }
+                            else
+                            {
+                                if(item.name === 'quote' || item.name === 'quote-edit')
                                 {
-                                    var searchResult = item.data.text.toLowerCase().indexOf(search_query) >= 0;
-                                    return searchResult;
+                                    var searchResult1 = item.data.quoted.text.toLowerCase().indexOf(search_query) >= 0;
+                                    var searchResult2 = item.data.current.text.toLowerCase().indexOf(search_query) >= 0;
+                                    return searchResult1 || searchResult2;
                                 }
                                 else
                                 {
-                                    if(item.name === 'quote' || item.name === 'quote-edit')
-                                    {
-                                        var searchResult1 = item.data.quoted.text.toLowerCase().indexOf(search_query) >= 0;
-                                        var searchResult2 = item.data.current.text.toLowerCase().indexOf(search_query) >= 0;
-                                        return searchResult1 || searchResult2;
-                                    }
-                                    else
-                                    {
-                                        return false;
-                                    }
+                                    return false;
                                 }
                             }
-                        );
+                        }
+                    );
                 }
             }
         );

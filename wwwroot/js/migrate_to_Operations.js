@@ -1,4 +1,4 @@
-lookup.Operations = ko.observableArray([]);
+
 lookup.migrate_to_Operations = function()
 {
     var toProcess = lookup.Notes();

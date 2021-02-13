@@ -35,7 +35,7 @@ lookup.model_Operation = function(data)
     self.switchToolBoxVisibility = function()
     {
         self.toolBoxVisible(!self.toolBoxVisible());
-
+        return true;
     };
 };
 
