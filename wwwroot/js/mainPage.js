@@ -38,6 +38,8 @@ function ConnectedNotesViewModel()
         lookup.save_Operations_to_storage(toStoreOperations);
     });
 
+    lookup.check_platform();
+
 
     lookup.LimitedFilteredOperations = ko.observableArray([]);
     lookup.backendWorker.addListener('LimitedFilteredOperations.changed.event', function(cards) 

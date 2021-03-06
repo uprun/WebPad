@@ -135,6 +135,7 @@
 
         <script language="JavaScript" type="text/javascript" src="js/save_Operations_to_storage.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/model_Operation.js" asp-append-version="true"></script>
+        <script language="JavaScript" type="text/javascript" src="js/privacy_policy_link.js" asp-append-version="true"></script>
 
         <script language="JavaScript" type="text/javascript" src="js/mainPage.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/cardAfterRender.js" asp-append-version="true"></script>
@@ -504,7 +505,10 @@
                     if you have any suggestions feel free to e-mail me: <a href="mailto:oleksandr.kryvonos.ods.ua@gmail.com">oleksandr.kryvonos.ods.ua@gmail.com</a><br/>
                 </address> 
                 <br/>
-                <h2 style="padding-left: 1rem;"><a style="color: rgb(132, 191, 255);" href="/privacy_policy.html">Privacy policy</a></h2>
+                <h2 style="padding-left: 1rem;"><a style="color: rgb(132, 191, 255);" data-bind="attr:
+                        {
+                            href: privacy_policy_link
+                        }">Privacy policy</a></h2>
                 
             </div>
         </div>
