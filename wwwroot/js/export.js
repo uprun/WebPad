@@ -42,27 +42,40 @@ lookup.download = function(content, fileName, contentType) {
     a.click();
 };
 
+lookup.android_file_error_handler = function()
+{
+
+};
 
 lookup.Android_file_download = function(content, fileName, contentType)
 {
-    window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory, function (dirEntry) {
-        dirEntry.getFile(fileName, { create: true }, function (fileEntry) {
-             fileEntry.createWriter(function (fileWriter) {
-
-                 fileWriter.onwriteend = function (e) {
-                     console.log('Write completed.');
-                 };
-
-                 fileWriter.onerror = function (e) {
-                     console.log('Write failed: ' + e.toString());
-                 };
-
-                 // Create a new Blob and write it to log.txt.
-                 var blob = new Blob([content], { type: contentType });
-
-                 fileWriter.write(blob);
-
-             }, errorHandler);
-         });
+    window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory, function (dirEntry) 
+    {
+        dirEntry.getFile(fileName, { create: true, exclusive: false }, function (fileEntry) 
+        {
+            lookup.Android_write_file(fileEntry, content, contentType);
+            
+        }, lookup.android_file_error_handler);
      });
+};
+
+lookup.Android_write_file = function(fileEntry, content, contentType)
+{
+    fileEntry.createWriter(function (fileWriter) {
+
+        fileWriter.onwriteend = function() {
+            console.log("Successful file write...");
+            //readFile(fileEntry);
+        };
+
+        fileWriter.onerror = function (e) {
+            console.log("Failed file write: " + e.toString());
+        };
+
+        
+        var dataObj = new Blob([content], { type: contentType });
+
+        fileWriter.write(dataObj);
+    });
+
 };
