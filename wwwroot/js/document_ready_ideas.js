@@ -9,5 +9,5 @@ $(document).ready(function()
         viewModel.getViewPortScrollPosition();
     }, true);
     viewModel.loadNotes();
-    //setTimeout(viewModel.ActualGenerateConnections, 3000);
+    viewModel.check_platform();
 });
