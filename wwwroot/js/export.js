@@ -15,6 +15,8 @@ lookup.export = function()
     
     var content = JSON.stringify(toExport);
     
+    var dateTime = new Date();
+    var fileName = "WebPad-snapshot-" + dateTime.toDateString() + ".txt";
 
 
     if (window.cordova && cordova.platformId !== "browser") 
@@ -22,11 +24,11 @@ lookup.export = function()
         // document.addEventListener("deviceready", function () {
         //   // save file using codova-plugin-file
         // });
-        lookup.Android_file_download(content, 'WebPad-snapshot.txt', 'text/plain');
+        lookup.Android_file_download(content, fileName, 'text/plain');
     } 
     else
     {
-        lookup.download(content, 'WebPad-snapshot.txt', 'text/plain');
+        lookup.download(content, fileName, 'text/plain');
     }
     
     
