@@ -6,3 +6,4 @@ obj
 obj/*
 **/obj/*
 packages/*
+.DS_Store
