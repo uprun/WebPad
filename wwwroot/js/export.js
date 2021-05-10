@@ -19,7 +19,7 @@ lookup.export = function()
     var fileName = "WebPad-snapshot-" + dateTime.toDateString() + ".txt";
 
 
-    if (window.cordova && cordova.platformId !== "browser") 
+    if (lookup.platform_is_cordova_android()) 
     {
         // document.addEventListener("deviceready", function () {
         //   // save file using codova-plugin-file
