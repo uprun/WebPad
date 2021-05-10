@@ -1,34 +1,3 @@
-lookup.platform_is_cordova = ko.observable(false);
-lookup.platform_is_cordova_electron_mac = ko.observable(false);
-lookup.platform_is_cordova_android = ko.observable(false);
-
-lookup.check_platform = function()
-{
-    if(typeof(window.cordova) !== 'undefined')
-    {
-        lookup.platform_is_cordova(true);
-
-        if(
-            typeof(navigator) !== 'undefined' && 
-            (navigator.platform === "MacIntel")
-        )
-        {
-            lookup.platform_is_cordova_electron_mac(true);
-        }
-        else
-        {
-            lookup.platform_is_cordova_android(true);
-        }
-    }
-    
-
-    // if (window.cordova && cordova.platformId !== "browser") {
-    //     lookup.platform_is_mobile(true);
-    // }
-};
-
-
-
 lookup.privacy_policy_link = ko.computed(function()
 {
     if(lookup.platform_is_cordova())
@@ -40,7 +9,7 @@ lookup.privacy_policy_link = ko.computed(function()
         }
         else
         {
-            return "file:///android_asset/www/privacy_policy.html";
+            return "file:///android_asset/www/privacy_policy_android.html";
         }
         
     }
