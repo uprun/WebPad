@@ -23,4 +23,4 @@ lookup.findEdgeById = function(id)
     
     return result;
 
-}
+};
