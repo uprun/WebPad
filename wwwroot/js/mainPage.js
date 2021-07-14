@@ -25,7 +25,7 @@ function ConnectedNotesViewModel()
 
     lookup.populateColorPresets();
 
-    lookup.backendWorker = new lookup.QueryableWorker("js/backend-worker.js?v=" + new Date().toString());
+    lookup.backendWorker = new lookup.QueryableWorker("worker-scripts/backend-worker.js?v=" + new Date().toString());
 
 
     lookup.backendWorker.addListener('saveItemsToStorage.event', function(toStoreNotes, toStoreConnections) 
