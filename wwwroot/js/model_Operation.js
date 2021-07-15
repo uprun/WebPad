@@ -37,6 +37,13 @@ lookup.model_Operation = function(data)
         self.toolBoxVisible(!self.toolBoxVisible());
         return true;
     };
+
+    self.toTupleKey = function()
+    {
+        var key = {name: self.name, data: self.data};
+        var toReturn = JSON.stringify(key);
+        return toReturn;
+    };
 };
 
 lookup.prefill_Operation = function(self, abc) {
