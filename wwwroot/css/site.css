@@ -157,6 +157,23 @@ a
     display: inline-block;
 }
 
+.webpad-button-paddings
+{
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.webpad-options-background
+{
+    background: repeating-linear-gradient(
+        45deg,
+        #3d4574,
+        #3d4574 2rem,
+        #283058 2rem,
+        #283058 4rem
+        );
+}
+
 .webpad-search-bar-adjusted
 {
     width: 100%;
@@ -327,7 +344,8 @@ a
 {
     width: 40rem;
     max-width: calc(100% - 4rem);
-    height: 100vh;
+    height: auto;
+    max-height: 100vh;
     position: fixed;
     top: 0px;
     left: 0px;
