@@ -1,5 +1,6 @@
 lookup.model_Card = function(data)
-{
+{   
+    // DEPRECATED: use model_Operation.js instead
     var self = this;
     self.Note = data.Note;
     self.isRoot = typeof(data.connections_incoming) === 'undefined';

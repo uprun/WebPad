@@ -1,5 +1,6 @@
 lookup.model_Node = function(data)
 {
+    // DEPRECATED: use model_Operation.js instead
     var self = this;
     self.id = data.id;
     self.text = ko.observable(data.text);
