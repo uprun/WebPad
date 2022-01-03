@@ -24,8 +24,11 @@ lookup.loadNotes = function()
             else
             {
                 lookup.backendWorker.sendQuery('populate_Operations', []);
+                lookup.set_option_show_help_demo_notes_to_true();
             }
         }
+
+        lookup.send_to_worker_update_for_option_show_help_demo_notes();
         
         lookup.scrollToCard_processQueue();
     };

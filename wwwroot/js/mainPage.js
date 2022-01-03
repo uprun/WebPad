@@ -21,11 +21,15 @@ function ConnectedNotesViewModel()
 
     lookup.backgroundApplySaved();
 
+    lookup.apply_saved_option_show_help_demo_notes();
+
     lookup.hashCards = {};
 
     lookup.populateColorPresets();
 
     lookup.backendWorker = new lookup.QueryableWorker("worker-scripts/backend-worker.js?v=" + new Date().toString());
+
+    lookup.send_to_worker_update_for_option_show_help_demo_notes();
 
 
     lookup.backendWorker.addListener('saveItemsToStorage.event', function(toStoreNotes, toStoreConnections) 
@@ -37,6 +41,7 @@ function ConnectedNotesViewModel()
     {
         lookup.save_Operations_to_storage(toStoreOperations);
     });
+
 
     lookup.check_platform();
 

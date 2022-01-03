@@ -129,6 +129,7 @@
         <script language="JavaScript" type="text/javascript" src="js/jumpToCardFromQuotedOperation.js" asp-append-version="true"></script>
         <script language="JavaScript" type="text/javascript" src="js/operationToBeQuoted.js" asp-append-version="true"></script>
         
+        <script language="JavaScript" type="text/javascript" src="js/option_show_help_demo_notes.js" asp-append-version="true"></script>
         
         
 
@@ -483,6 +484,33 @@
                             data-bind="click: $root.changeBackgroundToDefault">
                             darkness
                     </div>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <span class="webpad-color-blue" style="font-size: 1.4rem; " >
+                            Demo notes:
+                    </span>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange" 
+                            data-bind="
+                                click: $root.set_option_show_help_demo_notes_to_true,
+                                style:
+                                {
+                                    visibility: $root.option_show_help_demo_notes() ? 'hidden' : 'inherit'
+                                }">
+                            show
+                    </div>
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange" 
+                            data-bind="
+                                click: $root.set_option_show_help_demo_notes_to_false,
+                                style:
+                                {
+                                    visibility: $root.option_show_help_demo_notes() ? 'inherit' : 'hidden'
+                                }">
+                            hide
+                    </div>
+
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     <span class="webpad-color-blue" style="font-size: 1.4rem; " >

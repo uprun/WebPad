@@ -18,10 +18,10 @@ lookup.demo_notes_en = [
         },
         "name": "create",
         "data": {
-            "text": "or WebPad is a notes taking app",
-            "color": "#ff94eb"
+            "text": "actually WebPad is a non-hierarchical notes app",
+            "color": "#ffbbdc"
         },
-        "time": "2020-04-18T14:59:50.517Z"
+        "time": "2020-04-18T14:59:51.957Z"
     },
     {
         "id": {
@@ -30,7 +30,7 @@ lookup.demo_notes_en = [
         },
         "name": "create",
         "data": {
-            "text": "every note is connected through the words",
+            "text": "every word is a hashtag by default, try it - click any word",
             "color": "#84bfff"
         },
         "time": "2020-04-18T14:59:54.957Z"

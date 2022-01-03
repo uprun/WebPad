@@ -18,6 +18,7 @@ importScripts("../js/populate_Operations.js" + "?v=" + new Date().toString())
 importScripts("../js/Operation_was_added.js" + "?v=" + new Date().toString())
 importScripts("../js/demo_notes_en.js" + "?v=" + new Date().toString())
 importScripts("../js/populate.js" + "?v=" + new Date().toString())
+importScripts("../js/option_show_help_demo_notes.js" )//+ "?v=" + new Date().toString())
 
 lookup.actions = 
 {
@@ -59,15 +60,18 @@ lookup
     lookup.Operations_And_Demo = ko.pureComputed(
         function()
         {
-            if(lookup.Operations().length == 0)
+            const show_demo_notes = lookup.option_show_help_demo_notes();
+            if(lookup.Operations().length == 0 || show_demo_notes)
             {
-                return ko.utils.arrayMap(
+                var demo_operations = ko.utils.arrayMap(
                     lookup.demo_notes_en,
                     function(item)
                     {
                         return new lookup.model_Operation(item);
                     }
                 );
+                var combined_result = [].concat(demo_operations, lookup.Operations());
+                return combined_result;
             }
             else
             {
