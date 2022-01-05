@@ -18,7 +18,8 @@ importScripts("../js/populate_Operations.js" + "?v=" + new Date().toString())
 importScripts("../js/Operation_was_added.js" + "?v=" + new Date().toString())
 importScripts("../js/demo_notes_en.js" + "?v=" + new Date().toString())
 importScripts("../js/populate.js" + "?v=" + new Date().toString())
-importScripts("../js/option_show_help_demo_notes.js" )//+ "?v=" + new Date().toString())
+importScripts("../js/option_show_help_demo_notes.js" + "?v=" + new Date().toString())
+importScripts("../js/find_aliases.js" + "?v=" + new Date().toString())
 
 lookup.actions = 
 {
@@ -81,6 +82,8 @@ lookup
         }
     );
 
+    
+
     lookup.FilteredOperations = ko.pureComputed
         (
             function()
@@ -93,6 +96,13 @@ lookup
                 }
                 else
                 {
+                    const first_jump = lookup.find_aliases(search_query);
+                    const second_jump = first_jump.flatMap(first => lookup.find_aliases(first));
+                    var aliases = [].concat([search_query], first_jump, second_jump)
+                        .filter(query => query.length > 0);
+                    var reduced = aliases.reduce((ac, elem) => { ac[elem] = true; return ac;}, {});
+                    aliases = Object.getOwnPropertyNames(reduced);
+                    console.log(aliases);
                     // classic search approach
                     return ko.utils.arrayFilter
                     (
@@ -101,15 +111,15 @@ lookup
                         {
                             if(item.name === 'create')
                             {
-                                var searchResult = item.data.text.toLowerCase().indexOf(search_query) >= 0;
+                                var searchResult =  aliases.some( query => item.data.text.toLowerCase().indexOf(query) >= 0);
                                 return searchResult;
                             }
                             else
                             {
                                 if(item.name === 'quote' || item.name === 'quote-edit')
                                 {
-                                    var searchResult1 = item.data.quoted.text.toLowerCase().indexOf(search_query) >= 0;
-                                    var searchResult2 = item.data.current.text.toLowerCase().indexOf(search_query) >= 0;
+                                    var searchResult1 = aliases.some( query => item.data.quoted.text.toLowerCase().indexOf(query) >= 0);
+                                    var searchResult2 = aliases.some( query => item.data.current.text.toLowerCase().indexOf(query) >= 0);
                                     return searchResult1 || searchResult2;
                                 }
                                 else
