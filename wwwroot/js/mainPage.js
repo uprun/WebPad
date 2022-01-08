@@ -71,6 +71,16 @@ function ConnectedNotesViewModel()
         lookup.CurrentResultLimit(length);
     });
 
+    lookup.backendWorker.addListener('populate_Operations.finished', function(length) 
+    {
+        lookup.load_aliases();
+    });
+
+    lookup.backendWorker.addListener('import_Operations.finished', function(length) 
+    {
+        lookup.backendWorker.sendQuery('regenerate_Aliases');
+    });
+
     lookup.ExtendCurrentResultLimit = function()
     {
         lookup.onListChanged_keepHeightOffset();

@@ -20,6 +20,7 @@ importScripts("../js/demo_notes_en.js" + "?v=" + new Date().toString())
 importScripts("../js/populate.js" + "?v=" + new Date().toString())
 importScripts("../js/option_show_help_demo_notes.js" + "?v=" + new Date().toString())
 importScripts("../js/find_aliases.js" + "?v=" + new Date().toString())
+importScripts("../js/import_Operations.js" + "?v=" + new Date().toString())
 
 lookup.actions = 
 {

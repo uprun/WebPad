@@ -33,7 +33,7 @@ lookup.import = function()
                     {
                         Operations: parsed.Operations
                     };
-                    lookup.backendWorker.sendQuery('populate_Operations', operationsData);
+                    lookup.backendWorker.sendQuery('import_Operations', operationsData);
                 }
                 
             }; 
