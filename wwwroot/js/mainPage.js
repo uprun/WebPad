@@ -42,6 +42,13 @@ function ConnectedNotesViewModel()
         lookup.save_Operations_to_storage(toStoreOperations);
     });
 
+    lookup.backendWorker.addListener('saveAliasesToStorage.event', function(toStoreAliases) 
+    {
+        lookup.save_Aliases_to_storage(toStoreAliases);
+    });
+
+    
+
 
     lookup.check_platform();
 

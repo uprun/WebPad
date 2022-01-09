@@ -5,7 +5,7 @@ lookup.load_aliases = function()
         var data = {};
         if(typeof(lookup.localStorage["Aliases"]) !== 'undefined')
         {
-            data.Aliases = JSON.parse(lookup.localStorage.getItem("Aliases"));
+            data.Aliases = lookup.localStorage.getItem("Aliases");
             lookup.backendWorker.sendQuery('populate_Aliases', data);
         }
         else

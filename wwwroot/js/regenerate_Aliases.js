@@ -6,4 +6,5 @@ lookup.regenerate_Aliases = function()
         to_process.forEach(element => {
             lookup.process_potential_Alias(element);
         });
+        lookup.reply_from_backend_worker('saveAliasesToStorage.event', lookup.Aliases);
     };

@@ -1,21 +1,14 @@
 lookup.find_aliases = function(query)
     {
-        query = query.toLowerCase();
-        var operationsToWorkWith = lookup.Operations_And_Demo();
-        var aliases = operationsToWorkWith
-            .filter(item => 
-                {
-                    if(item.name === 'create')
-                    {
-                        var splitted = item.data.text.toLowerCase().split(" ").filter(x => x.length > 0);
-                        return splitted.length === 2 && (splitted[0] === query || splitted[1] === query);
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                     )
-            .flatMap( item => item.data.text.toLowerCase().split(" ").filter(x => x.length > 0));
-        return aliases;
+        // backend-worker context
+        query = query.trim().toLowerCase();
+        const found_aliases = lookup.Aliases[query];
+        if(typeof(found_aliases) === 'undefined')
+        {
+            return [];
+        }
+        else
+        {
+            return Object.getOwnPropertyNames(found_aliases).filter(element => found_aliases[element]);
+        }
     };

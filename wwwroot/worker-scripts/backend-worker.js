@@ -23,6 +23,13 @@ importScripts("../js/find_aliases.js" + "?v=" + new Date().toString())
 importScripts("../js/import_Operations.js" + "?v=" + new Date().toString())
 importScripts("../js/populate_Aliases.js" + "?v=" + new Date().toString())
 importScripts("../js/regenerate_Aliases.js" + "?v=" + new Date().toString())
+importScripts("../js/define_Aliases_if_needed.js" + "?v=" + new Date().toString())
+importScripts("../js/process_potential_Alias.js" + "?v=" + new Date().toString())
+importScripts("../js/add_Alias.js" + "?v=" + new Date().toString())
+importScripts("../js/remove_Alias.js" + "?v=" + new Date().toString())
+
+
+
 
 
 lookup.actions = 
@@ -102,6 +109,8 @@ lookup
                 {
                     const first_jump = lookup.find_aliases(search_query);
                     const second_jump = first_jump.flatMap(first => lookup.find_aliases(first));
+                    // [2022-01-09] Aliases should search only by backward-index (from word to note)
+                    // [2022-01-09] if search query matches any present word then it should search by word-backward-index
                     var aliases = [].concat([search_query], first_jump, second_jump)
                         .filter(query => query.length > 0);
                     var reduced = aliases.reduce((ac, elem) => { ac[elem] = true; return ac;}, {});
@@ -260,6 +269,8 @@ function reply() {
   if (arguments.length < 1) { throw new TypeError('reply - not enough arguments'); return; }
   postMessage({ 'queryMethodListener': arguments[0], 'queryMethodArguments': Array.prototype.slice.call(arguments, 1) });
 }
+
+lookup.reply_from_backend_worker = reply;
 
 onmessage = function(oEvent) {
   if (oEvent.data instanceof Object && oEvent.data.hasOwnProperty('queryMethod') && oEvent.data.hasOwnProperty('queryMethodArguments')) {
