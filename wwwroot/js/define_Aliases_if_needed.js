@@ -9,6 +9,9 @@ lookup.define_Aliases_if_needed = function() {
             },
             'month': {
                 'months': true
+            },
+            'monthes': {
+                'months': true
             }
         };
     }

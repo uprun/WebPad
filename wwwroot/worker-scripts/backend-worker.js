@@ -24,7 +24,6 @@ importScripts("../js/import_Operations.js" + "?v=" + new Date().toString())
 importScripts("../js/populate_Aliases.js" + "?v=" + new Date().toString())
 importScripts("../js/regenerate_Aliases.js" + "?v=" + new Date().toString())
 importScripts("../js/define_Aliases_if_needed.js" + "?v=" + new Date().toString())
-importScripts("../js/process_potential_Alias.js" + "?v=" + new Date().toString())
 importScripts("../js/add_Alias.js" + "?v=" + new Date().toString())
 importScripts("../js/remove_Alias.js" + "?v=" + new Date().toString())
 

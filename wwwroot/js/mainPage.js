@@ -80,6 +80,7 @@ function ConnectedNotesViewModel()
 
     lookup.backendWorker.addListener('populate_Operations.finished', function(length) 
     {
+        //[2022-05-01] no aliases for current release, I will create a seperate UI-screen for adding them
         lookup.load_aliases();
     });
 
