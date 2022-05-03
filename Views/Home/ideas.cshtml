@@ -547,7 +547,9 @@
                             import
                     </div>
                 </div>
-                <div class="w3-col w3-container s12 m12 l12">
+                <div 
+                    class="w3-col w3-container s12 m12 l12" 
+                    data-bind="ifnot: $root.platform_is_cordova()" >
                     <br/> 
                     <div
                         class="lisperanto-patreon">
