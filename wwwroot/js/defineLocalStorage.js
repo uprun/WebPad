@@ -30,5 +30,6 @@ lookup.defineLocalStorage = function()
     }
     else {
         // Too bad, no localStorage for us
+        alert("No local storage");
     }
 };
