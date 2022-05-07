@@ -16,6 +16,10 @@ https://www.patreon.com/o_kryvonos
 
 https://discord.gg/W5HFSKVXgc
 
+# Follow me on Twitter
+
+https://twitter.com/o_kryvonos
+
 ## Building
 
 ```
