@@ -11,6 +11,11 @@ Try it now at https://webpad.com.ua
 
 https://www.patreon.com/o_kryvonos
 
+
+# Join Discord server 
+
+https://discord.gg/W5HFSKVXgc
+
 ## Building
 
 ```
