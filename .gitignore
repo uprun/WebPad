@@ -1,6 +1,7 @@
 *.db
 bin
 bin/*
+bin-linux-2.2/*
 **/bin/*
 obj
 obj/*

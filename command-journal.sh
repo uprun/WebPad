@@ -1,1 +1,1 @@
-journalctl --unit kestrel-asp.service --reverse
+journalctl --unit webpad.service --reverse
