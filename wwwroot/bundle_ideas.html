@@ -3135,6 +3135,30 @@ $(document).ready(function()
                             href: privacy_policy_link
                         }">Privacy policy</a>
                     </h2>
+                    <div style="height: 0.8rem;"></div>
+                </div>
+                <div 
+                    class="w3-col w3-container s12 m12 l12" 
+                    data-bind="ifnot: $root.platform_is_cordova()" >
+                    <span
+                        class="lisperanto-patreon">
+                        <a 
+                            href="https://www.patreon.com/o_kryvonos" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            onclick="lookup.patreonLinkOnClick(event)"
+                            >
+                            Support on Patreon
+                        </a>
+                    </span>
+                    <span
+                        class="mypage-discord">
+                        <a href="https://discord.gg/W5HFSKVXgc">Join Discord</a>
+                    </span>
+                    <span
+                        class="mypage-android">
+                        <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">Android app</a>
+                    </span>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     <span class="webpad-color-blue" style="font-size: 1.4rem; " >
@@ -3197,22 +3221,6 @@ $(document).ready(function()
                     <div style="font-size: 1.4rem;" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple prevent-select cursor-pointer" 
                             data-bind="click: $root.import">
                             import
-                    </div>
-                </div>
-                <div 
-                    class="w3-col w3-container s12 m12 l12" 
-                    data-bind="ifnot: $root.platform_is_cordova()" >
-                    <br/> 
-                    <div
-                        class="lisperanto-patreon">
-                        <a 
-                            href="https://www.patreon.com/o_kryvonos" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            onclick="lookup.patreonLinkOnClick(event)"
-                            >
-                            Support on Patreon
-                        </a>
                     </div>
                 </div>
                 

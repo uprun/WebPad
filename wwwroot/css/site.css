@@ -505,4 +505,31 @@ div.webpad-hide-on-large-screen
 .cursor-pointer {
     cursor: pointer;
 }
-  
+
+.mypage-discord{
+    background:#404eed;
+    color:#fff;
+    border-radius: 3rem;
+    padding: 0.5rem;
+    border: 0.2rem solid #404eed;
+    display: inline-block;
+}
+
+.mypage-android{
+    background:#14f21f;
+    color:#000000;
+    border-radius: 3rem;
+    padding: 0.5rem;
+    border: 0.2rem solid #000000;
+    display: inline-block;
+}
+
+.mypage-discord > a
+{
+    color: inherit;
+} 
+
+.mypage-android > a
+{
+    color: inherit;
+} 
