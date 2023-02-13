@@ -495,4 +495,10 @@ div.webpad-hide-on-large-screen
     border: 0.2rem solid rgb(255, 66, 77);
     display: inline-block;
   }
+
+.prevent-select {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
   
