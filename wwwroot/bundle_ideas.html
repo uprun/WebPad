@@ -2599,6 +2599,18 @@ lookup.patreonLinkOnClick = function(event)
 </script>
 
 <script>
+// Begin of "js/patreonSupporters.js"
+// as of date 2022-07-27
+lookup.patreonSupporters = ko.observableArray(
+    [
+        "Alexander Obenauer",
+        "Justin Shaffner"
+    ]
+);
+// End of "js/patreonSupporters.js"
+</script>
+
+<script>
 // Begin of "js/mainPage.js"
 
 
@@ -3091,6 +3103,29 @@ $(document).ready(function()
                     <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
                         : personal wiki
                     </span>
+                    <span 
+                        class="" 
+                        data-bind="ifnot: $root.platform_is_cordova()" >
+                        <span
+                            class="lisperanto-patreon">
+                            <a 
+                                href="https://www.patreon.com/o_kryvonos" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                onclick="lookup.patreonLinkOnClick(event)"
+                                >
+                                Support on Patreon
+                            </a>
+                        </span>
+                        <span
+                            class="mypage-discord">
+                            <a href="https://discord.gg/W5HFSKVXgc">Join Discord</a>
+                        </span>
+                        <span
+                            class="mypage-android">
+                            <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">Android app</a>
+                        </span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -3224,12 +3259,20 @@ $(document).ready(function()
                     </div>
                 </div>
                 
-                <div class="w3-col w3-container s12 m12 l12">
-                    <br/> 
+                <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
+                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Development is supported by:</span>
+                </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
+                    <!-- ko foreach: $root.patreonSupporters -->
+                    <div class="webpad-color-coral"
+                        data-bind="text: $data">
+                    </div>
+                    <!-- /ko -->
                 </div>
                 
-                <address class="webpad-color-yellow" style="padding-left: 1rem;">
-                    This app is created by Oleksandr Kryvonos, a developer from Odesa, Ukraine. <br/>
+                <address class="webpad-color-yellow" style="padding-left: 1rem; margin-bottom: 1rem;">
+                    This app is created by <span class="webpad-color-coral" style="font-size: 1.4rem;">Oleksandr Kryvonos</span>, a developer from Odesa, Ukraine  <span style="font-size: 2rem;">&#127482;&#127462;</span>  . <br/>
                     It is an open-source project: <a href="https://github.com/uprun/WebPad">https://github.com/uprun/WebPad</a> <br/>
                     
                     if you have any suggestions feel free to e-mail me: <a href="mailto:oleksandr.kryvonos.ods.ua@gmail.com">oleksandr.kryvonos.ods.ua@gmail.com</a><br/>
