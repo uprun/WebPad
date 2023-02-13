@@ -421,12 +421,12 @@
                    </div>
                 </div>
         </script>
-        <div id="webpad-header-absolute-position" class="webpad-header-absolute-position" style="display: none;" data-bind="visible: !$root.menuIsOpen()">
+        <div id="webpad-header-absolute-position" class="webpad-header-absolute-position prevent-select" style="display: none;" data-bind="visible: !$root.menuIsOpen()">
             <div class="w3-row">
                 <div class="w3-col w3-container s12 m12 l12">
-                    <div class=" webpad-button-no-border webpad-golden-frame" data-bind="click: $root.toggleMenu">
+                    <div class=" webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind="click: $root.toggleMenu">
                         <span style="font-size: 2rem;">
-                            <img src="svg/bars.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="open menu"/> 
+                            <img src="svg/bars.svg" class="webpad-edit-pencil " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="open menu"/> 
                         </span>
                         
                     </div>
@@ -456,7 +456,7 @@
                     'webpad-menu-animate-fade-back': !$root.menuIsOpen()
                 }">
             <div class="w3-row webpad-sky-frame webpad-options-background">
-                <div class="w3-col w3-container s12 m12 l12">
+                <div class="w3-col w3-container s12 m12 l12 prevent-select">
                     <span class="webpad-color-yellow" style="font-size: 2rem;">
                         Web
                     </span>
@@ -469,7 +469,7 @@
                     <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
                         : options
                     </span>
-                    <div style="float: right;" class=" webpad-button-no-border webpad-golden-frame" data-bind="click: $root.toggleMenu">
+                    <div style="float: right;" class=" webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind="click: $root.toggleMenu">
                         <span style="font-size: 2rem;">
                             <img src="svg/times-close-menu.svg" class="webpad-edit-pencil" alt="close menu"/> 
                         </span>
@@ -490,11 +490,11 @@
                     </span>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
-                    <div style="font-size: 1.4rem; background: #333" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-coral" 
+                    <div style="font-size: 1.4rem; background: #333" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-coral prevent-select cursor-pointer" 
                             data-bind="click: $root.changeBackground">
                             graphite
                     </div>
-                    <div style="font-size: 1.4rem; background: #000" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple" 
+                    <div style="font-size: 1.4rem; background: #000" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple prevent-select cursor-pointer" 
                             data-bind="click: $root.changeBackgroundToDefault">
                             darkness
                     </div>
@@ -506,7 +506,7 @@
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange" 
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
                             data-bind="
                                 click: $root.set_option_show_help_demo_notes_to_true,
                                 style:
@@ -515,7 +515,7 @@
                                 }">
                             show
                     </div>
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange" 
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
                             data-bind="
                                 click: $root.set_option_show_help_demo_notes_to_false,
                                 style:
@@ -533,7 +533,7 @@
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     <div style="color: yellow;">All data is stored only on your device, use export regularly to perform a backup:</div>
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange" 
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
                             data-bind="click: $root.export">
                             export
                     </div>
@@ -542,7 +542,7 @@
                     <label for="importSnapshotFile" style="color: yellow;">Select a snapshot file to import:</label>
                     <br/>
                     <input type="file" id="importSnapshotFile" style="width: 20rem; color: yellow;" >
-                    <div style="font-size: 1.4rem;" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple" 
+                    <div style="font-size: 1.4rem;" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple prevent-select cursor-pointer" 
                             data-bind="click: $root.import">
                             import
                     </div>

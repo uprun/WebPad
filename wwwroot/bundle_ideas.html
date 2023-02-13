@@ -10,7 +10,7 @@
     
 
     <meta name="description" content="Wiki, personal wiki.">
-    <meta name="keywords" content="wiki, personal wiki, personal-wiki, todo, note taking app, note-taking, link notes">
+    <meta name="keywords" content="wiki, personal wiki, personal-wiki, note taking app, note-taking, link notes">
     <meta name="author" content="Kryvonos Oleksandr">
 
     <!-- Facebook's OpenGraph protocol meta start -->
@@ -31,13 +31,13 @@
     <meta property="og:video" content="https://www.youtube.com/watch?v=SxVn7iSVn3A" />
     <!-- Facebook's OpenGraph protocol meta end -->
     
-    <link rel="manifest" href="json/manifest.json" asp-append-version="true">
-    <script src="lib/jquery/jquery.js" asp-append-version="true" lisperanto-skip-bundle="true"></script>
+    <link rel="manifest" href="json/manifest.json" >
+    <script src="lib/jquery/jquery.js"  lisperanto-skip-bundle="true"></script>
     
-    <script src="lib/knockout/knockout-latest.debug.js" asp-append-version="true" lisperanto-skip-bundle="true"></script>
+    <script src="lib/knockout/knockout-latest.debug.js"  lisperanto-skip-bundle="true"></script>
 
 
-    <link rel="stylesheet" href="css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="css/site.css" />
 
     <link rel="apple-touch-icon" sizes="32x32" href="/WebPad_logo_32.png">
     <link rel="apple-touch-icon" sizes="57x57" href="/WebPad_logo_57.png">
@@ -59,9 +59,9 @@
 
 
         
-        <link rel="stylesheet" href="css/w3-4.13.css" asp-append-version="true"> 
+        <link rel="stylesheet" href="css/w3-4.13.css" > 
         
-        <link rel="stylesheet" href="css/site.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="css/site.css" />
 <script>
 // Begin of "js/knockout-extension-contentEditable.js"
 ko.bindingHandlers.htmlLazy = {
@@ -3069,12 +3069,12 @@ $(document).ready(function()
                    </div>
                 </div>
         </script>
-        <div id="webpad-header-absolute-position" class="webpad-header-absolute-position" style="display: none;" data-bind="visible: !$root.menuIsOpen()">
+        <div id="webpad-header-absolute-position" class="webpad-header-absolute-position prevent-select" style="display: none;" data-bind="visible: !$root.menuIsOpen()">
             <div class="w3-row">
                 <div class="w3-col w3-container s12 m12 l12">
-                    <div class=" webpad-button-no-border webpad-golden-frame" data-bind="click: $root.toggleMenu">
+                    <div class=" webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind="click: $root.toggleMenu">
                         <span style="font-size: 2rem;">
-                            <img src="svg/bars.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="open menu"/> 
+                            <img src="svg/bars.svg" class="webpad-edit-pencil " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="open menu"/> 
                         </span>
                         
                     </div>
@@ -3104,7 +3104,7 @@ $(document).ready(function()
                     'webpad-menu-animate-fade-back': !$root.menuIsOpen()
                 }">
             <div class="w3-row webpad-sky-frame webpad-options-background">
-                <div class="w3-col w3-container s12 m12 l12">
+                <div class="w3-col w3-container s12 m12 l12 prevent-select">
                     <span class="webpad-color-yellow" style="font-size: 2rem;">
                         Web
                     </span>
@@ -3117,7 +3117,7 @@ $(document).ready(function()
                     <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
                         : options
                     </span>
-                    <div style="float: right;" class=" webpad-button-no-border webpad-golden-frame" data-bind="click: $root.toggleMenu">
+                    <div style="float: right;" class=" webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind="click: $root.toggleMenu">
                         <span style="font-size: 2rem;">
                             <img src="svg/times-close-menu.svg" class="webpad-edit-pencil" alt="close menu"/> 
                         </span>
@@ -3138,11 +3138,11 @@ $(document).ready(function()
                     </span>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
-                    <div style="font-size: 1.4rem; background: #333" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-coral" 
+                    <div style="font-size: 1.4rem; background: #333" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-coral prevent-select cursor-pointer" 
                             data-bind="click: $root.changeBackground">
                             graphite
                     </div>
-                    <div style="font-size: 1.4rem; background: #000" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple" 
+                    <div style="font-size: 1.4rem; background: #000" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple prevent-select cursor-pointer" 
                             data-bind="click: $root.changeBackgroundToDefault">
                             darkness
                     </div>
@@ -3154,7 +3154,7 @@ $(document).ready(function()
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange" 
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
                             data-bind="
                                 click: $root.set_option_show_help_demo_notes_to_true,
                                 style:
@@ -3163,7 +3163,7 @@ $(document).ready(function()
                                 }">
                             show
                     </div>
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange" 
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
                             data-bind="
                                 click: $root.set_option_show_help_demo_notes_to_false,
                                 style:
@@ -3181,7 +3181,7 @@ $(document).ready(function()
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     <div style="color: yellow;">All data is stored only on your device, use export regularly to perform a backup:</div>
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange" 
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
                             data-bind="click: $root.export">
                             export
                     </div>
@@ -3190,7 +3190,7 @@ $(document).ready(function()
                     <label for="importSnapshotFile" style="color: yellow;">Select a snapshot file to import:</label>
                     <br/>
                     <input type="file" id="importSnapshotFile" style="width: 20rem; color: yellow;" >
-                    <div style="font-size: 1.4rem;" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple" 
+                    <div style="font-size: 1.4rem;" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple prevent-select cursor-pointer" 
                             data-bind="click: $root.import">
                             import
                     </div>
