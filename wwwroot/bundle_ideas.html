@@ -1,0 +1,3455 @@
+<!DOCTYPE html>
+<html>
+<head prefix="og: http://ogp.me/ns#">
+    <title>WebPad</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#333333" />
+    <meta name="application-name" content="WebPad">
+    <meta name="msapplication-TileColor" content="#333333">
+    
+
+    <meta name="description" content="Wiki, personal wiki.">
+    <meta name="keywords" content="wiki, personal wiki, personal-wiki, todo, note taking app, note-taking, link notes">
+    <meta name="author" content="Kryvonos Oleksandr">
+
+    <!-- Facebook's OpenGraph protocol meta start -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="WebPad" />
+    
+    <meta property="og:image" content="https://webpad.com.ua/WebPad_logo_500.png" />
+    <meta property="og:image:secure_url" content="https://webpad.com.ua/WebPad_logo_500.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="500" />
+    <meta property="og:image:height" content="500" />
+    <meta property="og:image:alt" content="The WebPad logo that consists of 4 colored lightning symbol, that l: orange, purple, green and yellow." />
+
+    <meta property="og:url" content="https://webpad.com.ua/" />
+    <meta property="og:description" content="Wiki, personal wiki." />
+    <meta property="og:determiner" content="the" />
+    <meta property="og:site_name" content="WebPad" />
+    <meta property="og:video" content="https://www.youtube.com/watch?v=SxVn7iSVn3A" />
+    <!-- Facebook's OpenGraph protocol meta end -->
+    
+    <link rel="manifest" href="json/manifest.json" asp-append-version="true">
+    <script src="lib/jquery/jquery.js" asp-append-version="true" lisperanto-skip-bundle="true"></script>
+    
+    <script src="lib/knockout/knockout-latest.debug.js" asp-append-version="true" lisperanto-skip-bundle="true"></script>
+
+
+    <link rel="stylesheet" href="css/site.css" asp-append-version="true"/>
+
+    <link rel="apple-touch-icon" sizes="32x32" href="/WebPad_logo_32.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/WebPad_logo_57.png">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/WebPad_logo_57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/WebPad_logo_60.png">
+    <link rel="apple-touch-icon" sizes="64x64" href="/WebPad_logo_64.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/WebPad_logo_72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/WebPad_logo_76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/WebPad_logo_114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/WebPad_logo_120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/WebPad_logo_144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/WebPad_logo_152.png">
+    <link rel="apple-touch-icon" sizes="250x250" href="/WebPad_logo_250.png">
+    <link rel="apple-touch-icon" sizes="500x500" href="/WebPad_logo_500.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/WebPad_logo_512.png">
+
+</head>
+<body class='night' style="background-color: #000000; margin: 0; " data-bind="style: { background: $root.backgroundColor() }">
+
+
+        
+        <link rel="stylesheet" href="css/w3-4.13.css" asp-append-version="true"> 
+        
+        <link rel="stylesheet" href="css/site.css" asp-append-version="true"/>
+<script>
+// Begin of "js/knockout-extension-contentEditable.js"
+ko.bindingHandlers.htmlLazy = {
+    init: function(element, valueAccessor) {
+        var $element = $(element);
+        var initialValue = ko.utils.unwrapObservable(valueAccessor());
+        $element.text(initialValue);
+      },
+    update: function (element, valueAccessor) {
+        var value = ko.unwrap(valueAccessor());
+        var $element = $(element);
+        
+        if (!element.isContentEditable) {
+            $element.text(value);
+        }
+    }
+};
+ko.bindingHandlers.contentEditable = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        var value = ko.unwrap(valueAccessor()),
+            htmlLazy = allBindingsAccessor().htmlLazy;
+        $(element).on('paste', function (event) {
+            event.preventDefault();
+            document.execCommand('inserttext', false, event.originalEvent.clipboardData.getData('text/plain'));
+        });
+        
+        $(element).on("input", function () {
+            if (this.isContentEditable && ko.isWriteableObservable(htmlLazy)) {
+                var data = $(this); 
+                htmlLazy(data.text());
+            }
+        });
+        $(element).focusout(function(){
+            var data = $(this);        
+            if (!data.text().replace(" ", "").length) {
+                data.empty();
+            }
+        });
+    },
+    update: function (element, valueAccessor) {
+        var value = ko.unwrap(valueAccessor());
+        
+        element.contentEditable = value;
+        
+        if (!element.isContentEditable) {
+            $(element).trigger("input");
+        }
+    }
+};
+// End of "js/knockout-extension-contentEditable.js"
+</script>
+
+        
+<script>
+// Begin of "js/lookup.js"
+var lookup = {
+};
+lookup.Notes = ko.observableArray([]);
+lookup.ColorPresets = ko.observableArray([]);
+lookup.Connections = ko.observableArray([]);
+lookup.history = ko.observableArray([]); 
+
+// End of "js/lookup.js"
+</script>
+<script>
+// Begin of "js/model_Connection.js"
+lookup.model_Connection = function(data)
+{
+    var id = data.id;
+    var sourceId = data.sourceId;
+    var destinationId = data.destinationId;
+    var label = data.label;
+    var generated = data.generated;
+    var findNodeByIdFunc = data.findNodeByIdFunc;
+
+    var self = this;
+    self.id = id;
+    self.SourceId = sourceId;
+    self.DestinationId = destinationId;
+    self.Source = findNodeByIdFunc(self.SourceId);
+    self.Destination = findNodeByIdFunc(self.DestinationId);
+    self.DestinationCard = lookup.hashCards[self.DestinationId];
+    self.Destination.isReferenced(true);
+    self.Destination.AddExternalReferencedBy(self);
+    self.label = ko.observable(label);
+    if(typeof(data.textChangedHandler) != "undefined")
+    {
+        self.label.subscribe(function(changes)
+        {
+            data.textChangedHandler(changes, self);
+        });
+    }
+    self.labelAlmost = ko.computed(function()
+    {
+        var valueToCheck = self.label();
+        if( 
+            typeof(valueToCheck) == "undefined" ||
+             valueToCheck == null || 
+             valueToCheck == "")
+             {
+                 return "";
+             }
+        else
+        {
+            return valueToCheck;
+        }
+    });
+    self.labelUpdateCallback;
+    self.generated = generated ? generated : false;
+    self.underEdit = ko.observable(false);
+    self.ConvertToJs = function() {
+        return {
+            id: self.id,
+            SourceId: self.SourceId,
+            DestinationId:  self.DestinationId,
+            label: self.label(),
+            generated: generated
+        };
+    };
+    self.switchDone = function()
+    {
+        self.Destination.switchDone();
+    }
+
+    self.toolBoxVisible = ko.observable(false);
+    self.switchToolBoxVisibility = function()
+    {
+        self.toolBoxVisible(!self.toolBoxVisible());
+    };
+    self.DisplayNextLevel = ko.observable(true);
+    self.SwitchDisplayNextLevel = function()
+    {
+        self.DisplayNextLevel(!self.DisplayNextLevel());
+    };
+    self.toUnlink = ko.observable(false);
+    self.prepareToUnlink = function()
+    {
+        self.toUnlink(true);
+    };
+    self.cancelUnlink = function()
+    {
+        self.toUnlink(false);
+    };
+    self.confirmUnlink = function()
+    {
+        lookup.RemoveConnection(self);
+    };
+
+};
+// End of "js/model_Connection.js"
+</script>
+<script>
+// Begin of "js/model_Node.js"
+lookup.model_Node = function(data)
+{
+    // DEPRECATED: use model_Operation.js instead
+    var self = this;
+    self.id = data.id;
+    self.text = ko.observable(data.text);
+    if(typeof(data.textChangedHandler) != "undefined")
+    {
+        self.text.subscribe(function(changes)
+        {
+            data.textChangedHandler(changes, self);
+        });
+    }
+
+    self.color = data.color;
+    self.createDate = data.createDate;
+    if(typeof(data.isDone) != "undefined")
+    {
+        self.isDone = ko.observable(data.isDone);
+    }
+    else
+    {
+        self.isDone = ko.observable(false);
+    }
+    self.switchDone = function()
+    {
+        self.isDone(!self.isDone());
+        var info = self.ConvertToJs();
+        lookup.pushToHistory({
+            action: lookup.actions.NoteUpdated,
+            data: info
+        });
+
+    }
+
+    self.IsForSearchResult = function(query)
+    {
+        
+        var entry = lookup.dictionary_of_notes[query];
+        if(typeof(entry) !== 'undefined')
+        {
+            var own_id_entry = entry[self.id];
+            if(typeof(own_id_entry) !== 'undefined' )
+            {
+                return own_id_entry;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        
+    };
+
+    self.hasIncomingConnection = data.hasIncomingConnection;
+
+    self.isReferenced = ko.observable(false);
+    self.ReferencedBy = ko.observableArray([]);
+    self.ReferencedByWrapped = ko.pureComputed(function()
+    {
+        return ko.utils.arrayMap(self.ReferencedBy(), function(elem)
+        {
+            var item = elem.Source;
+            var result = {
+                color: item.color,
+                id: item.id,
+                parentNodeId: self.id,
+                textSplitted: ko.pureComputed(function()
+                {
+                    return ko.utils.arrayMap(item.textSplitted(), function(elemWord)
+                    {
+                        return {
+                            word: elemWord.word,
+                            wordNode: elemWord.wordNode,
+                            wordQuery: elemWord.wordQuery,
+                            exists: elemWord.exists,
+                            isUrl: elemWord.isUrl,
+                            parentNodeId: self.id
+                        };
+
+                    });
+                })
+            };
+            return result;
+        })
+    });
+    self.AddExternalReferencedBy = function(data)
+    {
+        var filtered =  
+            ko.utils.arrayFilter
+            (
+                self.ReferencedBy(),
+                function(item)
+                { 
+                    return  item.Source.id === data.Source.id;
+                } 
+            );
+        if(filtered.length === 0)
+        {
+            self.ReferencedBy.push(data);
+        }
+    };
+    
+    
+
+
+    if(typeof(self.color) == "undefined" || self.color == null)
+    {
+        self.color = '#d190ff';
+    }
+    
+
+
+    self.ConvertToJs = function() {
+        return {
+            id: self.id,
+            text: self.text(),
+            color: self.color,
+            createDate: self.createDate,
+            isDone: self.isDone(),
+            hasIncomingConnection: self.hasIncomingConnection
+        };
+    };
+
+    if(typeof(self.createDate) == "undefined" || self.createDate == null)
+    {
+        self.createDate = new Date();
+        if(self.id !== -1 )
+        {
+            var info = self.ConvertToJs();
+            lookup.pushToHistory({
+                action: lookup.actions.NoteUpdated,
+                data: info
+            });
+        }
+        
+    }
+    else
+    {
+        self.createDate = new Date(self.createDate);
+    }
+
+    self.textSplitted = ko.pureComputed(function(){
+        var anotherDummyTriggerCall = lookup.dictionary_of_notes_updated();
+        var test = self.text().split(" ");
+        var result = ko.utils.arrayMap(test, function(item)
+            {
+                var toSearch = 
+                    item
+                    .replace("\r", " ")
+                    .replace("\n", " ")
+                    .replace("\t", " ")
+                    .toLowerCase()
+                    .trim();
+                
+                if(
+                    toSearch.endsWith(",") 
+                    || toSearch.endsWith(".") 
+                    || toSearch.endsWith("?")
+                    || toSearch.endsWith("!")
+                )
+                {
+                    toSearch = toSearch.substring(0, toSearch.length - 1);
+                }
+
+                var found = lookup.dictionary_of_notes[toSearch];
+                return {
+                    word: item,
+                    wordQuery: toSearch,
+                    wordNode: found,
+                    exists: typeof(found) !== 'undefined',
+                    isUrl: item.startsWith("https://"),
+                    parentNodeId: self.id
+                };
+            }
+        );
+        return result;
+    });
+};
+// End of "js/model_Node.js"
+</script>
+<script>
+// Begin of "js/model_ColorPreset.js"
+lookup.model_ColorPreset = function(data)
+{
+
+    var self = this;
+    self.Background = ko.observable(data.background);
+    self.Color = ko.observable(data.color);
+    self.ConvertToJs = function() {
+        return {
+            Color: self.Color(),
+            Background: self.Background()
+        };
+    };
+};
+// End of "js/model_ColorPreset.js"
+</script>
+<script>
+// Begin of "js/model_Card.js"
+lookup.model_Card = function(data)
+{   
+    // DEPRECATED: use model_Operation.js instead
+    var self = this;
+    self.Note = data.Note;
+    self.isRoot = typeof(data.connections_incoming) === 'undefined';
+    self.hasTags = typeof(data.connections_outgoing) !== 'undefined';
+    self.Tags = ko.observableArray([]);
+
+    self.ConvertToJs = function()
+    {
+        var data = {};
+        data.Note_serialized = self.Note.ConvertToJs();
+        data.connections_incoming = self.isRoot ? undefined : [];
+        data.connections_outgoing = self.hasTags ? [] : undefined;
+        return data;
+    }
+
+    self.AdditionalInformationText = ko.observable("");
+    self.AdditionalInformationTextVisible = ko.observable(false);
+    self
+        .AdditionalInformationTextVisible
+        .subscribe(function(data) 
+        {
+            if(data)
+            {
+                self.AdditionalInformationTextFocus(true);
+            }
+        });
+    self.AdditionalInformationTextFocus = ko.observable(false);
+    self.AnalyzeText = function(text, query)
+    {
+        return text.toLowerCase().indexOf(query) >= 0
+    };
+    self.IsForSearchResult = function(query)
+    {
+        var result = self.Note.IsForSearchResult(query);
+        if(result)
+        {
+            return result;
+        }
+        var filtered =  
+            ko.utils.arrayFilter
+            (
+                self.SmallTags(),
+                function(item)
+                { 
+                    var result = 
+                        item.Destination.IsForSearchResult(query)
+                    return result; 
+                } 
+            );
+        var tagsAnyPassed = filtered.length > 0 ;
+        if(tagsAnyPassed)
+        {
+            return true;
+        }
+        var filteredReferencedBy =  
+            ko.utils.arrayFilter
+            (
+                self.Note.ReferencedBy(),
+                function(item)
+                { 
+                    var result = 
+                        item.Source.IsForSearchResult(query);
+                    return result; 
+                } 
+            );
+
+        var referencedByPassed = filteredReferencedBy.length > 0;
+        return referencedByPassed;
+    };
+    self.underEdit = ko.observable(false);
+    
+    self.AdditionalInformationTextColor = ko.observable(lookup.GetRandomColor().Color());
+    self.toolBoxVisible = ko.observable(false);
+    self.switchToolBoxVisibility = function()
+    {
+        self.toolBoxVisible(!self.toolBoxVisible());
+        return true;
+    };
+
+    self.markAsDone = function()
+    {
+        event.stopPropagation();
+        self.convertTo("done");
+        self.convertFrom("not-done");
+    };
+    self.removeDone = function()
+    {
+        event.stopPropagation();
+        self.convertFrom("done");
+        self.convertTo("not-done");
+    }
+
+    self.toBeRemoved = ko.observable(false);
+    self.prepareToBeRemoved = function()
+    {
+        self.toBeRemoved(true);
+    }
+    self.rollbackRemoval = function()
+    {
+        self.toBeRemoved(false);
+    }
+    self.completlyRemoved = ko.observable(false);
+    self.reallyRemove = function()
+    {
+        self.completlyRemoved(true);
+        // remove incoming references
+        ko.utils.arrayForEach
+        (
+            self.Note.ReferencedBy(), 
+            function(item) 
+            {
+                lookup.RemoveConnection(item);
+            }
+        );
+        
+        //remove tags
+        ko.utils.arrayForEach
+        (
+            self.SmallTags(), 
+            function(item) 
+            {
+                lookup.RemoveConnection(item);
+                lookup.RemoveNote({Note: item.Destination });
+            }
+        );
+        lookup.RemoveNote(self);
+    }
+
+    self.isTask = ko.pureComputed(function()
+    {
+        return self.hasSmallTag("task");
+    });
+
+    self.isDone = ko.pureComputed(function()
+    {
+        return self.hasSmallTag("done");
+    });
+
+    self.hasSmallTag = function(tag)
+    {
+        tag = tag.toLowerCase().trim();
+        var foundTaskTag = ko.utils.arrayFirst(self.SmallTags(), function(item){
+            return item.Destination.text().toLowerCase().trim() === tag;
+        });
+        return  typeof(foundTaskTag) !== 'undefined';
+    };
+
+
+    self.convertFromTask = function()
+    {
+        self.convertFrom("task");
+    };
+
+    self.convertFrom = function(tag)
+    {
+        tag = tag.toLowerCase().trim();
+        var foundTaskTags = 
+        ko.utils.arrayFilter(self.SmallTags(),
+            function(item)
+            {
+                return item.Destination.text().toLowerCase().trim() === tag;
+            });
+        ko.utils.arrayForEach
+        (
+            foundTaskTags, 
+            function(item) 
+            {
+                lookup.RemoveConnection(item);
+                lookup.RemoveNote({Note: item.Destination });
+            }
+        );
+        
+    };
+
+    self.removeTag = function(item)
+    {
+        lookup.RemoveConnection(item.originalTag);
+        lookup.RemoveNote({Note: item.originalTag.Destination });
+    };
+
+    self.convertToTask = function()
+    {
+        self.convertTo("task");
+    };
+
+    self.convertTo = function(tag)
+    {
+        tag = tag.toLowerCase().trim();
+        if(self.hasSmallTag(tag) === false)
+        {
+            lookup.AddInformationToExistingOne(self, tag);
+        }
+    };
+
+    self.isSmallTagChecker = function(item)
+    {
+        if(typeof(item.DestinationCard) !== 'undefined' 
+            && item.DestinationCard.Tags().length > 0)
+        {
+            return false;
+        }
+        else
+        {
+            return item.Destination.text().length < 20;
+        }
+    };
+
+    self.SmallTags = ko.pureComputed(function()
+    {
+        return ko.utils.arrayFilter(self.Tags(), function(item)
+        {
+            return self.isSmallTagChecker(item);
+        })
+    });
+
+    self.SmallTagsWrapped = ko.pureComputed(function()
+    {
+        return ko.utils.arrayMap(self.SmallTags(), function(elem)
+        {
+            var item = elem.Destination;
+            var result = {
+                originalTag: elem,
+                color: item.color,
+                id: item.id,
+                parentNodeId: self.Note.id,
+                textSplitted: ko.pureComputed(function()
+                {
+                    return ko.utils.arrayMap(item.textSplitted(), function(elemWord)
+                    {
+                        return {
+                            word: elemWord.word,
+                            wordNode: elemWord.wordNode,
+                            wordQuery: elemWord.wordQuery,
+                            exists: elemWord.exists,
+                            isUrl: elemWord.isUrl,
+                            parentNodeId: self.Note.id
+                        };
+
+                    });
+                })
+            };
+            return result;
+        })
+    });
+
+    self.BigTags = ko.pureComputed(function()
+    {
+        return ko.utils.arrayFilter(self.Tags(), function(item)
+        {
+            return self.isSmallTagChecker(item) === false;
+        })
+    });
+};
+// End of "js/model_Card.js"
+</script>
+
+<script>
+// Begin of "js/load_aliases.js"
+lookup.load_aliases = function()
+    {
+        // if there is no aliases => generate them
+        // save last processed importing date
+        var data = {};
+        if(typeof(lookup.localStorage["Aliases"]) !== 'undefined')
+        {
+            data.Aliases = lookup.localStorage.getItem("Aliases");
+            lookup.backendWorker.sendQuery('populate_Aliases', data);
+        }
+        else
+        {
+            lookup.backendWorker.sendQuery('regenerate_Aliases', data);
+        }
+    };
+// End of "js/load_aliases.js"
+</script>
+<script>
+// Begin of "js/save_Aliases_to_storage.js"
+lookup.save_Aliases_to_storage = function(to_save)
+    {
+        lookup.localStorage.setItem("Aliases", JSON.stringify(to_save));
+    };
+// End of "js/save_Aliases_to_storage.js"
+</script>
+        
+        
+<script>
+// Begin of "js/scrollToCard.js"
+lookup.scrollToCard_queue = [];
+lookup.scrollToCard = function(id, number_of_retries_left) {
+    var searchQuery = '#' + id;
+    var cards = undefined; 
+    try
+    {
+        cards = $(searchQuery);
+    }
+    catch(error)
+    {
+        console.log("failed search query was : " + searchQuery)
+    }
+    
+
+    if(typeof(cards) !== "undefined" && cards.length > 0)
+    {
+        var target = cards.parent()[0];
+        //target.scrollIntoView();
+
+        var scrollAreas = $('.webpad-search-result-area');
+        $("body,html").stop().animate({
+                scrollTop: target.offsetTop
+            }, 300);
+        
+    }
+    else
+    {
+        if(typeof(number_of_retries_left) === "undefined")
+        {
+            lookup.scrollToCard_queue.push({id: id, number_of_retries_left: 5});
+        }
+        else
+        {
+            if(number_of_retries_left > 0)
+            {
+                lookup.scrollToCard_queue.push({id: id, number_of_retries_left: number_of_retries_left - 1 });
+            }
+        }
+    }
+    
+};
+
+lookup.scrollToCard_processQueue = function()
+{
+    if(lookup.scrollToCard_queue.length > 0)
+    {
+        var toScrollTo = lookup.scrollToCard_queue.shift();
+        lookup.scrollToCard(toScrollTo.id, toScrollTo.number_of_retries_left );
+    }
+    setTimeout(lookup.scrollToCard_processQueue, 300);
+}
+
+
+
+// End of "js/scrollToCard.js"
+</script>
+<script>
+// Begin of "js/findNodeById.js"
+lookup.findNodeById_buffer = undefined;
+lookup.findNodeById_notFound = new lookup.model_Node({id: -1, text: 'not found'});
+lookup.findNodeById = function(id)
+{
+    if(typeof(lookup.findNodeById_buffer) == "undefined")
+    {
+        lookup.findNodeById_buffer = {};
+        ko.utils.arrayForEach
+        (
+            lookup.Notes(), 
+            function(item) 
+                {
+                    lookup.findNodeById_buffer[item.id] = item;
+                }
+        );
+    }
+
+    var result = lookup.findNodeById_buffer[id];
+    if(typeof(result) == "undefined")
+    {
+        var filtered = ko.utils.arrayFilter(lookup.Notes(), function(item){ return item.id == id;} );
+        result = filtered.length > 0 ? filtered[0] : undefined;
+    }
+    if(typeof(result) === 'undefined')
+    {
+        result = lookup.findNodeById_notFound;
+    }
+
+    return result;
+
+};
+// End of "js/findNodeById.js"
+</script>
+<script>
+// Begin of "js/findEdgeById.js"
+lookup.findEdgeById_buffer = undefined;
+lookup.findEdgeById = function(id)
+{
+    if(typeof(lookup.findEdgeById_buffer) == "undefined")
+    {
+        lookup.findEdgeById_buffer = {};
+        ko.utils.arrayForEach
+        (
+            lookup.Connections(), 
+            function(item) 
+                {
+                    lookup.findEdgeById_buffer[item.id] = item;
+                }
+        );
+    }
+    var result = lookup.findEdgeById_buffer[id];
+    if(typeof(result) == "undefined")
+    {
+        var filtered = ko.utils.arrayFilter(lookup.Connections(), function(item){ return item.id == id;} );
+        result = filtered.length > 0 ? filtered[0] : undefined;
+    }
+
+    
+    return result;
+
+};
+// End of "js/findEdgeById.js"
+</script>
+<script>
+// Begin of "js/defineLocalStorage.js"
+lookup.defineLocalStorage_storageAvailable = function(type) {
+    try {
+        var storage = window[type],
+            x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    }
+    catch(e) {
+        return e instanceof DOMException && (
+            // everything except Firefox
+            e.code === 22 ||
+            // Firefox
+            e.code === 1014 ||
+            // test name field too, because code might not be present
+            // everything except Firefox
+            e.name === 'QuotaExceededError' ||
+            // Firefox
+            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+            // acknowledge QuotaExceededError only if there's something already stored
+            storage.length !== 0;
+    }
+}
+
+lookup.localStorage = undefined;
+lookup.defineLocalStorage = function()
+{
+    if (lookup.defineLocalStorage_storageAvailable('localStorage')) {
+        lookup.localStorage = window['localStorage'];
+    }
+    else {
+        // Too bad, no localStorage for us
+        alert("No local storage");
+    }
+};
+
+// End of "js/defineLocalStorage.js"
+</script>
+<script>
+// Begin of "js/findCardByMainNodeId.js"
+lookup.findCardByMainNodeId = function(mainId)
+{
+    var found = lookup.hashCards[mainId];
+    if(found)
+    {
+        return found;
+    }
+    else
+    {
+        return null;
+    }
+};
+// End of "js/findCardByMainNodeId.js"
+</script>
+<script>
+// Begin of "js/jumpToCardFromWord.js"
+lookup.jumpToCardFromWord = function(data)
+{
+    lookup.pushToSearchNotesQueryText(data.wordQuery);
+    lookup.onListChanged_set_scrollToLatestCard();
+    
+    event.stopPropagation();
+};
+// End of "js/jumpToCardFromWord.js"
+</script>
+<script>
+// Begin of "js/jumpToCardFromQuote.js"
+lookup.jumpToCardFromQuote = function(data)
+{
+    var destinationCard = lookup.findCardByMainNodeId(data.id);
+    if(destinationCard != null)
+    {
+        lookup.pushToSearchNotesQuery(destinationCard);
+        lookup.onListChanged_set_scrollToLatestCard();
+    }
+    event.stopPropagation();
+
+};
+// End of "js/jumpToCardFromQuote.js"
+</script>
+
+<script>
+// Begin of "js/SearchNotesQuery.js"
+lookup.SearchNotesQuery = ko.observable("");
+// lookup.SearchNotesQuery
+//     .extend({ rateLimit: 150 });
+
+lookup.SearchNotesQuery
+    .subscribe(function()
+    {
+        if(typeof(lookup.backendWorker) !== 'undefined')
+        {
+            lookup.backendWorker.sendQuery('SearchNotesQuery', lookup.SearchNotesQuery());
+
+        }
+        
+    });
+// End of "js/SearchNotesQuery.js"
+</script>
+<script>
+// Begin of "js/pushToSearchNotesQuery.js"
+lookup.stackSearchNotesQuery = ko.observableArray([]);
+lookup.pushToSearchNotesQuery = function(dataCard)
+{
+    var currentValue = lookup.SearchNotesQuery().trim();
+    
+    
+    lookup.stackSearchNotesQuery.push(
+        {
+            query: currentValue,
+            scrollPosition: lookup.viewportScrollPosition(),
+            amountOfCardsLimit: lookup.CurrentResultLimit()
+        }
+    );
+
+
+    var newQuery = dataCard.Note.text().trim();
+    lookup.SearchNotesQuery(newQuery);
+    lookup.ResetCurrentResultLimit();
+};
+// End of "js/pushToSearchNotesQuery.js"
+</script>
+<script>
+// Begin of "js/pushToSearchNotesQueryText.js"
+lookup.pushToSearchNotesQueryText = function(query)
+{
+    var currentValue = lookup.SearchNotesQuery().trim();
+    
+    
+    lookup.stackSearchNotesQuery.push(
+        {
+            query: currentValue,
+            scrollPosition: lookup.viewportScrollPosition(),
+            amountOfCardsLimit: lookup.CurrentResultLimit()
+        }
+    );
+
+
+    var newQuery = query.trim();
+    lookup.SearchNotesQuery(newQuery);
+    lookup.ResetCurrentResultLimit();
+};
+// End of "js/pushToSearchNotesQueryText.js"
+</script>
+<script>
+// Begin of "js/scrollToOnListChanged.js"
+lookup.scrollToDestinationCommand = ko.observable(undefined);
+lookup.getViewPortScrollPosition = function() {
+    lookup.viewportScrollPosition(document.body.scrollTop || document.documentElement.scrollTop);
+    console.log('scroll: '+ lookup.viewportScrollPosition())
+};
+
+lookup.onListChanged_setScrollTopOffset = function(offsetTop)
+{
+    var commandValue = lookup.scrollToDestinationCommand();
+    if(typeof(commandValue) === 'undefined')
+    {
+        commandValue = {};
+    }
+    commandValue["offsetTop"] = offsetTop;
+    lookup.scrollToDestinationCommand(commandValue);
+};
+
+lookup.onListChanged_set_scrollToLatestCard = function()
+{
+    var commandValue = lookup.scrollToDestinationCommand();
+    if(typeof(commandValue) === 'undefined')
+    {
+        commandValue = {};
+    }
+    commandValue["scrollToLatestCard"] = true;
+    lookup.scrollToDestinationCommand(commandValue);
+};
+
+lookup.onListChanged_keepHeightOffset = function()
+{
+    var commandValue = lookup.scrollToDestinationCommand();
+    if(typeof(commandValue) === 'undefined')
+    {
+        commandValue = {};
+    }
+    var totalHeight = $("body,html").height();
+    commandValue["previousHeight"] = totalHeight;
+    lookup.scrollToDestinationCommand(commandValue);
+};
+
+lookup.onListChanged_ScrollToDestination = function()
+{
+    var commandValue = lookup.scrollToDestinationCommand();
+    if(typeof(commandValue)!== 'undefined')
+    {
+        if(typeof(commandValue.offsetTop) !== 'undefined')
+        {
+            $("body,html").stop().animate({
+                scrollTop: lookup.scrollToDestinationCommand().offsetTop
+            }, 300);
+        }
+        if(typeof(commandValue.scrollToLatestCard) !== 'undefined')
+        {
+            console.log('onListChanged_ScrollToDestination=scrollToLatestCard')
+            var totalHeight = $("body,html").height();
+            $("body,html").stop().animate({
+                scrollTop: totalHeight
+            }, 300);
+        }
+        if(typeof(commandValue.previousHeight) !== 'undefined')
+        {
+            var totalHeightNow = $("body,html").height();
+            var previousHeight = commandValue.previousHeight;
+            var offset = totalHeightNow - previousHeight;
+            if(offset < 0)
+            {
+                offset = 0;
+            }
+            $("body,html").stop().animate({
+                scrollTop: offset
+            }, 1);
+        }
+        
+        lookup.scrollToDestinationCommand(undefined);
+    }
+};
+// End of "js/scrollToOnListChanged.js"
+</script>
+<script>
+// Begin of "js/rollbackSearchNotesQuery.js"
+lookup.stackSearchNotesQuery = ko.observableArray([]);
+lookup.rollbackSearchNotesQuery = function()
+{
+    if(lookup.stackSearchNotesQuery().length > 0)
+    {
+        previousQuery = lookup.stackSearchNotesQuery.pop();
+        lookup.onListChanged_setScrollTopOffset(previousQuery.scrollPosition);
+        lookup.SearchNotesQuery(previousQuery.query);
+        lookup.SetCurrentResultLimit(previousQuery.amountOfCardsLimit)
+    }
+    else
+    {
+        lookup.SearchNotesQuery("");
+        lookup.onListChanged_set_scrollToLatestCard();
+    }
+    
+};
+// End of "js/rollbackSearchNotesQuery.js"
+</script>
+
+<script>
+// Begin of "js/GetRandomColor.js"
+lookup.GetRandomColor = function() {
+    var selectedColorIndex = Math.floor(Math.random() * lookup.ColorPresets().length);
+    var selectedColor = lookup.ColorPresets()[selectedColorIndex];
+    return selectedColor;
+};
+// End of "js/GetRandomColor.js"
+</script>
+<script>
+// Begin of "js/MigrationOfColorOfNode.js"
+lookup.MigrationOfColorOfNode = function(node)
+{
+    if(typeof(node.color) === "undefined" )
+    {
+        var selectedColor = lookup.GetRandomColor();
+        lookup.ColorNodeFromCode(selectedColor, node);
+    }
+    else
+    {
+        var color_exists = lookup.for_code_access_hash_of_color_presets[node.color];
+        if( typeof(color_exists) === "undefined")
+        {
+            var selectedColor = lookup.GetRandomColor();
+            lookup.ColorNodeFromCode(selectedColor, node);
+        }
+    }
+    
+
+};
+// End of "js/MigrationOfColorOfNode.js"
+</script>
+<script>
+// Begin of "js/switchExpandedCardTagsList.js"
+lookup.switchExpandedCardTagsList = function(card)
+{
+    card.isCardExpanded(!card.isCardExpanded())
+};
+// End of "js/switchExpandedCardTagsList.js"
+</script>
+<script>
+// Begin of "js/switchAdditionalInformationText.js"
+lookup.switchAdditionalInformationText = function(card)
+{
+    card.AdditionalInformationTextVisible(!card.AdditionalInformationTextVisible());
+    if(card.AdditionalInformationTextVisible())
+    {
+        lookup.beginToTagOrQuote(card);
+    }
+};
+// End of "js/switchAdditionalInformationText.js"
+</script>
+<script>
+// Begin of "js/searchBarKeyPress.js"
+lookup.searchBarKeyPress = function(data, event) 
+{
+    if(event.shiftKey)
+    {
+    }
+    else
+    {
+        if(event.keyCode == 13)
+        {
+            lookup.CreateNoteFromSearchQuery();
+        }
+    }
+    return true;
+};
+// End of "js/searchBarKeyPress.js"
+</script>
+<script>
+// Begin of "js/additionalInfoKeyPress.js"
+lookup.additionalInfoKeyPress = function(data, event) 
+{
+    if(event.shiftKey)
+    {
+
+    }
+    else
+    {
+        if(event.keyCode == 13)
+        {
+            lookup.AddNoteToExistingOne();
+        }
+    }
+    return true;
+};
+// End of "js/additionalInfoKeyPress.js"
+</script>
+<script>
+// Begin of "js/pushToHistory.js"
+lookup.pushToHistory = function(item) {
+    
+};
+// End of "js/pushToHistory.js"
+</script>
+<script>
+// Begin of "js/Instanciate_model_node.js"
+lookup.Instanciate_model_node = function(data)
+    {
+        data.textChangedHandler = function(changes, model) 
+        {
+            if(changes 
+                //&& changes != model.text()
+                )
+            {
+                var toSend = model.ConvertToJs();
+                toSend.text = changes;
+                
+                lookup.pushToHistory({
+                        action: lookup.actions.NoteUpdated,
+                        data: toSend
+                    }
+                );
+            }
+        };
+        var result = new lookup.model_Node(data);
+        return result;
+    };
+// End of "js/Instanciate_model_node.js"
+</script>
+<script>
+// Begin of "js/ConnectNotes.js"
+lookup.ConnectNotes = function(from, to, label, generated) {
+    var connectionToAdd = lookup.Instanciate_model_connection(
+        {
+            id: lookup.getLocalIndex(),
+            sourceId: from.id,
+            destinationId: to.id,
+            label: label ? label : "", 
+            generated: generated,
+            findNodeByIdFunc: lookup.findNodeById
+        }
+    );
+    var added = connectionToAdd.ConvertToJs();
+    var filtered = ko.utils.arrayFilter(
+        lookup.Connections(), 
+        function(item)
+            { 
+                return item.SourceId == connectionToAdd.SourceId &&
+                    item.DestinationId == connectionToAdd.DestinationId &&
+                    item.label() == connectionToAdd.label();
+            } 
+        );
+    // don't allow to create duplicate connections
+    if(filtered.length === 0)
+    {
+        console.log("adding connection #" + connectionToAdd.id );
+        lookup.pushToHistory({
+            action: lookup.actions.ConnectionAdded,
+            data: added
+        });
+    }
+    else
+    {
+        console.log("it is not allowed to create duplicate connections");
+    }
+    
+};
+// End of "js/ConnectNotes.js"
+</script>
+<script>
+// Begin of "js/CreateNote.js"
+lookup.CreateNote = function(obj, callback) {
+
+    var selectedColor = lookup.GetRandomColor().Color();
+    if(typeof(obj.textColor) !== "undefined")
+    {
+        selectedColor = obj.textColor;
+    }
+    var toAdd = lookup.Instanciate_model_node(
+        {
+            id: lookup.getLocalIndex(),
+            text: obj.text,
+            color: selectedColor,
+            background: "inherit",
+            createDate: new Date(),
+            hasIncomingConnection: obj.hasIncomingConnection
+        });
+    var added = toAdd.ConvertToJs();
+    lookup.pushToHistory({
+        action: lookup.actions.NoteAdded,
+        data: added
+    });
+    if(callback && typeof(callback) === "function") {
+        callback(toAdd);
+    }
+};
+// End of "js/CreateNote.js"
+</script>
+<script>
+// Begin of "js/RemoveConnection.js"
+lookup.RemoveConnection = function(toRemove) {
+    var deleted = toRemove.ConvertToJs();
+    lookup.pushToHistory({
+        action: lookup.actions.ConnectionDeleted,
+        data: deleted
+    });
+};
+// End of "js/RemoveConnection.js"
+</script>
+<script>
+// Begin of "js/RemoveNote.js"
+lookup.RemoveNote = function(card) {
+    var toRemove = card.Note;
+    var deleted = toRemove.ConvertToJs();
+    lookup.pushToHistory({
+        action: lookup.actions.NoteDeleted,
+        data: deleted
+    });
+};
+// End of "js/RemoveNote.js"
+</script>
+<script>
+// Begin of "js/migrateConnectionToNode.js"
+lookup.migrateConnectionToNode = function()
+{
+    ko.utils.arrayForEach(lookup.Connections(), function(item) {
+        if(typeof(item) !== "undefined")
+        {
+            if(typeof(item.label()) !== "undefined" && item.label().trim().length > 0)
+            {
+                var objLabel = {
+                    text: item.label().trim()
+                };
+                // node from label
+                lookup.CreateNote(objLabel, function(createdNodeFromLabel) { 
+                    var objCombined = {
+                        text: createdNodeFromLabel.text() + ' ' + item.Destination.text()
+                    };
+                    lookup.CreateNote(objCombined, function(createdNodeFromCombined) { 
+                        
+                        lookup.ConnectNotes(createdNodeFromCombined, createdNodeFromLabel);  
+                        lookup.ConnectNotes(createdNodeFromCombined, item.Destination);  
+                        lookup.ConnectNotes(item.Source, createdNodeFromCombined);  
+                        lookup.RemoveConnection(item);
+                    });
+                });
+            }
+
+        }
+        
+    });
+
+};
+// End of "js/migrateConnectionToNode.js"
+</script>
+<script>
+// Begin of "js/Instanciate_model_connection.js"
+lookup.Instanciate_model_connection = function(data)
+    {
+        data.textChangedHandler = function(changes, model) 
+        {
+            if(changes  
+                //&& changes != model.label()
+                )
+            {
+                var toSend = model.ConvertToJs();
+                toSend.label = changes;
+                lookup.pushToHistory({
+                    action: lookup.actions.ConnectionUpdated,
+                    data: toSend
+                });
+            }
+        };
+        var result = new lookup.model_Connection(data);
+        return result;
+    };
+// End of "js/Instanciate_model_connection.js"
+</script>
+<script>
+// Begin of "js/changeBackground.js"
+lookup.backgroundColor = ko.observable("#000000");
+lookup.changeBackground = function() 
+{
+    var background = "#333333";
+    lookup.backgroundColor(background);
+    lookup.localStorage["backgroundColor"] = background;
+};
+
+lookup.changeBackgroundToDefault = function() 
+{
+    var background = "#000000";
+    lookup.backgroundColor(background);
+    lookup.localStorage["backgroundColor"] = background;
+};
+
+lookup.backgroundApplySaved = function() 
+{
+    var background = lookup.localStorage["backgroundColor"] || "#000000";
+    lookup.backgroundColor(background);
+};
+// End of "js/changeBackground.js"
+</script>
+<script>
+// Begin of "js/toggleMenu.js"
+lookup.menuIsOpen = ko.observable(false);
+lookup.menuWasAlreadyOpen=ko.observable(false);
+lookup.toggleMenu = function() 
+{
+    lookup.menuIsOpen(!lookup.menuIsOpen());
+    lookup.menuWasAlreadyOpen(true);
+};
+// End of "js/toggleMenu.js"
+</script>
+<script>
+// Begin of "js/getViewPortSize.js"
+lookup.viewportHeight = ko.observable(undefined);
+lookup.getViewPortSize = function() {
+    lookup.viewportHeight(window.innerHeight || document.documentElement.clientHeight);
+    // https://gomakethings.com/how-to-test-if-an-element-is-in-the-viewport-with-vanilla-javascript/
+};
+// End of "js/getViewPortSize.js"
+</script>
+<script>
+// Begin of "js/getViewPortScrollPosition.js"
+lookup.viewportScrollPosition = ko.observable(undefined);
+lookup.getViewPortScrollPosition = function() {
+    lookup.viewportScrollPosition(document.body.scrollTop || document.documentElement.scrollTop);
+};
+// End of "js/getViewPortScrollPosition.js"
+</script>
+
+
+<script>
+// Begin of "js/AddInformationToExistingOne.js"
+lookup.AddInformationToExistingOne = function(existing, information) {
+        
+    // block adding of extra information if it is empty
+    if(typeof(information) !== 'undefined')
+    {
+        information = information.trim();
+        if(information.length !== 0)
+        {
+            var obj = {
+                text: information,
+                textColor: lookup.GetRandomColor().Color(),
+                hasIncomingConnection: true
+            };
+            lookup.CreateNote(obj, function(destination) { 
+                lookup.ConnectNotes(existing.Note, destination);  
+            });
+        }
+
+    } 
+    
+};
+// End of "js/AddInformationToExistingOne.js"
+</script>
+<script>
+// Begin of "js/AddNoteToExistingOne.js"
+lookup.AddNoteToExistingOne = function() {
+    var existing = lookup.operationToBeQuoted();
+    var isQuoteEdit = lookup.isQuoteEdit();
+    var textOfQuote = lookup.actualTextOfQuote();
+    var colorOfQuote = lookup.colorOfNextQuote();
+
+    if(typeof(textOfQuote) !== "undefined")
+    {
+        textOfQuote = textOfQuote.trim();
+    }
+    else
+    {
+        textOfQuote = "";
+    }
+    lookup.cancelAddingQuote();
+
+    // block adding of extra information if it is empty
+    if(textOfQuote.length !== 0)
+    {
+        var data =
+        {
+            quoted: 
+            {
+                text: existing.text,
+                color: existing.color
+            },
+            current:
+            {
+                text: textOfQuote,
+                color: colorOfQuote
+            }
+
+        };
+        var operation =
+        {
+            id: 
+            {
+                is_local: true,
+                prefix: "to-be-defined"
+            },
+            name: isQuoteEdit ? 'quote-edit' : 'quote',
+            data: data,
+            time: new Date().toISOString()
+        };
+
+        lookup.backendWorker.sendQuery('Operation_was_added', operation);
+    }
+};
+// End of "js/AddNoteToExistingOne.js"
+</script>
+<script>
+// Begin of "js/ColorNode.js"
+lookup.ColorNode = function(colorToApply) {
+        
+    var toWorkWith = lookup.NoteToEdit();
+    
+    
+    toWorkWith.color = colorToApply.Color();
+    toWorkWith.background = colorToApply.Background();
+
+    var info = toWorkWith.ConvertToJs();
+    lookup.pushToHistory({
+        action: lookup.actions.NoteUpdated,
+        data: info
+    });
+};
+// End of "js/ColorNode.js"
+</script>
+<script>
+// Begin of "js/ColorNodeFromCode.js"
+lookup.ColorNodeFromCode = function(colorToApply, toWorkWith) {
+                
+    toWorkWith.color = colorToApply.Color();
+    toWorkWith.background = colorToApply.Background();
+
+    var info = toWorkWith.ConvertToJs();
+    lookup.pushToHistory({
+        action: lookup.actions.NoteUpdated,
+        data: info
+    });
+};
+// End of "js/ColorNodeFromCode.js"
+</script>
+<script>
+// Begin of "js/CreateNoteFromSearchQuery.js"
+lookup.CreateNoteFromSearchQuery = function() {
+    var data = 
+    {
+        text: lookup.SearchNotesQuery().trim(),
+        color: lookup.GetRandomColor().Color()
+    };
+    lookup.SearchNotesQuery("");
+    if(data.text.length > 0)
+    {
+        lookup.onListChanged_set_scrollToLatestCard();
+        var operation = 
+        {
+            id: 
+            {
+                is_local: true,
+                prefix: "to-be-defined"
+            },
+            name: 'create',
+            data: data,
+            time: new Date().toISOString()
+        };
+        lookup.backendWorker.sendQuery('Operation_was_added', operation);
+    }
+};
+// End of "js/CreateNoteFromSearchQuery.js"
+</script>
+<script>
+// Begin of "js/getLocalIndex.js"
+lookup.freeLocalIndex = 0;
+lookup.localPrefix = '_local_';
+
+lookup.getLocalIndex = function() {
+    while(true)
+    {
+        var index = ( lookup.localPrefix + (lookup.freeLocalIndex++) );
+        var searchResultEdge = lookup.findEdgeById(index);
+        var searchResultNode = lookup.findNodeById(index);
+        if(typeof(searchResultEdge) === 'undefined' && searchResultNode == lookup.findNodeById_notFound) 
+        {
+            return index;
+        }
+    }
+};
+// End of "js/getLocalIndex.js"
+</script>
+<script>
+// Begin of "js/populateColorPresets.js"
+lookup.data_color_presets = [ 
+    { 
+        background: "inherit",
+        color: "#ffa26b" 
+    },
+    { 
+        background: "inherit",
+        color: "#84bfff" 
+    },
+    { 
+        background: "inherit",
+        color: "#ff94eb" 
+    },
+    { 
+        background: "inherit",
+        color: "#64e05e" 
+    },
+    { 
+        background: "inherit",
+        color: "#f8e755" 
+    },
+    { 
+        background: "inherit",
+        color: "#ffbbdc" 
+    },
+    { 
+        background: "inherit",
+        color: "#d190ff" 
+    },
+    { 
+        background: "inherit",
+        color: "#ff8f95" 
+    }
+];;
+
+lookup.populateColorPresets = function()
+{
+    var toAddColors = ko.utils.arrayMap(lookup.data_color_presets, function(elem) 
+    {
+        var toReturn = new lookup.model_ColorPreset(elem);
+        return toReturn;
+    });
+
+    ko.utils.arrayPushAll(lookup.ColorPresets, toAddColors);
+
+};
+
+
+// End of "js/populateColorPresets.js"
+</script>
+
+<script>
+// Begin of "js/populate.js"
+lookup.CheckIfEveryNodeHasMigratedColor = function()
+    {
+            ko.utils.arrayForEach(lookup.Notes(), function(item) {
+                lookup.MigrationOfColorOfNode(item);
+            });
+    };
+
+    lookup.composedCards = ko.observableArray([]);
+    lookup.dictionary_of_notes = {};
+
+    lookup.dictionary_of_notes_updated = ko.observable(0);
+
+    lookup.split_search_key_and_add_to_dictionary = function(key, note_id, flag)
+    {
+        var index = 0;
+        
+        while(key.length > 0)
+        {
+            for(index = 0; index < key.length; index++)
+            {
+                var to_work_with = key.substring(index);
+                var entry = lookup.dictionary_of_notes[to_work_with];
+                if(typeof(entry) === 'undefined')
+                {
+                    lookup.dictionary_of_notes[to_work_with] = {};
+                    entry = lookup.dictionary_of_notes[to_work_with];
+                }
+                entry[note_id] = flag;
+                
+            }
+            key = key.substring(0, key.length - 1);
+        }
+    };
+
+    lookup.generateDictionary = function()
+    {
+        
+        ko.utils.arrayForEach(lookup.composedCards(), function(item) 
+        {    
+            var key = 
+                item
+                .Note
+                .text()
+                .replace("\r", " ")
+                .replace("\n", " ")
+                .replace("\t", " ")
+                .toLowerCase()
+                .trim();
+            
+            lookup.split_search_key_and_add_to_dictionary(key, item.Note.id, true);
+
+        });
+        var val = lookup.dictionary_of_notes_updated();
+        lookup.dictionary_of_notes_updated(val + 1);
+    };
+
+    lookup.generateDictionary_NoteAdded = function(note)
+    {
+        
+        var key = 
+                note
+                .text()
+                .replace("\r", " ")
+                .replace("\n", " ")
+                .replace("\t", " ")
+                .toLowerCase()
+                .trim();
+        lookup.split_search_key_and_add_to_dictionary(key, note.id, true);
+        var val = lookup.dictionary_of_notes_updated();
+        lookup.dictionary_of_notes_updated(val + 1);
+
+    };
+
+
+    lookup.populateConnections = function()
+    {
+        
+        lookup.populateConnections_startIndex = lookup.data.connections.length -1;
+        while(lookup.populateConnections_startIndex >= 0)
+        {
+            console.log('populateConnections: ' + lookup.populateConnections_startIndex);
+            var batchArray = [];
+            for(var batchKey = 0; batchKey < 100 && lookup.populateConnections_startIndex >= 0; batchKey++, lookup.populateConnections_startIndex--)
+            {
+                var elem = lookup.data.connections[lookup.populateConnections_startIndex];
+                var connectionToAdd = lookup.Instanciate_model_connection(
+                    {
+                        id: elem.id,
+                        sourceId: elem.SourceId,
+                        destinationId: elem.DestinationId,
+                        label: elem.label,
+                        generated: elem.generated,
+                        findNodeByIdFunc: lookup.findNodeById
+                    });
+                var found = lookup.hashCards[connectionToAdd.SourceId];
+                if(found)
+                {
+                    found.Tags.unshift(connectionToAdd);
+                }
+                batchArray.push(connectionToAdd);
+
+            }
+            ko.utils.arrayPushAll(lookup.Connections, batchArray);
+
+        }
+        setTimeout(lookup.generateDictionary, 1);
+
+    };
+
+
+    lookup.populateNotes = function()
+    {
+        lookup.populateNotes_startIndex = lookup.data.notes.length -1;
+        while(lookup.populateNotes_startIndex >= 0)
+        {
+            console.log('populateNotes: ' + lookup.populateNotes_startIndex);
+            var batchArray = [];
+            var cardsBatch = [];
+            for(var batchKey = 0; batchKey < 100 && lookup.populateNotes_startIndex >= 0; batchKey++, lookup.populateNotes_startIndex--)
+            {
+                var elem = lookup.data.notes[lookup.populateNotes_startIndex];
+                var noteToAdd = lookup.Instanciate_model_node(elem);
+                var outgoing = lookup.outgoing_connections[noteToAdd.id];
+                var incoming = lookup.incoming_connections[noteToAdd.id];
+                var composedCard = new lookup.model_Card({ Note: noteToAdd, connections_incoming: incoming, connections_outgoing: outgoing });
+                lookup.hashCards[noteToAdd.id] = composedCard;
+                cardsBatch.push(composedCard);
+                batchArray.push(noteToAdd);
+            }
+            ko.utils.arrayPushAll(lookup.Notes, batchArray);
+            ko.utils.arrayPushAll(lookup.composedCards, cardsBatch);
+
+        }
+        lookup.populateConnections();
+
+
+        
+
+    };
+
+    lookup.outgoing_connections = {};
+    lookup.incoming_connections = {};
+
+
+    lookup.populate_incoming_outgoing_connections = function()
+    {
+        lookup.populate_incoming_outgoing_connections_index = lookup.data.connections.length -1;
+        console.log('populate_incoming_outgoing_connections: ' + lookup.populate_incoming_outgoing_connections_index);
+
+        for(;  lookup.populate_incoming_outgoing_connections_index >= 0; lookup.populate_incoming_outgoing_connections_index--)
+        {
+            var elem = lookup.data.connections[lookup.populate_incoming_outgoing_connections_index];
+            var stored_outgoing = lookup.outgoing_connections[elem.SourceId];
+            if(typeof(stored_outgoing) === 'undefined')
+            {
+                lookup.outgoing_connections[elem.SourceId] = [];
+                stored_outgoing = lookup.outgoing_connections[elem.SourceId];
+            }
+            stored_outgoing.push(elem);
+
+            var stored_incoming = lookup.incoming_connections[elem.DestinationId];
+            if(typeof(stored_incoming) === 'undefined')
+            {
+                lookup.incoming_connections[elem.DestinationId] = [];
+                stored_incoming = lookup.incoming_connections[elem.DestinationId];
+            }
+            stored_incoming.push(elem);
+            
+        }
+
+        lookup.populateNotes();       
+
+    };
+
+    lookup.populate = function(data) {
+        lookup.for_code_access_hash_of_color_presets = {};
+        lookup.data_color_presets.forEach(element => {
+            lookup.for_code_access_hash_of_color_presets[element.color] = true;
+        });
+        lookup.data = data;
+
+        lookup.populate_incoming_outgoing_connections();    
+    };
+
+lookup.populate_reset_helpers = function()
+{
+    lookup.populate_incoming_outgoing_connections_index = undefined;
+    lookup.populateNotes_startIndex = undefined;
+    lookup.populateConnections_startIndex = undefined;
+};
+
+
+// End of "js/populate.js"
+</script>
+<script>
+// Begin of "js/QueryableWorker.js"
+lookup.QueryableWorker = function (url, defaultListener, onError) 
+{
+    var instance = this;
+    var worker = new Worker(url);
+    var listeners = {};
+    var self = this;
+
+    self.defaultListener = defaultListener || function() {};
+
+    if (onError) {worker.onerror = onError;}
+
+    self.postMessage = function(message) {
+      worker.postMessage(message);
+    }
+
+    self.terminate = function() {
+      worker.terminate();
+    }
+
+    self.addListener = function(name, listener) {
+      listeners[name] = listener;
+    }
+
+    self.removeListener = function(name) {
+      delete listeners[name];
+    }
+
+    /*
+      This functions takes at least one argument, the method name we want to query.
+      Then we can pass in the arguments that the method needs.
+    */
+   self.sendQuery = function() {
+      if (arguments.length < 1) {
+        throw new TypeError('QueryableWorker.sendQuery takes at least one argument');
+        return;
+      }
+      worker.postMessage({
+        'queryMethod': arguments[0],
+        'queryMethodArguments': Array.prototype.slice.call(arguments, 1)
+      });
+    }
+
+    worker.onmessage = function(event) {
+      if (event.data instanceof Object &&
+        event.data.hasOwnProperty('queryMethodListener') &&
+        event.data.hasOwnProperty('queryMethodArguments')) 
+        {
+          if(typeof(listeners[event.data.queryMethodListener]) !== 'undefined')
+          {
+            setTimeout(function() {
+              listeners[event.data.queryMethodListener].apply(instance, event.data.queryMethodArguments);
+            }, 1);
+          }
+          else
+          {
+            console.log("did not find listener for: " + event.data.queryMethodListener);
+          }
+
+          
+        } else 
+        {
+          self.defaultListener.call(instance, event.data);
+        }
+    }
+};
+// End of "js/QueryableWorker.js"
+</script>
+<script>
+// Begin of "js/populate.js"
+lookup.CheckIfEveryNodeHasMigratedColor = function()
+    {
+            ko.utils.arrayForEach(lookup.Notes(), function(item) {
+                lookup.MigrationOfColorOfNode(item);
+            });
+    };
+
+    lookup.composedCards = ko.observableArray([]);
+    lookup.dictionary_of_notes = {};
+
+    lookup.dictionary_of_notes_updated = ko.observable(0);
+
+    lookup.split_search_key_and_add_to_dictionary = function(key, note_id, flag)
+    {
+        var index = 0;
+        
+        while(key.length > 0)
+        {
+            for(index = 0; index < key.length; index++)
+            {
+                var to_work_with = key.substring(index);
+                var entry = lookup.dictionary_of_notes[to_work_with];
+                if(typeof(entry) === 'undefined')
+                {
+                    lookup.dictionary_of_notes[to_work_with] = {};
+                    entry = lookup.dictionary_of_notes[to_work_with];
+                }
+                entry[note_id] = flag;
+                
+            }
+            key = key.substring(0, key.length - 1);
+        }
+    };
+
+    lookup.generateDictionary = function()
+    {
+        
+        ko.utils.arrayForEach(lookup.composedCards(), function(item) 
+        {    
+            var key = 
+                item
+                .Note
+                .text()
+                .replace("\r", " ")
+                .replace("\n", " ")
+                .replace("\t", " ")
+                .toLowerCase()
+                .trim();
+            
+            lookup.split_search_key_and_add_to_dictionary(key, item.Note.id, true);
+
+        });
+        var val = lookup.dictionary_of_notes_updated();
+        lookup.dictionary_of_notes_updated(val + 1);
+    };
+
+    lookup.generateDictionary_NoteAdded = function(note)
+    {
+        
+        var key = 
+                note
+                .text()
+                .replace("\r", " ")
+                .replace("\n", " ")
+                .replace("\t", " ")
+                .toLowerCase()
+                .trim();
+        lookup.split_search_key_and_add_to_dictionary(key, note.id, true);
+        var val = lookup.dictionary_of_notes_updated();
+        lookup.dictionary_of_notes_updated(val + 1);
+
+    };
+
+
+    lookup.populateConnections = function()
+    {
+        
+        lookup.populateConnections_startIndex = lookup.data.connections.length -1;
+        while(lookup.populateConnections_startIndex >= 0)
+        {
+            console.log('populateConnections: ' + lookup.populateConnections_startIndex);
+            var batchArray = [];
+            for(var batchKey = 0; batchKey < 100 && lookup.populateConnections_startIndex >= 0; batchKey++, lookup.populateConnections_startIndex--)
+            {
+                var elem = lookup.data.connections[lookup.populateConnections_startIndex];
+                var connectionToAdd = lookup.Instanciate_model_connection(
+                    {
+                        id: elem.id,
+                        sourceId: elem.SourceId,
+                        destinationId: elem.DestinationId,
+                        label: elem.label,
+                        generated: elem.generated,
+                        findNodeByIdFunc: lookup.findNodeById
+                    });
+                var found = lookup.hashCards[connectionToAdd.SourceId];
+                if(found)
+                {
+                    found.Tags.unshift(connectionToAdd);
+                }
+                batchArray.push(connectionToAdd);
+
+            }
+            ko.utils.arrayPushAll(lookup.Connections, batchArray);
+
+        }
+        setTimeout(lookup.generateDictionary, 1);
+
+    };
+
+
+    lookup.populateNotes = function()
+    {
+        lookup.populateNotes_startIndex = lookup.data.notes.length -1;
+        while(lookup.populateNotes_startIndex >= 0)
+        {
+            console.log('populateNotes: ' + lookup.populateNotes_startIndex);
+            var batchArray = [];
+            var cardsBatch = [];
+            for(var batchKey = 0; batchKey < 100 && lookup.populateNotes_startIndex >= 0; batchKey++, lookup.populateNotes_startIndex--)
+            {
+                var elem = lookup.data.notes[lookup.populateNotes_startIndex];
+                var noteToAdd = lookup.Instanciate_model_node(elem);
+                var outgoing = lookup.outgoing_connections[noteToAdd.id];
+                var incoming = lookup.incoming_connections[noteToAdd.id];
+                var composedCard = new lookup.model_Card({ Note: noteToAdd, connections_incoming: incoming, connections_outgoing: outgoing });
+                lookup.hashCards[noteToAdd.id] = composedCard;
+                cardsBatch.push(composedCard);
+                batchArray.push(noteToAdd);
+            }
+            ko.utils.arrayPushAll(lookup.Notes, batchArray);
+            ko.utils.arrayPushAll(lookup.composedCards, cardsBatch);
+
+        }
+        lookup.populateConnections();
+
+
+        
+
+    };
+
+    lookup.outgoing_connections = {};
+    lookup.incoming_connections = {};
+
+
+    lookup.populate_incoming_outgoing_connections = function()
+    {
+        lookup.populate_incoming_outgoing_connections_index = lookup.data.connections.length -1;
+        console.log('populate_incoming_outgoing_connections: ' + lookup.populate_incoming_outgoing_connections_index);
+
+        for(;  lookup.populate_incoming_outgoing_connections_index >= 0; lookup.populate_incoming_outgoing_connections_index--)
+        {
+            var elem = lookup.data.connections[lookup.populate_incoming_outgoing_connections_index];
+            var stored_outgoing = lookup.outgoing_connections[elem.SourceId];
+            if(typeof(stored_outgoing) === 'undefined')
+            {
+                lookup.outgoing_connections[elem.SourceId] = [];
+                stored_outgoing = lookup.outgoing_connections[elem.SourceId];
+            }
+            stored_outgoing.push(elem);
+
+            var stored_incoming = lookup.incoming_connections[elem.DestinationId];
+            if(typeof(stored_incoming) === 'undefined')
+            {
+                lookup.incoming_connections[elem.DestinationId] = [];
+                stored_incoming = lookup.incoming_connections[elem.DestinationId];
+            }
+            stored_incoming.push(elem);
+            
+        }
+
+        lookup.populateNotes();       
+
+    };
+
+    lookup.populate = function(data) {
+        lookup.for_code_access_hash_of_color_presets = {};
+        lookup.data_color_presets.forEach(element => {
+            lookup.for_code_access_hash_of_color_presets[element.color] = true;
+        });
+        lookup.data = data;
+
+        lookup.populate_incoming_outgoing_connections();    
+    };
+
+lookup.populate_reset_helpers = function()
+{
+    lookup.populate_incoming_outgoing_connections_index = undefined;
+    lookup.populateNotes_startIndex = undefined;
+    lookup.populateConnections_startIndex = undefined;
+};
+
+
+// End of "js/populate.js"
+</script>
+<script>
+// Begin of "js/loadNotes.js"
+
+lookup.loadNotes = function()
+    {
+        var data = {};
+        if(typeof(lookup.localStorage["Operations"]) !== 'undefined')
+        {
+            data.Operations = JSON.parse(lookup.localStorage.getItem("Operations"));
+            lookup.backendWorker.sendQuery('populate_Operations', data);
+        }
+        else
+        {
+            if(typeof(lookup.localStorage["Notes"]) !== 'undefined')
+            {
+                data.notes = JSON.parse(lookup.localStorage.getItem("Notes"));
+                data.connections = JSON.parse(lookup.localStorage.getItem("Connections"));
+                //lookup.populate(data);
+                lookup.backendWorker.addListener('populate.finished', function()
+                {
+                    console.log('populate.finished');
+                    lookup.backendWorker.sendQuery('migrate_to_Operations');
+                });
+                lookup.backendWorker.sendQuery('populate', data);
+            }
+            else
+            {
+                lookup.backendWorker.sendQuery('populate_Operations', []);
+                lookup.set_option_show_help_demo_notes_to_true();
+            }
+        }
+
+        lookup.send_to_worker_update_for_option_show_help_demo_notes();
+        
+        lookup.scrollToCard_processQueue();
+    };
+// End of "js/loadNotes.js"
+</script>
+<script>
+// Begin of "js/toBeEdited.js"
+lookup.toBeEdited = ko.observable(undefined);
+lookup.cardUnderEdit = ko.observable(undefined);
+lookup.beginToEdit = function(card)
+{
+    lookup.cardUnderEdit(card);
+    lookup.toBeEdited(card.Note.text());
+
+};
+lookup.cancelEdit = function()
+{
+    lookup.toBeEdited(undefined);
+    lookup.cardUnderEdit(undefined);
+};
+lookup.applyChanges = function()
+{
+    lookup.cardUnderEdit().Note.text(lookup.toBeEdited());
+    lookup.cancelEdit();
+};
+// End of "js/toBeEdited.js"
+</script>
+<script>
+// Begin of "js/taggedOrQuotedCard.js"
+lookup.taggedOrQuotedCard = ko.observable(undefined);
+lookup.beginToTagOrQuote = function(card)
+{
+    if(typeof(lookup.taggedOrQuotedCard()) !== 'undefined')
+    {
+        lookup.switchAdditionalInformationText(lookup.taggedOrQuotedCard());
+    }
+    lookup.taggedOrQuotedCard(card);
+};
+lookup.cancelAddingTagOrQuote = function()
+{
+    if(typeof(lookup.taggedOrQuotedCard()) !== 'undefined')
+    {
+        lookup.switchAdditionalInformationText(lookup.taggedOrQuotedCard());
+    }
+    lookup.taggedOrQuotedCard(undefined);
+};
+// End of "js/taggedOrQuotedCard.js"
+</script>
+<script>
+// Begin of "js/export.js"
+lookup.export = function()
+{
+    var toExport = {};
+
+    if(typeof(lookup.localStorage["Notes"]) !== 'undefined')
+    {
+        toExport.Notes = JSON.parse(lookup.localStorage.getItem("Notes"));
+        toExport.Connections = JSON.parse(lookup.localStorage.getItem("Connections"));
+    }
+    if(typeof(lookup.localStorage["Operations"]) !== 'undefined')
+    {
+        toExport.Operations = JSON.parse(lookup.localStorage.getItem("Operations"));
+    }
+
+    
+    var content = JSON.stringify(toExport);
+    
+    var dateTime = new Date();
+    var fileName = "WebPad-snapshot-" + dateTime.toDateString() + ".txt";
+
+
+    if (lookup.platform_is_cordova_android()) 
+    {
+        // document.addEventListener("deviceready", function () {
+        //   // save file using codova-plugin-file
+        // });
+        lookup.Android_file_download(content, fileName, 'text/plain');
+    } 
+    else
+    {
+        lookup.download(content, fileName, 'text/plain');
+    }
+    
+    
+
+
+};
+
+lookup.download = function(content, fileName, contentType) {
+    var a = document.createElement("a");
+    var file = new Blob([content], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+};
+
+lookup.android_file_error_handler = function(error)
+{
+    alert(JSON.stringify(error));
+};
+
+lookup.Android_file_download = function(content, fileName, contentType)
+{
+    window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory, function (dirEntry) 
+    {
+        dirEntry.getFile(fileName, { create: true, exclusive: false }, function (fileEntry) 
+        {
+            lookup.Android_write_file(fileEntry, content, contentType);
+            
+        }, lookup.android_file_error_handler);        
+     });
+};
+
+lookup.Android_write_file = function(fileEntry, content, contentType)
+{
+    fileEntry.createWriter(function (fileWriter) {
+
+        fileWriter.onwriteend = function() {
+            console.log("Successful file write...");
+            alert( "Your notes are exported to: " + fileEntry.nativeURL);
+        };
+
+        fileWriter.onerror = function (e) {
+            console.log("Failed file write: " + e.toString());
+        };
+
+        
+        var dataObj = new Blob([content], { type: contentType });
+
+        fileWriter.write(dataObj);
+    });
+
+};
+
+// End of "js/export.js"
+</script>
+<script>
+// Begin of "js/import.js"
+lookup.import = function()
+{
+    var selectedFiles = document.getElementById('importSnapshotFile').files;
+    if(typeof(selectedFiles) !== 'undefined')
+    {
+        if(selectedFiles.length > 0)
+        {
+            var snapshotFile = selectedFiles[0];
+            const reader = new FileReader();
+            reader.onload = function(e) 
+            { 
+                var result = e.target.result; 
+                var parsed = JSON.parse(result);
+                if
+                (
+                    typeof(parsed.Notes) !== 'undefined' && 
+                    typeof(parsed.Connections) !== 'undefined'
+                )
+                {
+                    var data = {};
+                    data.notes = parsed.Notes;
+                    data.connections = parsed.Connections
+                    lookup.backendWorker.addListener('populate.finished', function()
+                    {
+                        console.log('populate.finished');
+                        lookup.backendWorker.sendQuery('migrate_to_Operations');
+                    });
+                    lookup.backendWorker.sendQuery('populate', data);
+                }
+                if(typeof(parsed.Operations) !== 'undefined')
+                {
+                    var operationsData = 
+                    {
+                        Operations: parsed.Operations
+                    };
+                    lookup.backendWorker.sendQuery('import_Operations', operationsData);
+                }
+                
+            }; 
+            reader.readAsText(snapshotFile);
+        }
+    }
+
+};
+// End of "js/import.js"
+</script>
+        
+<script>
+// Begin of "js/saveItemsToStorage.js"
+lookup.saveItemsToStorage = function(toStoreNotes, toStoreConnections)
+{
+    lookup.localStorage.setItem("Notes", JSON.stringify(toStoreNotes));
+    lookup.localStorage.setItem("Connections", JSON.stringify(toStoreConnections));
+};
+
+// End of "js/saveItemsToStorage.js"
+</script>
+
+
+<script>
+// Begin of "js/jumpToCardFromOperation.js"
+lookup.jumpToCardFromOperation = function(data)
+{
+    lookup.pushToSearchNotesQueryText(data.text);
+    lookup.onListChanged_set_scrollToLatestCard();
+    
+    event.stopPropagation();
+};
+// End of "js/jumpToCardFromOperation.js"
+</script>
+<script>
+// Begin of "js/jumpToCardFromQuotedOperation.js"
+lookup.jumpToCardFromQuotedOperation = function(data)
+{
+    lookup.pushToSearchNotesQueryText(data.quoted.text);
+    lookup.onListChanged_set_scrollToLatestCard();
+    
+    event.stopPropagation();
+};
+// End of "js/jumpToCardFromQuotedOperation.js"
+</script>
+<script>
+// Begin of "js/operationToBeQuoted.js"
+lookup.operationToBeQuoted = ko.observable(undefined);
+lookup.actualTextOfQuote = ko.observable(undefined);
+lookup.colorOfNextQuote = ko.observable(undefined);
+lookup.isQuoteEdit = ko.observable(false);
+
+lookup.beginToQuoteText = function(data)
+{
+    lookup.colorOfNextQuote(lookup.GetRandomColor().Color());
+    lookup.isQuoteEdit(false);
+    lookup.actualTextOfQuote("");
+    lookup.operationToBeQuoted(data);
+    event.stopPropagation();
+};
+lookup.beginToQuoteQuotedText = function(data)
+{
+    lookup.colorOfNextQuote(lookup.GetRandomColor().Color());
+    lookup.isQuoteEdit(false);
+    lookup.actualTextOfQuote("");
+    lookup.operationToBeQuoted(data.quoted);
+    event.stopPropagation();
+};
+lookup.beginToQuoteEditText = function(data)
+{
+    lookup.colorOfNextQuote(lookup.GetRandomColor().Color());
+    lookup.isQuoteEdit(true);
+    lookup.actualTextOfQuote(data.text);
+    lookup.operationToBeQuoted(data);
+    event.stopPropagation();
+    
+};
+lookup.cancelAddingQuote = function()
+{
+    lookup.operationToBeQuoted(undefined);
+};
+// End of "js/operationToBeQuoted.js"
+</script>
+        
+<script>
+// Begin of "js/option_show_help_demo_notes.js"
+lookup.option_show_help_demo_notes = ko.observable(false);
+lookup.set_option_show_help_demo_notes_to_true = function() 
+{
+    lookup.option_show_help_demo_notes(true);
+    lookup.localStorage["option_show_help_demo_notes"] = true;
+    lookup.send_to_worker_update_for_option_show_help_demo_notes();
+};
+
+lookup.set_option_show_help_demo_notes_to_false = function() 
+{
+    lookup.option_show_help_demo_notes(false);
+    lookup.localStorage["option_show_help_demo_notes"] = false;
+    lookup.send_to_worker_update_for_option_show_help_demo_notes();
+};
+
+lookup.apply_saved_option_show_help_demo_notes = function() 
+{
+    var stored = lookup.localStorage["option_show_help_demo_notes"] === "true";
+    lookup.option_show_help_demo_notes(stored);
+    lookup.send_to_worker_update_for_option_show_help_demo_notes();
+};
+
+lookup.for_worker_apply_changes_in_option_show_help_demo_notes = function(newValue)
+{
+    lookup.option_show_help_demo_notes(newValue);
+};
+
+lookup.send_to_worker_update_for_option_show_help_demo_notes = function()
+{
+    if(typeof(lookup.backendWorker) !== 'undefined')
+    {
+        const valueToSend = lookup.option_show_help_demo_notes();
+        lookup.backendWorker.sendQuery('for_worker_apply_changes_in_option_show_help_demo_notes', valueToSend);
+    }
+    
+};
+// End of "js/option_show_help_demo_notes.js"
+</script>
+        
+        
+
+
+<script>
+// Begin of "js/save_Operations_to_storage.js"
+lookup.save_Operations_to_storage = function(toStoreOperations)
+{
+    lookup.localStorage.setItem("Operations", JSON.stringify(toStoreOperations));
+};
+
+// End of "js/save_Operations_to_storage.js"
+</script>
+<script>
+// Begin of "js/model_Operation.js"
+lookup.model_Operation = function(data)
+{
+    var self = this;
+    self.id = data.id;
+    self.name = data.name;
+    self.data = data.data;
+    self.time = data.time;
+
+    self.createDate = new Date(self.time);
+
+    if(self.name === 'create')
+    {
+        lookup.prefill_Operation(self, self.data);
+    }
+    if(self.name === 'quote' || self.name === 'quote-edit')
+    {
+        lookup.prefill_Operation(self, self.data.current);
+        self.quoted = {};
+        lookup.prefill_Operation(self.quoted, self.data.quoted);
+    }
+
+    self.ConvertToJs = function()
+    {
+        var toReturn =
+        {
+            id: self.id,
+            name: self.name,
+            data: self.data,
+            time: self.time
+        };
+        return toReturn;
+    };
+
+    self.toolBoxVisible = ko.observable(false);
+    self.switchToolBoxVisibility = function()
+    {
+        self.toolBoxVisible(!self.toolBoxVisible());
+        return true;
+    };
+
+    self.toTupleKey = function()
+    {
+        var key = {name: self.name, data: self.data};
+        var toReturn = JSON.stringify(key);
+        return toReturn;
+    };
+};
+
+lookup.split_color_from_6_hex = function(color_in_6_hex)
+{
+    var hex_red = '0x' + color_in_6_hex.substring(1, 3);
+    var hex_green = '0x' + color_in_6_hex.substring(3, 5);
+    var hex_blue = '0x' + color_in_6_hex.substring(5, 7);
+    var int_red = parseInt(hex_red, 16);
+    var int_green = parseInt(hex_green, 16);
+    var int_blue = parseInt(hex_blue, 16);
+    var colorWithIntComponents = 
+    {
+        red: int_red,
+        green: int_green,
+        blue: int_blue
+    };
+    return colorWithIntComponents;
+};
+
+lookup.form_rgba_string_constant = function(color_with_components, alpha)
+{
+    var toReturn = 'rgba(' + color_with_components.red + ', ' + color_with_components.green + ', ' + color_with_components.blue + ', ' + alpha +')' ;
+    return toReturn;
+};
+
+lookup.prefill_Operation = function(self, abc) {
+
+    self.color = abc.color;
+    self.text = abc.text;
+    if(typeof(abc.color) === 'undefined')
+    {
+        self.color_border = "#ff12ff";
+    }
+    else
+    {
+        var color_with_components = lookup.split_color_from_6_hex(abc.color);
+
+        self.color_border = lookup.form_rgba_string_constant(color_with_components, '0.6')
+    }
+    var test = abc.text.split(" ");
+    self.textSplitted = ko.utils.arrayMap(test, function (item) {
+        var toSearch = item
+            .replace("\r", " ")
+            .replace("\n", " ")
+            .replace("\t", " ")
+            .toLowerCase()
+            .trim();
+        
+        // if url then do nothing
+        if(!toSearch.startsWith("https://"))
+        {
+            if (
+                toSearch.endsWith(",")
+                || toSearch.endsWith(".")
+                || toSearch.endsWith("?")
+                || toSearch.endsWith("!")) 
+            {
+                toSearch = toSearch.substring(0, toSearch.length - 1);
+            }
+
+        }
+        
+        return {
+            word: item,
+            wordQuery: toSearch
+        };
+    }
+    );
+}
+
+// End of "js/model_Operation.js"
+</script>
+<script>
+// Begin of "js/check_platform.js"
+lookup.platform_is_cordova = ko.observable(false);
+lookup.platform_is_cordova_electron_mac = ko.observable(false);
+lookup.platform_is_cordova_android = ko.observable(false);
+
+lookup.check_platform = function()
+{
+    if(typeof(window.cordova) !== 'undefined')
+    {
+        lookup.platform_is_cordova(true);
+
+        if(
+            typeof(navigator) !== 'undefined' && 
+            (navigator.platform === "MacIntel")
+        )
+        {
+            lookup.platform_is_cordova_electron_mac(true);
+        }
+        else
+        {
+            lookup.platform_is_cordova_android(true);
+        }
+    }
+};
+// End of "js/check_platform.js"
+</script>
+<script>
+// Begin of "js/privacy_policy_link.js"
+lookup.privacy_policy_link = ko.computed(function()
+{
+    if(lookup.platform_is_cordova())
+    {
+        //&& window.cordova.platformId !== "electron"
+        if(lookup.platform_is_cordova_electron_mac())
+        {
+            return "file:///Applications/WebPad.app/Contents/Resources/app.asar/privacy_policy_mac.html";
+        }
+        else
+        {
+            return "file:///android_asset/www/privacy_policy_android.html";
+        }
+        
+    }
+    else
+    {
+        return "/privacy_policy.html";
+    }
+});
+// End of "js/privacy_policy_link.js"
+</script>
+
+<script>
+// Begin of "js/patreonLinkOnClick.js"
+lookup.patreonLinkOnClick = function(event)
+{
+    event.stopPropagation();
+};
+// End of "js/patreonLinkOnClick.js"
+</script>
+
+<script>
+// Begin of "js/mainPage.js"
+
+
+function ConnectedNotesViewModel()
+{
+    var self = this;
+    lookup.actions = 
+    {
+        NoteUpdated: 'NoteUpdated',
+        ConnectionUpdated: 'ConnectionUpdated',
+        NoteAdded: 'NoteAdded',
+        NoteDeleted: 'NoteDeleted',
+        ConnectionAdded: 'ConnectionAdded',
+        ConnectionDeleted: 'ConnectionDeleted',
+        PositionsUpdated: 'PositionsUpdated',
+        HealthCheckRequest: 'HealthCheckRequest',
+        HealthCheckIdsProposal: 'HealthCheckIdsProposal'
+
+    };
+
+    lookup.defineLocalStorage();
+
+    lookup.backgroundApplySaved();
+
+    lookup.apply_saved_option_show_help_demo_notes();
+
+    lookup.hashCards = {};
+
+    lookup.populateColorPresets();
+
+    lookup.backendWorker = new lookup.QueryableWorker("worker-scripts/bundle-backend-worker.js?v=" + new Date().toString());
+
+    lookup.send_to_worker_update_for_option_show_help_demo_notes();
+
+
+    lookup.backendWorker.addListener('saveItemsToStorage.event', function(toStoreNotes, toStoreConnections) 
+    {
+        lookup.saveItemsToStorage(toStoreNotes, toStoreConnections);
+    });
+
+    lookup.backendWorker.addListener('saveOperationsToStorage.event', function(toStoreOperations) 
+    {
+        lookup.save_Operations_to_storage(toStoreOperations);
+    });
+
+    lookup.backendWorker.addListener('saveAliasesToStorage.event', function(toStoreAliases) 
+    {
+        lookup.save_Aliases_to_storage(toStoreAliases);
+    });
+
+    
+
+
+    lookup.check_platform();
+
+
+    lookup.LimitedFilteredOperations = ko.observableArray([]);
+    lookup.backendWorker.addListener('LimitedFilteredOperations.changed.event', function(cards) 
+    {
+        lookup.LimitedFilteredOperations.removeAll();
+        var processed = ko.utils.arrayMap(cards, function(item) {
+            var operation = new lookup.model_Operation(item)
+            return operation;
+        });
+        
+        ko.utils.arrayPushAll(lookup.LimitedFilteredOperations, processed);
+    });
+
+    lookup.hidden_operations_count = ko.observable(0);
+    lookup.backendWorker.addListener('NumberOfHiddenOperations.changed', function(length) 
+    {
+        lookup.hidden_operations_count(length);
+    });
+
+    lookup.CurrentResultLimit = ko.observable(45);
+
+    lookup.backendWorker.addListener('CurrentResultLimit.changed', function(length) 
+    {
+        lookup.CurrentResultLimit(length);
+    });
+
+    lookup.backendWorker.addListener('populate_Operations.finished', function(length) 
+    {
+        //[2022-05-01] no aliases for current release, I will create a seperate UI-screen for adding them
+        lookup.load_aliases();
+    });
+
+    lookup.backendWorker.addListener('import_Operations.finished', function(length) 
+    {
+        lookup.backendWorker.sendQuery('regenerate_Aliases');
+    });
+
+    lookup.ExtendCurrentResultLimit = function()
+    {
+        lookup.onListChanged_keepHeightOffset();
+        lookup.backendWorker.sendQuery("ExtendCurrentResultLimit");
+    };
+
+    lookup.ResetCurrentResultLimit = function()
+    {
+        lookup.backendWorker.sendQuery("ResetCurrentResultLimit");
+    };
+
+    lookup.SetCurrentResultLimit = function(value)
+    {
+        lookup.backendWorker.sendQuery("SetCurrentResultLimit", value);
+    };
+
+    if(typeof(Worker) == "undefined") {
+        console.log("Failed to find Worker.");
+    }
+    if(!lookup.localStorage) {
+        console.log("Local web-storage is unavailable.");
+    }
+  
+    self.ApplyLookupToSelf = function()
+    {
+        for(var x in lookup)
+        {
+            self[x] = lookup[x];
+        }
+    };
+
+    
+
+};
+
+
+// End of "js/mainPage.js"
+</script>
+<script>
+// Begin of "js/cardAfterRender.js"
+
+
+lookup.listRenderedCompletely = function()
+{
+    console.log("list rendered completely, but cards still can be moved");
+        if(typeof(lookup.ReversedListOfCards_scroll_to_first) === 'undefined' 
+            || lookup.ReversedListOfCards_scroll_to_first === true)
+        {
+            lookup.onListChanged_set_scrollToLatestCard();
+            lookup.ReversedListOfCards_scroll_to_first = false;
+        }
+        
+        lookup.onListChanged_ScrollToDestination();
+};
+
+lookup.cardAfterRender = function()
+{
+    var cards = lookup.LimitedFilteredOperations();
+    // var renderedItems = ko.utils.arrayFilter(cards, 
+    //     function(item)
+    //     { 
+    //         try
+    //         {
+    //             var searchResult = $('#'+item.Note.id);
+    //             return searchResult.length > 0;
+
+    //         }
+    //         catch(error)
+    //         {
+    //             console.log("failed search query was : " + '#'+item.Note.id)
+    //         }
+    //         return true;
+    //     } );
+    // var isCompletelyRendered = renderedItems.length === cards.length;
+    var numberOfRenderedCards = $(".webpad-card").length;
+    var isCompletelyRendered = cards.length === numberOfRenderedCards;
+    if(isCompletelyRendered)
+    {
+        lookup.listRenderedCompletely();
+    }
+    
+};
+// End of "js/cardAfterRender.js"
+</script>
+<script>
+// Begin of "js/document_ready_ideas.js"
+$(document).ready(function()
+{
+    var viewModel = new ConnectedNotesViewModel();
+    viewModel.ApplyLookupToSelf();
+    ko.applyBindings(viewModel);
+    viewModel.getViewPortSize();
+    window.addEventListener('resize', function(){  viewModel.getViewPortSize(); }, true);
+    window.addEventListener('scroll', function () {
+        viewModel.getViewPortScrollPosition();
+    }, true);
+    viewModel.loadNotes();
+    viewModel.check_platform();
+});
+// End of "js/document_ready_ideas.js"
+</script>
+<script>
+// Begin of "cordova.js"
+// just placeholder for real file
+// End of "cordova.js"
+</script>
+        
+        
+        <div vocab="https://schema.org/"
+            typeof="WebApplication" style="display: none;">
+            <span property="name" >WebPad</span>
+            <span property="description">wiki, personal wiki.</span>
+            <span property="accessMode">textual</span>
+            <div property="offers" typeof="Offer">
+                Price: $<span property="price">0.00</span>
+                <meta property="priceCurrency" content="USD" />
+                <span property="description">unlimited* sync between devices forever*, well until this web-site is running.</span>
+            </div>
+            <span property="operatingSystem">Windows</span>
+            <span property="operatingSystem">Linux</span>
+            <span property="operatingSystem">MacOs</span>
+            <span property="operatingSystem">iOs</span>
+            <span property="operatingSystem">Android</span>
+            <span property="image">https://webpad.com.ua/WebPad_logo_500.png</span>
+        
+        </div>
+        
+        <div vocab="https://schema.org/"
+            typeof="Organization" style="display: none;">
+            <span property="url" >https://webpad.com.ua</span>
+            <span property="logo">https://webpad.com.ua/WebPad_logo_500.png</span>
+        </div>
+        
+        
+        <script type="text/html" id="additional-toolbox-template">
+            
+            <span class="webpad-extra-information-plus-icon" data-bind="ifnot: $data.AdditionalInformationTextVisible">
+                &nbsp;
+                <span>
+                    <div
+                        class="webpad-brightness-dimmed webpad-button-no-border" 
+                        style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
+                        data-bind=" click: $root.switchAdditionalInformationText">
+                        <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
+                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                        <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="Edit"/> 
+                    </div>
+                </span>
+                &nbsp;
+                <span
+                    data-bind="ifnot: $data.isTask()" >
+                    <div
+                        class="webpad-brightness-dimmed webpad-button-no-border" 
+                        style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
+                        data-bind=" click: $data.convertToTask">
+                        <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Edit"/> 
+                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                        <span class="" style="color: #84bfff; vertical-align: middle; margin-right: 0.5rem;" alt="hashTagBeginSymbol"> task</span>
+                    </div>
+                </span>
+            </span>
+        </script>
+
+        <script type="text/html" id="to-be-removed-template">
+            <span data-bind="if: $data.toBeRemoved">
+                <span data-bind="ifnot: $data.completlyRemoved">
+                    <h2>
+                        <span 
+                                placeholder="..." 
+                                class="webpad-contenteditable webpad-break-words-node"
+                                data-bind="
+                                    contentEditable: false,
+                                    htmlLazy:  $data.Note.text,
+                                    style:
+                                    {
+                                        color: $data.Note.color,
+                                    }
+                                    " 
+                            ></span>
+                        <div>
+                            <h1 style="color: aliceblue;"  > 
+                                <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" ">
+                                    <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="removal?"/> 
+                                </div>
+                                <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" ">?</span>
+                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $data.rollbackRemoval">
+                                    <img src="svg/times-green.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="rollback removal"/> 
+                                </div>
+                                &nbsp;&nbsp;
+                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $data.reallyRemove">
+                                    <img src="svg/thumbs-up-orange.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="really remove"/> 
+                                </div>
+                            </h1>
+                        </div>
+                        
+                    </h2>
+                </span>
+                <span data-bind="if: $data.completlyRemoved">
+                    <br/>
+                    <br/>
+                    <span class="webpad-brightness-dimmed" style="color: aliceblue;" >removing...</span>
+                </span>
+                
+            </span>
+        </script>
+        
+        <script type="text/html" id="text-with-dictionary-template">
+            <!-- ko foreach: $data.textSplitted -->
+                <!-- ko if: $data.isUrl -->
+                    <a class="webpad-break-words-node" target="_blank" data-bind="
+                        text: word,
+                        style:
+                        {
+                            color: $parent.color,
+                            'word-break': word.length < 20 ? 'break-word' : 'break-all',
+                        },
+                        attr:
+                        {
+                            href: word
+                        }
+                            ">
+                    </a>
+                <!-- /ko -->
+                <!-- ko ifnot: $data.isUrl -->
+                    <!-- ko if: $data.exists -->
+                        <span class="webpad-break-words-node webpad-border-bottom-dotted" data-bind="
+                            text: word,
+                            style:
+                            {
+                                color: $parent.color,
+                                'border-color': wordNode.color,
+                                'border-bottom-style': word.length < 3 ? 'solid' : 'dotted',
+                                'word-break': word.length < 20 ? 'break-word' : 'break-all',
+                            },
+                            click: $root.jumpToCardFromWord
+                                ">
+                        </span>
+                    <!-- /ko -->
+                <!-- /ko -->
+                
+                
+            <!-- /ko -->
+        </script>
+
+        <script type="text/html" id="text-with-dictionary-light-template">
+            <!-- ko foreach: $data.textSplitted -->  
+                <!-- ko if: $data.word.startsWith('https://') -->
+                    <a class="webpad-break-words-node" target="_blank" data-bind="
+                        text: word,
+                        style:
+                        {
+                            color: $parent.color,
+                            'word-break': word.length < 20 ? 'break-word' : 'break-all',
+                        },
+                        attr:
+                        {
+                            href: word
+                        }
+                            ">
+                    </a>
+                <!-- /ko -->
+                <!-- ko ifnot: $data.word.startsWith('https://') -->         
+                    <span class="webpad-break-words-node webpad-border-bottom-dotted" data-bind="
+                        text: word,
+                        style:
+                        {
+                            color: $parent.color,
+                            'border-color': $parent.color_border,
+                            'border-bottom-style': word.length < 3 ? 'solid' : 'dotted',
+                            'word-break': word.length < 20 ? 'break-word' : 'break-all',
+                        },
+                        click: $root.jumpToCardFromWord
+                            ">
+                    </span>
+                <!-- /ko -->            
+            <!-- /ko -->
+        </script>
+
+        <script type="text/html" id="referenced-operation-template">
+            <div
+                class="webpad-sky-frame webpad-brightness-dimmed"
+                style=" font-size: 1rem; margin-left: 1rem; margin-right: 1rem; padding-right: 0.5rem; padding-left: 0.5rem;" >
+                    <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data }  -->
+                    <!-- /ko -->
+            </div>
+            <div class="webpad-hide-on-small-screen" style="height: 1rem;">
+            </div>
+        </script>
+        
+        
+       
+
+        <script type="text/html" id="operation-template">
+                <div class="w3-col w3-container s12 m12 l12">
+                    <div 
+                        style="font-size: 1.3rem;" 
+                        class="webpad-card w3-animate-opacity" 
+                        data-bind="click: $data.switchToolBoxVisibility" >
+                        <span>
+                            
+                            <span data-bind="if: name === 'quote' || name === 'quote-edit' " >
+                                <div class="webpad-brightness-dimmed " data-bind="css:{ 'webpad-quote-edit' : name === 'quote-edit', 'webpad-quote' : name === 'quote'}">
+                                    <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data.quoted }  -->
+                                    <!-- /ko -->
+                                    &nbsp;
+                                    <span data-bind="visible: $data.toolBoxVisible">
+                                        <span  class="w3-animate-opacity webpad-brightness-dimmed">
+                                            <span class="webpad-button-no-border webpad-brightness-dimmed webpad-golden-frame" 
+                                                style="font-size: 1.4rem; padding-left: 0.5rem; padding-right: 0.5rem; " data-bind=" click: $root.jumpToCardFromQuotedOperation">
+                                                <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
+                                            </span>
+                                            <span
+                                                class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" 
+                                                style="font-size: 1.4rem;"
+                                                data-bind=" click: $root.beginToQuoteQuotedText">
+                                                <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
+                                                <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                                                <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="Edit"/> 
+                                            </span>
+                                        </span>
+                                    </span>
+                                </div>
+                            </span>
+                            <span >
+                                <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data }  -->
+                                <!-- /ko -->
+                                <span data-bind="visible: $data.toolBoxVisible">
+                                    <span  class="w3-animate-opacity webpad-brightness-dimmed">
+                                        <span 
+                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button webpad-golden-frame" 
+                                            style="font-size: 1.4rem;"
+                                            data-bind=" click: $root.jumpToCardFromOperation">   
+                                            <img src="svg/search.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;"  alt="jump to quote source"/> 
+                                            <span class="" style="color: #84bfff; vertical-align: middle;" alt="hashTagBeginSymbol"></span>
+                                        </span>
+                                        <span class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" 
+                                            style="font-size: 1.4rem;"
+                                            data-bind=" click: $root.beginToQuoteEditText">
+                                            <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
+                                            <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="Edit"/> 
+                                        </span>
+                                        <span
+                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" 
+                                            style="font-size: 1.4rem;"
+                                            data-bind=" click: $root.beginToQuoteText">
+                                            <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
+                                            <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                                            <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="Edit"/> 
+                                        </span>
+                                        
+                                    </span>
+                                    <div style="font-size: 0.8rem;" class="w3-animate-opacity webpad-brightness-dimmed"  >
+                                            <span style="color: aliceblue;  vertical-align: middle;" data-bind="text: $data.createDate">
+                                            </span>
+                                        </div>
+                                </span>
+                            </span>
+                        </span>
+                    </div>
+                    
+                    
+                    
+                </div>
+        </script>
+
+        <script type="text/html" id="show-more-template">
+                <div class="w3-row" data-bind="if: $root.hidden_operations_count() > 0">
+                   <div class="w3-col w3-container s12 m12 l12">
+                       <span style="font-size: 2rem;">                    
+                            <button  class="webpad-node webpad-green" 
+                                data-bind=
+                                    "click: $root.ExtendCurrentResultLimit,
+                                    text: 'Show more items ( ' + $root.hidden_operations_count() + ' hidden)'">
+                            </button>
+                        </span>
+                   </div>
+                </div>
+        </script>
+        <div id="webpad-header-absolute-position" class="webpad-header-absolute-position" style="display: none;" data-bind="visible: !$root.menuIsOpen()">
+            <div class="w3-row">
+                <div class="w3-col w3-container s12 m12 l12">
+                    <div class=" webpad-button-no-border webpad-golden-frame" data-bind="click: $root.toggleMenu">
+                        <span style="font-size: 2rem;">
+                            <img src="svg/bars.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="open menu"/> 
+                        </span>
+                        
+                    </div>
+                    <span class="webpad-color-yellow" style="font-size: 2rem;">
+                        Web
+                    </span>
+                    <span class="webpad-color-blue" style="font-size: 2rem;">
+                        Pad
+                    </span>
+
+                    <span class="webpad-color-yellow webpad-hide-on-small-screen" style="font-size: 2rem;">
+                        : personal wiki
+                    </span>
+                    <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
+                        : personal wiki
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div 
+            class="webpad-menu-absolute-position webpad-menu-animate-left" 
+            style="display: none;" 
+            data-bind="
+                visible:  $root.menuWasAlreadyOpen(),
+                css: { 
+                    'webpad-menu-animate-show-from-left': $root.menuIsOpen(),
+                    'webpad-menu-animate-fade-back': !$root.menuIsOpen()
+                }">
+            <div class="w3-row webpad-sky-frame webpad-options-background">
+                <div class="w3-col w3-container s12 m12 l12">
+                    <span class="webpad-color-yellow" style="font-size: 2rem;">
+                        Web
+                    </span>
+                    <span class="webpad-color-blue" style="font-size: 2rem;">
+                        Pad
+                    </span>
+                    <span class="webpad-color-yellow webpad-hide-on-small-screen" style="font-size: 2rem;">
+                        : options
+                    </span>
+                    <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
+                        : options
+                    </span>
+                    <div style="float: right;" class=" webpad-button-no-border webpad-golden-frame" data-bind="click: $root.toggleMenu">
+                        <span style="font-size: 2rem;">
+                            <img src="svg/times-close-menu.svg" class="webpad-edit-pencil" alt="close menu"/> 
+                        </span>
+                        
+                    </div>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <h2>
+                        <a style="color: rgb(242, 155, 103);" data-bind="attr:
+                        {
+                            href: privacy_policy_link
+                        }">Privacy policy</a>
+                    </h2>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <span class="webpad-color-blue" style="font-size: 1.4rem; " >
+                            Background:
+                    </span>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <div style="font-size: 1.4rem; background: #333" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-coral" 
+                            data-bind="click: $root.changeBackground">
+                            graphite
+                    </div>
+                    <div style="font-size: 1.4rem; background: #000" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple" 
+                            data-bind="click: $root.changeBackgroundToDefault">
+                            darkness
+                    </div>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <span class="webpad-color-blue" style="font-size: 1.4rem; " >
+                            Demo notes:
+                    </span>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange" 
+                            data-bind="
+                                click: $root.set_option_show_help_demo_notes_to_true,
+                                style:
+                                {
+                                    visibility: $root.option_show_help_demo_notes() ? 'hidden' : 'inherit'
+                                }">
+                            show
+                    </div>
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange" 
+                            data-bind="
+                                click: $root.set_option_show_help_demo_notes_to_false,
+                                style:
+                                {
+                                    visibility: $root.option_show_help_demo_notes() ? 'inherit' : 'hidden'
+                                }">
+                            hide
+                    </div>
+
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <span class="webpad-color-blue" style="font-size: 1.4rem; " >
+                            Export & import:
+                    </span>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <div style="color: yellow;">All data is stored only on your device, use export regularly to perform a backup:</div>
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange" 
+                            data-bind="click: $root.export">
+                            export
+                    </div>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    <label for="importSnapshotFile" style="color: yellow;">Select a snapshot file to import:</label>
+                    <br/>
+                    <input type="file" id="importSnapshotFile" style="width: 20rem; color: yellow;" >
+                    <div style="font-size: 1.4rem;" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple" 
+                            data-bind="click: $root.import">
+                            import
+                    </div>
+                </div>
+                <div 
+                    class="w3-col w3-container s12 m12 l12" 
+                    data-bind="ifnot: $root.platform_is_cordova()" >
+                    <br/> 
+                    <div
+                        class="lisperanto-patreon">
+                        <a 
+                            href="https://www.patreon.com/o_kryvonos" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            onclick="lookup.patreonLinkOnClick(event)"
+                            >
+                            Support on Patreon
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="w3-col w3-container s12 m12 l12">
+                    <br/> 
+                </div>
+                
+                <address class="webpad-color-yellow" style="padding-left: 1rem;">
+                    This app is created by Oleksandr Kryvonos, a developer from Odesa, Ukraine. <br/>
+                    It is an open-source project: <a href="https://github.com/uprun/WebPad">https://github.com/uprun/WebPad</a> <br/>
+                    
+                    if you have any suggestions feel free to e-mail me: <a href="mailto:oleksandr.kryvonos.ods.ua@gmail.com">oleksandr.kryvonos.ods.ua@gmail.com</a><br/>
+                </address> 
+                <div class="w3-col w3-container s12 m12 l12 webpad-color-coral" data-bind="if: $root.platform_is_cordova()">
+                    For more information you can visit a website of the project <a href="https://webpad.com.ua">https://webpad.com.ua</a> <br/>
+                </div>
+                
+                
+            </div>
+        </div>
+
+        <div class="" style="width: 100%;" >
+            <div style="width: 100%; padding-top: 4rem; padding-bottom: 10rem;" class="webpad-search-result-area">
+                <div class="w3-row" >
+                    <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen">
+                        &NonBreakingSpace;
+                    </div>
+                    <div  class="w3-col w3-container s12 m8 l6 webpad-text-column" >
+                        <div style="" data-bind="template: { name: 'show-more-template' } " ></div>
+                        <div class="w3-row" id="cards-list-reversed"  
+                            data-bind="template: 
+                                { 
+                                    name: 'operation-template',
+                                    foreach: LimitedFilteredOperations,
+                                    afterRender: $root.cardAfterRender
+                                } ">
+
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div 
+            class="webpad-search-absolute-position" 
+            style="display: none; bottom: 0rem; margin-bottom: 0.2em;" 
+            data-bind="visible:  typeof($root.toBeEdited()) === 'undefined'">
+            <div class="w3-row">
+                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
+                    &NonBreakingSpace;
+                    <span style="float: right;" data-bind="if: $root.stackSearchNotesQuery().length > 0">
+                        <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.rollbackSearchNotesQuery">
+                            <span lass="webpad-brightness-dimmed" style="color: aliceblue; vertical-align: middle;" data-bind="text: $root.stackSearchNotesQuery().length">
+                            </span>
+                            <img src="svg/history.svg" class="webpad-edit-pencil" alt="create"/> 
+                        </div>
+                    </span>
+                    <span style="float: right;" data-bind="if: $root.stackSearchNotesQuery().length === 0 && $root.SearchNotesQuery().trim().length > 0">
+                        <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.rollbackSearchNotesQuery">
+                            <img src="svg/history.svg" class="webpad-edit-pencil" style=" margin-left: 0.5rem; margin-right: 0.5rem;" alt="create"/> 
+                        </div>
+                    </span>
+                </div>
+                <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-small-screen" style="font-size: 1.4rem;">
+                    <input 
+                        placeholder="create or search note ..." 
+                        class="webpad-search-bar webpad-search-bar-adjusted"
+                        type="text" 
+                        data-bind="
+                            textInput: $root.SearchNotesQuery,
+                            event: {keypress: $root.searchBarKeyPress}
+                            " 
+                    /> 
+                </div>
+                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
+                    <span style="float: left;" data-bind="if: $root.SearchNotesQuery().trim().length > 0">
+                        <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.CreateNoteFromSearchQuery">
+                            <img src="svg/plus.svg" class="webpad-edit-pencil " style=" margin-left: 0.5rem; margin-right: 0.5rem;" alt="create"/> 
+                        </div>
+                    </span>
+                    &NonBreakingSpace;
+
+                </div>
+                <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-large-screen" style="font-size: 1.4rem; margin: 0px; padding: 0px;">
+                    <div class="w3-row">
+                        <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 2rem;">
+                            <span data-bind="if: $root.stackSearchNotesQuery().length > 0">
+                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.rollbackSearchNotesQuery">
+                                    <span lass="webpad-brightness-dimmed" style="color: aliceblue; vertical-align: middle;" data-bind="text: $root.stackSearchNotesQuery().length">
+                                    </span>
+                                    <img src="svg/history.svg" class="webpad-edit-pencil" alt="create"/> 
+                                </div>
+                            </span>
+                            <span data-bind="if: $root.stackSearchNotesQuery().length === 0 && $root.SearchNotesQuery().trim().length > 0">
+                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.rollbackSearchNotesQuery">
+                                    <img src="svg/history.svg" class="webpad-edit-pencil" style=" margin-left: 0.5rem; margin-right: 0.5rem;" alt="create"/> 
+                                </div>
+                            </span>
+                        </div>
+                        <div class="w3-col w3-container s6  webpad-hide-on-large-screen" style="font-size: 2rem;">
+                            <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
+                                <div class="webpad-button-no-border webpad-golden-frame" style="float: right;" data-bind=" click: $root.CreateNoteFromSearchQuery">
+                                    <img src="svg/plus.svg" class="webpad-edit-pencil" style=" margin-left: 0.5rem; margin-right: 0.5rem;" alt="create"/> 
+                                </div>
+                            </span>
+                        </div>
+                        <div class="w3-col w3-container s12 webpad-hide-on-large-screen" style="font-size: 1.4rem;">
+                            <input 
+                                placeholder="create or search note ..." 
+                                class="webpad-search-bar webpad-search-bar-full-width"
+                                type="text" 
+                                data-bind="
+                                    textInput: $root.SearchNotesQuery,
+                                    event: {keypress: $root.searchBarKeyPress}
+                                    " 
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div 
+            class="webpad-search-absolute-position" 
+            style="display: none; bottom: 0rem; margin-bottom: 0.2em;"
+             data-bind="if: typeof($root.operationToBeQuoted()) !== 'undefined', visible: typeof($root.operationToBeQuoted()) !== 'undefined'">
+            <div class="w3-row">
+                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
+                    &NonBreakingSpace;
+                </div>
+                <div class="w3-col w3-container s12 m8 l6" >
+                    <!-- ko template: { name: 'referenced-operation-template', data: $root.operationToBeQuoted() }  -->
+                    <!-- /ko -->
+                </div>
+                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
+                    &NonBreakingSpace;
+                </div>
+                
+            </div>
+            <div class="w3-row">
+                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
+                    &NonBreakingSpace;
+                    <span style="float: right;">
+                        <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.cancelAddingQuote">
+                            <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
+                        </div>
+                    </span>
+                </div>
+                <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-small-screen" style="font-size: 1.4rem;">
+                    
+                    <span class="webpad-brightness-dimmed webpad-button-no-border" >
+                        <!-- ko ifnot: $root.isQuoteEdit -->
+                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                        <!-- /ko -->
+                        <!-- ko if: $root.isQuoteEdit -->
+                        <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil" alt="Edit"/> 
+                        <!-- /ko -->
+                    </span>
+                    
+                    <span style="width: calc(100% - 2em);" class="webpad-break-words-node"
+                        data-bind="
+                                style:
+                                {
+                                    color: $root.colorOfNextQuote,
+                                },">
+                        <input 
+                            placeholder="add quote" 
+                            class="webpad-extra-information w3-animate-opacity"
+                            type="text" 
+                            data-bind="
+                                textInput:  $root.actualTextOfQuote,
+                                event: {keypress: $root.additionalInfoKeyPress}, 
+                                hasFocus: true
+                                " 
+                        />
+                    </span>                    
+                </div>
+                <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
+                    <span style="float: left;" data-bind="if: $root.actualTextOfQuote().trim().length > 0 && $root.actualTextOfQuote().trim() !== $root.operationToBeQuoted().text.trim() ">
+                        <div class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.AddNoteToExistingOne">
+                            <img src="svg/check.svg"  class="webpad-edit-pencil" alt="Apply edit" /> 
+                            <span style="color: aliceblue; font-size: 1.4rem;">
+                            </span>
+                        </div>
+                    </span>
+                    &NonBreakingSpace;
+
+                </div>
+                <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-large-screen" style="font-size: 1.4rem; margin: 0px; padding: 0px;">
+                    <div class="w3-row">
+                        <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 2rem;">
+                            <span >
+                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.cancelAddingQuote">
+                                    <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
+                                </div>
+                            </span>
+                           
+                        </div>
+                        <div class="w3-col w3-container s6  webpad-hide-on-large-screen" style="font-size: 2rem;">
+                            <span data-bind="if: $root.actualTextOfQuote().trim().length > 0 && $root.actualTextOfQuote().trim() !== $root.operationToBeQuoted().text.trim() ">
+                                <div class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" style="float: right;" data-bind=" click: $root.AddNoteToExistingOne">
+                                    <img src="svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" /> 
+                                    <span style="color: aliceblue; font-size: 1.4rem; margin-right: 0.5rem;">
+                                    </span>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="w3-col w3-container s12 webpad-hide-on-large-screen" style="font-size: 1.4rem;">
+                            
+                            <span class="webpad-brightness-dimmed webpad-button-no-border" >
+                                <!-- ko ifnot: $root.isQuoteEdit -->
+                                <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                                <!-- /ko -->
+                                <!-- ko if: $root.isQuoteEdit -->
+                                <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil" alt="Edit"/> 
+                                <!-- /ko -->
+                            </span>
+                            
+                            <span style="width: calc(100% - 2em);" class="webpad-break-words-node"
+                                data-bind="
+                                        style:
+                                        {
+                                            color: $root.colorOfNextQuote,
+                                        },">
+                                <input 
+                                    placeholder="add quote" 
+                                    class="webpad-extra-information w3-animate-opacity"
+                                    type="text" 
+                                    data-bind="
+                                        textInput:  $root.actualTextOfQuote,
+                                        event: {keypress: $root.additionalInfoKeyPress}, 
+                                        hasFocus: true
+                                        " 
+                                />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+</body>
+</html>

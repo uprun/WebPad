@@ -1,31 +1,31 @@
 importScripts("../lib/knockout/knockout-latest.debug.js" + "?v=" + new Date().toString())
-importScripts("../js/lookup.js"  + "?v=" + new Date().toString())
-importScripts("../js/populateColorPresets.js" + "?v=" + new Date().toString())
-importScripts("../js/model_Card.js" + "?v=" + new Date().toString())
-importScripts("../js/model_ColorPreset.js" + "?v=" + new Date().toString())
-importScripts("../js/model_Connection.js" + "?v=" + new Date().toString())
-importScripts("../js/model_Node.js" + "?v=" + new Date().toString())
-importScripts("../js/model_Operation.js" + "?v=" + new Date().toString())
-importScripts("../js/get_Operation_Index.js" + "?v=" + new Date().toString())
-importScripts("../js/migrate_to_Operations.js" + "?v=" + new Date().toString())
-importScripts("../js/Instanciate_model_node.js" + "?v=" + new Date().toString())
-importScripts("../js/GetRandomColor.js" + "?v=" + new Date().toString())
-importScripts("../js/Instanciate_model_connection.js" + "?v=" + new Date().toString())
-importScripts("../js/findNodeById.js" + "?v=" + new Date().toString())
-importScripts("../js/SearchNotesQuery.js" + "?v=" + new Date().toString())
-importScripts("../js/findCardByMainNodeId.js" + "?v=" + new Date().toString())
-importScripts("../js/populate_Operations.js" + "?v=" + new Date().toString())
-importScripts("../js/Operation_was_added.js" + "?v=" + new Date().toString())
-importScripts("../js/demo_notes_en.js" + "?v=" + new Date().toString())
-importScripts("../js/populate.js" + "?v=" + new Date().toString())
-importScripts("../js/option_show_help_demo_notes.js" + "?v=" + new Date().toString())
-importScripts("../js/find_aliases.js" + "?v=" + new Date().toString())
-importScripts("../js/import_Operations.js" + "?v=" + new Date().toString())
-importScripts("../js/populate_Aliases.js" + "?v=" + new Date().toString())
-importScripts("../js/regenerate_Aliases.js" + "?v=" + new Date().toString())
-importScripts("../js/define_Aliases_if_needed.js" + "?v=" + new Date().toString())
-importScripts("../js/add_Alias.js" + "?v=" + new Date().toString())
-importScripts("../js/remove_Alias.js" + "?v=" + new Date().toString())
+<script language="JavaScript" type="text/javascript" src="js/lookup.js"  ></script>
+<script language="JavaScript" type="text/javascript" src="js/populateColorPresets.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/model_Card.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/model_ColorPreset.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/model_Connection.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/model_Node.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/model_Operation.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/get_Operation_Index.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/migrate_to_Operations.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/Instanciate_model_node.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/GetRandomColor.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/Instanciate_model_connection.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/findNodeById.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/SearchNotesQuery.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/findCardByMainNodeId.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/populate_Operations.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/Operation_was_added.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/demo_notes_en.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/populate.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/option_show_help_demo_notes.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/find_aliases.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/import_Operations.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/populate_Aliases.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/regenerate_Aliases.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/define_Aliases_if_needed.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/add_Alias.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/remove_Alias.js" ></script>
 
 
 

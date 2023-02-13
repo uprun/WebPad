@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using ConnectedNotes.Models;
-using Newtonsoft.Json;
+using System.IO;
+using System.Threading.Tasks;
 
-namespace ConnectedNotes.Controllers
+namespace WebPad.Controllers
 {
     [RequestSizeLimit(100_000)]// explicit restriction to 100 kilobytes
     public class HomeController : Controller
@@ -19,11 +19,74 @@ namespace ConnectedNotes.Controllers
                 homePageCounter++;
                 Console.WriteLine($"#{homePageCounter} open of \"{nameof(ideas)}\" page");
             }
+            Response.Redirect("bundle_ideas.html");
             
             return View();
         }
 
-        
+        // public async Task GenerateBundle()
+        // {
+        //     Console.WriteLine(nameof(GenerateBundle));
+        //     string input_path = Path.Combine(Directory.GetCurrentDirectory(), "Views", "Home", "ideas.cshtml");
+        //     string output_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "bundle_ideas.html");
+        //     await helper_generate_bundle(input_path, output_path);
+        // }
+
+        // public async Task GenerateBundle_worker()
+        // {
+        //     Console.WriteLine(nameof(GenerateBundle));
+        //     string input_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "worker-scripts", "backend-worker.js");
+        //     string output_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "worker-scripts", "bundle-backend-worker.js");
+        //     await helper_generate_bundle(input_path, output_path, add_script_tags: false);
+        // }
+
+        private static async Task helper_generate_bundle(string input_path, string output_path, bool add_script_tags = true)
+        {
+            using (StreamReader input_source = new StreamReader(input_path))
+            using (StreamWriter output_writer = new StreamWriter(output_path))
+            {
+                while (input_source.EndOfStream == false)
+                {
+                    var line = await input_source.ReadLineAsync();
+                    var trimmed = line.Trim();
+                    if (trimmed.StartsWith("<script ") && trimmed.Contains("src=\"") && (trimmed.Contains("lisperanto-skip-bundle=\"true\"") == false))
+                    {
+                        var splitted = trimmed.Split(new[] { " ", "</script>", ">", "<script" }, StringSplitOptions.RemoveEmptyEntries);
+                        string src_from_script = splitted.First(a => a.StartsWith("src="));
+                        var actual_path = src_from_script.Substring("src=\"".Length, src_from_script.Length - "src=\"\"".Length);
+
+                        if(add_script_tags)
+                        {
+                            output_writer.WriteLine("<script>");
+                        }
+                            
+                        var path_to_src_file = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", actual_path);
+                        Console.WriteLine($"Processing \"{path_to_src_file}\"");
+                        output_writer.WriteLine($"// Begin of \"{actual_path}\"");
+                        using (var extra_readed = new StreamReader(path_to_src_file))
+                        {
+                            var all_content = extra_readed.ReadToEnd();
+                            output_writer.Write(all_content);
+
+                        }
+                        output_writer.WriteLine("");
+                        output_writer.WriteLine($"// End of \"{actual_path}\"");
+                        if(add_script_tags)
+                        {
+                            output_writer.WriteLine("</script>");
+                        }
+
+                    }
+                    else
+                    {
+                        //Console.WriteLine(line);
+                        output_writer.WriteLine(line);
+                    }
+
+                }
+            }
+        }
+
 
         private static Dictionary<string, string> synchronization = new Dictionary<string, string>();
 
@@ -32,137 +95,6 @@ namespace ConnectedNotes.Controllers
         private static object pageLocker = new object();
 
         private static int homePageCounter = 0;
-
-        private string GenerateToken()
-        {
-            char[] toSelect = new[] {'a', 'b', 'c', 'd', 'k', 'h', 'y', 'z', 'x', 's', 'f', 't'};
-            var rnd = new Random();
-            int firstPart = rnd.Next(100);
-            int secondIndex = rnd.Next(toSelect.Length);
-            int secondIndex_2 = rnd.Next(toSelect.Length);
-            int thirdPart = rnd.Next(100);
-            int fourthIndex = rnd.Next(toSelect.Length);
-            int fourthIndex_2 = rnd.Next(toSelect.Length);
-            return $"{firstPart}{toSelect[secondIndex]}{toSelect[secondIndex_2]}{thirdPart}{toSelect[fourthIndex]}{toSelect[fourthIndex_2]}";
-        }
-
-        [HttpPost]
-        [Throttle(Name = nameof(GetOneTimeSynchronizationToken), Seconds = 10)]
-        public JsonResult GetOneTimeSynchronizationToken(string publicKey)
-        {
-            string token;
-            lock(synchronization)
-            {
-                token = GenerateToken();
-                for(int k = 0; k < 10; k++)
-                {
-                    if(synchronization.ContainsKey(token))
-                    {
-                        token = GenerateToken();
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                if(synchronization.ContainsKey(token))
-                {
-                    throw new Exception("Failed to obtain link token");
-                }
-                synchronization.Add(token, publicKey);
-            }
-
-            return new JsonResult(token);
-            
-        }
-        
-        [HttpPost]
-        public JsonResult SendMessages(Message[] messages, string senderPublicKey)
-        {
-            if(messages.Length > 10)
-            {
-                Request.HttpContext.Response.StatusCode = (int) System.Net.HttpStatusCode.Conflict;
-                return new JsonResult(false);
-            }
-            int sum = messages.Sum(x => x.Receiver.Length + x.Text.Length);
-            if(sum > 4000)
-            {
-                Request.HttpContext.Response.StatusCode = (int) System.Net.HttpStatusCode.Conflict;
-                return new JsonResult(false);
-            }
-            
-
-            foreach(var m in messages)
-            {
-                lock(messageBox)
-                {
-                    var searchKey = ( Receiver: m.Receiver, Sender: senderPublicKey);
-                    if(messageBox.ContainsKey( searchKey ))
-                    {
-                        var mailBoxOfReceiver = messageBox[searchKey];
-                        
-                        mailBoxOfReceiver.Add(m.Text);
-
-                    }
-                    else
-                    {
-                        messageBox.Add(searchKey, new List<string>() { m.Text });
-                    }
-                }
-            }
-
-            return new JsonResult(true);
-            
-        }
-
-        [HttpPost]
-        public JsonResult ReceiveMessages(string publicKey)
-        { // potential place for abuse, because anyone who nows my public key can receive messages for me, but on the other hand they are encrypted
-            var result = new List<string>();
-        
-            lock(messageBox)
-            {
-                messageBox.Keys.ToList()
-                .Where(x => x.Receiver == publicKey)
-                .ToList()
-                .ForEach(key => {
-                    var mailBoxOfReceiver = messageBox[key];
-                    result.AddRange(mailBoxOfReceiver.Take(2));
-                    messageBox[key] = mailBoxOfReceiver.Skip(2).ToList();
-                });
-            }
-           
-
-            return new JsonResult(result);
-            
-        }
-
-        [HttpPost]
-        public JsonResult StatisticsOnLoad(string publicKey)
-        {
-
-            return new JsonResult(true);
-        }
-        
-        [Throttle(Name = nameof(GetSyncPublicKey), Seconds = 5)]
-        public JsonResult GetSyncPublicKey(string token)
-        {
-            string publicKey;
-            lock(synchronization)
-            {
-                if(synchronization.ContainsKey(token))
-                {
-                    publicKey = synchronization[token];
-                    synchronization.Remove(token);
-                }
-                else
-                {
-                    throw new Exception("Syncronization token not found");
-                }
-            }
-            return new JsonResult(publicKey);
-
-        }
 
         
 
