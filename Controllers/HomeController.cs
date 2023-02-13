@@ -24,29 +24,46 @@ namespace WebPad.Controllers
             return View();
         }
 
-        public async Task GenerateBundle()
+        // public async Task GenerateBundle()
+        // {
+        //     Console.WriteLine(nameof(GenerateBundle));
+        //     string input_path = Path.Combine(Directory.GetCurrentDirectory(), "Views", "Home", "ideas.cshtml");
+        //     string output_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "bundle_ideas.html");
+        //     await helper_generate_bundle(input_path, output_path);
+        // }
+
+        // public async Task GenerateBundle_worker()
+        // {
+        //     Console.WriteLine(nameof(GenerateBundle));
+        //     string input_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "worker-scripts", "backend-worker.js");
+        //     string output_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "worker-scripts", "bundle-backend-worker.js");
+        //     await helper_generate_bundle(input_path, output_path, add_script_tags: false);
+        // }
+
+        private static async Task helper_generate_bundle(string input_path, string output_path, bool add_script_tags = true)
         {
-            Console.WriteLine(nameof(GenerateBundle));
-            string v = Path.Combine(Directory.GetCurrentDirectory(), "Views", "Home", "ideas.cshtml");
-            string output_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "bundle_ideas.html");
-            using (StreamReader input_source = new StreamReader(v))
+            using (StreamReader input_source = new StreamReader(input_path))
             using (StreamWriter output_writer = new StreamWriter(output_path))
             {
-                while(input_source.EndOfStream == false)
+                while (input_source.EndOfStream == false)
                 {
                     var line = await input_source.ReadLineAsync();
                     var trimmed = line.Trim();
-                    if(trimmed.StartsWith("<script ") && trimmed.Contains("src=\"") && (trimmed.Contains("lisperanto-skip-bundle=\"true\"") == false))
+                    if (trimmed.StartsWith("<script ") && trimmed.Contains("src=\"") && (trimmed.Contains("lisperanto-skip-bundle=\"true\"") == false))
                     {
-                        var splitted = trimmed.Split(new []{" ", "</script>", ">" , "<script"}, StringSplitOptions.RemoveEmptyEntries);
+                        var splitted = trimmed.Split(new[] { " ", "</script>", ">", "<script" }, StringSplitOptions.RemoveEmptyEntries);
                         string src_from_script = splitted.First(a => a.StartsWith("src="));
                         var actual_path = src_from_script.Substring("src=\"".Length, src_from_script.Length - "src=\"\"".Length);
-                        
-                        output_writer.WriteLine("<script>");
+
+                        if(add_script_tags)
+                        {
+                            output_writer.WriteLine("<script>");
+                        }
+                            
                         var path_to_src_file = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", actual_path);
                         Console.WriteLine($"Processing \"{path_to_src_file}\"");
                         output_writer.WriteLine($"// Begin of \"{actual_path}\"");
-                        using(var extra_readed = new StreamReader(path_to_src_file))
+                        using (var extra_readed = new StreamReader(path_to_src_file))
                         {
                             var all_content = extra_readed.ReadToEnd();
                             output_writer.Write(all_content);
@@ -54,7 +71,10 @@ namespace WebPad.Controllers
                         }
                         output_writer.WriteLine("");
                         output_writer.WriteLine($"// End of \"{actual_path}\"");
-                        output_writer.WriteLine("</script>");
+                        if(add_script_tags)
+                        {
+                            output_writer.WriteLine("</script>");
+                        }
 
                     }
                     else
@@ -62,12 +82,11 @@ namespace WebPad.Controllers
                         //Console.WriteLine(line);
                         output_writer.WriteLine(line);
                     }
-                    
-                } 
+
+                }
             }
         }
 
-        
 
         private static Dictionary<string, string> synchronization = new Dictionary<string, string>();
 

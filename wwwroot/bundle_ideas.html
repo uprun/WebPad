@@ -2629,7 +2629,7 @@ function ConnectedNotesViewModel()
 
     lookup.populateColorPresets();
 
-    lookup.backendWorker = new lookup.QueryableWorker("worker-scripts/backend-worker.js?v=" + new Date().toString());
+    lookup.backendWorker = new lookup.QueryableWorker("worker-scripts/bundle-backend-worker.js?v=" + new Date().toString());
 
     lookup.send_to_worker_update_for_option_show_help_demo_notes();
 
