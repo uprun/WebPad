@@ -19,6 +19,7 @@ namespace WebPad.Controllers
                 homePageCounter++;
                 Console.WriteLine($"#{homePageCounter} open of \"{nameof(ideas)}\" page");
             }
+            Response.Redirect("bundle_ideas.html");
             
             return View();
         }
@@ -27,22 +28,39 @@ namespace WebPad.Controllers
         {
             Console.WriteLine(nameof(GenerateBundle));
             string v = Path.Combine(Directory.GetCurrentDirectory(), "Views", "Home", "ideas.cshtml");
-            string output_path = Path.Combine(Directory.GetCurrentDirectory(), "Views", "Home", "bundle_ideas.cshtml");
-            using (StreamReader str_r = new StreamReader(v))
-            using (StreamWriter str_w = new StreamWriter(output_path))
+            string output_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "bundle_ideas.html");
+            using (StreamReader input_source = new StreamReader(v))
+            using (StreamWriter output_writer = new StreamWriter(output_path))
             {
-                while(str_r.EndOfStream == false)
+                while(input_source.EndOfStream == false)
                 {
-                    var line = await str_r.ReadLineAsync();
+                    var line = await input_source.ReadLineAsync();
                     var trimmed = line.Trim();
-                    if(trimmed.StartsWith("<script language=\"JavaScript\"") && trimmed.Contains("src=\""))
+                    if(trimmed.StartsWith("<script ") && trimmed.Contains("src=\"") && (trimmed.Contains("lisperanto-skip-bundle=\"true\"") == false))
                     {
-                        Console.WriteLine("Replaced by content of the file");
+                        var splitted = trimmed.Split(new []{" ", "</script>", ">" , "<script"}, StringSplitOptions.RemoveEmptyEntries);
+                        string src_from_script = splitted.First(a => a.StartsWith("src="));
+                        var actual_path = src_from_script.Substring("src=\"".Length, src_from_script.Length - "src=\"\"".Length);
+                        
+                        output_writer.WriteLine("<script>");
+                        var path_to_src_file = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", actual_path);
+                        Console.WriteLine($"Processing \"{path_to_src_file}\"");
+                        output_writer.WriteLine($"// Begin of \"{actual_path}\"");
+                        using(var extra_readed = new StreamReader(path_to_src_file))
+                        {
+                            var all_content = extra_readed.ReadToEnd();
+                            output_writer.Write(all_content);
+
+                        }
+                        output_writer.WriteLine("");
+                        output_writer.WriteLine($"// End of \"{actual_path}\"");
+                        output_writer.WriteLine("</script>");
 
                     }
                     else
                     {
-                        Console.WriteLine(line);
+                        //Console.WriteLine(line);
+                        output_writer.WriteLine(line);
                     }
                     
                 } 
