@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace WebPad.Controllers
 {
@@ -21,11 +22,9 @@ namespace WebPad.Controllers
 
         public IActionResult ideas(string source)
         {
-            lock(pageLocker)
-            {
-                homePageCounter++;
-                Console.WriteLine($"#{homePageCounter} open of \"{nameof(ideas)}\" page");
-            }
+            Interlocked.Increment(ref homePageCounter);
+            Console.WriteLine($"#{homePageCounter} open of \"{nameof(ideas)}\" page");
+            
             Response.Redirect("bundle_ideas.html");
             
             return View();
@@ -130,12 +129,6 @@ namespace WebPad.Controllers
                 output_writer.WriteLine("</script>");
             }
         }
-
-        private static Dictionary<string, string> synchronization = new Dictionary<string, string>();
-
-        private static Dictionary<(string Receiver, string Sender), List<string> > messageBox = new Dictionary<(string Receiver, string Sender), List<string> > ();
-
-        private static object pageLocker = new object();
 
         private static int homePageCounter = 0;
 

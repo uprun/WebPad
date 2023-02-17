@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +18,8 @@ namespace ConnectedNotes
         {
             Configuration = configuration;
         }
+
+        private static int homePageCounter = 0;
 
         public IConfiguration Configuration { get; }
 
@@ -39,7 +42,17 @@ namespace ConnectedNotes
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 //app.UseHsts();
             }
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                OnPrepareResponse = (context) => {
+                    if(context.File.Name != "bundle_ideas.html")
+                    {
+                        return;
+                    }
+                    Interlocked.Increment(ref homePageCounter);
+                    Console.WriteLine($"#{homePageCounter} open of {context.File.Name} page");
+                }
+            });
 
             app.UseRouting();
 
