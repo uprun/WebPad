@@ -31,15 +31,15 @@ namespace WebPad.Controllers
             return View();
         }
 
-        public async Task GenerateBundle()
-        {
-            Console.WriteLine(nameof(GenerateBundle));
-            string input_path = Path.Combine(Directory.GetCurrentDirectory(), "Views", "Home", "ideas.cshtml");
-            string output_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "bundle_ideas.html");
-            await helper_generate_bundle(input_path, output_path);
+        // public async Task GenerateBundle()
+        // {
+        //     Console.WriteLine(nameof(GenerateBundle));
+        //     string input_path = Path.Combine(Directory.GetCurrentDirectory(), "Views", "Home", "ideas.cshtml");
+        //     string output_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "bundle_ideas.html");
+        //     await helper_generate_bundle(input_path, output_path);
             
-            await GenerateBundle_worker();
-        }
+        //     await GenerateBundle_worker();
+        // }
 
         private async Task GenerateBundle_worker()
         {
