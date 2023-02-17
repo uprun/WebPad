@@ -533,3 +533,18 @@ div.webpad-hide-on-large-screen
 {
     color: inherit;
 } 
+
+
+.mypage-desktop-laptop {
+    background:#77c2e8;
+    color:#000000;
+    border-radius: 3rem;
+    padding: 0.5rem;
+    border: 0.2rem solid #000000;
+    display: inline-block;
+}
+
+.mypage-desktop-laptop > a
+{
+    color: inherit;
+} 
