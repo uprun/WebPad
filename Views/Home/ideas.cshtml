@@ -185,7 +185,7 @@
                 &nbsp;
                 <span>
                     <div
-                        class="webpad-brightness-dimmed webpad-button-no-border" 
+                        class="webpad-brightness-dimmed webpad-button-no-border prevent-select cursor-pointer" 
                         style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
                         data-bind=" click: $root.switchAdditionalInformationText">
                         <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
@@ -197,7 +197,7 @@
                 <span
                     data-bind="ifnot: $data.isTask()" >
                     <div
-                        class="webpad-brightness-dimmed webpad-button-no-border" 
+                        class="webpad-brightness-dimmed webpad-button-no-border prevent-select cursor-pointer" 
                         style="border-style: solid; border-width: 0.2rem; border-color: #f8e755; border-radius: 0.7rem; font-size: 1.4rem;"
                         data-bind=" click: $data.convertToTask">
                         <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem;" alt="Edit"/> 
@@ -226,15 +226,15 @@
                             ></span>
                         <div>
                             <h1 style="color: aliceblue;"  > 
-                                <div class="webpad-brightness-dimmed webpad-button-no-border" data-bind=" ">
+                                <div class="webpad-brightness-dimmed webpad-button-no-border prevent-select cursor-pointer" data-bind=" ">
                                     <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="removal?"/> 
                                 </div>
                                 <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" ">?</span>
-                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $data.rollbackRemoval">
+                                <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $data.rollbackRemoval">
                                     <img src="svg/times-green.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="rollback removal"/> 
                                 </div>
                                 &nbsp;&nbsp;
-                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $data.reallyRemove">
+                                <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $data.reallyRemove">
                                     <img src="svg/thumbs-up-orange.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="really remove"/> 
                                 </div>
                             </h1>
@@ -352,12 +352,12 @@
                                     &nbsp;
                                     <span data-bind="visible: $data.toolBoxVisible">
                                         <span  class="w3-animate-opacity webpad-brightness-dimmed">
-                                            <span class="webpad-button-no-border webpad-brightness-dimmed webpad-golden-frame" 
+                                            <span class="webpad-button-no-border webpad-brightness-dimmed webpad-golden-frame prevent-select cursor-pointer" 
                                                 style="font-size: 1.4rem; padding-left: 0.5rem; padding-right: 0.5rem; " data-bind=" click: $root.jumpToCardFromQuotedOperation">
                                                 <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
                                             </span>
                                             <span
-                                                class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" 
+                                                class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" 
                                                 style="font-size: 1.4rem;"
                                                 data-bind=" click: $root.beginToQuoteQuotedText">
                                                 <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
@@ -374,20 +374,20 @@
                                 <span data-bind="visible: $data.toolBoxVisible">
                                     <span  class="w3-animate-opacity webpad-brightness-dimmed">
                                         <span 
-                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button webpad-golden-frame" 
+                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button webpad-golden-frame prevent-select cursor-pointer" 
                                             style="font-size: 1.4rem;"
                                             data-bind=" click: $root.jumpToCardFromOperation">   
                                             <img src="svg/search.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;"  alt="jump to quote source"/> 
                                             <span class="" style="color: #84bfff; vertical-align: middle;" alt="hashTagBeginSymbol"></span>
                                         </span>
-                                        <span class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" 
+                                        <span class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" 
                                             style="font-size: 1.4rem;"
                                             data-bind=" click: $root.beginToQuoteEditText">
                                             <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
                                             <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="Edit"/> 
                                         </span>
                                         <span
-                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" 
+                                            class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" 
                                             style="font-size: 1.4rem;"
                                             data-bind=" click: $root.beginToQuoteText">
                                             <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
@@ -662,14 +662,14 @@
                 <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
                     &NonBreakingSpace;
                     <span style="float: right;" data-bind="if: $root.stackSearchNotesQuery().length > 0">
-                        <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.rollbackSearchNotesQuery">
+                        <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.rollbackSearchNotesQuery">
                             <span lass="webpad-brightness-dimmed" style="color: aliceblue; vertical-align: middle;" data-bind="text: $root.stackSearchNotesQuery().length">
                             </span>
                             <img src="svg/history.svg" class="webpad-edit-pencil" alt="create"/> 
                         </div>
                     </span>
                     <span style="float: right;" data-bind="if: $root.stackSearchNotesQuery().length === 0 && $root.SearchNotesQuery().trim().length > 0">
-                        <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.rollbackSearchNotesQuery">
+                        <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.rollbackSearchNotesQuery">
                             <img src="svg/history.svg" class="webpad-edit-pencil" style=" margin-left: 0.5rem; margin-right: 0.5rem;" alt="create"/> 
                         </div>
                     </span>
@@ -687,7 +687,7 @@
                 </div>
                 <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
                     <span style="float: left;" data-bind="if: $root.SearchNotesQuery().trim().length > 0">
-                        <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.CreateNoteFromSearchQuery">
+                        <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.CreateNoteFromSearchQuery">
                             <img src="svg/plus.svg" class="webpad-edit-pencil " style=" margin-left: 0.5rem; margin-right: 0.5rem;" alt="create"/> 
                         </div>
                     </span>
@@ -698,21 +698,21 @@
                     <div class="w3-row">
                         <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 2rem;">
                             <span data-bind="if: $root.stackSearchNotesQuery().length > 0">
-                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.rollbackSearchNotesQuery">
+                                <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.rollbackSearchNotesQuery">
                                     <span lass="webpad-brightness-dimmed" style="color: aliceblue; vertical-align: middle;" data-bind="text: $root.stackSearchNotesQuery().length">
                                     </span>
                                     <img src="svg/history.svg" class="webpad-edit-pencil" alt="create"/> 
                                 </div>
                             </span>
                             <span data-bind="if: $root.stackSearchNotesQuery().length === 0 && $root.SearchNotesQuery().trim().length > 0">
-                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.rollbackSearchNotesQuery">
+                                <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.rollbackSearchNotesQuery">
                                     <img src="svg/history.svg" class="webpad-edit-pencil" style=" margin-left: 0.5rem; margin-right: 0.5rem;" alt="create"/> 
                                 </div>
                             </span>
                         </div>
                         <div class="w3-col w3-container s6  webpad-hide-on-large-screen" style="font-size: 2rem;">
                             <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
-                                <div class="webpad-button-no-border webpad-golden-frame" style="float: right;" data-bind=" click: $root.CreateNoteFromSearchQuery">
+                                <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" style="float: right;" data-bind=" click: $root.CreateNoteFromSearchQuery">
                                     <img src="svg/plus.svg" class="webpad-edit-pencil" style=" margin-left: 0.5rem; margin-right: 0.5rem;" alt="create"/> 
                                 </div>
                             </span>
@@ -754,7 +754,7 @@
                 <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
                     &NonBreakingSpace;
                     <span style="float: right;">
-                        <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.cancelAddingQuote">
+                        <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.cancelAddingQuote">
                             <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
                         </div>
                     </span>
@@ -763,10 +763,10 @@
                     
                     <span class="webpad-brightness-dimmed webpad-button-no-border" >
                         <!-- ko ifnot: $root.isQuoteEdit -->
-                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil prevent-select" alt="Add information" /> 
                         <!-- /ko -->
                         <!-- ko if: $root.isQuoteEdit -->
-                        <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil" alt="Edit"/> 
+                        <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil prevent-select" alt="Edit"/> 
                         <!-- /ko -->
                     </span>
                     
@@ -790,7 +790,7 @@
                 </div>
                 <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
                     <span style="float: left;" data-bind="if: $root.actualTextOfQuote().trim().length > 0 && $root.actualTextOfQuote().trim() !== $root.operationToBeQuoted().text.trim() ">
-                        <div class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.AddNoteToExistingOne">
+                        <div class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.AddNoteToExistingOne">
                             <img src="svg/check.svg"  class="webpad-edit-pencil" alt="Apply edit" /> 
                             <span style="color: aliceblue; font-size: 1.4rem;">
                             </span>
@@ -803,7 +803,7 @@
                     <div class="w3-row">
                         <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 2rem;">
                             <span >
-                                <div class="webpad-button-no-border webpad-golden-frame" data-bind=" click: $root.cancelAddingQuote">
+                                <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.cancelAddingQuote">
                                     <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
                                 </div>
                             </span>
@@ -811,7 +811,7 @@
                         </div>
                         <div class="w3-col w3-container s6  webpad-hide-on-large-screen" style="font-size: 2rem;">
                             <span data-bind="if: $root.actualTextOfQuote().trim().length > 0 && $root.actualTextOfQuote().trim() !== $root.operationToBeQuoted().text.trim() ">
-                                <div class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame" style="float: right;" data-bind=" click: $root.AddNoteToExistingOne">
+                                <div class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" style="float: right;" data-bind=" click: $root.AddNoteToExistingOne">
                                     <img src="svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" /> 
                                     <span style="color: aliceblue; font-size: 1.4rem; margin-right: 0.5rem;">
                                     </span>
@@ -822,10 +822,10 @@
                             
                             <span class="webpad-brightness-dimmed webpad-button-no-border" >
                                 <!-- ko ifnot: $root.isQuoteEdit -->
-                                <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                                <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil prevent-select" alt="Add information" /> 
                                 <!-- /ko -->
                                 <!-- ko if: $root.isQuoteEdit -->
-                                <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil" alt="Edit"/> 
+                                <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil prevent-select" alt="Edit"/> 
                                 <!-- /ko -->
                             </span>
                             
