@@ -6,6 +6,7 @@ lookup.check_platform = function()
 {
     if(typeof(window.cordova) !== 'undefined')
     {
+        console.log("Cordova is here");
         lookup.platform_is_cordova(true);
 
         if(
@@ -19,5 +20,10 @@ lookup.check_platform = function()
         {
             lookup.platform_is_cordova_android(true);
         }
+    }
+    else
+    {
+        console.log("Not a Cordova");
+
     }
 };

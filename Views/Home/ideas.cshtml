@@ -150,7 +150,7 @@
         <script language="JavaScript" type="text/javascript" src="js/mainPage.js" ></script>
         <script language="JavaScript" type="text/javascript" src="js/cardAfterRender.js" ></script>
         <script language="JavaScript" type="text/javascript" src="js/document_ready_ideas.js" ></script>
-        <script language="JavaScript" type="text/javascript" src="cordova.js"></script>
+        <script language="JavaScript" type="text/javascript" src="cordova.js" lisperanto-skip-bundle="true"></script>
         
         
         <div vocab="https://schema.org/"
@@ -520,8 +520,10 @@
                 </div>
                 <div 
                     class="w3-col w3-container s12 m12 l12" 
-                    data-bind="ifnot: $root.platform_is_cordova()" >
-                    <span
+                    data-bind="ifnot: $root.platform_is_cordova()"
+                     >
+                    <span 
+                        
                         class="lisperanto-patreon">
                         <a 
                             href="https://www.patreon.com/o_kryvonos" 
@@ -539,6 +541,15 @@
                     <span
                         class="mypage-android">
                         <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">Android app</a>
+                    </span>
+                </div>
+                <div 
+                    class="w3-col w3-container s12 m12 l12" 
+                    data-bind="if: $root.platform_is_cordova()"
+                     >
+                    <span
+                        class="mypage-discord">
+                        <a href="https://discord.gg/W5HFSKVXgc">Join Discord</a>
                     </span>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">

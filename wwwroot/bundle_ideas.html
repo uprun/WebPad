@@ -3333,8 +3333,9 @@ lookup.platform_is_cordova_android = ko.observable(false);
 
 lookup.check_platform = function()
 {
-    if(typeof(window.cordova) !== 'undefined')
+    if(typeof(window._cordovaNative) !== 'undefined')
     {
+        console.log("Cordova is here");
         lookup.platform_is_cordova(true);
 
         if(
@@ -3348,6 +3349,11 @@ lookup.check_platform = function()
         {
             lookup.platform_is_cordova_android(true);
         }
+    }
+    else
+    {
+        console.log("Not a Cordova");
+
     }
 };
 // End of "js/check_platform.js"
@@ -3592,11 +3598,7 @@ $(document).ready(function()
 });
 // End of "js/document_ready_ideas.js"
 </script>
-<script>
-// Begin of "cordova.js"
-// just placeholder for real file
-// End of "cordova.js"
-</script>
+        <script language="JavaScript" type="text/javascript" src="cordova.js" lisperanto-skip-bundle="true"></script>
         
         
         <div vocab="https://schema.org/"
@@ -3966,8 +3968,10 @@ $(document).ready(function()
                 </div>
                 <div 
                     class="w3-col w3-container s12 m12 l12" 
-                    data-bind="ifnot: $root.platform_is_cordova()" >
-                    <span
+                    data-bind="ifnot: $root.platform_is_cordova()"
+                     >
+                    <span 
+                        
                         class="lisperanto-patreon">
                         <a 
                             href="https://www.patreon.com/o_kryvonos" 
@@ -3985,6 +3989,15 @@ $(document).ready(function()
                     <span
                         class="mypage-android">
                         <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">Android app</a>
+                    </span>
+                </div>
+                <div 
+                    class="w3-col w3-container s12 m12 l12" 
+                    data-bind="if: $root.platform_is_cordova()"
+                     >
+                    <span
+                        class="mypage-discord">
+                        <a href="https://discord.gg/W5HFSKVXgc">Join Discord</a>
                     </span>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
