@@ -57,6 +57,7 @@ lookup.Android_file_download = function(content, fileName, contentType)
         {
             lookup.Android_write_file(fileEntry, content, contentType);
             
+            
         }, lookup.android_file_error_handler);        
      });
 };
@@ -68,6 +69,11 @@ lookup.Android_write_file = function(fileEntry, content, contentType)
         fileWriter.onwriteend = function() {
             console.log("Successful file write...");
             alert( "Your notes are exported to: " + fileEntry.nativeURL);
+            // new attempt 2023-03-25 00:55 CET
+            // var a = document.createElement("a");
+            // a.href = fileEntry.nativeURL;
+            // a.download = fileEntry.name;
+            // a.click();
         };
 
         fileWriter.onerror = function (e) {
