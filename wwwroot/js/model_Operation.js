@@ -84,6 +84,25 @@ lookup.prefill_Operation = function(self, abc) {
         self.color_border = lookup.form_rgba_string_constant(color_with_components, '0.6')
     }
     var test = abc.text.split(" ");
+    if (globalThis?.TinySegmenter) {
+        var segmenter = new TinySegmenter();
+        var segmented = [];
+        var toSegment = "";
+        for (const t of test) {
+        if (t.startsWith("https://")) {
+            if (toSegment.length > 0) {
+            segmented.push(...segmenter.segment(toSegment));
+            }
+            segmented.push(t);
+        } else {
+            toSegment += t + " ";
+        }
+        }
+        if (toSegment.length > 0) {
+        segmented.push(...segmenter.segment(toSegment));
+        }
+        test = segmented;
+    }
     self.textSplitted = ko.utils.arrayMap(test, function (item) {
         var toSearch = item
             .replace("\r", " ")
