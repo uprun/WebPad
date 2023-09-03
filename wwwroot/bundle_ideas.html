@@ -3388,6 +3388,16 @@ lookup.privacy_policy_link = ko.computed(function()
 });
 // End of "js/privacy_policy_link.js"
 </script>
+<script>
+// Begin of "js/ping_sync.js"
+lookup.ping_sync = function()
+{
+    console.log("oing sync");
+    setTimeout(lookup.ping_sync, 1000);
+};
+
+// End of "js/ping_sync.js"
+</script>
 
 <script>
 // Begin of "js/patreonLinkOnClick.js"
@@ -3525,6 +3535,8 @@ function ConnectedNotesViewModel()
     if(!lookup.localStorage) {
         console.log("Local web-storage is unavailable.");
     }
+
+    lookup.ping_sync();
   
     self.ApplyLookupToSelf = function()
     {

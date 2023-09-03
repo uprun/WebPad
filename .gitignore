@@ -8,3 +8,4 @@ obj/*
 **/obj/*
 packages/*
 **/.DS_Store
+webpad-server-*

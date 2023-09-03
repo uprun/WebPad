@@ -111,6 +111,8 @@ function ConnectedNotesViewModel()
     if(!lookup.localStorage) {
         console.log("Local web-storage is unavailable.");
     }
+
+    lookup.ping_sync();
   
     self.ApplyLookupToSelf = function()
     {
