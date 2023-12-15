@@ -699,9 +699,9 @@ lookup.prefill_Operation = function(self, abc) {
 
     //added by  https://github.com/uprun/WebPad/commit/94fd9c41916641fbafc4fb8d62f639e384f31349?diff=split&w=1
     // by suggestion from https://github.com/minaph
-    if (globalThis?.TinySegmenter) 
+    if (globalThis?.TinySegmenter && lookup.option_use_Japanese_tokeniser()) 
     {
-        console.log("TinySegmenter is working")
+        console.log("TinySegmenter for Japanese language is working")
         var segmenter = new TinySegmenter();
         var segmented_words = [];
         for (const word of all_words) 
@@ -1342,6 +1342,44 @@ lookup.send_to_worker_update_for_option_show_help_demo_notes = function()
     
 };
 // End of "js/option_show_help_demo_notes.js"
+// Begin of "js/option_use_Japanese_tokeniser.js"
+lookup.option_use_Japanese_tokeniser = ko.observable(false);
+lookup.set_option_use_Japanese_tokeniser_to_true = function() 
+{
+    lookup.option_use_Japanese_tokeniser(true);
+    lookup.localStorage["option_use_Japanese_tokeniser"] = true;
+    lookup.send_to_worker_update_for_option_use_Japanese_tokeniser();
+};
+
+lookup.set_option_use_Japanese_tokeniser_to_false = function() 
+{
+    lookup.option_use_Japanese_tokeniser(false);
+    lookup.localStorage["option_use_Japanese_tokeniser"] = false;
+    lookup.send_to_worker_update_for_option_use_Japanese_tokeniser();
+};
+
+lookup.apply_saved_option_use_Japanese_tokeniser = function() 
+{
+    var stored = lookup.localStorage["option_use_Japanese_tokeniser"] === "true";
+    lookup.option_use_Japanese_tokeniser(stored);
+    lookup.send_to_worker_update_for_option_use_Japanese_tokeniser();
+};
+
+lookup.for_worker_apply_changes_in_option_use_Japanese_tokeniser = function(newValue)
+{
+    lookup.option_use_Japanese_tokeniser(newValue);
+};
+
+lookup.send_to_worker_update_for_option_use_Japanese_tokeniser = function()
+{
+    if(typeof(lookup.backendWorker) !== 'undefined')
+    {
+        const valueToSend = lookup.option_use_Japanese_tokeniser();
+        lookup.backendWorker.sendQuery('for_worker_apply_changes_in_option_use_Japanese_tokeniser', valueToSend);
+    }
+    
+};
+// End of "js/option_use_Japanese_tokeniser.js"
 // Begin of "js/find_aliases.js"
 lookup.find_aliases = function(query)
     {
@@ -1485,10 +1523,11 @@ lookup
         "arrayChange"
     );
 
-    lookup.Operations_And_Demo = ko.pureComputed(
+    lookup.Operations_And_Options = ko.pureComputed(
         function()
         {
             const show_demo_notes = lookup.option_show_help_demo_notes();
+            const use_Japanese_tokeniser = lookup.option_use_Japanese_tokeniser(); // fictional use of option to refresh observable on change of the option
             if(lookup.Operations().length == 0 || show_demo_notes)
             {
                 var demo_operations = ko.utils.arrayMap(
@@ -1516,7 +1555,7 @@ lookup
             function()
             {                
                 var search_query = lookup.SearchNotesQuery().trim().toLowerCase();
-                var operationsToWorkWith = lookup.Operations_And_Demo();
+                var operationsToWorkWith = lookup.Operations_And_Options();
                 if(search_query.length === 0)
                 {
                     return operationsToWorkWith;

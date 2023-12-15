@@ -19,6 +19,7 @@ importScripts("../lib/knockout/knockout-latest.debug.js" + "?v=" + new Date().to
 <script language="JavaScript" type="text/javascript" src="js/demo_notes_en.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/populate.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/option_show_help_demo_notes.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/option_use_Japanese_tokeniser.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/find_aliases.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/import_Operations.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/populate_Aliases.js" ></script>
@@ -68,10 +69,11 @@ lookup
         "arrayChange"
     );
 
-    lookup.Operations_And_Demo = ko.pureComputed(
+    lookup.Operations_And_Options = ko.pureComputed(
         function()
         {
             const show_demo_notes = lookup.option_show_help_demo_notes();
+            const use_Japanese_tokeniser = lookup.option_use_Japanese_tokeniser(); // fictional use of option to refresh observable on change of the option
             if(lookup.Operations().length == 0 || show_demo_notes)
             {
                 var demo_operations = ko.utils.arrayMap(
@@ -99,7 +101,7 @@ lookup
             function()
             {                
                 var search_query = lookup.SearchNotesQuery().trim().toLowerCase();
-                var operationsToWorkWith = lookup.Operations_And_Demo();
+                var operationsToWorkWith = lookup.Operations_And_Options();
                 if(search_query.length === 0)
                 {
                     return operationsToWorkWith;

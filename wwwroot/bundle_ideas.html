@@ -787,6 +787,22 @@ div.webpad-hide-on-large-screen
     border-radius: 0.7rem;
   }
 
+  .webpad-green-frame
+  {
+    border-style: solid; 
+    border-width: 0.2rem;
+    border-color: rgb(101, 215, 86);
+    border-radius: 0.7rem;
+  }
+
+  .webpad-orange-frame
+  {
+    border-style: solid; 
+    border-width: 0.2rem;
+    border-color: rgb(208, 155, 80);
+    border-radius: 0.7rem;
+  }
+
   .webpad-sky-frame
   {
     border-style: solid; 
@@ -2907,6 +2923,7 @@ lookup.loadNotes = function()
             {
                 lookup.backendWorker.sendQuery('populate_Operations', []);
                 lookup.set_option_show_help_demo_notes_to_true();
+                lookup.set_option_show_option_use_Japanese_tokeniser_to_false();
             }
         }
 
@@ -3215,6 +3232,46 @@ lookup.send_to_worker_update_for_option_show_help_demo_notes = function()
 };
 // End of "js/option_show_help_demo_notes.js"
 </script>
+<script>
+// Begin of "js/option_use_Japanese_tokeniser.js"
+lookup.option_use_Japanese_tokeniser = ko.observable(false);
+lookup.set_option_use_Japanese_tokeniser_to_true = function() 
+{
+    lookup.option_use_Japanese_tokeniser(true);
+    lookup.localStorage["option_use_Japanese_tokeniser"] = true;
+    lookup.send_to_worker_update_for_option_use_Japanese_tokeniser();
+};
+
+lookup.set_option_use_Japanese_tokeniser_to_false = function() 
+{
+    lookup.option_use_Japanese_tokeniser(false);
+    lookup.localStorage["option_use_Japanese_tokeniser"] = false;
+    lookup.send_to_worker_update_for_option_use_Japanese_tokeniser();
+};
+
+lookup.apply_saved_option_use_Japanese_tokeniser = function() 
+{
+    var stored = lookup.localStorage["option_use_Japanese_tokeniser"] === "true";
+    lookup.option_use_Japanese_tokeniser(stored);
+    lookup.send_to_worker_update_for_option_use_Japanese_tokeniser();
+};
+
+lookup.for_worker_apply_changes_in_option_use_Japanese_tokeniser = function(newValue)
+{
+    lookup.option_use_Japanese_tokeniser(newValue);
+};
+
+lookup.send_to_worker_update_for_option_use_Japanese_tokeniser = function()
+{
+    if(typeof(lookup.backendWorker) !== 'undefined')
+    {
+        const valueToSend = lookup.option_use_Japanese_tokeniser();
+        lookup.backendWorker.sendQuery('for_worker_apply_changes_in_option_use_Japanese_tokeniser', valueToSend);
+    }
+    
+};
+// End of "js/option_use_Japanese_tokeniser.js"
+</script>
         
         
 
@@ -3319,9 +3376,9 @@ lookup.prefill_Operation = function(self, abc) {
 
     //added by  https://github.com/uprun/WebPad/commit/94fd9c41916641fbafc4fb8d62f639e384f31349?diff=split&w=1
     // by suggestion from https://github.com/minaph
-    if (globalThis?.TinySegmenter) 
+    if (globalThis?.TinySegmenter && lookup.option_use_Japanese_tokeniser()) 
     {
-        console.log("TinySegmenter is working")
+        console.log("TinySegmenter for Japanese language is working")
         var segmenter = new TinySegmenter();
         var segmented_words = [];
         for (const word of all_words) 
@@ -3487,6 +3544,7 @@ function ConnectedNotesViewModel()
     lookup.backgroundApplySaved();
 
     lookup.apply_saved_option_show_help_demo_notes();
+    lookup.apply_saved_option_use_Japanese_tokeniser();
 
     lookup.hashCards = {};
 
@@ -4097,31 +4155,60 @@ $(document).ready(function()
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     <span class="webpad-color-blue" style="font-size: 1.4rem; " >
-                            Demo notes:
+                            Demo notes use is:
                     </span>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
-                            data-bind="
-                                click: $root.set_option_show_help_demo_notes_to_true,
-                                style:
-                                {
-                                    visibility: $root.option_show_help_demo_notes() ? 'hidden' : 'inherit'
-                                }">
-                            show
-                    </div>
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
                             data-bind="
                                 click: $root.set_option_show_help_demo_notes_to_false,
                                 style:
                                 {
                                     visibility: $root.option_show_help_demo_notes() ? 'inherit' : 'hidden'
                                 }">
-                            hide
+                            on
+                    </div>
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
+                            data-bind="
+                                click: $root.set_option_show_help_demo_notes_to_true,
+                                style:
+                                {
+                                    visibility: $root.option_show_help_demo_notes() ? 'hidden' : 'inherit'
+                                }">
+                            off
                     </div>
 
                 </div>
+
+                <div class="w3-col w3-container s12 m12 l12">
+                    <span class="webpad-color-blue" style="font-size: 1.4rem; " >
+                            Japanise tokeniser is:
+                    </span>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
+                            data-bind="
+                                click: $root.set_option_use_Japanese_tokeniser_to_false,
+                                style:
+                                {
+                                    visibility: $root.option_use_Japanese_tokeniser() ? 'inherit' : 'hidden'
+                                }">
+                            on
+                    </div>
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
+                            data-bind="
+                                click: $root.set_option_use_Japanese_tokeniser_to_true,
+                                style:
+                                {
+                                    visibility: $root.option_use_Japanese_tokeniser() ? 'hidden' : 'inherit'
+                                }">
+                            off
+                    </div>
+
+                </div>
+
                 <div class="w3-col w3-container s12 m12 l12">
                     <span class="webpad-color-blue" style="font-size: 1.4rem; " >
                             Export & import:

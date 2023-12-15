@@ -486,6 +486,22 @@ div.webpad-hide-on-large-screen
     border-radius: 0.7rem;
   }
 
+  .webpad-green-frame
+  {
+    border-style: solid; 
+    border-width: 0.2rem;
+    border-color: rgb(101, 215, 86);
+    border-radius: 0.7rem;
+  }
+
+  .webpad-orange-frame
+  {
+    border-style: solid; 
+    border-width: 0.2rem;
+    border-color: rgb(208, 155, 80);
+    border-radius: 0.7rem;
+  }
+
   .webpad-sky-frame
   {
     border-style: solid; 

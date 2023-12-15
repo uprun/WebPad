@@ -87,9 +87,9 @@ lookup.prefill_Operation = function(self, abc) {
 
     //added by  https://github.com/uprun/WebPad/commit/94fd9c41916641fbafc4fb8d62f639e384f31349?diff=split&w=1
     // by suggestion from https://github.com/minaph
-    if (globalThis?.TinySegmenter) 
+    if (globalThis?.TinySegmenter && lookup.option_use_Japanese_tokeniser()) 
     {
-        console.log("TinySegmenter is working")
+        console.log("TinySegmenter for Japanese language is working")
         var segmenter = new TinySegmenter();
         var segmented_words = [];
         for (const word of all_words) 

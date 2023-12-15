@@ -135,6 +135,7 @@
         <script language="JavaScript" type="text/javascript" src="js/operationToBeQuoted.js" ></script>
         
         <script language="JavaScript" type="text/javascript" src="js/option_show_help_demo_notes.js" ></script>
+        <script language="JavaScript" type="text/javascript" src="js/option_use_Japanese_tokeniser.js" ></script>
         
         
 
@@ -594,31 +595,60 @@
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     <span class="webpad-color-blue" style="font-size: 1.4rem; " >
-                            Demo notes:
+                            Demo notes use is:
                     </span>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
-                            data-bind="
-                                click: $root.set_option_show_help_demo_notes_to_true,
-                                style:
-                                {
-                                    visibility: $root.option_show_help_demo_notes() ? 'hidden' : 'inherit'
-                                }">
-                            show
-                    </div>
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
                             data-bind="
                                 click: $root.set_option_show_help_demo_notes_to_false,
                                 style:
                                 {
                                     visibility: $root.option_show_help_demo_notes() ? 'inherit' : 'hidden'
                                 }">
-                            hide
+                            on
+                    </div>
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
+                            data-bind="
+                                click: $root.set_option_show_help_demo_notes_to_true,
+                                style:
+                                {
+                                    visibility: $root.option_show_help_demo_notes() ? 'hidden' : 'inherit'
+                                }">
+                            off
                     </div>
 
                 </div>
+
+                <div class="w3-col w3-container s12 m12 l12">
+                    <span class="webpad-color-blue" style="font-size: 1.4rem; " >
+                            Japanise tokeniser is:
+                    </span>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
+                            data-bind="
+                                click: $root.set_option_use_Japanese_tokeniser_to_false,
+                                style:
+                                {
+                                    visibility: $root.option_use_Japanese_tokeniser() ? 'inherit' : 'hidden'
+                                }">
+                            on
+                    </div>
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
+                            data-bind="
+                                click: $root.set_option_use_Japanese_tokeniser_to_true,
+                                style:
+                                {
+                                    visibility: $root.option_use_Japanese_tokeniser() ? 'hidden' : 'inherit'
+                                }">
+                            off
+                    </div>
+
+                </div>
+
                 <div class="w3-col w3-container s12 m12 l12">
                     <span class="webpad-color-blue" style="font-size: 1.4rem; " >
                             Export & import:
