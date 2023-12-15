@@ -35,6 +35,7 @@
     <script src="lib/jquery/jquery.js"  lisperanto-skip-bundle="true"></script>
     
     <script src="lib/knockout/knockout-latest.debug.js"  lisperanto-skip-bundle="true"></script>
+    <script src="lib/tiny-segmenter/tiny-segmenter-0.2.0.js"  lisperanto-skip-bundle="true"></script>
 
 
 
@@ -146,6 +147,7 @@
         <script language="JavaScript" type="text/javascript" src="js/patreonLinkOnClick.js" ></script>
 
         <script language="JavaScript" type="text/javascript" src="js/patreonSupporters.js" ></script>
+        <script language="JavaScript" type="text/javascript" src="js/codeContributors.js" ></script>
 
         <script language="JavaScript" type="text/javascript" src="js/mainPage.js" ></script>
         <script language="JavaScript" type="text/javascript" src="js/cardAfterRender.js" ></script>
@@ -444,8 +446,7 @@
                     <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
                         : personal wiki
                     </span>
-                    <span 
-                        class="" 
+                    <span class="support-links webpad-hide-on-small-screen" 
                         data-bind="ifnot: $root.platform_is_cordova()" >
                         <span
                             class="lisperanto-patreon">
@@ -468,6 +469,31 @@
                         </span>
                         <span class="mypage-desktop-laptop" >
                             <a href="https://github.com/uprun/WebPad/releases">Desktop/Laptop releases</a>
+                        </span>
+
+                    </span>
+                    <span class="support-links-small webpad-hide-on-large-screen" 
+                        style="font-size: 0.8rem;"
+                        data-bind="ifnot: $root.platform_is_cordova()" >
+                        <span
+                            class="lisperanto-patreon">
+                            <a 
+                                href="https://www.patreon.com/o_kryvonos" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                onclick="lookup.patreonLinkOnClick(event)"
+                                >P</a>
+                        </span>
+                        <span
+                            class="mypage-discord">
+                            <a href="https://discord.gg/W5HFSKVXgc">D</a>
+                        </span>
+                        <span
+                            class="mypage-android">
+                            <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">A</a>
+                        </span>
+                        <span class="mypage-desktop-laptop" >
+                            <a href="https://github.com/uprun/WebPad/releases">PC</a>
                         </span>
 
                     </span>
@@ -621,6 +647,18 @@
 
                 <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
                     <!-- ko foreach: $root.patreonSupporters -->
+                    <div class="webpad-color-coral"
+                        data-bind="text: $data">
+                    </div>
+                    <!-- /ko -->
+                </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
+                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Code contributors:</span>
+                </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
+                    <!-- ko foreach: $root.codeContributors -->
                     <div class="webpad-color-coral"
                         data-bind="text: $data">
                     </div>

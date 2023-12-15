@@ -116,7 +116,7 @@ lookup
                     aliases = Object.getOwnPropertyNames(reduced);
                     console.log(aliases);
                     // classic search approach
-                    return ko.utils.arrayFilter
+                    const filtered_operations = ko.utils.arrayFilter
                     (
                         operationsToWorkWith,
                         function(item, index)
@@ -141,6 +141,7 @@ lookup
                             }
                         }
                     );
+                    return filtered_operations;
                 }
             }
         );

@@ -22,7 +22,7 @@
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="500" />
     <meta property="og:image:height" content="500" />
-    <meta property="og:image:alt" content="The WebPad logo that consists of 4 colored lightning symbol, that l: orange, purple, green and yellow." />
+    <meta property="og:image:alt" content="The WebPad logo that consists of 4 colored lightning symbol, that are: orange, purple, green and yellow." />
 
     <meta property="og:url" content="https://webpad.com.ua/" />
     <meta property="og:description" content="Wiki, personal wiki." />
@@ -35,6 +35,7 @@
     <script src="lib/jquery/jquery.js"  lisperanto-skip-bundle="true"></script>
     
     <script src="lib/knockout/knockout-latest.debug.js"  lisperanto-skip-bundle="true"></script>
+    <script src="lib/tiny-segmenter/tiny-segmenter-0.2.0.js"  lisperanto-skip-bundle="true"></script>
 
 
 
@@ -1003,6 +1004,9 @@ lookup.model_Connection = function(data)
 </script>
 <script>
 // Begin of "js/model_Node.js"
+// DEPRECATED: use model_Operation.js instead
+
+
 lookup.model_Node = function(data)
 {
     // DEPRECATED: use model_Operation.js instead
@@ -1061,6 +1065,8 @@ lookup.model_Node = function(data)
         
     };
 
+    // DEPRECATED: use model_Operation.js instead
+
     self.hasIncomingConnection = data.hasIncomingConnection;
 
     self.isReferenced = ko.observable(false);
@@ -1111,7 +1117,7 @@ lookup.model_Node = function(data)
     };
     
     
-
+    // DEPRECATED: use model_Operation.js instead
 
     if(typeof(self.color) == "undefined" || self.color == null)
     {
@@ -1142,7 +1148,7 @@ lookup.model_Node = function(data)
                 data: info
             });
         }
-        
+        // DEPRECATED: use model_Operation.js instead
     }
     else
     {
@@ -1151,8 +1157,10 @@ lookup.model_Node = function(data)
 
     self.textSplitted = ko.pureComputed(function(){
         var anotherDummyTriggerCall = lookup.dictionary_of_notes_updated();
-        var test = self.text().split(" ");
-        var result = ko.utils.arrayMap(test, function(item)
+        var all_words = self.text().split(" ");
+
+        // DEPRECATED: use model_Operation.js instead
+        var result = ko.utils.arrayMap(all_words, function(item)
             {
                 var toSearch = 
                     item
@@ -1183,6 +1191,7 @@ lookup.model_Node = function(data)
                 };
             }
         );
+        // DEPRECATED: use model_Operation.js instead
         return result;
     });
 };
@@ -3298,8 +3307,31 @@ lookup.prefill_Operation = function(self, abc) {
 
         self.color_border = lookup.form_rgba_string_constant(color_with_components, '0.6')
     }
-    var test = abc.text.split(" ");
-    self.textSplitted = ko.utils.arrayMap(test, function (item) {
+    var all_words = abc.text.split(" ");
+
+    //added by  https://github.com/uprun/WebPad/commit/94fd9c41916641fbafc4fb8d62f639e384f31349?diff=split&w=1
+    // by suggestion from https://github.com/minaph
+    if (globalThis?.TinySegmenter) 
+    {
+        console.log("TinySegmenter is working")
+        var segmenter = new TinySegmenter();
+        var segmented_words = [];
+        for (const word of all_words) 
+        {
+            if (word.toLowerCase().startsWith("https://")) 
+            {
+                segmented_words.push(word);
+            } 
+            else 
+            {
+                segmented_words.push(...segmenter.segment(word));
+            }
+        }
+        all_words = segmented_words;
+    }
+    // end of https://github.com/uprun/WebPad/commit/94fd9c41916641fbafc4fb8d62f639e384f31349?diff=split&w=1
+
+    self.textSplitted = ko.utils.arrayMap(all_words, function (item) {
         var toSearch = item
             .replace("\r", " ")
             .replace("\n", " ")
@@ -3408,6 +3440,17 @@ lookup.patreonSupporters = ko.observableArray(
     ]
 );
 // End of "js/patreonSupporters.js"
+</script>
+<script>
+// Begin of "js/codeContributors.js"
+// as of date 2023-12-15
+lookup.codeContributors = ko.observableArray(
+    [
+        "美濃 佑輝 [Yuki Minoh] Japanese tokeniser usage",
+    ]
+);
+
+// End of "js/codeContributors.js"
 </script>
 
 <script>
@@ -3615,12 +3658,11 @@ $(document).ready(function()
             <div property="offers" typeof="Offer">
                 Price: $<span property="price">0.00</span>
                 <meta property="priceCurrency" content="USD" />
-                <span property="description">unlimited* sync between devices forever*, well until this web-site is running.</span>
+                <span property="description">personal wiki that cares about privacy.</span>
             </div>
             <span property="operatingSystem">Windows</span>
             <span property="operatingSystem">Linux</span>
             <span property="operatingSystem">MacOs</span>
-            <span property="operatingSystem">iOs</span>
             <span property="operatingSystem">Android</span>
             <span property="image">https://webpad.com.ua/WebPad_logo_500.png</span>
         
@@ -3899,8 +3941,7 @@ $(document).ready(function()
                     <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
                         : personal wiki
                     </span>
-                    <span 
-                        class="" 
+                    <span class="support-links webpad-hide-on-small-screen" 
                         data-bind="ifnot: $root.platform_is_cordova()" >
                         <span
                             class="lisperanto-patreon">
@@ -3923,6 +3964,31 @@ $(document).ready(function()
                         </span>
                         <span class="mypage-desktop-laptop" >
                             <a href="https://github.com/uprun/WebPad/releases">Desktop/Laptop releases</a>
+                        </span>
+
+                    </span>
+                    <span class="support-links-small webpad-hide-on-large-screen" 
+                        style="font-size: 0.8rem;"
+                        data-bind="ifnot: $root.platform_is_cordova()" >
+                        <span
+                            class="lisperanto-patreon">
+                            <a 
+                                href="https://www.patreon.com/o_kryvonos" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                onclick="lookup.patreonLinkOnClick(event)"
+                                >P</a>
+                        </span>
+                        <span
+                            class="mypage-discord">
+                            <a href="https://discord.gg/W5HFSKVXgc">D</a>
+                        </span>
+                        <span
+                            class="mypage-android">
+                            <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">A</a>
+                        </span>
+                        <span class="mypage-desktop-laptop" >
+                            <a href="https://github.com/uprun/WebPad/releases">PC</a>
                         </span>
 
                     </span>
@@ -4076,6 +4142,18 @@ $(document).ready(function()
 
                 <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
                     <!-- ko foreach: $root.patreonSupporters -->
+                    <div class="webpad-color-coral"
+                        data-bind="text: $data">
+                    </div>
+                    <!-- /ko -->
+                </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
+                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Code contributors:</span>
+                </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
+                    <!-- ko foreach: $root.codeContributors -->
                     <div class="webpad-color-coral"
                         data-bind="text: $data">
                     </div>
