@@ -151,6 +151,14 @@ a
     pointer-events: none;
 }
 
+.webpad-svg-element
+{
+    height: 0.8em;
+    /* margin-left: 0.2em; */
+    /* margin-right: 0.2em; */
+    pointer-events: none;
+}
+
 .webpad-button-no-border
 {
     /* border-style: none; */
