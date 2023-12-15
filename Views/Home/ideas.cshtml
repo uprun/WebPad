@@ -35,6 +35,7 @@
     <script src="lib/jquery/jquery.js"  lisperanto-skip-bundle="true"></script>
     
     <script src="lib/knockout/knockout-latest.debug.js"  lisperanto-skip-bundle="true"></script>
+    <script src="lib/tiny-segmenter/tiny-segmenter-0.2.0.js"  lisperanto-skip-bundle="true"></script>
 
 
 
@@ -134,6 +135,7 @@
         <script language="JavaScript" type="text/javascript" src="js/operationToBeQuoted.js" ></script>
         
         <script language="JavaScript" type="text/javascript" src="js/option_show_help_demo_notes.js" ></script>
+        <script language="JavaScript" type="text/javascript" src="js/option_use_Japanese_tokeniser.js" ></script>
         
         
 
@@ -146,6 +148,8 @@
         <script language="JavaScript" type="text/javascript" src="js/patreonLinkOnClick.js" ></script>
 
         <script language="JavaScript" type="text/javascript" src="js/patreonSupporters.js" ></script>
+        <script language="JavaScript" type="text/javascript" src="js/codeContributors.js" ></script>
+        <script language="JavaScript" type="text/javascript" src="js/librariesInUse.js" ></script>
 
         <script language="JavaScript" type="text/javascript" src="js/mainPage.js" ></script>
         <script language="JavaScript" type="text/javascript" src="js/cardAfterRender.js" ></script>
@@ -432,7 +436,7 @@
                         
                     </div>
                     <span class="webpad-color-yellow" style="font-size: 2rem;">
-                        &#127482;&#127462; Web
+                        <span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span>Web
                     </span>
                     <span class="webpad-color-blue" style="font-size: 2rem;">
                         Pad
@@ -444,8 +448,7 @@
                     <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
                         : personal wiki
                     </span>
-                    <span 
-                        class="" 
+                    <span class="support-links webpad-hide-on-small-screen" 
                         data-bind="ifnot: $root.platform_is_cordova()" >
                         <span
                             class="lisperanto-patreon">
@@ -471,6 +474,31 @@
                         </span>
 
                     </span>
+                    <span class="support-links-small webpad-hide-on-large-screen" 
+                        style="font-size: 0.8rem;"
+                        data-bind="ifnot: $root.platform_is_cordova()" >
+                        <span
+                            class="lisperanto-patreon">
+                            <a 
+                                href="https://www.patreon.com/o_kryvonos" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                onclick="lookup.patreonLinkOnClick(event)"
+                                >P</a>
+                        </span>
+                        <span
+                            class="mypage-discord">
+                            <a href="https://discord.gg/W5HFSKVXgc">D</a>
+                        </span>
+                        <span
+                            class="mypage-android">
+                            <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">A</a>
+                        </span>
+                        <span class="mypage-desktop-laptop" >
+                            <a href="https://github.com/uprun/WebPad/releases">PC</a>
+                        </span>
+
+                    </span>
                 </div>
             </div>
         </div>
@@ -486,7 +514,7 @@
             <div class="w3-row webpad-sky-frame webpad-options-background">
                 <div class="w3-col w3-container s12 m12 l12 prevent-select">
                     <span class="webpad-color-yellow" style="font-size: 2rem;">
-                        &#127482;&#127462; Web
+                        <span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span>Web
                     </span>
                     <span class="webpad-color-blue" style="font-size: 2rem;">
                         Pad
@@ -505,7 +533,7 @@
                     </div>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12 webpad-color-purple">
-                    <h3>designed &#127912; and made &#127959;&#65039; by Ukrainian &#127482;&#127462;</h3>
+                    <h3>designed &#127912; and made &#127959;&#65039; by Ukrainian <span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span></h3>
                     
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
@@ -568,31 +596,60 @@
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     <span class="webpad-color-blue" style="font-size: 1.4rem; " >
-                            Demo notes:
+                            Demo notes use is:
                     </span>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
-                            data-bind="
-                                click: $root.set_option_show_help_demo_notes_to_true,
-                                style:
-                                {
-                                    visibility: $root.option_show_help_demo_notes() ? 'hidden' : 'inherit'
-                                }">
-                            show
-                    </div>
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
                             data-bind="
                                 click: $root.set_option_show_help_demo_notes_to_false,
                                 style:
                                 {
                                     visibility: $root.option_show_help_demo_notes() ? 'inherit' : 'hidden'
                                 }">
-                            hide
+                            on
+                    </div>
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
+                            data-bind="
+                                click: $root.set_option_show_help_demo_notes_to_true,
+                                style:
+                                {
+                                    visibility: $root.option_show_help_demo_notes() ? 'hidden' : 'inherit'
+                                }">
+                            off
                     </div>
 
                 </div>
+
+                <div class="w3-col w3-container s12 m12 l12">
+                    <span class="webpad-color-blue" style="font-size: 1.4rem; " >
+                            Japanise tokeniser is:
+                    </span>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
+                            data-bind="
+                                click: $root.set_option_use_Japanese_tokeniser_to_false,
+                                style:
+                                {
+                                    visibility: $root.option_use_Japanese_tokeniser() ? 'inherit' : 'hidden'
+                                }">
+                            on
+                    </div>
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
+                            data-bind="
+                                click: $root.set_option_use_Japanese_tokeniser_to_true,
+                                style:
+                                {
+                                    visibility: $root.option_use_Japanese_tokeniser() ? 'hidden' : 'inherit'
+                                }">
+                            off
+                    </div>
+
+                </div>
+
                 <div class="w3-col w3-container s12 m12 l12">
                     <span class="webpad-color-blue" style="font-size: 1.4rem; " >
                             Export & import:
@@ -626,9 +683,35 @@
                     </div>
                     <!-- /ko -->
                 </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
+                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Code contributors:</span>
+                </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
+                    <!-- ko foreach: $root.codeContributors -->
+                    <div class="webpad-color-coral"
+                        data-bind="text: $data">
+                    </div>
+                    <!-- /ko -->
+                </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
+                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Used tools:</span>
+                </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
+                    <!-- ko foreach: $root.librariesInUse -->
+                    <div class="webpad-color-coral">
+                        <a target="_blank" data-bind="text: $data.library, attr: {href: $data.url}"></a>
+                    </div>
+                    <!-- /ko -->
+                </div>
+
+                
                 
                 <address class="webpad-color-yellow" style="padding-left: 1rem; margin-bottom: 1rem;">
-                    This app is created by <span class="webpad-color-coral" style="font-size: 1.4rem;">Oleksandr Kryvonos</span>, a developer from Odesa, Ukraine  <span style="font-size: 2rem;">&#127482;&#127462;</span>  . <br/>
+                    This app is created by <span class="webpad-color-coral" style="font-size: 1.4rem;">Oleksandr Kryvonos</span>, a developer from Odesa, Ukraine  <span style="font-size: 2rem;"><span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span></span>  . <br/>
                     It is an open-source project: <a href="https://github.com/uprun/WebPad">https://github.com/uprun/WebPad</a> <br/>
                     
                     if you have any suggestions feel free to e-mail me: <a href="mailto:oleksandr.kryvonos.ods.ua@gmail.com">oleksandr.kryvonos.ods.ua@gmail.com</a><br/>
@@ -637,7 +720,7 @@
                     For more information you can visit a website of the project <a href="https://webpad.com.ua">https://webpad.com.ua</a> <br/>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
-                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Version 1.9.* [2023-03-25]</span>
+                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Version 1.10.* [2023-12-15]</span>
                 </div>
                 
                 

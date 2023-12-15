@@ -1,3 +1,6 @@
+// DEPRECATED: use model_Operation.js instead
+
+
 lookup.model_Node = function(data)
 {
     // DEPRECATED: use model_Operation.js instead
@@ -56,6 +59,8 @@ lookup.model_Node = function(data)
         
     };
 
+    // DEPRECATED: use model_Operation.js instead
+
     self.hasIncomingConnection = data.hasIncomingConnection;
 
     self.isReferenced = ko.observable(false);
@@ -106,7 +111,7 @@ lookup.model_Node = function(data)
     };
     
     
-
+    // DEPRECATED: use model_Operation.js instead
 
     if(typeof(self.color) == "undefined" || self.color == null)
     {
@@ -137,7 +142,7 @@ lookup.model_Node = function(data)
                 data: info
             });
         }
-        
+        // DEPRECATED: use model_Operation.js instead
     }
     else
     {
@@ -146,8 +151,10 @@ lookup.model_Node = function(data)
 
     self.textSplitted = ko.pureComputed(function(){
         var anotherDummyTriggerCall = lookup.dictionary_of_notes_updated();
-        var test = self.text().split(" ");
-        var result = ko.utils.arrayMap(test, function(item)
+        var all_words = self.text().split(" ");
+
+        // DEPRECATED: use model_Operation.js instead
+        var result = ko.utils.arrayMap(all_words, function(item)
             {
                 var toSearch = 
                     item
@@ -178,6 +185,7 @@ lookup.model_Node = function(data)
                 };
             }
         );
+        // DEPRECATED: use model_Operation.js instead
         return result;
     });
 };

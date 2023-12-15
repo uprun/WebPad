@@ -17,8 +17,10 @@ importScripts("../lib/knockout/knockout-latest.debug.js" + "?v=" + new Date().to
 <script language="JavaScript" type="text/javascript" src="js/populate_Operations.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/Operation_was_added.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/demo_notes_en.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/empty_note.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/populate.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/option_show_help_demo_notes.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/option_use_Japanese_tokeniser.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/find_aliases.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/import_Operations.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/populate_Aliases.js" ></script>
@@ -68,10 +70,11 @@ lookup
         "arrayChange"
     );
 
-    lookup.Operations_And_Demo = ko.pureComputed(
+    lookup.Operations_And_Options = ko.pureComputed(
         function()
         {
             const show_demo_notes = lookup.option_show_help_demo_notes();
+            const use_Japanese_tokeniser = lookup.option_use_Japanese_tokeniser(); // fictional use of option to refresh observable on change of the option
             if(lookup.Operations().length == 0 || show_demo_notes)
             {
                 var demo_operations = ko.utils.arrayMap(
@@ -84,11 +87,13 @@ lookup
                 var combined_result = [].concat(demo_operations, lookup.Operations());
                 return combined_result;
             }
-            else
+            if (use_Japanese_tokeniser)
             {
-                return lookup.Operations();
+                var combined_result = [].concat([new lookup.model_Operation(lookup.empty_note)], lookup.Operations()); // combining with empty note, hope it will refresh set
+                return combined_result;
             }
-
+            
+            return lookup.Operations();
         }
     );
 
@@ -99,7 +104,7 @@ lookup
             function()
             {                
                 var search_query = lookup.SearchNotesQuery().trim().toLowerCase();
-                var operationsToWorkWith = lookup.Operations_And_Demo();
+                var operationsToWorkWith = lookup.Operations_And_Options();
                 if(search_query.length === 0)
                 {
                     return operationsToWorkWith;
@@ -116,7 +121,7 @@ lookup
                     aliases = Object.getOwnPropertyNames(reduced);
                     console.log(aliases);
                     // classic search approach
-                    return ko.utils.arrayFilter
+                    const filtered_operations = ko.utils.arrayFilter
                     (
                         operationsToWorkWith,
                         function(item, index)
@@ -141,6 +146,7 @@ lookup
                             }
                         }
                     );
+                    return filtered_operations;
                 }
             }
         );

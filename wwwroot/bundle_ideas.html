@@ -22,7 +22,7 @@
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="500" />
     <meta property="og:image:height" content="500" />
-    <meta property="og:image:alt" content="The WebPad logo that consists of 4 colored lightning symbol, that l: orange, purple, green and yellow." />
+    <meta property="og:image:alt" content="The WebPad logo that consists of 4 colored lightning symbol, that are: orange, purple, green and yellow." />
 
     <meta property="og:url" content="https://webpad.com.ua/" />
     <meta property="og:description" content="Wiki, personal wiki." />
@@ -35,6 +35,7 @@
     <script src="lib/jquery/jquery.js"  lisperanto-skip-bundle="true"></script>
     
     <script src="lib/knockout/knockout-latest.debug.js"  lisperanto-skip-bundle="true"></script>
+    <script src="lib/tiny-segmenter/tiny-segmenter-0.2.0.js"  lisperanto-skip-bundle="true"></script>
 
 
 
@@ -451,6 +452,14 @@ a
     pointer-events: none;
 }
 
+.webpad-svg-element
+{
+    height: 0.8em;
+    /* margin-left: 0.2em; */
+    /* margin-right: 0.2em; */
+    pointer-events: none;
+}
+
 .webpad-button-no-border
 {
     /* border-style: none; */
@@ -778,6 +787,22 @@ div.webpad-hide-on-large-screen
     border-radius: 0.7rem;
   }
 
+  .webpad-green-frame
+  {
+    border-style: solid; 
+    border-width: 0.2rem;
+    border-color: rgb(101, 215, 86);
+    border-radius: 0.7rem;
+  }
+
+  .webpad-orange-frame
+  {
+    border-style: solid; 
+    border-width: 0.2rem;
+    border-color: rgb(208, 155, 80);
+    border-radius: 0.7rem;
+  }
+
   .webpad-sky-frame
   {
     border-style: solid; 
@@ -1003,6 +1028,9 @@ lookup.model_Connection = function(data)
 </script>
 <script>
 // Begin of "js/model_Node.js"
+// DEPRECATED: use model_Operation.js instead
+
+
 lookup.model_Node = function(data)
 {
     // DEPRECATED: use model_Operation.js instead
@@ -1061,6 +1089,8 @@ lookup.model_Node = function(data)
         
     };
 
+    // DEPRECATED: use model_Operation.js instead
+
     self.hasIncomingConnection = data.hasIncomingConnection;
 
     self.isReferenced = ko.observable(false);
@@ -1111,7 +1141,7 @@ lookup.model_Node = function(data)
     };
     
     
-
+    // DEPRECATED: use model_Operation.js instead
 
     if(typeof(self.color) == "undefined" || self.color == null)
     {
@@ -1142,7 +1172,7 @@ lookup.model_Node = function(data)
                 data: info
             });
         }
-        
+        // DEPRECATED: use model_Operation.js instead
     }
     else
     {
@@ -1151,8 +1181,10 @@ lookup.model_Node = function(data)
 
     self.textSplitted = ko.pureComputed(function(){
         var anotherDummyTriggerCall = lookup.dictionary_of_notes_updated();
-        var test = self.text().split(" ");
-        var result = ko.utils.arrayMap(test, function(item)
+        var all_words = self.text().split(" ");
+
+        // DEPRECATED: use model_Operation.js instead
+        var result = ko.utils.arrayMap(all_words, function(item)
             {
                 var toSearch = 
                     item
@@ -1183,6 +1215,7 @@ lookup.model_Node = function(data)
                 };
             }
         );
+        // DEPRECATED: use model_Operation.js instead
         return result;
     });
 };
@@ -2890,6 +2923,7 @@ lookup.loadNotes = function()
             {
                 lookup.backendWorker.sendQuery('populate_Operations', []);
                 lookup.set_option_show_help_demo_notes_to_true();
+                lookup.set_option_show_option_use_Japanese_tokeniser_to_false();
             }
         }
 
@@ -3198,6 +3232,46 @@ lookup.send_to_worker_update_for_option_show_help_demo_notes = function()
 };
 // End of "js/option_show_help_demo_notes.js"
 </script>
+<script>
+// Begin of "js/option_use_Japanese_tokeniser.js"
+lookup.option_use_Japanese_tokeniser = ko.observable(false);
+lookup.set_option_use_Japanese_tokeniser_to_true = function() 
+{
+    lookup.option_use_Japanese_tokeniser(true);
+    lookup.localStorage["option_use_Japanese_tokeniser"] = true;
+    lookup.send_to_worker_update_for_option_use_Japanese_tokeniser();
+};
+
+lookup.set_option_use_Japanese_tokeniser_to_false = function() 
+{
+    lookup.option_use_Japanese_tokeniser(false);
+    lookup.localStorage["option_use_Japanese_tokeniser"] = false;
+    lookup.send_to_worker_update_for_option_use_Japanese_tokeniser();
+};
+
+lookup.apply_saved_option_use_Japanese_tokeniser = function() 
+{
+    var stored = lookup.localStorage["option_use_Japanese_tokeniser"] === "true";
+    lookup.option_use_Japanese_tokeniser(stored);
+    lookup.send_to_worker_update_for_option_use_Japanese_tokeniser();
+};
+
+lookup.for_worker_apply_changes_in_option_use_Japanese_tokeniser = function(newValue)
+{
+    lookup.option_use_Japanese_tokeniser(newValue);
+};
+
+lookup.send_to_worker_update_for_option_use_Japanese_tokeniser = function()
+{
+    if(typeof(lookup.backendWorker) !== 'undefined')
+    {
+        const valueToSend = lookup.option_use_Japanese_tokeniser();
+        lookup.backendWorker.sendQuery('for_worker_apply_changes_in_option_use_Japanese_tokeniser', valueToSend);
+    }
+    
+};
+// End of "js/option_use_Japanese_tokeniser.js"
+</script>
         
         
 
@@ -3298,8 +3372,31 @@ lookup.prefill_Operation = function(self, abc) {
 
         self.color_border = lookup.form_rgba_string_constant(color_with_components, '0.6')
     }
-    var test = abc.text.split(" ");
-    self.textSplitted = ko.utils.arrayMap(test, function (item) {
+    var all_words = abc.text.split(" ");
+
+    //added by  https://github.com/uprun/WebPad/commit/94fd9c41916641fbafc4fb8d62f639e384f31349?diff=split&w=1
+    // by suggestion from https://github.com/minaph
+    if (globalThis?.TinySegmenter && lookup.option_use_Japanese_tokeniser()) 
+    {
+        console.log("TinySegmenter for Japanese language is working")
+        var segmenter = new TinySegmenter();
+        var segmented_words = [];
+        for (const word of all_words) 
+        {
+            if (word.toLowerCase().startsWith("https://")) 
+            {
+                segmented_words.push(word);
+            } 
+            else 
+            {
+                segmented_words.push(...segmenter.segment(word));
+            }
+        }
+        all_words = segmented_words;
+    }
+    // end of https://github.com/uprun/WebPad/commit/94fd9c41916641fbafc4fb8d62f639e384f31349?diff=split&w=1
+
+    self.textSplitted = ko.utils.arrayMap(all_words, function (item) {
         var toSearch = item
             .replace("\r", " ")
             .replace("\n", " ")
@@ -3409,6 +3506,47 @@ lookup.patreonSupporters = ko.observableArray(
 );
 // End of "js/patreonSupporters.js"
 </script>
+<script>
+// Begin of "js/codeContributors.js"
+// as of date 2023-12-15
+lookup.codeContributors = ko.observableArray(
+    [
+        "美濃 佑輝 [Yuki Minoh] Japanese tokeniser usage",
+    ]
+);
+
+// End of "js/codeContributors.js"
+</script>
+<script>
+// Begin of "js/librariesInUse.js"
+// as of date 2023-12-15
+lookup.librariesInUse = ko.observableArray(
+    [
+        {
+            "library": "TinySegmenter [Japanese tokeniser]",
+            "url": "http://chasen.org/~taku/software/TinySegmenter/"
+        },
+        {
+            "library": "Knockout.js [MVVM library, two-way bindings]",
+            "url": "https://knockoutjs.com/"
+        },
+        {
+            "library": "JQuery [simplified requests to DOM]",
+            "url" : "https://jquery.com/"
+        },
+        {
+            "library": "W3.CSS [CSS presets]",
+            "url": "https://www.w3schools.com/w3css/default.asp"
+        },
+        {
+            "library": "Apache Cordova [deploy web-site as an app]",
+            "url": "https://cordova.apache.org/"
+        }
+    ]
+);
+
+// End of "js/librariesInUse.js"
+</script>
 
 <script>
 // Begin of "js/mainPage.js"
@@ -3436,6 +3574,7 @@ function ConnectedNotesViewModel()
     lookup.backgroundApplySaved();
 
     lookup.apply_saved_option_show_help_demo_notes();
+    lookup.apply_saved_option_use_Japanese_tokeniser();
 
     lookup.hashCards = {};
 
@@ -3615,12 +3754,11 @@ $(document).ready(function()
             <div property="offers" typeof="Offer">
                 Price: $<span property="price">0.00</span>
                 <meta property="priceCurrency" content="USD" />
-                <span property="description">unlimited* sync between devices forever*, well until this web-site is running.</span>
+                <span property="description">personal wiki that cares about privacy.</span>
             </div>
             <span property="operatingSystem">Windows</span>
             <span property="operatingSystem">Linux</span>
             <span property="operatingSystem">MacOs</span>
-            <span property="operatingSystem">iOs</span>
             <span property="operatingSystem">Android</span>
             <span property="image">https://webpad.com.ua/WebPad_logo_500.png</span>
         
@@ -3887,7 +4025,7 @@ $(document).ready(function()
                         
                     </div>
                     <span class="webpad-color-yellow" style="font-size: 2rem;">
-                        &#127482;&#127462; Web
+                        <span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span>Web
                     </span>
                     <span class="webpad-color-blue" style="font-size: 2rem;">
                         Pad
@@ -3899,8 +4037,7 @@ $(document).ready(function()
                     <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
                         : personal wiki
                     </span>
-                    <span 
-                        class="" 
+                    <span class="support-links webpad-hide-on-small-screen" 
                         data-bind="ifnot: $root.platform_is_cordova()" >
                         <span
                             class="lisperanto-patreon">
@@ -3926,6 +4063,31 @@ $(document).ready(function()
                         </span>
 
                     </span>
+                    <span class="support-links-small webpad-hide-on-large-screen" 
+                        style="font-size: 0.8rem;"
+                        data-bind="ifnot: $root.platform_is_cordova()" >
+                        <span
+                            class="lisperanto-patreon">
+                            <a 
+                                href="https://www.patreon.com/o_kryvonos" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                onclick="lookup.patreonLinkOnClick(event)"
+                                >P</a>
+                        </span>
+                        <span
+                            class="mypage-discord">
+                            <a href="https://discord.gg/W5HFSKVXgc">D</a>
+                        </span>
+                        <span
+                            class="mypage-android">
+                            <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">A</a>
+                        </span>
+                        <span class="mypage-desktop-laptop" >
+                            <a href="https://github.com/uprun/WebPad/releases">PC</a>
+                        </span>
+
+                    </span>
                 </div>
             </div>
         </div>
@@ -3941,7 +4103,7 @@ $(document).ready(function()
             <div class="w3-row webpad-sky-frame webpad-options-background">
                 <div class="w3-col w3-container s12 m12 l12 prevent-select">
                     <span class="webpad-color-yellow" style="font-size: 2rem;">
-                        &#127482;&#127462; Web
+                        <span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span>Web
                     </span>
                     <span class="webpad-color-blue" style="font-size: 2rem;">
                         Pad
@@ -3960,7 +4122,7 @@ $(document).ready(function()
                     </div>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12 webpad-color-purple">
-                    <h3>designed &#127912; and made &#127959;&#65039; by Ukrainian &#127482;&#127462;</h3>
+                    <h3>designed &#127912; and made &#127959;&#65039; by Ukrainian <span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span></h3>
                     
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
@@ -4023,31 +4185,60 @@ $(document).ready(function()
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     <span class="webpad-color-blue" style="font-size: 1.4rem; " >
-                            Demo notes:
+                            Demo notes use is:
                     </span>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12">
                     
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
-                            data-bind="
-                                click: $root.set_option_show_help_demo_notes_to_true,
-                                style:
-                                {
-                                    visibility: $root.option_show_help_demo_notes() ? 'hidden' : 'inherit'
-                                }">
-                            show
-                    </div>
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
                             data-bind="
                                 click: $root.set_option_show_help_demo_notes_to_false,
                                 style:
                                 {
                                     visibility: $root.option_show_help_demo_notes() ? 'inherit' : 'hidden'
                                 }">
-                            hide
+                            on
+                    </div>
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
+                            data-bind="
+                                click: $root.set_option_show_help_demo_notes_to_true,
+                                style:
+                                {
+                                    visibility: $root.option_show_help_demo_notes() ? 'hidden' : 'inherit'
+                                }">
+                            off
                     </div>
 
                 </div>
+
+                <div class="w3-col w3-container s12 m12 l12">
+                    <span class="webpad-color-blue" style="font-size: 1.4rem; " >
+                            Japanise tokeniser is:
+                    </span>
+                </div>
+                <div class="w3-col w3-container s12 m12 l12">
+                    
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
+                            data-bind="
+                                click: $root.set_option_use_Japanese_tokeniser_to_false,
+                                style:
+                                {
+                                    visibility: $root.option_use_Japanese_tokeniser() ? 'inherit' : 'hidden'
+                                }">
+                            on
+                    </div>
+                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
+                            data-bind="
+                                click: $root.set_option_use_Japanese_tokeniser_to_true,
+                                style:
+                                {
+                                    visibility: $root.option_use_Japanese_tokeniser() ? 'hidden' : 'inherit'
+                                }">
+                            off
+                    </div>
+
+                </div>
+
                 <div class="w3-col w3-container s12 m12 l12">
                     <span class="webpad-color-blue" style="font-size: 1.4rem; " >
                             Export & import:
@@ -4081,9 +4272,35 @@ $(document).ready(function()
                     </div>
                     <!-- /ko -->
                 </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
+                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Code contributors:</span>
+                </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
+                    <!-- ko foreach: $root.codeContributors -->
+                    <div class="webpad-color-coral"
+                        data-bind="text: $data">
+                    </div>
+                    <!-- /ko -->
+                </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
+                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Used tools:</span>
+                </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
+                    <!-- ko foreach: $root.librariesInUse -->
+                    <div class="webpad-color-coral">
+                        <a target="_blank" data-bind="text: $data.library, attr: {href: $data.url}"></a>
+                    </div>
+                    <!-- /ko -->
+                </div>
+
+                
                 
                 <address class="webpad-color-yellow" style="padding-left: 1rem; margin-bottom: 1rem;">
-                    This app is created by <span class="webpad-color-coral" style="font-size: 1.4rem;">Oleksandr Kryvonos</span>, a developer from Odesa, Ukraine  <span style="font-size: 2rem;">&#127482;&#127462;</span>  . <br/>
+                    This app is created by <span class="webpad-color-coral" style="font-size: 1.4rem;">Oleksandr Kryvonos</span>, a developer from Odesa, Ukraine  <span style="font-size: 2rem;"><span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span></span>  . <br/>
                     It is an open-source project: <a href="https://github.com/uprun/WebPad">https://github.com/uprun/WebPad</a> <br/>
                     
                     if you have any suggestions feel free to e-mail me: <a href="mailto:oleksandr.kryvonos.ods.ua@gmail.com">oleksandr.kryvonos.ods.ua@gmail.com</a><br/>
@@ -4092,7 +4309,7 @@ $(document).ready(function()
                     For more information you can visit a website of the project <a href="https://webpad.com.ua">https://webpad.com.ua</a> <br/>
                 </div>
                 <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
-                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Version 1.9.* [2023-03-25]</span>
+                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Version 1.10.* [2023-12-15]</span>
                 </div>
                 
                 
