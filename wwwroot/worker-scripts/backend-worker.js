@@ -17,6 +17,7 @@ importScripts("../lib/knockout/knockout-latest.debug.js" + "?v=" + new Date().to
 <script language="JavaScript" type="text/javascript" src="js/populate_Operations.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/Operation_was_added.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/demo_notes_en.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/empty_note.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/populate.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/option_show_help_demo_notes.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/option_use_Japanese_tokeniser.js" ></script>
@@ -86,11 +87,13 @@ lookup
                 var combined_result = [].concat(demo_operations, lookup.Operations());
                 return combined_result;
             }
-            else
+            if (use_Japanese_tokeniser)
             {
-                return lookup.Operations();
+                var combined_result = [].concat([new lookup.model_Operation(lookup.empty_note)], lookup.Operations()); // combining with empty note, hope it will refresh set
+                return combined_result;
             }
-
+            
+            return lookup.Operations();
         }
     );
 

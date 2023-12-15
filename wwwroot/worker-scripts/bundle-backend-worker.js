@@ -1110,6 +1110,21 @@ lookup.demo_notes_en = [
     }
 ];
 // End of "js/demo_notes_en.js"
+// Begin of "js/empty_note.js"
+lookup.empty_note = 
+{
+    "id": {
+        "is_local": true,
+        "prefix": "to-be-defined"
+    },
+    "name": "create",
+    "data": {
+        "text": "",
+        "color": "#ffa26b"
+    },
+    "time": "2023-12-15T13:16:53.119Z"
+};
+// End of "js/empty_note.js"
 // Begin of "js/populate.js"
 lookup.CheckIfEveryNodeHasMigratedColor = function()
     {
@@ -1540,11 +1555,13 @@ lookup
                 var combined_result = [].concat(demo_operations, lookup.Operations());
                 return combined_result;
             }
-            else
+            if (use_Japanese_tokeniser)
             {
-                return lookup.Operations();
+                var combined_result = [].concat([new lookup.model_Operation(lookup.empty_note)], lookup.Operations()); // combining with empty note, hope it will refresh set
+                return combined_result;
             }
-
+            
+            return lookup.Operations();
         }
     );
 
