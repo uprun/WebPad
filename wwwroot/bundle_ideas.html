@@ -3517,6 +3517,36 @@ lookup.codeContributors = ko.observableArray(
 
 // End of "js/codeContributors.js"
 </script>
+<script>
+// Begin of "js/librariesInUse.js"
+// as of date 2023-12-15
+lookup.librariesInUse = ko.observableArray(
+    [
+        {
+            "library": "TinySegmenter [Japanese tokeniser]",
+            "url": "http://chasen.org/~taku/software/TinySegmenter/"
+        },
+        {
+            "library": "Knockout.js [MVVM library, two-way bindings]",
+            "url": "https://knockoutjs.com/"
+        },
+        {
+            "library": "JQuery [simplified requests to DOM]",
+            "url" : "https://jquery.com/"
+        },
+        {
+            "library": "W3.CSS [CSS presets]",
+            "url": "https://www.w3schools.com/w3css/default.asp"
+        },
+        {
+            "library": "Apache Cordova [deploy web-site as an app]",
+            "url": "https://cordova.apache.org/"
+        }
+    ]
+);
+
+// End of "js/librariesInUse.js"
+</script>
 
 <script>
 // Begin of "js/mainPage.js"
@@ -4254,6 +4284,20 @@ $(document).ready(function()
                     </div>
                     <!-- /ko -->
                 </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
+                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Used tools:</span>
+                </div>
+
+                <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
+                    <!-- ko foreach: $root.librariesInUse -->
+                    <div class="webpad-color-coral">
+                        <a target="_blank" data-bind="text: $data.library, attr: {href: $data.url}"></a>
+                    </div>
+                    <!-- /ko -->
+                </div>
+
+                
                 
                 <address class="webpad-color-yellow" style="padding-left: 1rem; margin-bottom: 1rem;">
                     This app is created by <span class="webpad-color-coral" style="font-size: 1.4rem;">Oleksandr Kryvonos</span>, a developer from Odesa, Ukraine  <span style="font-size: 2rem;"><span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span></span>  . <br/>
