@@ -63,8 +63,9 @@ function ConnectedNotesViewModel()
     {
         if(lookup.operationsToAddGradually.length > 0)
         {
-            lookup.LimitedFilteredOperations.push(lookup.operationsToAddGradually[0]);
-            lookup.operationsToAddGradually = lookup.operationsToAddGradually.splice(1);
+            
+            var to_add = lookup.operationsToAddGradually.pop();
+            lookup.LimitedFilteredOperations.push(to_add);
         }
         lookup.operationsToAddGradually_timer = setTimeout(lookup.operationsToAddGradually_handler, lookup.operationsToAddGradually_miliseconds);
         
