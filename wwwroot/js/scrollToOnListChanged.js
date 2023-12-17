@@ -55,7 +55,7 @@ lookup.onListChanged_ScrollToDestination = function()
             var totalHeight = $("body,html").height();
             $("body,html").stop().animate({
                 scrollTop: totalHeight
-            }, 300);
+            }, 300, "linear");
         }
         if(typeof(commandValue.previousHeight) !== 'undefined')
         {

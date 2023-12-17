@@ -15,6 +15,9 @@ lookup.listRenderedCompletely = function()
 
 lookup.cardAfterRender = function()
 {
+    lookup.onListChanged_set_scrollToLatestCard();
+    lookup.onListChanged_ScrollToDestination();
+    return;
     var cards = lookup.LimitedFilteredOperations();
     // var renderedItems = ko.utils.arrayFilter(cards, 
     //     function(item)

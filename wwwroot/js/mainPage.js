@@ -55,15 +55,45 @@ function ConnectedNotesViewModel()
 
 
     lookup.LimitedFilteredOperations = ko.observableArray([]);
+    //lookup.LimitedFilteredOperations.extend({ rateLimit: { timeout: 50, method: "notifyAtFixedRate" } });
+    lookup.operationsToAddGradually = [];
+    lookup.operationsToAddGradually_miliseconds = 20;
+    lookup.operationsToAddGradually_timer = undefined;
+    lookup.operationsToAddGradually_handler = function()
+    {
+        if(lookup.operationsToAddGradually.length > 0)
+        {
+            lookup.LimitedFilteredOperations.push(lookup.operationsToAddGradually[0]);
+            lookup.operationsToAddGradually = lookup.operationsToAddGradually.splice(1);
+        }
+        lookup.operationsToAddGradually_timer = setTimeout(lookup.operationsToAddGradually_handler, lookup.operationsToAddGradually_miliseconds);
+        
+    };
     lookup.backendWorker.addListener('LimitedFilteredOperations.changed.event', function(cards) 
     {
+        var start = new Date;
+        console.log("start", start);
         lookup.LimitedFilteredOperations.removeAll();
+        var next = new Date;
+        console.log("removal diff", next - start)
+        start = next;
         var processed = ko.utils.arrayMap(cards, function(item) {
             var operation = new lookup.model_Operation(item)
             return operation;
         });
+        next = new Date
+        console.log("creation diff", next - start)
+        start = next;
         
-        ko.utils.arrayPushAll(lookup.LimitedFilteredOperations, processed);
+        lookup.operationsToAddGradually = processed;
+        
+        next = new Date
+        console.log("push all diff", next - start)
+        start = next;
+        if ( typeof(lookup.operationsToAddGradually_timer) === "undefined")
+        {
+            lookup.operationsToAddGradually_timer = setTimeout(lookup.operationsToAddGradually_handler, lookup.operationsToAddGradually_miliseconds);
+        }
     });
 
     lookup.hidden_operations_count = ko.observable(0);
