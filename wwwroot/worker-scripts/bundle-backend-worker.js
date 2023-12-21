@@ -622,6 +622,14 @@ lookup.model_Operation = function(data)
 
     self.createDate = new Date(self.time);
 
+    self.createDateToOrder = 
+        "" + self.createDate.getFullYear() +
+        "-" + ((self.createDate.getMonth() + 1) + "").padStart(2, "0") +
+        "-" + (self.createDate.getDate() + "").padStart(2, "0") +
+        "  " + (self.createDate.getHours() + "").padStart(2, "0") +
+        ":" + (self.createDate.getMinutes() + "").padStart(2, "0") + 
+        ":" + (self.createDate.getSeconds() + "").padStart(2, "0");
+
     if(self.name === 'create')
     {
         lookup.prefill_Operation(self, self.data);

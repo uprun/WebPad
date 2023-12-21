@@ -296,6 +296,16 @@ a
     filter: brightness(70%);
 }
 
+.webpad-brightness-dimmed-2x
+{
+    filter: brightness(49%);
+}
+
+.webpad-brightness-dimmed-3x
+{
+    filter: brightness(34%);
+}
+
 .webpad-quote-edit
 {
     border-left-color: #f8e755;

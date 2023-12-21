@@ -57,7 +57,7 @@ function ConnectedNotesViewModel()
     lookup.LimitedFilteredOperations = ko.observableArray([]);
     //lookup.LimitedFilteredOperations.extend({ rateLimit: { timeout: 50, method: "notifyAtFixedRate" } });
     lookup.operationsToAddGradually = [];
-    lookup.operationsToAddGradually_miliseconds = 20;
+    lookup.operationsToAddGradually_miliseconds = 10;
     lookup.operationsToAddGradually_timer = undefined;
     lookup.operationsToAddGradually_handler = function()
     {

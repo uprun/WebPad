@@ -592,6 +592,16 @@ a
     filter: brightness(70%);
 }
 
+.webpad-brightness-dimmed-2x
+{
+    filter: brightness(49%);
+}
+
+.webpad-brightness-dimmed-3x
+{
+    filter: brightness(34%);
+}
+
 .webpad-quote-edit
 {
     border-left-color: #f8e755;
@@ -3294,6 +3304,14 @@ lookup.model_Operation = function(data)
 
     self.createDate = new Date(self.time);
 
+    self.createDateToOrder = 
+        "" + self.createDate.getFullYear() +
+        "-" + ((self.createDate.getMonth() + 1) + "").padStart(2, "0") +
+        "-" + (self.createDate.getDate() + "").padStart(2, "0") +
+        "  " + (self.createDate.getHours() + "").padStart(2, "0") +
+        ":" + (self.createDate.getMinutes() + "").padStart(2, "0") + 
+        ":" + (self.createDate.getSeconds() + "").padStart(2, "0");
+
     if(self.name === 'create')
     {
         lookup.prefill_Operation(self, self.data);
@@ -3606,7 +3624,7 @@ function ConnectedNotesViewModel()
     lookup.LimitedFilteredOperations = ko.observableArray([]);
     //lookup.LimitedFilteredOperations.extend({ rateLimit: { timeout: 50, method: "notifyAtFixedRate" } });
     lookup.operationsToAddGradually = [];
-    lookup.operationsToAddGradually_miliseconds = 20;
+    lookup.operationsToAddGradually_miliseconds = 10;
     lookup.operationsToAddGradually_timer = undefined;
     lookup.operationsToAddGradually_handler = function()
     {
@@ -3963,6 +3981,7 @@ lookup.on_load = function()
                     <span >
                         <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data }  -->
                         <!-- /ko -->
+                        <div style="font-size: 0.6rem;"><span class="w3-animate-opacity webpad-brightness-dimmed-3x" style="color: aliceblue;" data-bind="text: $data.createDateToOrder"></span></div>
                         <span data-bind="visible: $data.toolBoxVisible">
                             <span  class="w3-animate-opacity webpad-brightness-dimmed">
                                 <span 
