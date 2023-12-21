@@ -65,6 +65,16 @@ function ConnectedNotesViewModel()
         {
             
             var to_add = lookup.operationsToAddGradually.pop();
+            var length = lookup.LimitedFilteredOperations().length;
+            var next_bottom = 0;
+            if (length > 0)
+            {
+                var last_added = document.getElementById((length - 1) + "-card");
+
+                next_bottom = last_added.offsetParent.offsetHeight - last_added.offsetTop;
+            }
+            
+            to_add.bottom(next_bottom);
             lookup.LimitedFilteredOperations.push(to_add);
         }
         lookup.operationsToAddGradually_timer = setTimeout(lookup.operationsToAddGradually_handler, lookup.operationsToAddGradually_miliseconds);

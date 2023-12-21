@@ -151,6 +151,7 @@
     <script language="JavaScript" type="text/javascript" src="js/document_ready_ideas.js" ></script>
     <script language="JavaScript" type="text/javascript" src="cordova.js" lisperanto-skip-bundle="true"></script>
     <script language="JavaScript" type="text/javascript" src="js/on_resize.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/on_load.js" ></script>
 
 </head>
 
@@ -275,7 +276,7 @@
 
 
 <script type="text/html" id="operation-template">
-        <div class="w3-col w3-container s12 m12 l12" style="position: absolute;" data-bind="style : { bottom: $index() * 150}">
+        <div class="w3-col w3-container s12 m12 l12 webpad-operation-card" style="position: absolute;" data-bind="style : { bottom: $data.bottom}, attr: { id: $index() + '-card'}">
             <div 
                 style="font-size: 1.3rem;" 
                 class="webpad-card w3-animate-opacity" 
@@ -365,7 +366,10 @@
 <body class='night' 
     style="background-color: #000000; margin: 0; " 
     data-bind="style: { background: $root.backgroundColor() }" 
-    onresize="lookup.on_resize()">
+    onresize="lookup.on_resize()"
+    onload="lookup.on_load()"
+    >
+    
 
 
         

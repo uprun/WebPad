@@ -618,6 +618,8 @@ lookup.model_Operation = function(data)
     self.data = data.data;
     self.time = data.time;
 
+    self.bottom = ko.observable(0);
+
     self.createDate = new Date(self.time);
 
     if(self.name === 'create')

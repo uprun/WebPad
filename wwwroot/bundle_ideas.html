@@ -3290,6 +3290,8 @@ lookup.model_Operation = function(data)
     self.data = data.data;
     self.time = data.time;
 
+    self.bottom = ko.observable(0);
+
     self.createDate = new Date(self.time);
 
     if(self.name === 'create')
@@ -3612,6 +3614,16 @@ function ConnectedNotesViewModel()
         {
             
             var to_add = lookup.operationsToAddGradually.pop();
+            var length = lookup.LimitedFilteredOperations().length;
+            var next_bottom = 0;
+            if (length > 0)
+            {
+                var last_added = document.getElementById((length - 1) + "-card");
+
+                next_bottom = last_added.offsetParent.offsetHeight - last_added.offsetTop;
+            }
+            
+            to_add.bottom(next_bottom);
             lookup.LimitedFilteredOperations.push(to_add);
         }
         lookup.operationsToAddGradually_timer = setTimeout(lookup.operationsToAddGradually_handler, lookup.operationsToAddGradually_miliseconds);
@@ -3786,6 +3798,14 @@ lookup.on_resize = function()
 };
 // End of "js/on_resize.js"
 </script>
+<script>
+// Begin of "js/on_load.js"
+lookup.on_load = function()
+{
+    lookup.on_resize();
+};
+// End of "js/on_load.js"
+</script>
 
 </head>
 
@@ -3910,7 +3930,7 @@ lookup.on_resize = function()
 
 
 <script type="text/html" id="operation-template">
-        <div class="w3-col w3-container s12 m12 l12" style="position: absolute;" data-bind="style : { bottom: $index() * 150}">
+        <div class="w3-col w3-container s12 m12 l12 webpad-operation-card" style="position: absolute;" data-bind="style : { bottom: $data.bottom}, attr: { id: $index() + '-card'}">
             <div 
                 style="font-size: 1.3rem;" 
                 class="webpad-card w3-animate-opacity" 
@@ -4000,7 +4020,10 @@ lookup.on_resize = function()
 <body class='night' 
     style="background-color: #000000; margin: 0; " 
     data-bind="style: { background: $root.backgroundColor() }" 
-    onresize="lookup.on_resize()">
+    onresize="lookup.on_resize()"
+    onload="lookup.on_load()"
+    >
+    
 
 
         
