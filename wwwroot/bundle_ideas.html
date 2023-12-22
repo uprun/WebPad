@@ -1532,65 +1532,6 @@ lookup.save_Aliases_to_storage = function(to_save)
 // End of "js/save_Aliases_to_storage.js"
 </script>
     
-    
-<script>
-// Begin of "js/scrollToCard.js"
-lookup.scrollToCard_queue = [];
-lookup.scrollToCard = function(id, number_of_retries_left) {
-    var searchQuery = '#' + id;
-    var cards = undefined; 
-    try
-    {
-        cards = $(searchQuery);
-    }
-    catch(error)
-    {
-        console.log("failed search query was : " + searchQuery)
-    }
-    
-
-    if(typeof(cards) !== "undefined" && cards.length > 0)
-    {
-        var target = cards.parent()[0];
-        //target.scrollIntoView();
-
-        var scrollAreas = $('.webpad-search-result-area');
-        $("body,html").stop().animate({
-                scrollTop: target.offsetTop
-            }, 300);
-        
-    }
-    else
-    {
-        if(typeof(number_of_retries_left) === "undefined")
-        {
-            lookup.scrollToCard_queue.push({id: id, number_of_retries_left: 5});
-        }
-        else
-        {
-            if(number_of_retries_left > 0)
-            {
-                lookup.scrollToCard_queue.push({id: id, number_of_retries_left: number_of_retries_left - 1 });
-            }
-        }
-    }
-    
-};
-
-lookup.scrollToCard_processQueue = function()
-{
-    if(lookup.scrollToCard_queue.length > 0)
-    {
-        var toScrollTo = lookup.scrollToCard_queue.shift();
-        lookup.scrollToCard(toScrollTo.id, toScrollTo.number_of_retries_left );
-    }
-    setTimeout(lookup.scrollToCard_processQueue, 300);
-}
-
-
-
-// End of "js/scrollToCard.js"
-</script>
 <script>
 // Begin of "js/findNodeById.js"
 lookup.findNodeById_buffer = undefined;
@@ -1717,7 +1658,7 @@ lookup.findCardByMainNodeId = function(mainId)
 lookup.jumpToCardFromWord = function(data)
 {
     lookup.pushToSearchNotesQueryText(data.wordQuery);
-    lookup.onListChanged_set_scrollToLatestCard();
+    lookup.resetGlobalOffsetY();
     
     event.stopPropagation();
 };
@@ -1731,7 +1672,7 @@ lookup.jumpToCardFromQuote = function(data)
     if(destinationCard != null)
     {
         lookup.pushToSearchNotesQuery(destinationCard);
-        lookup.onListChanged_set_scrollToLatestCard();
+        lookup.resetGlobalOffsetY();
     }
     event.stopPropagation();
 
@@ -1790,7 +1731,7 @@ lookup.pushToSearchNotesQueryText = function(query)
     lookup.stackSearchNotesQuery.push(
         {
             query: currentValue,
-            scrollPosition: lookup.viewportScrollPosition(),
+            scrollPosition: lookup.globalOffsetY(),
             amountOfCardsLimit: lookup.CurrentResultLimit()
         }
     );
@@ -1803,86 +1744,6 @@ lookup.pushToSearchNotesQueryText = function(query)
 // End of "js/pushToSearchNotesQueryText.js"
 </script>
 <script>
-// Begin of "js/scrollToOnListChanged.js"
-lookup.scrollToDestinationCommand = ko.observable(undefined);
-lookup.getViewPortScrollPosition = function() {
-    lookup.viewportScrollPosition(document.body.scrollTop || document.documentElement.scrollTop);
-    console.log('scroll: '+ lookup.viewportScrollPosition())
-};
-
-lookup.onListChanged_setScrollTopOffset = function(offsetTop)
-{
-    var commandValue = lookup.scrollToDestinationCommand();
-    if(typeof(commandValue) === 'undefined')
-    {
-        commandValue = {};
-    }
-    commandValue["offsetTop"] = offsetTop;
-    lookup.scrollToDestinationCommand(commandValue);
-};
-
-lookup.onListChanged_set_scrollToLatestCard = function()
-{
-    var commandValue = lookup.scrollToDestinationCommand();
-    if(typeof(commandValue) === 'undefined')
-    {
-        commandValue = {};
-    }
-    commandValue["scrollToLatestCard"] = true;
-    lookup.scrollToDestinationCommand(commandValue);
-};
-
-lookup.onListChanged_keepHeightOffset = function()
-{
-    var commandValue = lookup.scrollToDestinationCommand();
-    if(typeof(commandValue) === 'undefined')
-    {
-        commandValue = {};
-    }
-    var totalHeight = $("body,html").height();
-    commandValue["previousHeight"] = totalHeight;
-    lookup.scrollToDestinationCommand(commandValue);
-};
-
-lookup.onListChanged_ScrollToDestination = function()
-{
-    var commandValue = lookup.scrollToDestinationCommand();
-    if(typeof(commandValue)!== 'undefined')
-    {
-        if(typeof(commandValue.offsetTop) !== 'undefined')
-        {
-            $("body,html").stop().animate({
-                scrollTop: lookup.scrollToDestinationCommand().offsetTop
-            }, 300);
-        }
-        if(typeof(commandValue.scrollToLatestCard) !== 'undefined')
-        {
-            console.log('onListChanged_ScrollToDestination=scrollToLatestCard')
-            var totalHeight = $("body,html").height();
-            $("body,html").stop().animate({
-                scrollTop: totalHeight
-            }, 300, "linear");
-        }
-        if(typeof(commandValue.previousHeight) !== 'undefined')
-        {
-            var totalHeightNow = $("body,html").height();
-            var previousHeight = commandValue.previousHeight;
-            var offset = totalHeightNow - previousHeight;
-            if(offset < 0)
-            {
-                offset = 0;
-            }
-            $("body,html").stop().animate({
-                scrollTop: offset
-            }, 1);
-        }
-        
-        lookup.scrollToDestinationCommand(undefined);
-    }
-};
-// End of "js/scrollToOnListChanged.js"
-</script>
-<script>
 // Begin of "js/rollbackSearchNotesQuery.js"
 lookup.stackSearchNotesQuery = ko.observableArray([]);
 lookup.rollbackSearchNotesQuery = function()
@@ -1890,14 +1751,14 @@ lookup.rollbackSearchNotesQuery = function()
     if(lookup.stackSearchNotesQuery().length > 0)
     {
         previousQuery = lookup.stackSearchNotesQuery.pop();
-        lookup.onListChanged_setScrollTopOffset(previousQuery.scrollPosition);
+        lookup.globalOffsetY(previousQuery.scrollPosition);
         lookup.SearchNotesQuery(previousQuery.query);
         lookup.SetCurrentResultLimit(previousQuery.amountOfCardsLimit)
     }
     else
     {
         lookup.SearchNotesQuery("");
-        lookup.onListChanged_set_scrollToLatestCard();
+        lookup.resetGlobalOffsetY();
     }
     
 };
@@ -2218,14 +2079,6 @@ lookup.getViewPortSize = function() {
 };
 // End of "js/getViewPortSize.js"
 </script>
-<script>
-// Begin of "js/getViewPortScrollPosition.js"
-lookup.viewportScrollPosition = ko.observable(undefined);
-lookup.getViewPortScrollPosition = function() {
-    lookup.viewportScrollPosition(document.body.scrollTop || document.documentElement.scrollTop);
-};
-// End of "js/getViewPortScrollPosition.js"
-</script>
 
 
 <script>
@@ -2349,7 +2202,7 @@ lookup.CreateNoteFromSearchQuery = function() {
     lookup.SearchNotesQuery("");
     if(data.text.length > 0)
     {
-        lookup.onListChanged_set_scrollToLatestCard();
+        lookup.resetGlobalOffsetY();
         var operation = 
         {
             id: 
@@ -2933,8 +2786,6 @@ lookup.loadNotes = function()
         }
 
         lookup.send_to_worker_update_for_option_show_help_demo_notes();
-        
-        lookup.scrollToCard_processQueue();
     };
 // End of "js/loadNotes.js"
 </script>
@@ -3141,7 +2992,7 @@ lookup.saveItemsToStorage = function(toStoreNotes, toStoreConnections)
 lookup.jumpToCardFromOperation = function(data)
 {
     lookup.pushToSearchNotesQueryText(data.text);
-    lookup.onListChanged_set_scrollToLatestCard();
+    lookup.resetGlobalOffsetY();
     
     event.stopPropagation();
 };
@@ -3152,7 +3003,7 @@ lookup.jumpToCardFromOperation = function(data)
 lookup.jumpToCardFromQuotedOperation = function(data)
 {
     lookup.pushToSearchNotesQueryText(data.quoted.text);
-    lookup.onListChanged_set_scrollToLatestCard();
+    lookup.resetGlobalOffsetY();
     
     event.stopPropagation();
 };
@@ -3291,6 +3142,60 @@ lookup.save_Operations_to_storage = function(toStoreOperations)
 // End of "js/save_Operations_to_storage.js"
 </script>
 <script>
+// Begin of "js/globalOffsets.js"
+lookup.globalOffsetY = ko.observable(0);
+lookup.globalOffsetX = ko.observable(0);
+lookup.globalMaxY = ko.observable(800);
+lookup.globalMinY = ko.observable(800);
+
+lookup.resetGlobalOffsetY = function()
+{
+    lookup.globalOffsetY(0);
+};
+// End of "js/globalOffsets.js"
+</script>
+<script>
+// Begin of "js/applyMovement.js"
+lookup.applyMovement = function (deltaY, deltaX) 
+{
+    var newOffsetY = lookup.globalOffsetY() + deltaY;
+    // const max_Y = lookup.globalMaxY();
+    // newOffsetY = Math.min(newOffsetY, max_Y);
+    // const min_Y = lookup.globalMinY() + document.body.offsetHeight;
+    // newOffsetY = Math.max(newOffsetY, min_Y);
+    lookup.globalOffsetY(newOffsetY);
+
+    // var newOffsetX = lookup.globalOffsetX() - deltaX ;
+    // const max_X = lookup.globalMaxX();
+    // newOffsetX = Math.min(newOffsetX, max_X);
+    // const min_X = lookup.globalMinX() + document.body.offsetWidth;
+    // newOffsetX = Math.max(newOffsetX, min_X);
+    // lookup.globalOffsetX(newOffsetX);
+    //console.log({x: newOffsetX, min_X: min_X, y: newOffsetY, min_Y: min_Y});
+};
+// End of "js/applyMovement.js"
+</script>
+<script>
+// Begin of "js/body_on_wheel.js"
+lookup.bodyOnWheel = function() {
+    // really changing to span fixes breaks?
+    // yeah if you want correct line-break use span instead of div
+    // just test  
+    // what if there is more text?
+    
+        event.preventDefault();
+        const deltaY = event.deltaY;
+        const deltaX = event.deltaX;
+        //console.log(event);
+        lookup.applyMovement(deltaY, deltaX);
+      
+        //scale += event.deltaY * -0.01;
+    
+    
+    };
+// End of "js/body_on_wheel.js"
+</script>
+<script>
 // Begin of "js/model_Operation.js"
 lookup.model_Operation = function(data)
 {
@@ -3301,6 +3206,8 @@ lookup.model_Operation = function(data)
     self.time = data.time;
 
     self.bottom = ko.observable(0);
+
+    self.globalBottom = ko.computed(() => self.bottom() + lookup.globalOffsetY());
 
     self.createDate = new Date(self.time);
 
@@ -3738,25 +3645,8 @@ function ConnectedNotesViewModel()
 </script>
 <script>
 // Begin of "js/cardAfterRender.js"
-
-
-lookup.listRenderedCompletely = function()
-{
-    console.log("list rendered completely, but cards still can be moved");
-        if(typeof(lookup.ReversedListOfCards_scroll_to_first) === 'undefined' 
-            || lookup.ReversedListOfCards_scroll_to_first === true)
-        {
-            lookup.onListChanged_set_scrollToLatestCard();
-            lookup.ReversedListOfCards_scroll_to_first = false;
-        }
-        
-        lookup.onListChanged_ScrollToDestination();
-};
-
 lookup.cardAfterRender = function()
 {
-    lookup.onListChanged_set_scrollToLatestCard();
-    lookup.onListChanged_ScrollToDestination();
     return;
     var cards = lookup.LimitedFilteredOperations();
     // var renderedItems = ko.utils.arrayFilter(cards, 
@@ -3794,9 +3684,6 @@ $(document).ready(function()
     ko.applyBindings(viewModel);
     viewModel.getViewPortSize();
     window.addEventListener('resize', function(){  viewModel.getViewPortSize(); }, true);
-    window.addEventListener('scroll', function () {
-        viewModel.getViewPortScrollPosition();
-    }, true);
     viewModel.loadNotes();
     viewModel.check_platform();
 });
@@ -3824,6 +3711,7 @@ lookup.on_load = function()
 };
 // End of "js/on_load.js"
 </script>
+    
 
 </head>
 
@@ -3853,49 +3741,6 @@ lookup.on_load = function()
                 <span class="" style="color: #84bfff; vertical-align: middle; margin-right: 0.5rem;" alt="hashTagBeginSymbol"> task</span>
             </div>
         </span>
-    </span>
-</script>
-
-<script type="text/html" id="to-be-removed-template">
-    <span data-bind="if: $data.toBeRemoved">
-        <span data-bind="ifnot: $data.completlyRemoved">
-            <h2>
-                <span 
-                        placeholder="..." 
-                        class="webpad-contenteditable webpad-break-words-node"
-                        data-bind="
-                            contentEditable: false,
-                            htmlLazy:  $data.Note.text,
-                            style:
-                            {
-                                color: $data.Note.color,
-                            }
-                            " 
-                    ></span>
-                <div>
-                    <h1 style="color: aliceblue;"  > 
-                        <div class="webpad-brightness-dimmed webpad-button-no-border prevent-select cursor-pointer" data-bind=" ">
-                            <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="removal?"/> 
-                        </div>
-                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" ">?</span>
-                        <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $data.rollbackRemoval">
-                            <img src="svg/times-green.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="rollback removal"/> 
-                        </div>
-                        &nbsp;&nbsp;
-                        <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $data.reallyRemove">
-                            <img src="svg/thumbs-up-orange.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="really remove"/> 
-                        </div>
-                    </h1>
-                </div>
-                
-            </h2>
-        </span>
-        <span data-bind="if: $data.completlyRemoved">
-            <br/>
-            <br/>
-            <span class="webpad-brightness-dimmed" style="color: aliceblue;" >removing...</span>
-        </span>
-        
     </span>
 </script>
 
@@ -3948,7 +3793,7 @@ lookup.on_load = function()
 
 
 <script type="text/html" id="operation-template">
-        <div class="w3-col w3-container s12 m12 l12 webpad-operation-card" style="position: absolute;" data-bind="style : { bottom: $data.bottom}, attr: { id: $index() + '-card'}">
+        <div class="w3-col w3-container s12 m12 l12 webpad-operation-card" style="position: absolute;" data-bind="style : { bottom: $data.globalBottom}, attr: { id: $index() + '-card'}">
             <div 
                 style="font-size: 1.3rem;" 
                 class="webpad-card w3-animate-opacity" 
@@ -4041,14 +3886,8 @@ lookup.on_load = function()
     data-bind="style: { background: $root.backgroundColor() }" 
     onresize="lookup.on_resize()"
     onload="lookup.on_load()"
+    onwheel="lookup.bodyOnWheel()"
     >
-    
-
-
-        
-        
-        
-        
         <div vocab="https://schema.org/"
             typeof="WebApplication" style="display: none;">
             <span property="name" >WebPad</span>

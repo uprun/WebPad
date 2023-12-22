@@ -30,6 +30,4 @@ lookup.loadNotes = function()
         }
 
         lookup.send_to_worker_update_for_option_show_help_demo_notes();
-        
-        lookup.scrollToCard_processQueue();
     };

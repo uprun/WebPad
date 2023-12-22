@@ -620,6 +620,8 @@ lookup.model_Operation = function(data)
 
     self.bottom = ko.observable(0);
 
+    self.globalBottom = ko.computed(() => self.bottom() + lookup.globalOffsetY());
+
     self.createDate = new Date(self.time);
 
     self.createDateToOrder = 
@@ -1506,6 +1508,17 @@ lookup.remove_Alias = function(left, right)
 };
 
 // End of "js/remove_Alias.js"
+// Begin of "js/globalOffsets.js"
+lookup.globalOffsetY = ko.observable(0);
+lookup.globalOffsetX = ko.observable(0);
+lookup.globalMaxY = ko.observable(800);
+lookup.globalMinY = ko.observable(800);
+
+lookup.resetGlobalOffsetY = function()
+{
+    lookup.globalOffsetY(0);
+};
+// End of "js/globalOffsets.js"
 
 
 

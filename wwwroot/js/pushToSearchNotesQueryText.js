@@ -6,7 +6,7 @@ lookup.pushToSearchNotesQueryText = function(query)
     lookup.stackSearchNotesQuery.push(
         {
             query: currentValue,
-            scrollPosition: lookup.viewportScrollPosition(),
+            scrollPosition: lookup.globalOffsetY(),
             amountOfCardsLimit: lookup.CurrentResultLimit()
         }
     );

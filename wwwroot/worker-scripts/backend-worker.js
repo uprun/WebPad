@@ -28,6 +28,7 @@ importScripts("../lib/knockout/knockout-latest.debug.js" + "?v=" + new Date().to
 <script language="JavaScript" type="text/javascript" src="js/define_Aliases_if_needed.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/add_Alias.js" ></script>
 <script language="JavaScript" type="text/javascript" src="js/remove_Alias.js" ></script>
+<script language="JavaScript" type="text/javascript" src="js/globalOffsets.js" ></script>
 
 
 

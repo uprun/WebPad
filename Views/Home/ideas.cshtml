@@ -70,8 +70,6 @@
     <script language="JavaScript" type="text/javascript" src="js/load_aliases.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/save_Aliases_to_storage.js" ></script>
     
-    
-    <script language="JavaScript" type="text/javascript" src="js/scrollToCard.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/findNodeById.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/findEdgeById.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/defineLocalStorage.js" ></script>
@@ -82,7 +80,6 @@
     <script language="JavaScript" type="text/javascript" src="js/SearchNotesQuery.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/pushToSearchNotesQuery.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/pushToSearchNotesQueryText.js" ></script>
-    <script language="JavaScript" type="text/javascript" src="js/scrollToOnListChanged.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/rollbackSearchNotesQuery.js" ></script>
 
     <script language="JavaScript" type="text/javascript" src="js/GetRandomColor.js" ></script>
@@ -102,7 +99,6 @@
     <script language="JavaScript" type="text/javascript" src="js/changeBackground.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/toggleMenu.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/getViewPortSize.js" ></script>
-    <script language="JavaScript" type="text/javascript" src="js/getViewPortScrollPosition.js" ></script>
 
 
     <script language="JavaScript" type="text/javascript" src="js/AddInformationToExistingOne.js" ></script>
@@ -136,6 +132,9 @@
 
 
     <script language="JavaScript" type="text/javascript" src="js/save_Operations_to_storage.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/globalOffsets.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/applyMovement.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_on_wheel.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/model_Operation.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/check_platform.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/privacy_policy_link.js" ></script>
@@ -152,6 +151,7 @@
     <script language="JavaScript" type="text/javascript" src="cordova.js" lisperanto-skip-bundle="true"></script>
     <script language="JavaScript" type="text/javascript" src="js/on_resize.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/on_load.js" ></script>
+    
 
 </head>
 
@@ -181,49 +181,6 @@
                 <span class="" style="color: #84bfff; vertical-align: middle; margin-right: 0.5rem;" alt="hashTagBeginSymbol"> task</span>
             </div>
         </span>
-    </span>
-</script>
-
-<script type="text/html" id="to-be-removed-template">
-    <span data-bind="if: $data.toBeRemoved">
-        <span data-bind="ifnot: $data.completlyRemoved">
-            <h2>
-                <span 
-                        placeholder="..." 
-                        class="webpad-contenteditable webpad-break-words-node"
-                        data-bind="
-                            contentEditable: false,
-                            htmlLazy:  $data.Note.text,
-                            style:
-                            {
-                                color: $data.Note.color,
-                            }
-                            " 
-                    ></span>
-                <div>
-                    <h1 style="color: aliceblue;"  > 
-                        <div class="webpad-brightness-dimmed webpad-button-no-border prevent-select cursor-pointer" data-bind=" ">
-                            <img src="svg/trash-orange.svg" class="webpad-edit-pencil" alt="removal?"/> 
-                        </div>
-                        <span class="webpad-brightness-dimmed" style="color: aliceblue;" data-bind=" ">?</span>
-                        <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $data.rollbackRemoval">
-                            <img src="svg/times-green.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="rollback removal"/> 
-                        </div>
-                        &nbsp;&nbsp;
-                        <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $data.reallyRemove">
-                            <img src="svg/thumbs-up-orange.svg" class="webpad-edit-pencil" style="margin-left: 0.5em; margin-right: 0.5em;" alt="really remove"/> 
-                        </div>
-                    </h1>
-                </div>
-                
-            </h2>
-        </span>
-        <span data-bind="if: $data.completlyRemoved">
-            <br/>
-            <br/>
-            <span class="webpad-brightness-dimmed" style="color: aliceblue;" >removing...</span>
-        </span>
-        
     </span>
 </script>
 
@@ -276,7 +233,7 @@
 
 
 <script type="text/html" id="operation-template">
-        <div class="w3-col w3-container s12 m12 l12 webpad-operation-card" style="position: absolute;" data-bind="style : { bottom: $data.bottom}, attr: { id: $index() + '-card'}">
+        <div class="w3-col w3-container s12 m12 l12 webpad-operation-card" style="position: absolute;" data-bind="style : { bottom: $data.globalBottom}, attr: { id: $index() + '-card'}">
             <div 
                 style="font-size: 1.3rem;" 
                 class="webpad-card w3-animate-opacity" 
@@ -369,14 +326,8 @@
     data-bind="style: { background: $root.backgroundColor() }" 
     onresize="lookup.on_resize()"
     onload="lookup.on_load()"
+    onwheel="lookup.bodyOnWheel()"
     >
-    
-
-
-        
-        
-        
-        
         <div vocab="https://schema.org/"
             typeof="WebApplication" style="display: none;">
             <span property="name" >WebPad</span>

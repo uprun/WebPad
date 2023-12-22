@@ -5,9 +5,6 @@ $(document).ready(function()
     ko.applyBindings(viewModel);
     viewModel.getViewPortSize();
     window.addEventListener('resize', function(){  viewModel.getViewPortSize(); }, true);
-    window.addEventListener('scroll', function () {
-        viewModel.getViewPortScrollPosition();
-    }, true);
     viewModel.loadNotes();
     viewModel.check_platform();
 });

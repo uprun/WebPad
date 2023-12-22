@@ -7,7 +7,7 @@ lookup.CreateNoteFromSearchQuery = function() {
     lookup.SearchNotesQuery("");
     if(data.text.length > 0)
     {
-        lookup.onListChanged_set_scrollToLatestCard();
+        lookup.resetGlobalOffsetY();
         var operation = 
         {
             id: 

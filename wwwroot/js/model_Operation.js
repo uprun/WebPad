@@ -8,6 +8,8 @@ lookup.model_Operation = function(data)
 
     self.bottom = ko.observable(0);
 
+    self.globalBottom = ko.computed(() => self.bottom() + lookup.globalOffsetY());
+
     self.createDate = new Date(self.time);
 
     self.createDateToOrder = 

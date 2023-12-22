@@ -4,7 +4,7 @@ lookup.jumpToCardFromQuote = function(data)
     if(destinationCard != null)
     {
         lookup.pushToSearchNotesQuery(destinationCard);
-        lookup.onListChanged_set_scrollToLatestCard();
+        lookup.resetGlobalOffsetY();
     }
     event.stopPropagation();
 
