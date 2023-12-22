@@ -71,7 +71,9 @@ function ConnectedNotesViewModel()
             {
                 var last_added = document.getElementById((length - 1) + "-card");
 
-                next_bottom = last_added.offsetParent.offsetHeight - last_added.offsetTop;
+                var obj_last = lookup.LimitedFilteredOperations()[length - 1];
+
+                next_bottom = obj_last.bottom()  + last_added.offsetHeight;
             }
             
             to_add.bottom(next_bottom);
