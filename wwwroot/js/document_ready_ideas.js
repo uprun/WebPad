@@ -7,4 +7,5 @@ $(document).ready(function()
     window.addEventListener('resize', function(){  viewModel.getViewPortSize(); }, true);
     viewModel.loadNotes();
     viewModel.check_platform();
+    console.log("anchor", document.getElementById("menu-icon-id").offsetHeight);
 });

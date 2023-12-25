@@ -1660,7 +1660,8 @@ lookup.jumpToCardFromWord = function(data)
     lookup.pushToSearchNotesQueryText(data.wordQuery);
     lookup.resetGlobalOffsetY();
     
-    event.stopPropagation();
+    //event.stopPropagation();
+    return true;
 };
 // End of "js/jumpToCardFromWord.js"
 </script>
@@ -3678,6 +3679,128 @@ lookup.cardAfterRender = function()
 // End of "js/cardAfterRender.js"
 </script>
 <script>
+// Begin of "js/body_anchorWidth.js"
+lookup.body_anchorWidth = ko.observable(0);
+// End of "js/body_anchorWidth.js"
+</script>
+<script>
+// Begin of "js/body_is_dragged.js"
+lookup.body_is_dragged = ko.observable(false);
+// End of "js/body_is_dragged.js"
+</script>
+<script>
+// Begin of "js/body_onmousedown.js"
+lookup.body_onmousedown = function()
+{
+    console.log(event);
+    lookup.body_is_dragged(true);
+    lookup.body_total_movement_while_drag(0)
+};
+// End of "js/body_onmousedown.js"
+</script>
+<script>
+// Begin of "js/body_onmousemove.js"
+lookup.body_onmousemove = function()
+{
+    console.log(event);
+    if(lookup.body_is_dragged())
+    {
+        const deltaX = event.movementX;
+        const deltaY = event.movementY;
+        lookup.applyMovement(-deltaY, deltaX);
+        lookup.body_total_movement_while_drag(lookup.body_total_movement_while_drag() + Math.abs(deltaX) + Math.abs(deltaY));
+    }
+    else
+    {
+        //console.log("NO DRAG");
+    }
+};
+// End of "js/body_onmousemove.js"
+</script>
+<script>
+// Begin of "js/body_onmouseleave.js"
+lookup.body_onmouseleave = function()
+{
+    console.log(event);
+    lookup.body_is_dragged(false);
+};
+// End of "js/body_onmouseleave.js"
+</script>
+<script>
+// Begin of "js/body_onmouseup.js"
+lookup.body_onmouseup = function()
+{
+    console.log(event);
+    lookup.body_is_dragged(false);
+};
+
+// End of "js/body_onmouseup.js"
+</script>
+<script>
+// Begin of "js/body_total_movement_while_drag.js"
+
+lookup.body_total_movement_while_drag = ko.observable(0);
+// End of "js/body_total_movement_while_drag.js"
+</script>
+<script>
+// Begin of "js/bodyOnClick.js"
+lookup.bodyOnClick = function(e)
+{
+    //console.log(event);
+    var offset = 
+    {
+        x: event.pageX,
+        y: event.pageY
+    };
+
+    const drag_threshold = 3 * lookup.body_anchorWidth();
+    if ( lookup.body_total_movement_while_drag() > drag_threshold )
+    {
+        // to prevent click handler after drag, but allow it if drag was small
+        lookup.body_total_movement_while_drag(0);
+        return;
+    }
+
+    if(lookup.menuIsOpen() || lookup.optionsIsOpen())
+    {
+        lookup.hideMenu();
+        lookup.hideOptions();
+    }
+
+    lookup.showOmniBox();
+};
+// End of "js/bodyOnClick.js"
+</script>
+<script>
+// Begin of "js/bodyOnTouchEnd.js"
+lookup.bodyOnTouchEnd = function()
+{
+    lookup.previosTouch = undefined;
+};
+// End of "js/bodyOnTouchEnd.js"
+</script>
+<script>
+// Begin of "js/bodyOnTouchMove.js"
+lookup.bodyOnTouchMove = function()
+{
+    //console.log(event);
+    var touches = event.changedTouches;
+    if(touches.length > 0 )
+    {
+        const clientX = touches[0].clientX;
+        const clientY = touches[0].clientY;
+        if(typeof(lookup.previosTouch) !== "undefined")
+        {
+            var deltaX = lookup.previosTouch.x - clientX;
+            var deltaY = lookup.previosTouch.y - clientY;
+            lookup.applyMovement(deltaY, deltaX);
+        }
+        lookup.previosTouch = {x: clientX, y: clientY};
+    }
+};
+// End of "js/bodyOnTouchMove.js"
+</script>
+<script>
 // Begin of "js/document_ready_ideas.js"
 $(document).ready(function()
 {
@@ -3688,6 +3811,7 @@ $(document).ready(function()
     window.addEventListener('resize', function(){  viewModel.getViewPortSize(); }, true);
     viewModel.loadNotes();
     viewModel.check_platform();
+    console.log("anchor", document.getElementById("menu-icon-id").offsetHeight);
 });
 // End of "js/document_ready_ideas.js"
 </script>
@@ -3795,11 +3919,12 @@ lookup.on_load = function()
 
 
 <script type="text/html" id="operation-template">
-        <div class="w3-col w3-container s12 m12 l12 webpad-operation-card" style="position: absolute;" data-bind="style : { bottom: $data.globalBottom}, attr: { id: $index() + '-card'}">
+        <div class="w3-col w3-container s12 m12 l12 webpad-operation-card prevent-select" style="position: absolute;" data-bind="style : { bottom: $data.globalBottom}, attr: { id: $index() + '-card'}">
             <div 
                 style="font-size: 1.3rem;" 
                 class="webpad-card w3-animate-opacity" 
-                data-bind="click: $data.switchToolBoxVisibility" >
+                 >
+                 <!-- data-bind="click: $data.switchToolBoxVisibility" -->
                 <span>
                     
                     <span data-bind="if: name === 'quote' || name === 'quote-edit' " >
@@ -3871,7 +3996,7 @@ lookup.on_load = function()
 <script type="text/html" id="show-more-template">
         <div class="w3-row" data-bind="if: $root.hidden_operations_count() > 0">
             <div class="w3-col w3-container s12 m12 l12">
-                <span style="font-size: 2rem;">                    
+                <span style="font-size: 2rem;">
                     <button  class="webpad-node webpad-green" 
                         data-bind=
                             "click: $root.ExtendCurrentResultLimit,
@@ -3889,6 +4014,14 @@ lookup.on_load = function()
     onresize="lookup.on_resize()"
     onload="lookup.on_load()"
     onwheel="lookup.bodyOnWheel()"
+    ontouchmove="lookup.bodyOnTouchMove()"
+    ontouchend="lookup.bodyOnTouchEnd()"
+    ontouchcancel="lookup.bodyOnTouchEnd()"
+    ontouchleave="lookup.bodyOnTouchEnd()"
+    onmousedown="lookup.body_onmousedown()"
+    onmouseup="lookup.body_onmouseup()"
+    onmousemove="lookup.body_onmousemove()"
+    onmouseleave="lookup.body_onmouseleave()"
     >
         <div vocab="https://schema.org/"
             typeof="WebApplication" style="display: none;">
@@ -3920,7 +4053,7 @@ lookup.on_load = function()
             <div class="w3-row">
                 <div class="w3-col w3-container s12 m12 l12">
                     <div class=" webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind="click: $root.toggleMenu">
-                        <span style="font-size: 2rem;">
+                        <span id="menu-icon-id" style="font-size: 2rem;">
                             <img src="svg/bars.svg" class="webpad-edit-pencil " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="open menu"/> 
                         </span>
                         

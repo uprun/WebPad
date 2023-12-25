@@ -147,6 +147,16 @@
 
     <script language="JavaScript" type="text/javascript" src="js/mainPage.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/cardAfterRender.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_anchorWidth.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_is_dragged.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_onmousedown.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_onmousemove.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_onmouseleave.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_onmouseup.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_total_movement_while_drag.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/bodyOnClick.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/bodyOnTouchEnd.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/bodyOnTouchMove.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/document_ready_ideas.js" ></script>
     <script language="JavaScript" type="text/javascript" src="cordova.js" lisperanto-skip-bundle="true"></script>
     <script language="JavaScript" type="text/javascript" src="js/on_resize.js" ></script>
@@ -233,11 +243,12 @@
 
 
 <script type="text/html" id="operation-template">
-        <div class="w3-col w3-container s12 m12 l12 webpad-operation-card" style="position: absolute;" data-bind="style : { bottom: $data.globalBottom}, attr: { id: $index() + '-card'}">
+        <div class="w3-col w3-container s12 m12 l12 webpad-operation-card prevent-select" style="position: absolute;" data-bind="style : { bottom: $data.globalBottom}, attr: { id: $index() + '-card'}">
             <div 
                 style="font-size: 1.3rem;" 
                 class="webpad-card w3-animate-opacity" 
-                data-bind="click: $data.switchToolBoxVisibility" >
+                 >
+                 <!-- data-bind="click: $data.switchToolBoxVisibility" -->
                 <span>
                     
                     <span data-bind="if: name === 'quote' || name === 'quote-edit' " >
@@ -309,7 +320,7 @@
 <script type="text/html" id="show-more-template">
         <div class="w3-row" data-bind="if: $root.hidden_operations_count() > 0">
             <div class="w3-col w3-container s12 m12 l12">
-                <span style="font-size: 2rem;">                    
+                <span style="font-size: 2rem;">
                     <button  class="webpad-node webpad-green" 
                         data-bind=
                             "click: $root.ExtendCurrentResultLimit,
@@ -327,6 +338,14 @@
     onresize="lookup.on_resize()"
     onload="lookup.on_load()"
     onwheel="lookup.bodyOnWheel()"
+    ontouchmove="lookup.bodyOnTouchMove()"
+    ontouchend="lookup.bodyOnTouchEnd()"
+    ontouchcancel="lookup.bodyOnTouchEnd()"
+    ontouchleave="lookup.bodyOnTouchEnd()"
+    onmousedown="lookup.body_onmousedown()"
+    onmouseup="lookup.body_onmouseup()"
+    onmousemove="lookup.body_onmousemove()"
+    onmouseleave="lookup.body_onmouseleave()"
     >
         <div vocab="https://schema.org/"
             typeof="WebApplication" style="display: none;">
@@ -358,7 +377,7 @@
             <div class="w3-row">
                 <div class="w3-col w3-container s12 m12 l12">
                     <div class=" webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind="click: $root.toggleMenu">
-                        <span style="font-size: 2rem;">
+                        <span id="menu-icon-id" style="font-size: 2rem;">
                             <img src="svg/bars.svg" class="webpad-edit-pencil " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="open menu"/> 
                         </span>
                         
