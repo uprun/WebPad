@@ -75,7 +75,7 @@
     <script language="JavaScript" type="text/javascript" src="js/defineLocalStorage.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/findCardByMainNodeId.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/jumpToCardFromWord.js" ></script>
-    <script language="JavaScript" type="text/javascript" src="js/jumpToCardFromQuote.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/open_url.js" ></script>
 
     <script language="JavaScript" type="text/javascript" src="js/SearchNotesQuery.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/pushToSearchNotesQuery.js" ></script>
@@ -197,19 +197,18 @@
 <script type="text/html" id="text-with-dictionary-light-template">
     <!-- ko foreach: $data.textSplitted -->  
         <!-- ko if: $data.word.startsWith('https://') -->
-            <a class="webpad-break-words-node" target="_blank" data-bind="
+            <span class="webpad-break-words-node" data-bind="
                 text: word,
                 style:
                 {
                     color: $parent.color,
+                    'border-color': $parent.color_border,
+                    'border-bottom-style': 'solid',
                     'word-break': word.length < 20 ? 'break-word' : 'break-all',
                 },
-                attr:
-                {
-                    href: word
-                }
+                click: $root.open_url
                     ">
-            </a>
+            </span>
         <!-- /ko -->
         <!-- ko ifnot: $data.word.startsWith('https://') -->         
             <span class="webpad-break-words-node webpad-border-bottom-dotted" data-bind="
@@ -222,8 +221,7 @@
                     'word-break': word.length < 20 ? 'break-word' : 'break-all',
                 },
                 click: $root.jumpToCardFromWord
-                    ">
-            </span>
+                    "></span>
         <!-- /ko -->            
     <!-- /ko -->
 </script>
