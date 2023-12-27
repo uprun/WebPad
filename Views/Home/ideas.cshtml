@@ -160,7 +160,7 @@
     <script language="JavaScript" type="text/javascript" src="js/document_ready_ideas.js" ></script>
     <script language="JavaScript" type="text/javascript" src="cordova.js" lisperanto-skip-bundle="true"></script>
     <script language="JavaScript" type="text/javascript" src="js/on_resize.js" ></script>
-    <script language="JavaScript" type="text/javascript" src="js/on_load.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_on_load.js" ></script>
     
 
 </head>
@@ -336,7 +336,7 @@
     style="background-color: #000000; margin: 0; " 
     data-bind="style: { background: $root.backgroundColor() }" 
     onresize="lookup.on_resize()"
-    onload="lookup.on_load()"
+    onload="lookup.body_on_load()"
     onwheel="lookup.bodyOnWheel()"
     ontouchmove="lookup.bodyOnTouchMove()"
     ontouchend="lookup.bodyOnTouchEnd()"

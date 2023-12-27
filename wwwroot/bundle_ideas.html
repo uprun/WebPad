@@ -1657,6 +1657,9 @@ lookup.findCardByMainNodeId = function(mainId)
 // Begin of "js/jumpToCardFromWord.js"
 lookup.jumpToCardFromWord = function(data)
 {
+    const drag_threshold = 1.5 * lookup.body_anchorWidth();
+    if ( lookup.body_total_movement_while_drag() > drag_threshold )
+        return true;
     lookup.pushToSearchNotesQueryText(data.wordQuery);
     lookup.resetGlobalOffsetY();
     
@@ -2782,7 +2785,7 @@ lookup.loadNotes = function()
             {
                 lookup.backendWorker.sendQuery('populate_Operations', []);
                 lookup.set_option_show_help_demo_notes_to_true();
-                lookup.set_option_show_option_use_Japanese_tokeniser_to_false();
+                lookup.set_option_use_Japanese_tokeniser_to_false();
             }
         }
 
@@ -3812,6 +3815,9 @@ $(document).ready(function()
     viewModel.loadNotes();
     viewModel.check_platform();
     console.log("anchor", document.getElementById("menu-icon-id").offsetHeight);
+    const menu_icon = document.getElementById("menu-icon-id");
+    console.log(menu_icon);
+    lookup.body_anchorWidth( menu_icon.offsetHeight);
 });
 // End of "js/document_ready_ideas.js"
 </script>
@@ -3830,12 +3836,19 @@ lookup.on_resize = function()
 // End of "js/on_resize.js"
 </script>
 <script>
-// Begin of "js/on_load.js"
-lookup.on_load = function()
+// Begin of "js/body_on_load.js"
+lookup.body_on_load = function()
 {
+    console.log("body_on_load");
     lookup.on_resize();
+    const menu_icon = document.getElementById("menu-icon-id");
+    console.log(menu_icon);
+    lookup.body_anchorWidth( menu_icon.offsetHeight);
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log("Hello World!");
+      });
 };
-// End of "js/on_load.js"
+// End of "js/body_on_load.js"
 </script>
     
 
@@ -4012,7 +4025,7 @@ lookup.on_load = function()
     style="background-color: #000000; margin: 0; " 
     data-bind="style: { background: $root.backgroundColor() }" 
     onresize="lookup.on_resize()"
-    onload="lookup.on_load()"
+    onload="lookup.body_on_load()"
     onwheel="lookup.bodyOnWheel()"
     ontouchmove="lookup.bodyOnTouchMove()"
     ontouchend="lookup.bodyOnTouchEnd()"
