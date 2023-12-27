@@ -1669,21 +1669,6 @@ lookup.jumpToCardFromWord = function(data)
 // End of "js/jumpToCardFromWord.js"
 </script>
 <script>
-// Begin of "js/jumpToCardFromQuote.js"
-lookup.jumpToCardFromQuote = function(data)
-{
-    var destinationCard = lookup.findCardByMainNodeId(data.id);
-    if(destinationCard != null)
-    {
-        lookup.pushToSearchNotesQuery(destinationCard);
-        lookup.resetGlobalOffsetY();
-    }
-    event.stopPropagation();
-
-};
-// End of "js/jumpToCardFromQuote.js"
-</script>
-<script>
 // Begin of "js/open_url.js"
 lookup.open_url = function(data)
 {
