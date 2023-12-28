@@ -33,7 +33,7 @@ namespace WebPad.Controllers
         public async Task GenerateBundle()
         {
             Console.WriteLine(nameof(GenerateBundle));
-            string input_path = Path.Combine(Directory.GetCurrentDirectory(), "Views", "Home", "ideas.cshtml");
+            string input_path = Path.Combine(Directory.GetCurrentDirectory(), "Views", "Home", "ideas.html");
             string output_path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "bundle_ideas.html");
             await helper_generate_bundle(input_path, output_path);
             
