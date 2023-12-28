@@ -1728,6 +1728,8 @@ lookup.pushToSearchNotesQuery = function(dataCard)
 lookup.pushToSearchNotesQueryText = function(query)
 {
     var currentValue = lookup.SearchNotesQuery().trim();
+
+    
     
     
     lookup.stackSearchNotesQuery.push(
@@ -1740,6 +1742,7 @@ lookup.pushToSearchNotesQueryText = function(query)
 
 
     var newQuery = query.trim();
+    history.pushState({ query: newQuery }, "#" + newQuery, "?hash_tag=" + newQuery);
     lookup.SearchNotesQuery(newQuery);
     lookup.ResetCurrentResultLimit();
 };
@@ -3839,9 +3842,11 @@ lookup.body_on_load = function()
 {
     console.log("body_on_load");
     lookup.on_resize();
-    const menu_icon = document.getElementById("menu-icon-id");
-    console.log(menu_icon);
-    lookup.body_anchorWidth( menu_icon.offsetHeight);
+    window.addEventListener("popstate", (event) => {
+        console.log(
+          `location: ${document.location}, state: ${JSON.stringify(event.state)}`,
+        );
+      });
 };
 // End of "js/body_on_load.js"
 </script>
