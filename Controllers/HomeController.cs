@@ -30,6 +30,7 @@ namespace WebPad.Controllers
             return View();
         }
 
+        [HttpGet]
         public async Task GenerateBundle()
         {
             Console.WriteLine(nameof(GenerateBundle));

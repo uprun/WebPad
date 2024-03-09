@@ -246,15 +246,14 @@
                 style="font-size: 1.3rem;" 
                 class="webpad-card w3-animate-opacity" 
                  >
-                 <!-- data-bind="click: $data.switchToolBoxVisibility" -->
+                 <!-- data-bind="dblclick: $data.switchToolBoxVisibility" -->
                 <span>
-                    
+                    <div style="font-size: 0.6rem; text-align: left;"><span class="w3-animate-opacity webpad-brightness-dimmed-2x" style="color: rgb(214, 123, 12);" data-bind="text: $data.createDateToOrder"></span></div>
                     <span data-bind="if: name === 'quote' || name === 'quote-edit' " >
                         <div class="webpad-brightness-dimmed " data-bind="css:{ 'webpad-quote-edit' : name === 'quote-edit', 'webpad-quote' : name === 'quote'}">
                             <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data.quoted }  -->
                             <!-- /ko -->
-                            &nbsp;
-                            <span data-bind="visible: $data.toolBoxVisible">
+                            <div style="margin-top: 0.5rem;">
                                 <span  class="w3-animate-opacity webpad-brightness-dimmed">
                                     <span class="webpad-button-no-border webpad-brightness-dimmed webpad-golden-frame prevent-select cursor-pointer" 
                                         style="font-size: 1.4rem; padding-left: 0.5rem; padding-right: 0.5rem; " data-bind=" click: $root.jumpToCardFromQuotedOperation">
@@ -269,14 +268,14 @@
                                         <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="Edit"/> 
                                     </span>
                                 </span>
-                            </span>
+                            </div>
                         </div>
                     </span>
                     <span >
                         <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data }  -->
                         <!-- /ko -->
-                        <div style="font-size: 0.6rem;"><span class="w3-animate-opacity webpad-brightness-dimmed-3x" style="color: aliceblue;" data-bind="text: $data.createDateToOrder"></span></div>
-                        <span data-bind="visible: $data.toolBoxVisible">
+                        
+                        <div style="margin-top: 0.5rem;">
                             <span  class="w3-animate-opacity webpad-brightness-dimmed">
                                 <span 
                                     class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button webpad-golden-frame prevent-select cursor-pointer" 
@@ -301,11 +300,7 @@
                                 </span>
                                 
                             </span>
-                            <div style="font-size: 0.8rem;" class="w3-animate-opacity webpad-brightness-dimmed"  >
-                                    <span style="color: aliceblue;  vertical-align: middle;" data-bind="text: $data.createDate">
-                                    </span>
-                                </div>
-                        </span>
+                        </div>
                     </span>
                 </span>
             </div>
