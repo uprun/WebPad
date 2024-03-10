@@ -1,0 +1,165 @@
+<head prefix="og: http://ogp.me/ns#">
+    <title>WebPad</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#333333" />
+    <meta name="application-name" content="WebPad">
+    <meta name="msapplication-TileColor" content="#333333">
+    
+
+    <meta name="description" content="Wiki, personal wiki.">
+    <meta name="keywords" content="wiki, personal wiki, personal-wiki, note taking app, note-taking, link notes">
+    <meta name="author" content="Kryvonos Oleksandr">
+
+    <!-- Facebook's OpenGraph protocol meta start -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="WebPad" />
+    
+    <meta property="og:image" content="https://webpad.com.ua/WebPad_logo_500.png" />
+    <meta property="og:image:secure_url" content="https://webpad.com.ua/WebPad_logo_500.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="500" />
+    <meta property="og:image:height" content="500" />
+    <meta property="og:image:alt" content="The WebPad logo that consists of 4 colored lightning symbol, that are: orange, purple, green and yellow." />
+
+    <meta property="og:url" content="https://webpad.com.ua/" />
+    <meta property="og:description" content="Wiki, personal wiki." />
+    <meta property="og:determiner" content="the" />
+    <meta property="og:site_name" content="WebPad" />
+    <meta property="og:video" content="https://www.youtube.com/watch?v=SxVn7iSVn3A" />
+    <!-- Facebook's OpenGraph protocol meta end -->
+    
+    <link rel="manifest" href="json/manifest.json" >
+    <script src="lib/jquery/jquery.js"  lisperanto-skip-bundle="true"></script>
+    
+    <script src="lib/knockout/knockout-latest.debug.js"  lisperanto-skip-bundle="true"></script>
+    <script src="lib/tiny-segmenter/tiny-segmenter-0.2.0.js"  lisperanto-skip-bundle="true"></script>
+
+
+
+
+    <link rel="apple-touch-icon" sizes="32x32" href="/WebPad_logo_32.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/WebPad_logo_57.png">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/WebPad_logo_57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/WebPad_logo_60.png">
+    <link rel="apple-touch-icon" sizes="64x64" href="/WebPad_logo_64.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/WebPad_logo_72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/WebPad_logo_76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/WebPad_logo_114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/WebPad_logo_120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/WebPad_logo_144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/WebPad_logo_152.png">
+    <link rel="apple-touch-icon" sizes="250x250" href="/WebPad_logo_250.png">
+    <link rel="apple-touch-icon" sizes="500x500" href="/WebPad_logo_500.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/WebPad_logo_512.png">
+
+    <link rel="stylesheet" href="css/w3-4.13.css" > 
+        
+    <link rel="stylesheet" href="css/site.css" />
+    <script language="JavaScript" type="text/javascript" src="js/knockout-extension-contentEditable.js" ></script>
+
+    
+    <script language="JavaScript" type="text/javascript" src="js/lookup.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/stopPropagation.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/model_Connection.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/model_Node.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/model_ColorPreset.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/model_Card.js" ></script>
+
+    <script language="JavaScript" type="text/javascript" src="js/load_aliases.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/save_Aliases_to_storage.js" ></script>
+    
+    <script language="JavaScript" type="text/javascript" src="js/findNodeById.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/findEdgeById.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/defineLocalStorage.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/findCardByMainNodeId.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/jumpToCardFromWord.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/open_url.js" ></script>
+
+    <script language="JavaScript" type="text/javascript" src="js/SearchNotesQuery.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/pushToSearchNotesQuery.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/pushToSearchNotesQueryText.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/rollbackSearchNotesQuery.js" ></script>
+
+    <script language="JavaScript" type="text/javascript" src="js/GetRandomColor.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/MigrationOfColorOfNode.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/switchExpandedCardTagsList.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/switchAdditionalInformationText.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/searchBarKeyPress.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/additionalInfoKeyPress.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/pushToHistory.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/Instanciate_model_node.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/ConnectNotes.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/CreateNote.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/RemoveConnection.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/RemoveNote.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/migrateConnectionToNode.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/Instanciate_model_connection.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/changeBackground.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/toggleMenu.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/getViewPortSize.js" ></script>
+
+
+    <script language="JavaScript" type="text/javascript" src="js/AddInformationToExistingOne.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/AddNoteToExistingOne.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/ColorNode.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/ColorNodeFromCode.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/CreateNoteFromSearchQuery.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/getLocalIndex.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/populateColorPresets.js" ></script>
+
+    <script language="JavaScript" type="text/javascript" src="js/populate.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/QueryableWorker.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/populate.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/loadNotes.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/toBeEdited.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/taggedOrQuotedCard.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/export.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/import.js" ></script>
+    
+    <script language="JavaScript" type="text/javascript" src="js/saveItemsToStorage.js" ></script>
+
+
+    <script language="JavaScript" type="text/javascript" src="js/jumpToCardFromOperation.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/jumpToCardFromQuotedOperation.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/operationToBeQuoted.js" ></script>
+    
+    <script language="JavaScript" type="text/javascript" src="js/option_show_help_demo_notes.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/option_use_Japanese_tokeniser.js" ></script>
+    
+    
+
+
+    <script language="JavaScript" type="text/javascript" src="js/save_Operations_to_storage.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/globalOffsets.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/applyMovement.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_on_wheel.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/model_Operation.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/check_platform.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/privacy_policy_link.js" ></script>
+
+    <script language="JavaScript" type="text/javascript" src="js/patreonLinkOnClick.js" ></script>
+
+    <script language="JavaScript" type="text/javascript" src="js/patreonSupporters.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/codeContributors.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/librariesInUse.js" ></script>
+
+    <script language="JavaScript" type="text/javascript" src="js/mainPage.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/cardAfterRender.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_anchorWidth.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_is_dragged.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_onmousedown.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_onmousemove.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_onmouseleave.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_onmouseup.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_total_movement_while_drag.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/bodyOnClick.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/bodyOnTouchEnd.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/bodyOnTouchMove.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/document_ready_ideas.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="cordova.js" lisperanto-skip-bundle="true"></script>
+    <script language="JavaScript" type="text/javascript" src="js/on_resize.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/body_on_load.js" ></script>
+    
+
+</head>

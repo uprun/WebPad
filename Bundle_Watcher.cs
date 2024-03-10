@@ -136,6 +136,7 @@ public class Bundle_Watcher
 
     private static void embed_just_paste( StreamWriter output_writer, string trimmed)
     {
+        Console.WriteLine(trimmed);
         var splitted = trimmed.Split(new[] { " ", "</lisperanto-just-paste>", "/>", ">", "<lisperanto-just-paste " }, StringSplitOptions.RemoveEmptyEntries);
         string src_from_script = splitted.First(a => a.StartsWith("src="));
         var actual_path = src_from_script.Substring("src=\"".Length, src_from_script.Length - "src=\"\"".Length);
