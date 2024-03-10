@@ -19,6 +19,20 @@ namespace WebPad.Controllers
     public class HomeController : Controller
     {
         
+        [HttpGet]
+        public async Task RunUpdate()
+        {
+            var loopFunc =async () => {
+                while(true)
+                {
+                    Console.Write(" <^_^> ");
+                    await GenerateBundle();
+                    await Task.Delay(TimeSpan.FromSeconds(5.0));
+                }
+                
+            };
+            await Task.Run(loopFunc);
+        }
 
         public IActionResult ideas(string source)
         {

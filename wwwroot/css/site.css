@@ -309,7 +309,7 @@ a
 .webpad-quote-edit
 {
     border-left-color: #f8e755;
-    border-left-style: dotted;
+    border-left-style: double;
     border-left-width: .4em;
     font-style: italic;
     padding-left: .5em;
@@ -526,7 +526,7 @@ div.webpad-hide-on-large-screen
     color:#fff;
     border-radius: 3rem;
     padding: 0.5rem;
-    border: 0.2rem solid rgb(255, 66, 77);
+    border: 0.2rem solid #000000;
     display: inline-block;
   }
 
@@ -545,7 +545,7 @@ div.webpad-hide-on-large-screen
     color:#fff;
     border-radius: 3rem;
     padding: 0.5rem;
-    border: 0.2rem solid #404eed;
+    border: 0.2rem solid #000000;
     display: inline-block;
 }
 

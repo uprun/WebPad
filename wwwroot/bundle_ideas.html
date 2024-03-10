@@ -605,7 +605,7 @@ a
 .webpad-quote-edit
 {
     border-left-color: #f8e755;
-    border-left-style: dotted;
+    border-left-style: double;
     border-left-width: .4em;
     font-style: italic;
     padding-left: .5em;
@@ -822,7 +822,7 @@ div.webpad-hide-on-large-screen
     color:#fff;
     border-radius: 3rem;
     padding: 0.5rem;
-    border: 0.2rem solid rgb(255, 66, 77);
+    border: 0.2rem solid #000000;
     display: inline-block;
   }
 
@@ -841,7 +841,7 @@ div.webpad-hide-on-large-screen
     color:#fff;
     border-radius: 3rem;
     padding: 0.5rem;
-    border: 0.2rem solid #404eed;
+    border: 0.2rem solid #000000;
     display: inline-block;
 }
 
@@ -3157,6 +3157,26 @@ lookup.resetGlobalOffsetY = function()
 {
     lookup.globalOffsetY(0);
 };
+
+lookup.update_global_scroll_limits = function()
+{
+    var length = lookup.LimitedFilteredOperations().length;
+    var total_scrollable_height = 0;
+    if(length > 0)
+    {
+        var obj_last = lookup.LimitedFilteredOperations()[length - 1];
+        total_scrollable_height = obj_last.bottom();
+        if ( obj_last.offsetHeight != null) 
+        {
+            total_scrollable_height += obj_last.offsetHeight;
+        }
+    }
+
+    lookup.globalMaxY(-total_scrollable_height + window.innerHeight * 0.05);
+    lookup.globalMinY(window.innerHeight * 0.6);
+    
+    console.log("height scroll limits:", lookup.globalMinY(), lookup.globalMaxY());
+};
 // End of "js/globalOffsets.js"
 </script>
 <script>
@@ -3164,10 +3184,13 @@ lookup.resetGlobalOffsetY = function()
 lookup.applyMovement = function (deltaY, deltaX) 
 {
     var newOffsetY = lookup.globalOffsetY() + deltaY;
-    // const max_Y = lookup.globalMaxY();
-    // newOffsetY = Math.min(newOffsetY, max_Y);
-    // const min_Y = lookup.globalMinY() + document.body.offsetHeight;
-    // newOffsetY = Math.max(newOffsetY, min_Y);
+    
+    console.log("Global offset:", newOffsetY);
+    const max_Y = lookup.globalMaxY();
+    const min_Y = lookup.globalMinY();
+    newOffsetY = Math.min(newOffsetY, min_Y);
+    
+    newOffsetY = Math.max(newOffsetY, max_Y);
     lookup.globalOffsetY(newOffsetY);
 
     // var newOffsetX = lookup.globalOffsetX() - deltaX ;
@@ -3211,6 +3234,7 @@ lookup.model_Operation = function(data)
     self.time = data.time;
 
     self.bottom = ko.observable(0);
+    self.offsetHeight = null;
 
     self.globalBottom = ko.computed(() => self.bottom() + lookup.globalOffsetY());
 
@@ -3542,17 +3566,17 @@ function ConnectedNotesViewModel()
     lookup.operationsToAddGradually_timer = undefined;
     lookup.operationsToAddGradually_handler = function()
     {
+        var length = lookup.LimitedFilteredOperations().length;
+        var last_added = document.getElementById((length - 1) + "-card");
+        var obj_last = lookup.LimitedFilteredOperations()[length - 1];
         if(lookup.operationsToAddGradually.length > 0)
         {
             
             var to_add = lookup.operationsToAddGradually.pop();
-            var length = lookup.LimitedFilteredOperations().length;
+            
             var next_bottom = 0;
             if (length > 0)
             {
-                var last_added = document.getElementById((length - 1) + "-card");
-
-                var obj_last = lookup.LimitedFilteredOperations()[length - 1];
 
                 next_bottom = obj_last.bottom()  + last_added.offsetHeight;
             }
@@ -3560,6 +3584,11 @@ function ConnectedNotesViewModel()
             to_add.bottom(next_bottom);
             lookup.LimitedFilteredOperations.push(to_add);
         }
+        if (typeof(obj_last) !== "undefined" && obj_last.offsetHeight == null)
+        {
+            obj_last.offsetHeight = last_added.offsetHeight;
+        }
+        lookup.update_global_scroll_limits();
         lookup.operationsToAddGradually_timer = setTimeout(lookup.operationsToAddGradually_handler, lookup.operationsToAddGradually_miliseconds);
         
     };
@@ -3940,7 +3969,7 @@ lookup.body_on_load = function()
                  >
                  <!-- data-bind="dblclick: $data.switchToolBoxVisibility" -->
                 <span>
-                    <div style="font-size: 0.6rem; text-align: left;"><span class="w3-animate-opacity webpad-brightness-dimmed-2x" style="color: rgb(214, 123, 12);" data-bind="text: $data.createDateToOrder"></span></div>
+                    <div style="font-size: 0.6rem; text-align: left;"><span class="w3-animate-opacity" style="color: rgb(221, 150, 63);" data-bind="text: $data.createDateToOrder"></span></div>
                     <span data-bind="if: name === 'quote' || name === 'quote-edit' " >
                         <div class="webpad-brightness-dimmed " data-bind="css:{ 'webpad-quote-edit' : name === 'quote-edit', 'webpad-quote' : name === 'quote'}">
                             <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data.quoted }  -->

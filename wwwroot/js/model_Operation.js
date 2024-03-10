@@ -7,6 +7,7 @@ lookup.model_Operation = function(data)
     self.time = data.time;
 
     self.bottom = ko.observable(0);
+    self.offsetHeight = null;
 
     self.globalBottom = ko.computed(() => self.bottom() + lookup.globalOffsetY());
 

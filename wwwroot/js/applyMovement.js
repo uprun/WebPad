@@ -1,10 +1,13 @@
 lookup.applyMovement = function (deltaY, deltaX) 
 {
     var newOffsetY = lookup.globalOffsetY() + deltaY;
-    // const max_Y = lookup.globalMaxY();
-    // newOffsetY = Math.min(newOffsetY, max_Y);
-    // const min_Y = lookup.globalMinY() + document.body.offsetHeight;
-    // newOffsetY = Math.max(newOffsetY, min_Y);
+    
+    console.log("Global offset:", newOffsetY);
+    const max_Y = lookup.globalMaxY();
+    const min_Y = lookup.globalMinY();
+    newOffsetY = Math.min(newOffsetY, min_Y);
+    
+    newOffsetY = Math.max(newOffsetY, max_Y);
     lookup.globalOffsetY(newOffsetY);
 
     // var newOffsetX = lookup.globalOffsetX() - deltaX ;
