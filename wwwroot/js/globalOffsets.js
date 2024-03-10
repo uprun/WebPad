@@ -25,5 +25,5 @@ lookup.update_global_scroll_limits = function()
     lookup.globalMaxY(-total_scrollable_height + window.innerHeight * 0.05);
     lookup.globalMinY(window.innerHeight * 0.6);
     
-    console.log("height scroll limits:", lookup.globalMinY(), lookup.globalMaxY());
+    //console.log("height scroll limits:", lookup.globalMinY(), lookup.globalMaxY());
 };
