@@ -91,6 +91,11 @@ public class Bundle_Watcher
 
                 }
 
+                if (trimmed.StartsWith("<lisperanto-just-paste ") && trimmed.Contains("src=\""))
+                {
+                    embed_just_paste(output_writer, trimmed);
+                }
+
                 if (trimmed.StartsWith("<link rel=\"stylesheet\"") && trimmed.Contains("href=\"") && trimmed.IsAbsent("lisperanto-skip-bundle=\"true\""))
                 {
                     embed_style_content(output_writer, trimmed);
@@ -127,6 +132,24 @@ public class Bundle_Watcher
         output_writer.WriteLine("");
         output_writer.WriteLine($"/* End of \"{actual_path}\" */");
         output_writer.WriteLine("</style>");
+    }
+
+    private static void embed_just_paste( StreamWriter output_writer, string trimmed)
+    {
+        var splitted = trimmed.Split(new[] { " ", "</lisperanto-just-paste>", "/>", ">", "<lisperanto-just-paste " }, StringSplitOptions.RemoveEmptyEntries);
+        string src_from_script = splitted.First(a => a.StartsWith("src="));
+        var actual_path = src_from_script.Substring("src=\"".Length, src_from_script.Length - "src=\"\"".Length);
+
+        var path_to_src_file = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", actual_path);
+        
+        using (var extra_readed = new StreamReader(path_to_src_file))
+        {
+            var all_content = extra_readed.ReadToEnd();
+            output_writer.Write(all_content);
+
+        }
+        output_writer.WriteLine("");
+        
     }
 
     private static void embed_script_content(bool add_script_tags, StreamWriter output_writer, string trimmed)

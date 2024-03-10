@@ -4095,314 +4095,317 @@ lookup.body_on_load = function()
         
         
         
-        <div id="webpad-header-absolute-position" class="webpad-header-absolute-position prevent-select" style="display: none;" data-bind="visible: !$root.menuIsOpen()">
-            <div class="w3-row">
-                <div class="w3-col w3-container s12 m12 l12">
-                    <div class=" webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind="click: $root.toggleMenu">
-                        <span id="menu-icon-id" style="font-size: 2rem;">
-                            <img src="svg/bars.svg" class="webpad-edit-pencil " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="open menu"/> 
-                        </span>
-                        
-                    </div>
-                    <span class="webpad-color-yellow" style="font-size: 2rem;">
-                        <span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span>Web
-                    </span>
-                    <span class="webpad-color-blue" style="font-size: 2rem;">
-                        Pad
-                    </span>
-
-                    <span class="webpad-color-yellow webpad-hide-on-small-screen" style="font-size: 2rem;">
-                        : personal wiki
-                    </span>
-                    <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
-                        : personal wiki
-                    </span>
-                    <span class="support-links webpad-hide-on-small-screen" 
-                        data-bind="ifnot: $root.platform_is_cordova()" >
-                        <span
-                            class="lisperanto-patreon">
-                            <a 
-                                href="https://www.patreon.com/o_kryvonos" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                onclick="lookup.patreonLinkOnClick(event)"
-                                >
-                                Support on Patreon
-                            </a>
-                        </span>
-                        <span
-                            class="mypage-discord">
-                            <a href="https://discord.gg/W5HFSKVXgc">Join Discord</a>
-                        </span>
-                        <span
-                            class="mypage-android">
-                            <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">Android app</a>
-                        </span>
-                        <span class="mypage-desktop-laptop" >
-                            <a href="https://github.com/uprun/WebPad/releases">Desktop/Laptop releases</a>
-                        </span>
-
-                    </span>
-                    <span class="support-links-small webpad-hide-on-large-screen" 
-                        style="font-size: 0.8rem;"
-                        data-bind="ifnot: $root.platform_is_cordova()" >
-                        <span
-                            class="lisperanto-patreon">
-                            <a 
-                                href="https://www.patreon.com/o_kryvonos" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                onclick="lookup.patreonLinkOnClick(event)"
-                                >P</a>
-                        </span>
-                        <span
-                            class="mypage-discord">
-                            <a href="https://discord.gg/W5HFSKVXgc">D</a>
-                        </span>
-                        <span
-                            class="mypage-android">
-                            <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">A</a>
-                        </span>
-                        <span class="mypage-desktop-laptop" >
-                            <a href="https://github.com/uprun/WebPad/releases">PC</a>
-                        </span>
-
-                    </span>
-                </div>
+<div id="webpad-header-absolute-position" class="webpad-header-absolute-position prevent-select" style="display: none;" data-bind="visible: !$root.menuIsOpen()">
+    <div class="w3-row">
+        <div class="w3-col w3-container s12 m12 l12">
+            <div class=" webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind="click: $root.toggleMenu">
+                <span id="menu-icon-id" style="font-size: 2rem;">
+                    <img src="svg/bars.svg" class="webpad-edit-pencil " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="open menu"/> 
+                </span>
+                
             </div>
+            <span class="webpad-color-yellow" style="font-size: 2rem;">
+                <span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span>Web
+            </span>
+            <span class="webpad-color-blue" style="font-size: 2rem;">
+                Pad
+            </span>
+
+            <span class="webpad-color-yellow webpad-hide-on-small-screen" style="font-size: 2rem;">
+                : personal wiki
+            </span>
+            <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
+                : personal wiki
+            </span>
+            <span class="support-links webpad-hide-on-small-screen" 
+                data-bind="ifnot: $root.platform_is_cordova()" >
+                <span
+                    class="lisperanto-patreon">
+                    <a 
+                        href="https://www.patreon.com/o_kryvonos" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        onclick="lookup.patreonLinkOnClick(event)"
+                        >
+                        Support on Patreon
+                    </a>
+                </span>
+                <span
+                    class="mypage-discord">
+                    <a href="https://discord.gg/W5HFSKVXgc">Join Discord</a>
+                </span>
+                <span
+                    class="mypage-android">
+                    <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">Android app</a>
+                </span>
+                <span class="mypage-desktop-laptop" >
+                    <a href="https://github.com/uprun/WebPad/releases">Desktop/Laptop releases</a>
+                </span>
+
+            </span>
+            <span class="support-links-small webpad-hide-on-large-screen" 
+                style="font-size: 0.8rem;"
+                data-bind="ifnot: $root.platform_is_cordova()" >
+                <span
+                    class="lisperanto-patreon">
+                    <a 
+                        href="https://www.patreon.com/o_kryvonos" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        onclick="lookup.patreonLinkOnClick(event)"
+                        >P</a>
+                </span>
+                <span
+                    class="mypage-discord">
+                    <a href="https://discord.gg/W5HFSKVXgc">D</a>
+                </span>
+                <span
+                    class="mypage-android">
+                    <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">A</a>
+                </span>
+                <span class="mypage-desktop-laptop" >
+                    <a href="https://github.com/uprun/WebPad/releases">PC</a>
+                </span>
+
+            </span>
+        </div>
+    </div>
+</div>
+        <lisperanto-just-paste src="html/menu-header.html" />
+        
+<div 
+    class="webpad-menu-absolute-position webpad-menu-animate-left" 
+    style="display: none;" 
+    data-bind="
+        visible:  $root.menuWasAlreadyOpen(),
+        css: { 
+            'webpad-menu-animate-show-from-left': $root.menuIsOpen(),
+            'webpad-menu-animate-fade-back': !$root.menuIsOpen()
+        }"
+        onwheel="lookup.stopPropagation()"
+        ontouchmove="lookup.stopPropagation()"
+        ontouchend="lookup.stopPropagation()"
+        ontouchcancel="lookup.stopPropagation()"
+        ontouchleave="lookup.stopPropagation()"
+        onmousedown="lookup.stopPropagation()"
+        onmouseup="lookup.stopPropagation()"
+        onmousemove="lookup.stopPropagation()">
+    <div class="w3-row webpad-sky-frame webpad-options-background">
+        <div class="w3-col w3-container s12 m12 l12 prevent-select">
+            <span class="webpad-color-yellow" style="font-size: 2rem;">
+                <span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span>Web
+            </span>
+            <span class="webpad-color-blue" style="font-size: 2rem;">
+                Pad
+            </span>
+            <span class="webpad-color-yellow webpad-hide-on-small-screen" style="font-size: 2rem;">
+                : options
+            </span>
+            <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
+                : options
+            </span>
+            <div style="float: right;" class=" webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind="click: $root.toggleMenu">
+                <span style="font-size: 2rem;">
+                    <img src="svg/times-close-menu.svg" class="webpad-edit-pencil" alt="close menu"/> 
+                </span>
+                
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12 webpad-color-purple">
+            <h3>designed &#127912; and made &#127959;&#65039; by Ukrainian <span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span></h3>
+            
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <h2>
+                <a style="color: rgb(242, 155, 103);" data-bind="attr:
+                {
+                    href: privacy_policy_link
+                }">Privacy policy</a>
+            </h2>
+            <div style="height: 0.8rem;"></div>
         </div>
         <div 
-            class="webpad-menu-absolute-position webpad-menu-animate-left" 
-            style="display: none;" 
-            data-bind="
-                visible:  $root.menuWasAlreadyOpen(),
-                css: { 
-                    'webpad-menu-animate-show-from-left': $root.menuIsOpen(),
-                    'webpad-menu-animate-fade-back': !$root.menuIsOpen()
-                }"
-                onwheel="lookup.stopPropagation()"
-                ontouchmove="lookup.stopPropagation()"
-                ontouchend="lookup.stopPropagation()"
-                ontouchcancel="lookup.stopPropagation()"
-                ontouchleave="lookup.stopPropagation()"
-                onmousedown="lookup.stopPropagation()"
-                onmouseup="lookup.stopPropagation()"
-                onmousemove="lookup.stopPropagation()">
-            <div class="w3-row webpad-sky-frame webpad-options-background">
-                <div class="w3-col w3-container s12 m12 l12 prevent-select">
-                    <span class="webpad-color-yellow" style="font-size: 2rem;">
-                        <span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span>Web
-                    </span>
-                    <span class="webpad-color-blue" style="font-size: 2rem;">
-                        Pad
-                    </span>
-                    <span class="webpad-color-yellow webpad-hide-on-small-screen" style="font-size: 2rem;">
-                        : options
-                    </span>
-                    <span class="webpad-color-yellow webpad-hide-on-large-screen" style="font-size: 1.3rem;">
-                        : options
-                    </span>
-                    <div style="float: right;" class=" webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind="click: $root.toggleMenu">
-                        <span style="font-size: 2rem;">
-                            <img src="svg/times-close-menu.svg" class="webpad-edit-pencil" alt="close menu"/> 
-                        </span>
-                        
-                    </div>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12 webpad-color-purple">
-                    <h3>designed &#127912; and made &#127959;&#65039; by Ukrainian <span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span></h3>
-                    
-                </div>
-                <div class="w3-col w3-container s12 m12 l12">
-                    <h2>
-                        <a style="color: rgb(242, 155, 103);" data-bind="attr:
-                        {
-                            href: privacy_policy_link
-                        }">Privacy policy</a>
-                    </h2>
-                    <div style="height: 0.8rem;"></div>
-                </div>
-                <div 
-                    class="w3-col w3-container s12 m12 l12" 
-                    data-bind="ifnot: $root.platform_is_cordova()"
-                     >
-                    <span 
-                        
-                        class="lisperanto-patreon">
-                        <a 
-                            href="https://www.patreon.com/o_kryvonos" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            onclick="lookup.patreonLinkOnClick(event)"
-                            >
-                            Support on Patreon
-                        </a>
-                    </span>
-                    <span
-                        class="mypage-discord">
-                        <a href="https://discord.gg/W5HFSKVXgc">Join Discord</a>
-                    </span>
-                    <span
-                        class="mypage-android">
-                        <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">Android app</a>
-                    </span>
-                </div>
-                <div 
-                    class="w3-col w3-container s12 m12 l12" 
-                    data-bind="if: $root.platform_is_cordova()"
-                     >
-                    <span
-                        class="mypage-discord">
-                        <a href="https://discord.gg/W5HFSKVXgc">Join Discord</a>
-                    </span>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12">
-                    <span class="webpad-color-blue" style="font-size: 1.4rem; " >
-                            Background:
-                    </span>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12">
-                    <div style="font-size: 1.4rem; background: #333" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-coral prevent-select cursor-pointer" 
-                            data-bind="click: $root.changeBackground">
-                            graphite
-                    </div>
-                    <div style="font-size: 1.4rem; background: #000" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple prevent-select cursor-pointer" 
-                            data-bind="click: $root.changeBackgroundToDefault">
-                            darkness
-                    </div>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12">
-                    <span class="webpad-color-blue" style="font-size: 1.4rem; " >
-                            Demo notes use is:
-                    </span>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12">
-                    
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
-                            data-bind="
-                                click: $root.set_option_show_help_demo_notes_to_false,
-                                style:
-                                {
-                                    visibility: $root.option_show_help_demo_notes() ? 'inherit' : 'hidden'
-                                }">
-                            on
-                    </div>
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
-                            data-bind="
-                                click: $root.set_option_show_help_demo_notes_to_true,
-                                style:
-                                {
-                                    visibility: $root.option_show_help_demo_notes() ? 'hidden' : 'inherit'
-                                }">
-                            off
-                    </div>
-
-                </div>
-
-                <div class="w3-col w3-container s12 m12 l12">
-                    <span class="webpad-color-blue" style="font-size: 1.4rem; " >
-                            Japanise tokeniser is:
-                    </span>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12">
-                    
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
-                            data-bind="
-                                click: $root.set_option_use_Japanese_tokeniser_to_false,
-                                style:
-                                {
-                                    visibility: $root.option_use_Japanese_tokeniser() ? 'inherit' : 'hidden'
-                                }">
-                            on
-                    </div>
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
-                            data-bind="
-                                click: $root.set_option_use_Japanese_tokeniser_to_true,
-                                style:
-                                {
-                                    visibility: $root.option_use_Japanese_tokeniser() ? 'hidden' : 'inherit'
-                                }">
-                            off
-                    </div>
-
-                </div>
-
-                <div class="w3-col w3-container s12 m12 l12">
-                    <span class="webpad-color-blue" style="font-size: 1.4rem; " >
-                            Export & import:
-                    </span>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12">
-                    <div style="color: yellow;">All data is stored only on your device, use export regularly to perform a backup:</div>
-                    <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
-                            data-bind="click: $root.export">
-                            export
-                    </div>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12">
-                    <label for="importSnapshotFile" style="color: yellow;">Select a snapshot file to import:</label>
-                    <br/>
-                    <input type="file" id="importSnapshotFile" style="width: 20rem; color: yellow;" >
-                    <div style="font-size: 1.4rem;" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple prevent-select cursor-pointer" 
-                            data-bind="click: $root.import">
-                            import
-                    </div>
-                </div>
+            class="w3-col w3-container s12 m12 l12" 
+            data-bind="ifnot: $root.platform_is_cordova()"
+                >
+            <span 
                 
-                <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
-                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Development is supported by:</span>
-                </div>
-
-                <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
-                    <!-- ko foreach: $root.patreonSupporters -->
-                    <div class="webpad-color-coral"
-                        data-bind="text: $data">
-                    </div>
-                    <!-- /ko -->
-                </div>
-
-                <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
-                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Code contributors:</span>
-                </div>
-
-                <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
-                    <!-- ko foreach: $root.codeContributors -->
-                    <div class="webpad-color-coral"
-                        data-bind="text: $data">
-                    </div>
-                    <!-- /ko -->
-                </div>
-
-                <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
-                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Used tools:</span>
-                </div>
-
-                <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
-                    <!-- ko foreach: $root.librariesInUse -->
-                    <div class="webpad-color-coral">
-                        <a target="_blank" data-bind="text: $data.library, attr: {href: $data.url}"></a>
-                    </div>
-                    <!-- /ko -->
-                </div>
-
-                
-                
-                <address class="webpad-color-yellow" style="padding-left: 1rem; margin-bottom: 1rem;">
-                    This app is created by <span class="webpad-color-coral" style="font-size: 1.4rem;">Oleksandr Kryvonos</span>, a developer from Odesa, Ukraine  <span style="font-size: 2rem;"><span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span></span>  . <br/>
-                    It is an open-source project: <a href="https://github.com/uprun/WebPad">https://github.com/uprun/WebPad</a> <br/>
-                    
-                    if you have any suggestions feel free to e-mail me: <a href="mailto:oleksandr.kryvonos.ods.ua@gmail.com">oleksandr.kryvonos.ods.ua@gmail.com</a><br/>
-                </address> 
-                <div class="w3-col w3-container s12 m12 l12 webpad-color-coral" data-bind="if: $root.platform_is_cordova()">
-                    For more information you can visit a website of the project <a href="https://webpad.com.ua">https://webpad.com.ua</a> <br/>
-                </div>
-                <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
-                    <span class="webpad-color-blue" style="font-size: 1.4rem;" >Version 1.10.* [2023-12-15]</span>
-                </div>
-                
-                
+                class="lisperanto-patreon">
+                <a 
+                    href="https://www.patreon.com/o_kryvonos" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    onclick="lookup.patreonLinkOnClick(event)"
+                    >
+                    Support on Patreon
+                </a>
+            </span>
+            <span
+                class="mypage-discord">
+                <a href="https://discord.gg/W5HFSKVXgc">Join Discord</a>
+            </span>
+            <span
+                class="mypage-android">
+                <a href="https://play.google.com/store/apps/details?id=ua.com.webpad">Android app</a>
+            </span>
+        </div>
+        <div 
+            class="w3-col w3-container s12 m12 l12" 
+            data-bind="if: $root.platform_is_cordova()"
+                >
+            <span
+                class="mypage-discord">
+                <a href="https://discord.gg/W5HFSKVXgc">Join Discord</a>
+            </span>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <span class="webpad-color-blue" style="font-size: 1.4rem; " >
+                    Background:
+            </span>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="font-size: 1.4rem; background: #333" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-coral prevent-select cursor-pointer" 
+                    data-bind="click: $root.changeBackground">
+                    graphite
+            </div>
+            <div style="font-size: 1.4rem; background: #000" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple prevent-select cursor-pointer" 
+                    data-bind="click: $root.changeBackgroundToDefault">
+                    darkness
             </div>
         </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <span class="webpad-color-blue" style="font-size: 1.4rem; " >
+                    Demo notes use is:
+            </span>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            
+            <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
+                    data-bind="
+                        click: $root.set_option_show_help_demo_notes_to_false,
+                        style:
+                        {
+                            visibility: $root.option_show_help_demo_notes() ? 'inherit' : 'hidden'
+                        }">
+                    on
+            </div>
+            <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
+                    data-bind="
+                        click: $root.set_option_show_help_demo_notes_to_true,
+                        style:
+                        {
+                            visibility: $root.option_show_help_demo_notes() ? 'hidden' : 'inherit'
+                        }">
+                    off
+            </div>
+
+        </div>
+
+        <div class="w3-col w3-container s12 m12 l12">
+            <span class="webpad-color-blue" style="font-size: 1.4rem; " >
+                    Japanise tokeniser is:
+            </span>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            
+            <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
+                    data-bind="
+                        click: $root.set_option_use_Japanese_tokeniser_to_false,
+                        style:
+                        {
+                            visibility: $root.option_use_Japanese_tokeniser() ? 'inherit' : 'hidden'
+                        }">
+                    on
+            </div>
+            <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
+                    data-bind="
+                        click: $root.set_option_use_Japanese_tokeniser_to_true,
+                        style:
+                        {
+                            visibility: $root.option_use_Japanese_tokeniser() ? 'hidden' : 'inherit'
+                        }">
+                    off
+            </div>
+
+        </div>
+
+        <div class="w3-col w3-container s12 m12 l12">
+            <span class="webpad-color-blue" style="font-size: 1.4rem; " >
+                    Export & import:
+            </span>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <div style="color: yellow;">All data is stored only on your device, use export regularly to perform a backup:</div>
+            <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
+                    data-bind="click: $root.export">
+                    export
+            </div>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12">
+            <label for="importSnapshotFile" style="color: yellow;">Select a snapshot file to import:</label>
+            <br/>
+            <input type="file" id="importSnapshotFile" style="width: 20rem; color: yellow;" >
+            <div style="font-size: 1.4rem;" class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-purple prevent-select cursor-pointer" 
+                    data-bind="click: $root.import">
+                    import
+            </div>
+        </div>
+        
+        <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
+            <span class="webpad-color-blue" style="font-size: 1.4rem;" >Development is supported by:</span>
+        </div>
+
+        <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
+            <!-- ko foreach: $root.patreonSupporters -->
+            <div class="webpad-color-coral"
+                data-bind="text: $data">
+            </div>
+            <!-- /ko -->
+        </div>
+
+        <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
+            <span class="webpad-color-blue" style="font-size: 1.4rem;" >Code contributors:</span>
+        </div>
+
+        <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
+            <!-- ko foreach: $root.codeContributors -->
+            <div class="webpad-color-coral"
+                data-bind="text: $data">
+            </div>
+            <!-- /ko -->
+        </div>
+
+        <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
+            <span class="webpad-color-blue" style="font-size: 1.4rem;" >Used tools:</span>
+        </div>
+
+        <div class="w3-col w3-container s12 m12 l12" style="margin-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1.2rem;" >
+            <!-- ko foreach: $root.librariesInUse -->
+            <div class="webpad-color-coral">
+                <a target="_blank" data-bind="text: $data.library, attr: {href: $data.url}"></a>
+            </div>
+            <!-- /ko -->
+        </div>
+
+        
+        
+        <address class="webpad-color-yellow" style="padding-left: 1rem; margin-bottom: 1rem;">
+            This app is created by <span class="webpad-color-coral" style="font-size: 1.4rem;">Oleksandr Kryvonos</span>, a developer from Odesa, Ukraine  <span style="font-size: 2rem;"><span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span></span>  . <br/>
+            It is an open-source project: <a href="https://github.com/uprun/WebPad">https://github.com/uprun/WebPad</a> <br/>
+            
+            if you have any suggestions feel free to e-mail me: <a href="mailto:oleksandr.kryvonos.ods.ua@gmail.com">oleksandr.kryvonos.ods.ua@gmail.com</a><br/>
+        </address> 
+        <div class="w3-col w3-container s12 m12 l12 webpad-color-coral" data-bind="if: $root.platform_is_cordova()">
+            For more information you can visit a website of the project <a href="https://webpad.com.ua">https://webpad.com.ua</a> <br/>
+        </div>
+        <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
+            <span class="webpad-color-blue" style="font-size: 1.4rem;" >Version 2.0.* [2024-03-10]</span>
+        </div>
+        
+        
+    </div>
+</div>
+        <lisperanto-just-paste src="html/menu.html" />
 
         <div id="webpad-search-results-absolute-position"  class="w3-col w3-container s12 m8 l6 webpad-text-column"  style="height: calc(100% - 8rem); position: absolute; margin: auto; overflow-x: hidden; overflow-y: hidden;">
             <div style="position: absolute;" data-bind="template: { name: 'show-more-template' } " ></div>
