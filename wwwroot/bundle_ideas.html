@@ -945,6 +945,14 @@ lookup.history = ko.observableArray([]);
 // End of "js/lookup.js"
 </script>
 <script>
+// Begin of "js/stopPropagation.js"
+lookup.stopPropagation = function ()
+{
+    event.stopPropagation();
+};
+// End of "js/stopPropagation.js"
+</script>
+<script>
 // Begin of "js/model_Connection.js"
 lookup.model_Connection = function(data)
 {
@@ -4171,7 +4179,15 @@ lookup.body_on_load = function()
                 css: { 
                     'webpad-menu-animate-show-from-left': $root.menuIsOpen(),
                     'webpad-menu-animate-fade-back': !$root.menuIsOpen()
-                }">
+                }"
+                onwheel="lookup.stopPropagation()"
+                ontouchmove="lookup.stopPropagation()"
+                ontouchend="lookup.stopPropagation()"
+                ontouchcancel="lookup.stopPropagation()"
+                ontouchleave="lookup.stopPropagation()"
+                onmousedown="lookup.stopPropagation()"
+                onmouseup="lookup.stopPropagation()"
+                onmousemove="lookup.stopPropagation()">
             <div class="w3-row webpad-sky-frame webpad-options-background">
                 <div class="w3-col w3-container s12 m12 l12 prevent-select">
                     <span class="webpad-color-yellow" style="font-size: 2rem;">
