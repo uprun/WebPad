@@ -47,6 +47,7 @@ public class Bundle_Watcher
         Console.WriteLine(e.FullPath);
         if (e.FullPath.EndsWith( "bundle_ideas.html")) return;
         if (e.FullPath .EndsWith("bundle-backend-worker.js")) return;
+        Console.Write($"changes detected as of time: {DateTime.Now:HH-mm}");
         Console.Write(" <^_^> ");
         GenerateBundle().Wait();
     }

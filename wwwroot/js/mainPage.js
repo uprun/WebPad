@@ -64,6 +64,7 @@ function ConnectedNotesViewModel()
         var length = lookup.LimitedFilteredOperations().length;
         var last_added = document.getElementById((length - 1) + "-card");
         var obj_last = lookup.LimitedFilteredOperations()[length - 1];
+        var show_more = document.getElementById( "show-more");
         if(lookup.operationsToAddGradually.length > 0)
         {
             
@@ -82,6 +83,10 @@ function ConnectedNotesViewModel()
         if (typeof(obj_last) !== "undefined" && obj_last.offsetHeight == null)
         {
             obj_last.offsetHeight = last_added.offsetHeight;
+        }
+        if (typeof(obj_last) !== "undefined" && obj_last.offsetHeight != null)
+        {
+            show_more.style.bottom = obj_last.bottom() + obj_last.offsetHeight + lookup.globalOffsetY() + "px";
         }
         lookup.update_global_scroll_limits();
         lookup.operationsToAddGradually_timer = setTimeout(lookup.operationsToAddGradually_handler, lookup.operationsToAddGradually_miliseconds);
