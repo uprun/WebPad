@@ -1,34 +1,34 @@
 importScripts("../lib/knockout/knockout-latest.debug.js" + "?v=" + new Date().toString())
-<script language="JavaScript" type="text/javascript" src="js/lookup.js"  ></script>
-<script language="JavaScript" type="text/javascript" src="js/populateColorPresets.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/model_Card.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/model_ColorPreset.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/model_Connection.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/model_Node.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/model_Operation.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/get_Operation_Index.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/migrate_to_Operations.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/Instanciate_model_node.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/GetRandomColor.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/Instanciate_model_connection.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/findNodeById.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/SearchNotesQuery.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/findCardByMainNodeId.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/populate_Operations.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/Operation_was_added.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/demo_notes_en.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/empty_note.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/populate.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/option_show_help_demo_notes.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/option_use_Japanese_tokeniser.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/find_aliases.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/import_Operations.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/populate_Aliases.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/regenerate_Aliases.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/define_Aliases_if_needed.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/add_Alias.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/remove_Alias.js" ></script>
-<script language="JavaScript" type="text/javascript" src="js/globalOffsets.js" ></script>
+<lisperanto-just-paste src="js/lookup.js"  />
+<lisperanto-just-paste src="js/populateColorPresets.js" />
+<lisperanto-just-paste src="js/model_Card.js" />
+<lisperanto-just-paste src="js/model_ColorPreset.js" />
+<lisperanto-just-paste src="js/model_Connection.js" />
+<lisperanto-just-paste src="js/model_Node.js" />
+<lisperanto-just-paste src="js/model_Operation.js" />
+<lisperanto-just-paste src="js/get_Operation_Index.js" />
+<lisperanto-just-paste src="js/migrate_to_Operations.js" />
+<lisperanto-just-paste src="js/Instanciate_model_node.js" />
+<lisperanto-just-paste src="js/GetRandomColor.js" />
+<lisperanto-just-paste src="js/Instanciate_model_connection.js" />
+<lisperanto-just-paste src="js/findNodeById.js" />
+<lisperanto-just-paste src="js/SearchNotesQuery.js" />
+<lisperanto-just-paste src="js/findCardByMainNodeId.js" />
+<lisperanto-just-paste src="js/populate_Operations.js" />
+<lisperanto-just-paste src="js/Operation_was_added.js" />
+<lisperanto-just-paste src="js/demo_notes_en.js" />
+<lisperanto-just-paste src="js/empty_note.js" />
+<lisperanto-just-paste src="js/populate.js" />
+<lisperanto-just-paste src="js/option_show_help_demo_notes.js" />
+<lisperanto-just-paste src="js/option_use_Japanese_tokeniser.js" />
+<lisperanto-just-paste src="js/find_aliases.js" />
+<lisperanto-just-paste src="js/import_Operations.js" />
+<lisperanto-just-paste src="js/populate_Aliases.js" />
+<lisperanto-just-paste src="js/regenerate_Aliases.js" />
+<lisperanto-just-paste src="js/define_Aliases_if_needed.js" />
+<lisperanto-just-paste src="js/add_Alias.js" />
+<lisperanto-just-paste src="js/remove_Alias.js" />
+<lisperanto-just-paste src="js/globalOffsets.js" />
 
 
 

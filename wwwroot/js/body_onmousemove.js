@@ -1,6 +1,6 @@
 lookup.body_onmousemove = function()
 {
-    console.log(event);
+    //console.log(event);
     if(lookup.body_is_dragged())
     {
         const deltaX = event.movementX;

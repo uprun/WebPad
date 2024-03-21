@@ -1,21 +1,9 @@
-﻿
+
 
 function ConnectedNotesViewModel()
 {
     var self = this;
-    lookup.actions = 
-    {
-        NoteUpdated: 'NoteUpdated',
-        ConnectionUpdated: 'ConnectionUpdated',
-        NoteAdded: 'NoteAdded',
-        NoteDeleted: 'NoteDeleted',
-        ConnectionAdded: 'ConnectionAdded',
-        ConnectionDeleted: 'ConnectionDeleted',
-        PositionsUpdated: 'PositionsUpdated',
-        HealthCheckRequest: 'HealthCheckRequest',
-        HealthCheckIdsProposal: 'HealthCheckIdsProposal'
-
-    };
+    
 
     lookup.defineLocalStorage();
 
@@ -145,7 +133,7 @@ function ConnectedNotesViewModel()
 
     lookup.ExtendCurrentResultLimit = function()
     {
-        lookup.onListChanged_keepHeightOffset();
+        //lookup.onListChanged_keepHeightOffset();
         lookup.backendWorker.sendQuery("ExtendCurrentResultLimit");
     };
 
