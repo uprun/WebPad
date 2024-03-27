@@ -604,9 +604,17 @@ lookup.model_Operation = function(data)
     self.time = data.time;
 
     self.bottom = ko.observable(0);
-    self.offsetHeight = null;
+    self.offsetHeight = ko.observable(0);
 
     self.globalBottom = ko.computed(() => self.bottom() + lookup.globalOffsetY());
+    self.visible = ko.computed(() => {
+         var top = self.globalBottom() + self.offsetHeight();
+         var bottom = self.globalBottom();
+         var height = lookup.globalScreenHeight();
+         // this is basically an inverse of invisibility rules
+         var visible = top >= 0 && bottom <= height;
+         return visible;
+        });
 
     self.createDate = new Date(self.time);
 
@@ -1448,6 +1456,10 @@ lookup.globalOffsetY = ko.observable(0);
 lookup.globalOffsetX = ko.observable(0);
 lookup.globalMaxY = ko.observable(800);
 lookup.globalMinY = ko.observable(800);
+lookup.globalScreenHeight = ko.observable(800);
+
+lookup.first_to_render_note_data_stringified = undefined;
+lookup.first_to_render_note_globalBottom = 0;
 
 lookup.resetGlobalOffsetY = function()
 {
@@ -1462,11 +1474,11 @@ lookup.update_global_scroll_limits = function()
     {
         var obj_last = lookup.LimitedFilteredOperations()[length - 1];
         total_scrollable_height = obj_last.bottom();
-        if ( obj_last.offsetHeight != null) 
-        {
-            total_scrollable_height += obj_last.offsetHeight;
-        }
+        
+        total_scrollable_height += obj_last.offsetHeight();
+        
     }
+    lookup.globalScreenHeight(window.innerHeight);
 
     lookup.globalMaxY(-total_scrollable_height + window.innerHeight * 0.05);
     lookup.globalMinY(window.innerHeight * 0.6);

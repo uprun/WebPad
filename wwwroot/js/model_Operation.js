@@ -7,9 +7,17 @@ lookup.model_Operation = function(data)
     self.time = data.time;
 
     self.bottom = ko.observable(0);
-    self.offsetHeight = null;
+    self.offsetHeight = ko.observable(0);
 
     self.globalBottom = ko.computed(() => self.bottom() + lookup.globalOffsetY());
+    self.visible = ko.computed(() => {
+         var top = self.globalBottom() + self.offsetHeight();
+         var bottom = self.globalBottom();
+         var height = lookup.globalScreenHeight();
+         // this is basically an inverse of invisibility rules
+         var visible = top >= 0 && bottom <= height;
+         return visible;
+        });
 
     self.createDate = new Date(self.time);
 

@@ -80,7 +80,7 @@
     <script language="JavaScript" type="text/javascript" src="js/open_url.js" ></script>
 
     <script language="JavaScript" type="text/javascript" src="js/SearchNotesQuery.js" ></script>
-    <script language="JavaScript" type="text/javascript" src="js/pushToSearchNotesQuery.js" ></script>
+    
     <script language="JavaScript" type="text/javascript" src="js/pushToSearchNotesQueryText.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/rollbackSearchNotesQuery.js" ></script>
 
@@ -148,7 +148,6 @@
     <script language="JavaScript" type="text/javascript" src="js/librariesInUse.js" ></script>
 
     <script language="JavaScript" type="text/javascript" src="js/mainPage.js" ></script>
-    <script language="JavaScript" type="text/javascript" src="js/cardAfterRender.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/body_anchorWidth.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/body_is_dragged.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/body_onmousedown.js" ></script>
@@ -657,8 +656,7 @@
             <!-- ko template: 
                     { 
                         name: 'operation-template',
-                        foreach: LimitedFilteredOperations,
-                        afterRender: $root.cardAfterRender
+                        foreach: LimitedFilteredOperations
                     } -->
             <!-- /ko -->
         </div>
