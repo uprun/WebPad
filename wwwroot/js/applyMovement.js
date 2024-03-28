@@ -3,8 +3,10 @@ lookup.applyMovement = function (deltaY, deltaX)
     var newOffsetY = lookup.globalOffsetY() + deltaY;
     
     //console.log("Global offset:", newOffsetY);
-    const max_Y = lookup.globalMaxY();
-    const min_Y = lookup.globalMinY();
+    var sum = 0;
+    lookup.LimitedFilteredOperations().forEach( e => sum += e.offsetHeight());
+    const max_Y = -sum;
+    const min_Y = lookup.globalScreenHeight() * 0.6;
     newOffsetY = Math.min(newOffsetY, min_Y);
     
     newOffsetY = Math.max(newOffsetY, max_Y);

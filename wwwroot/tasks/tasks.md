@@ -1,4 +1,8 @@
 2024-03-09-release-preparation
+so when I press button to load more, I need to properly split list
+I need to render list from "below" which means with anchor from top
+I need to write down tasks and not keep them in my mind
+
 [] render overscrolled notes first
 [] hide tools // nope tools are here to stay
 [done] limit over-scrolling to 80 % of height

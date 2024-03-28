@@ -6,10 +6,13 @@ lookup.model_Operation = function(data)
     self.data = data.data;
     self.time = data.time;
 
+    self.bottom_anchor = true;
     self.bottom = ko.observable(0);
+    
     self.offsetHeight = ko.observable(0);
 
     self.globalBottom = ko.computed(() => self.bottom() + lookup.globalOffsetY());
+
     self.visible = ko.computed(() => {
          var top = self.globalBottom() + self.offsetHeight();
          var bottom = self.globalBottom();

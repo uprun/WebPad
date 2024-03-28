@@ -603,10 +603,13 @@ lookup.model_Operation = function(data)
     self.data = data.data;
     self.time = data.time;
 
+    self.bottom_anchor = true;
     self.bottom = ko.observable(0);
+    
     self.offsetHeight = ko.observable(0);
 
     self.globalBottom = ko.computed(() => self.bottom() + lookup.globalOffsetY());
+
     self.visible = ko.computed(() => {
          var top = self.globalBottom() + self.offsetHeight();
          var bottom = self.globalBottom();
@@ -1480,8 +1483,8 @@ lookup.update_global_scroll_limits = function()
     }
     lookup.globalScreenHeight(window.innerHeight);
 
-    lookup.globalMaxY(-total_scrollable_height + window.innerHeight * 0.05);
-    lookup.globalMinY(window.innerHeight * 0.6);
+    //lookup.globalMaxY(-total_scrollable_height + window.innerHeight * 0.05);
+    //lookup.globalMinY(window.innerHeight * 0.6);
     
     //console.log("height scroll limits:", lookup.globalMinY(), lookup.globalMaxY());
 };

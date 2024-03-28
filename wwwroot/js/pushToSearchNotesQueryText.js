@@ -10,7 +10,7 @@ lookup.pushToSearchNotesQueryText = function(query)
     {
         var actual_note = lookup.LimitedFilteredOperations()[visible_note_id];
         note_data_stringified = JSON.stringify( actual_note.ConvertToJs() );
-        note_global_bottom = actual_note.globalBottom();
+        note_global_bottom = actual_note.bottom();
     }
     
     lookup.stackSearchNotesQuery.push(

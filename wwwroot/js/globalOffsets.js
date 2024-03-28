@@ -26,8 +26,8 @@ lookup.update_global_scroll_limits = function()
     }
     lookup.globalScreenHeight(window.innerHeight);
 
-    lookup.globalMaxY(-total_scrollable_height + window.innerHeight * 0.05);
-    lookup.globalMinY(window.innerHeight * 0.6);
+    //lookup.globalMaxY(-total_scrollable_height + window.innerHeight * 0.05);
+    //lookup.globalMinY(window.innerHeight * 0.6);
     
     //console.log("height scroll limits:", lookup.globalMinY(), lookup.globalMaxY());
 };
