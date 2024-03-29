@@ -1,0 +1,1 @@
+lookup.body_anchorWidth = ko.observable(0);

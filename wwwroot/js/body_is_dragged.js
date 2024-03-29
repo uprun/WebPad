@@ -1,0 +1,1 @@
+lookup.body_is_dragged = ko.observable(false);

@@ -16,17 +16,13 @@ https://www.patreon.com/o_kryvonos
 
 https://discord.gg/W5HFSKVXgc
 
-# Follow me on Twitter
-
-https://twitter.com/o_kryvonos
-
 ## Building
 
 ```
-$ dotnet restore
-$ dotnet run
+dotnet restore
+dotnet run
 ```
 
 ## License
 
-Copyright © Kryvonos Oleksandr 2018-2022 <oleksandr.kryvonos.ods.ua@gmail.com>. Provided under the [MIT License](http://opensource.org/licenses/MIT).
+Copyright © Kryvonos Oleksandr 2018-2024 <oleksandr.kryvonos.ods.ua@gmail.com>. Provided under the [MIT License](http://opensource.org/licenses/MIT).

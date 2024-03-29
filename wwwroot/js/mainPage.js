@@ -1,21 +1,9 @@
-﻿
+
 
 function ConnectedNotesViewModel()
 {
     var self = this;
-    lookup.actions = 
-    {
-        NoteUpdated: 'NoteUpdated',
-        ConnectionUpdated: 'ConnectionUpdated',
-        NoteAdded: 'NoteAdded',
-        NoteDeleted: 'NoteDeleted',
-        ConnectionAdded: 'ConnectionAdded',
-        ConnectionDeleted: 'ConnectionDeleted',
-        PositionsUpdated: 'PositionsUpdated',
-        HealthCheckRequest: 'HealthCheckRequest',
-        HealthCheckIdsProposal: 'HealthCheckIdsProposal'
-
-    };
+    
 
     lookup.defineLocalStorage();
 
@@ -55,15 +43,139 @@ function ConnectedNotesViewModel()
 
 
     lookup.LimitedFilteredOperations = ko.observableArray([]);
+    lookup.LimitedFilteredOperations_below = ko.observableArray([]);
+    //lookup.LimitedFilteredOperations.extend({ rateLimit: { timeout: 50, method: "notifyAtFixedRate" } });
+    lookup.operationsToAddGradually = [];
+    lookup.operationsToAddGradually_miliseconds = 10;
+    lookup.operationsToAddGradually_timer = undefined;
+    lookup.operations_to_add_below = [];
+
+    lookup.operations_to_add_below_timer = undefined;
+
+    lookup.operationsToAddGradually_handler = function()
+    {
+        var length = lookup.LimitedFilteredOperations().length;
+        
+        var last_added = document.getElementById((length - 1) + "-card");
+        var obj_last = lookup.LimitedFilteredOperations()[length - 1];
+        var show_more = document.getElementById( "show-more");
+        if(lookup.operationsToAddGradually.length > 0)
+        {
+            
+            var to_add = lookup.operationsToAddGradually.pop();
+            
+            var next_bottom = lookup.first_to_render_note_globalBottom;
+            if (length > 0)
+            {
+
+                next_bottom = obj_last.offset()  + last_added.offsetHeight;
+            }
+            
+            to_add.offset(next_bottom);
+            lookup.LimitedFilteredOperations.push(to_add);
+        }
+        if (typeof(obj_last) !== "undefined" && obj_last.offsetHeight() < 1)
+        {
+            obj_last.offsetHeight(last_added.offsetHeight);
+        }
+        if (typeof(obj_last) !== "undefined" && obj_last.offsetHeight() > 1)
+        {
+            show_more.style.bottom = obj_last.offset() + obj_last.offsetHeight() + lookup.globalOffsetY() + "px";
+        }
+        lookup.update_global_scroll_limits();
+        lookup.operationsToAddGradually_timer = setTimeout(lookup.operationsToAddGradually_handler, lookup.operationsToAddGradually_miliseconds);
+        
+    };
+
+    lookup.operations_to_add_below_handler = function()
+    {
+        let height = document.getElementById( "webpad-search-results-absolute-position" ).offsetHeight;
+        lookup.cards_container_height(height);
+
+        var length = lookup.LimitedFilteredOperations_below().length;
+        
+        var last_added = document.getElementById((length - 1) + "-card-below");
+        var obj_last = lookup.LimitedFilteredOperations_below()[length - 1];
+
+        
+        if(lookup.operations_to_add_below.length > 0)
+        {
+            
+            var to_add = lookup.operations_to_add_below.pop();
+            to_add.bottom_anchor(false);
+            
+            var next_offset = undefined;
+            if (length > 0)
+            {
+
+                next_offset = obj_last.offset()  + last_added.offsetHeight;
+            }
+            else
+            {
+                
+                next_offset =  height - lookup.first_to_render_note_globalBottom;
+
+            }
+            
+            to_add.offset(next_offset);
+            lookup.LimitedFilteredOperations_below.push(to_add);
+        }
+        if (typeof(obj_last) !== "undefined" && obj_last.offsetHeight() < 1)
+        {
+            obj_last.offsetHeight(last_added.offsetHeight);
+        }
+        
+        lookup.update_global_scroll_limits();
+        lookup.operations_to_add_below_timer = setTimeout(lookup.operations_to_add_below_handler, lookup.operationsToAddGradually_miliseconds);
+        
+    };
     lookup.backendWorker.addListener('LimitedFilteredOperations.changed.event', function(cards) 
     {
+        if ( typeof( lookup.first_to_render_note_data_stringified ) === "undefined")
+        {}
+        var start = new Date;
+        console.log("start", start);
         lookup.LimitedFilteredOperations.removeAll();
+        lookup.LimitedFilteredOperations_below.removeAll();
+        var next = new Date;
+        console.log("removal diff", next - start)
+        start = next;
         var processed = ko.utils.arrayMap(cards, function(item) {
             var operation = new lookup.model_Operation(item)
             return operation;
         });
+        next = new Date
+        console.log("creation diff", next - start)
+        start = next;
+
+        var first_id = processed.findIndex(e => JSON.stringify(e.ConvertToJs()) === lookup.first_to_render_note_data_stringified);
+        var slice_id = 0;
+        if (first_id >= 0)
+        {
+            slice_id = first_id + 1 ;
+            lookup.operationsToAddGradually = processed.slice(0, slice_id);
+            lookup.operations_to_add_below = processed.slice(slice_id).reverse();
+        }
+        else
+        {
+            lookup.operationsToAddGradually = processed;
         
-        ko.utils.arrayPushAll(lookup.LimitedFilteredOperations, processed);
+        }
+        
+        
+        //lookup.operationsToAddGradually = processed;
+        
+        next = new Date;
+        console.log("push all diff", next - start);
+        start = next;
+        if ( typeof(lookup.operationsToAddGradually_timer) === "undefined")
+        {
+            lookup.operationsToAddGradually_timer = setTimeout(lookup.operationsToAddGradually_handler, lookup.operationsToAddGradually_miliseconds);
+        }
+        if ( typeof(lookup.operations_to_add_below_timer) === "undefined")
+        {
+            lookup.operations_to_add_below_timer = setTimeout(lookup.operations_to_add_below_handler, lookup.operationsToAddGradually_miliseconds);
+        }
     });
 
     lookup.hidden_operations_count = ko.observable(0);
@@ -92,7 +204,10 @@ function ConnectedNotesViewModel()
 
     lookup.ExtendCurrentResultLimit = function()
     {
-        lookup.onListChanged_keepHeightOffset();
+        //lookup.onListChanged_keepHeightOffset();
+        let visible_note_info = {};
+        lookup.set_visible_note_information(visible_note_info);
+        lookup.restore_first_to_render_note_information(visible_note_info);
         lookup.backendWorker.sendQuery("ExtendCurrentResultLimit");
     };
 

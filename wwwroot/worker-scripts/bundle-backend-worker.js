@@ -1,14 +1,13 @@
 importScripts("../lib/knockout/knockout-latest.debug.js" + "?v=" + new Date().toString())
-// Begin of "js/lookup.js"
 var lookup = {
 };
 lookup.Notes = ko.observableArray([]);
 lookup.ColorPresets = ko.observableArray([]);
 lookup.Connections = ko.observableArray([]);
 lookup.history = ko.observableArray([]); 
-
-// End of "js/lookup.js"
-// Begin of "js/populateColorPresets.js"
+lookup.first_to_render_note_data_stringified = undefined;
+lookup.first_to_render_note_globalBottom = 0;
+lookup.cards_container_height = ko.observable(10);
 lookup.data_color_presets = [ 
     { 
         background: "inherit",
@@ -56,9 +55,6 @@ lookup.populateColorPresets = function()
 
 };
 
-
-// End of "js/populateColorPresets.js"
-// Begin of "js/model_Card.js"
 lookup.model_Card = function(data)
 {   
     // DEPRECATED: use model_Operation.js instead
@@ -315,8 +311,6 @@ lookup.model_Card = function(data)
         })
     });
 };
-// End of "js/model_Card.js"
-// Begin of "js/model_ColorPreset.js"
 lookup.model_ColorPreset = function(data)
 {
 
@@ -330,8 +324,6 @@ lookup.model_ColorPreset = function(data)
         };
     };
 };
-// End of "js/model_ColorPreset.js"
-// Begin of "js/model_Connection.js"
 lookup.model_Connection = function(data)
 {
     var id = data.id;
@@ -415,8 +407,6 @@ lookup.model_Connection = function(data)
     };
 
 };
-// End of "js/model_Connection.js"
-// Begin of "js/model_Node.js"
 // DEPRECATED: use model_Operation.js instead
 
 
@@ -608,8 +598,6 @@ lookup.model_Node = function(data)
         return result;
     });
 };
-// End of "js/model_Node.js"
-// Begin of "js/model_Operation.js"
 lookup.model_Operation = function(data)
 {
     var self = this;
@@ -618,7 +606,50 @@ lookup.model_Operation = function(data)
     self.data = data.data;
     self.time = data.time;
 
+    self.bottom_anchor = ko.observable(true);
+    self.offset = ko.observable(0);
+    self.offset_bottom = ko.computed(() => {
+        if (self.bottom_anchor()) return self.offset();
+        return  lookup.cards_container_height() - self.offset() - self.offsetHeight();
+    });
+    
+    self.offsetHeight = ko.observable(0);
+
+    self.globalOffset = ko.computed(() => {
+        if (self.bottom_anchor()) return self.offset() + lookup.globalOffsetY();
+        return self.offset() - lookup.globalOffsetY();
+    } );
+
+    self.on_screen_top_measured_from_bottom = ko.computed(() => {
+        if (self.bottom_anchor()) return self.globalOffset() + self.offsetHeight();
+        return self.offset_bottom() + lookup.globalOffsetY() + self.offsetHeight();
+    });
+
+    self.on_screen_bottom_measured_from_bottom = ko.computed(() => {
+        if (self.bottom_anchor()) return self.globalOffset();
+        return self.offset_bottom() + lookup.globalOffsetY();
+    });
+
+    self.visible = ko.computed(() => {
+         var top = self.on_screen_top_measured_from_bottom();
+         var bottom = self.on_screen_bottom_measured_from_bottom();
+         var height = lookup.cards_container_height();
+         // this is basically an inverse of invisibility rules
+         var visible = top >= 0 && bottom <= height;
+         return visible;
+        });
+
     self.createDate = new Date(self.time);
+
+    var date = "" + self.createDate.getFullYear() +
+        "-" + ((self.createDate.getMonth() + 1) + "").padStart(2, "0") +
+        "-" + (self.createDate.getDate() + "").padStart(2, "0");
+    
+    var time = (self.createDate.getHours() + "").padStart(2, "0") +
+    ":" + (self.createDate.getMinutes() + "").padStart(2, "0") + 
+    ":" + (self.createDate.getSeconds() + "").padStart(2, "0");
+
+    self.createDateToOrder = date + "  " +  time;
 
     if(self.name === 'create')
     {
@@ -748,9 +779,6 @@ lookup.prefill_Operation = function(self, abc) {
     }
     );
 }
-
-// End of "js/model_Operation.js"
-// Begin of "js/get_Operation_Index.js"
 lookup.get_Operation_Index = function() {
     var toReturn = 
     {
@@ -759,8 +787,6 @@ lookup.get_Operation_Index = function() {
     }
     return toReturn;
 };
-// End of "js/get_Operation_Index.js"
-// Begin of "js/migrate_to_Operations.js"
 
 lookup.migrate_to_Operations = function()
 {
@@ -852,9 +878,6 @@ function operation_create(elem) {
         }
     );
 }
-
-// End of "js/migrate_to_Operations.js"
-// Begin of "js/Instanciate_model_node.js"
 lookup.Instanciate_model_node = function(data)
     {
         data.textChangedHandler = function(changes, model) 
@@ -876,15 +899,11 @@ lookup.Instanciate_model_node = function(data)
         var result = new lookup.model_Node(data);
         return result;
     };
-// End of "js/Instanciate_model_node.js"
-// Begin of "js/GetRandomColor.js"
 lookup.GetRandomColor = function() {
     var selectedColorIndex = Math.floor(Math.random() * lookup.ColorPresets().length);
     var selectedColor = lookup.ColorPresets()[selectedColorIndex];
     return selectedColor;
 };
-// End of "js/GetRandomColor.js"
-// Begin of "js/Instanciate_model_connection.js"
 lookup.Instanciate_model_connection = function(data)
     {
         data.textChangedHandler = function(changes, model) 
@@ -904,8 +923,6 @@ lookup.Instanciate_model_connection = function(data)
         var result = new lookup.model_Connection(data);
         return result;
     };
-// End of "js/Instanciate_model_connection.js"
-// Begin of "js/findNodeById.js"
 lookup.findNodeById_buffer = undefined;
 lookup.findNodeById_notFound = new lookup.model_Node({id: -1, text: 'not found'});
 lookup.findNodeById = function(id)
@@ -937,8 +954,6 @@ lookup.findNodeById = function(id)
     return result;
 
 };
-// End of "js/findNodeById.js"
-// Begin of "js/SearchNotesQuery.js"
 lookup.SearchNotesQuery = ko.observable("");
 // lookup.SearchNotesQuery
 //     .extend({ rateLimit: 150 });
@@ -953,8 +968,6 @@ lookup.SearchNotesQuery
         }
         
     });
-// End of "js/SearchNotesQuery.js"
-// Begin of "js/findCardByMainNodeId.js"
 lookup.findCardByMainNodeId = function(mainId)
 {
     var found = lookup.hashCards[mainId];
@@ -967,8 +980,6 @@ lookup.findCardByMainNodeId = function(mainId)
         return null;
     }
 };
-// End of "js/findCardByMainNodeId.js"
-// Begin of "js/populate_Operations.js"
 lookup.populate_Operations = function(data) {
 
     var buffer = [];
@@ -1019,16 +1030,12 @@ lookup.populate_Operations = function(data) {
     lookup.Operations(sortedDistinctObjects);
 
 };
-// End of "js/populate_Operations.js"
-// Begin of "js/Operation_was_added.js"
 
 lookup.Operation_was_added = function(data) {
     // backend-worker context
     var toAdd = new lookup.model_Operation(data);
     lookup.Operations.push(toAdd);
 };
-// End of "js/Operation_was_added.js"
-// Begin of "js/demo_notes_en.js"
 lookup.demo_notes_en = [
     {
         "id": {
@@ -1109,8 +1116,6 @@ lookup.demo_notes_en = [
         "time": "2020-04-18T15:19:04.446Z"
     }
 ];
-// End of "js/demo_notes_en.js"
-// Begin of "js/empty_note.js"
 lookup.empty_note = 
 {
     "id": {
@@ -1124,8 +1129,6 @@ lookup.empty_note =
     },
     "time": "2023-12-15T13:16:53.119Z"
 };
-// End of "js/empty_note.js"
-// Begin of "js/populate.js"
 lookup.CheckIfEveryNodeHasMigratedColor = function()
     {
             ko.utils.arrayForEach(lookup.Notes(), function(item) {
@@ -1317,12 +1320,11 @@ lookup.populate_reset_helpers = function()
     lookup.populateConnections_startIndex = undefined;
 };
 
-
-// End of "js/populate.js"
-// Begin of "js/option_show_help_demo_notes.js"
 lookup.option_show_help_demo_notes = ko.observable(false);
 lookup.set_option_show_help_demo_notes_to_true = function() 
 {
+    if (typeof(lookup) === "undefined") return;
+    if (typeof(lookup.localStorage) === "undefined") return;
     lookup.option_show_help_demo_notes(true);
     lookup.localStorage["option_show_help_demo_notes"] = true;
     lookup.send_to_worker_update_for_option_show_help_demo_notes();
@@ -1330,6 +1332,8 @@ lookup.set_option_show_help_demo_notes_to_true = function()
 
 lookup.set_option_show_help_demo_notes_to_false = function() 
 {
+    if (typeof(lookup) === "undefined") return;
+    if (typeof(lookup.localStorage) === "undefined") return;
     lookup.option_show_help_demo_notes(false);
     lookup.localStorage["option_show_help_demo_notes"] = false;
     lookup.send_to_worker_update_for_option_show_help_demo_notes();
@@ -1356,8 +1360,6 @@ lookup.send_to_worker_update_for_option_show_help_demo_notes = function()
     }
     
 };
-// End of "js/option_show_help_demo_notes.js"
-// Begin of "js/option_use_Japanese_tokeniser.js"
 lookup.option_use_Japanese_tokeniser = ko.observable(false);
 lookup.set_option_use_Japanese_tokeniser_to_true = function() 
 {
@@ -1394,8 +1396,6 @@ lookup.send_to_worker_update_for_option_use_Japanese_tokeniser = function()
     }
     
 };
-// End of "js/option_use_Japanese_tokeniser.js"
-// Begin of "js/find_aliases.js"
 lookup.find_aliases = function(query)
     {
         // backend-worker context
@@ -1410,16 +1410,12 @@ lookup.find_aliases = function(query)
             return Object.getOwnPropertyNames(found_aliases).filter(element => found_aliases[element]);
         }
     };
-// End of "js/find_aliases.js"
-// Begin of "js/import_Operations.js"
 lookup.import_Operations = function(data) {
     // needed in order to know when to call 'regenerate_Aliases'
 
     lookup.populate_Operations(data);
 
 };
-// End of "js/import_Operations.js"
-// Begin of "js/populate_Aliases.js"
 lookup.populate_Aliases = function(data)
     {
         var _aliases = JSON.parse(data.Aliases);
@@ -1441,17 +1437,12 @@ lookup.populate_Aliases = function(data)
         //     });
         // }
     };
-// End of "js/populate_Aliases.js"
-// Begin of "js/regenerate_Aliases.js"
 lookup.regenerate_Aliases = function()
     {
         // backend-worker context
         lookup.define_Aliases_if_needed();
         lookup.reply_from_backend_worker('saveAliasesToStorage.event', lookup.Aliases);
     };
-
-// End of "js/regenerate_Aliases.js"
-// Begin of "js/define_Aliases_if_needed.js"
 lookup.define_Aliases_if_needed = function() {
     // backend-worker context
     if (typeof (lookup.Aliases) === 'undefined') {
@@ -1470,9 +1461,6 @@ lookup.define_Aliases_if_needed = function() {
         };
     }
 };
-
-// End of "js/define_Aliases_if_needed.js"
-// Begin of "js/add_Alias.js"
 lookup.add_Alias = function(left, right)
 {
     // backend-worker context
@@ -1482,9 +1470,6 @@ lookup.add_Alias = function(left, right)
     }
     lookup.Aliases[left][right] = true;
 };
-
-// End of "js/add_Alias.js"
-// Begin of "js/remove_Alias.js"
 lookup.remove_Alias = function(left, right)
 {
     // backend-worker context
@@ -1494,8 +1479,29 @@ lookup.remove_Alias = function(left, right)
     }
     lookup.Aliases[left][right] = false;
 };
+lookup.globalOffsetY = ko.observable(0);
+lookup.globalOffsetX = ko.observable(0);
+lookup.globalMaxY = ko.observable(800);
+lookup.globalMinY = ko.observable(800);
+lookup.globalScreenHeight = ko.observable(800);
 
-// End of "js/remove_Alias.js"
+
+
+lookup.resetGlobalOffsetY = function()
+{
+    lookup.globalOffsetY(0);
+};
+
+lookup.update_global_scroll_limits = function()
+{
+    
+    lookup.globalScreenHeight(window.innerHeight);
+
+    //lookup.globalMaxY(-total_scrollable_height + window.innerHeight * 0.05);
+    //lookup.globalMinY(window.innerHeight * 0.6);
+    
+    //console.log("height scroll limits:", lookup.globalMinY(), lookup.globalMaxY());
+};
 
 
 

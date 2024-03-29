@@ -6,7 +6,50 @@ lookup.model_Operation = function(data)
     self.data = data.data;
     self.time = data.time;
 
+    self.bottom_anchor = ko.observable(true);
+    self.offset = ko.observable(0);
+    self.offset_bottom = ko.computed(() => {
+        if (self.bottom_anchor()) return self.offset();
+        return  lookup.cards_container_height() - self.offset() - self.offsetHeight();
+    });
+    
+    self.offsetHeight = ko.observable(0);
+
+    self.globalOffset = ko.computed(() => {
+        if (self.bottom_anchor()) return self.offset() + lookup.globalOffsetY();
+        return self.offset() - lookup.globalOffsetY();
+    } );
+
+    self.on_screen_top_measured_from_bottom = ko.computed(() => {
+        if (self.bottom_anchor()) return self.globalOffset() + self.offsetHeight();
+        return self.offset_bottom() + lookup.globalOffsetY() + self.offsetHeight();
+    });
+
+    self.on_screen_bottom_measured_from_bottom = ko.computed(() => {
+        if (self.bottom_anchor()) return self.globalOffset();
+        return self.offset_bottom() + lookup.globalOffsetY();
+    });
+
+    self.visible = ko.computed(() => {
+         var top = self.on_screen_top_measured_from_bottom();
+         var bottom = self.on_screen_bottom_measured_from_bottom();
+         var height = lookup.cards_container_height();
+         // this is basically an inverse of invisibility rules
+         var visible = top >= 0 && bottom <= height;
+         return visible;
+        });
+
     self.createDate = new Date(self.time);
+
+    var date = "" + self.createDate.getFullYear() +
+        "-" + ((self.createDate.getMonth() + 1) + "").padStart(2, "0") +
+        "-" + (self.createDate.getDate() + "").padStart(2, "0");
+    
+    var time = (self.createDate.getHours() + "").padStart(2, "0") +
+    ":" + (self.createDate.getMinutes() + "").padStart(2, "0") + 
+    ":" + (self.createDate.getSeconds() + "").padStart(2, "0");
+
+    self.createDateToOrder = date + "  " +  time;
 
     if(self.name === 'create')
     {

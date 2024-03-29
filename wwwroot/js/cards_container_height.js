@@ -1,0 +1,1 @@
+lookup.cards_container_height = ko.observable(10);
