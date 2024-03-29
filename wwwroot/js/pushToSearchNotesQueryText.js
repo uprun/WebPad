@@ -3,15 +3,17 @@ lookup.pushToSearchNotesQueryText = function(query)
     var currentValue = lookup.SearchNotesQuery().trim();
 
     
-    var visible_note_id = lookup.LimitedFilteredOperations().findIndex(e => e.visible());
+    const cards = lookup.LimitedFilteredOperations().concat(lookup.LimitedFilteredOperations_below());
+    var visible_note_id = cards.findIndex(e => e.visible());
     var note_data_stringified = undefined;
     var note_global_bottom = 0;
     if (visible_note_id >= 0)
     {
-        var actual_note = lookup.LimitedFilteredOperations()[visible_note_id];
+        var actual_note = cards[visible_note_id];
         note_data_stringified = JSON.stringify( actual_note.ConvertToJs() );
-        note_global_bottom = actual_note.bottom();
+        note_global_bottom = actual_note.offset_bottom();
     }
+    
     
     lookup.stackSearchNotesQuery.push(
         {

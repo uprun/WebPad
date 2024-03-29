@@ -43,11 +43,14 @@ function ConnectedNotesViewModel()
 
 
     lookup.LimitedFilteredOperations = ko.observableArray([]);
+    lookup.LimitedFilteredOperations_below = ko.observableArray([]);
     //lookup.LimitedFilteredOperations.extend({ rateLimit: { timeout: 50, method: "notifyAtFixedRate" } });
     lookup.operationsToAddGradually = [];
     lookup.operationsToAddGradually_miliseconds = 10;
     lookup.operationsToAddGradually_timer = undefined;
     lookup.operations_to_add_below = [];
+
+    lookup.operations_to_add_below_timer = undefined;
 
     lookup.operationsToAddGradually_handler = function()
     {
@@ -65,10 +68,10 @@ function ConnectedNotesViewModel()
             if (length > 0)
             {
 
-                next_bottom = obj_last.bottom()  + last_added.offsetHeight;
+                next_bottom = obj_last.offset()  + last_added.offsetHeight;
             }
             
-            to_add.bottom(next_bottom);
+            to_add.offset(next_bottom);
             lookup.LimitedFilteredOperations.push(to_add);
         }
         if (typeof(obj_last) !== "undefined" && obj_last.offsetHeight() < 1)
@@ -77,7 +80,7 @@ function ConnectedNotesViewModel()
         }
         if (typeof(obj_last) !== "undefined" && obj_last.offsetHeight() > 1)
         {
-            show_more.style.bottom = obj_last.bottom() + obj_last.offsetHeight() + lookup.globalOffsetY() + "px";
+            show_more.style.bottom = obj_last.offset() + obj_last.offsetHeight() + lookup.globalOffsetY() + "px";
         }
         lookup.update_global_scroll_limits();
         lookup.operationsToAddGradually_timer = setTimeout(lookup.operationsToAddGradually_handler, lookup.operationsToAddGradually_miliseconds);
@@ -86,25 +89,35 @@ function ConnectedNotesViewModel()
 
     lookup.operations_to_add_below_handler = function()
     {
-        var length = lookup.LimitedFilteredOperations().length;
+
+        var length = lookup.LimitedFilteredOperations_below().length;
         
-        var last_added = document.getElementById((length - 1) + "-card");
-        var obj_last = lookup.LimitedFilteredOperations()[length - 1];
-        var show_more = document.getElementById( "show-more");
-        if(lookup.operationsToAddGradually.length > 0)
+        var last_added = document.getElementById((length - 1) + "-card-below");
+        var obj_last = lookup.LimitedFilteredOperations_below()[length - 1];
+
+        
+        if(lookup.operations_to_add_below.length > 0)
         {
             
-            var to_add = lookup.operationsToAddGradually.pop();
+            var to_add = lookup.operations_to_add_below.pop();
+            to_add.bottom_anchor(false);
             
-            var next_bottom = lookup.first_to_render_note_globalBottom;
+            var next_offset = undefined;
             if (length > 0)
             {
 
-                next_bottom = obj_last.bottom()  + last_added.offsetHeight;
+                next_offset = obj_last.offset()  + last_added.offsetHeight;
+            }
+            else
+            {
+                let height = document.getElementById( "webpad-search-results-absolute-position" ).offsetHeight;
+                lookup.cards_container_height(height);
+                next_offset =  height - lookup.first_to_render_note_globalBottom;
+
             }
             
-            to_add.bottom(next_bottom);
-            lookup.LimitedFilteredOperations.push(to_add);
+            to_add.offset(next_offset);
+            lookup.LimitedFilteredOperations_below.push(to_add);
         }
         if (typeof(obj_last) !== "undefined" && obj_last.offsetHeight() < 1)
         {
@@ -112,7 +125,7 @@ function ConnectedNotesViewModel()
         }
         
         lookup.update_global_scroll_limits();
-        lookup.operationsToAddGradually_timer = setTimeout(lookup.operations_to_add_below_handler, lookup.operationsToAddGradually_miliseconds);
+        lookup.operations_to_add_below_timer = setTimeout(lookup.operations_to_add_below_handler, lookup.operationsToAddGradually_miliseconds);
         
     };
     lookup.backendWorker.addListener('LimitedFilteredOperations.changed.event', function(cards) 
@@ -122,6 +135,7 @@ function ConnectedNotesViewModel()
         var start = new Date;
         console.log("start", start);
         lookup.LimitedFilteredOperations.removeAll();
+        lookup.LimitedFilteredOperations_below.removeAll();
         var next = new Date;
         console.log("removal diff", next - start)
         start = next;
@@ -156,6 +170,10 @@ function ConnectedNotesViewModel()
         if ( typeof(lookup.operationsToAddGradually_timer) === "undefined")
         {
             lookup.operationsToAddGradually_timer = setTimeout(lookup.operationsToAddGradually_handler, lookup.operationsToAddGradually_miliseconds);
+        }
+        if ( typeof(lookup.operations_to_add_below_timer) === "undefined")
+        {
+            lookup.operations_to_add_below_timer = setTimeout(lookup.operations_to_add_below_handler, lookup.operationsToAddGradually_miliseconds);
         }
     });
 

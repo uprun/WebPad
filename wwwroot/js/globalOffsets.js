@@ -14,16 +14,7 @@ lookup.resetGlobalOffsetY = function()
 
 lookup.update_global_scroll_limits = function()
 {
-    var length = lookup.LimitedFilteredOperations().length;
-    var total_scrollable_height = 0;
-    if(length > 0)
-    {
-        var obj_last = lookup.LimitedFilteredOperations()[length - 1];
-        total_scrollable_height = obj_last.bottom();
-        
-        total_scrollable_height += obj_last.offsetHeight();
-        
-    }
+    
     lookup.globalScreenHeight(window.innerHeight);
 
     //lookup.globalMaxY(-total_scrollable_height + window.innerHeight * 0.05);

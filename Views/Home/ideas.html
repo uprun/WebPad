@@ -20,76 +20,85 @@
 </script>
 
 
+<script type="text/html" id="card-template">
+    <div 
+        style="font-size: 1.3rem;" 
+        class="webpad-card w3-animate-opacity" 
+            >
+        <span>
+            <div style="font-size: 0.6rem; text-align: left;"><span class="w3-animate-opacity" style="color: rgb(221, 150, 63);" data-bind="text: $data.createDateToOrder"></span></div>
+            <span data-bind="if: name === 'quote' || name === 'quote-edit' " >
+                <div class="webpad-brightness-dimmed " data-bind="css:{ 'webpad-quote-edit' : name === 'quote-edit', 'webpad-quote' : name === 'quote'}">
+                    <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data.quoted }  -->
+                    <!-- /ko -->
+                    <div style="margin-top: 0.5rem;">
+                        <span  class="w3-animate-opacity webpad-brightness-dimmed">
+                            <span class="webpad-button-no-border webpad-brightness-dimmed webpad-golden-frame prevent-select cursor-pointer" 
+                                style="font-size: 1.4rem; padding-left: 0.5rem; padding-right: 0.5rem; " data-bind=" click: $root.jumpToCardFromQuotedOperation">
+                                <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
+                            </span>
+                            <span
+                                class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" 
+                                style="font-size: 1.4rem;"
+                                data-bind=" click: $root.beginToQuoteQuotedText">
+                                <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
+                                <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                                <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="Edit"/> 
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </span>
+            <span >
+                <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data }  -->
+                <!-- /ko -->
+                
+                <div style="margin-top: 0.5rem;">
+                    <span  class="w3-animate-opacity webpad-brightness-dimmed">
+                        <span 
+                            class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button webpad-golden-frame prevent-select cursor-pointer" 
+                            style="font-size: 1.4rem;"
+                            data-bind=" click: $root.jumpToCardFromOperation">   
+                            <img src="svg/search.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;"  alt="jump to quote source"/> 
+                            <span class="" style="color: #84bfff; vertical-align: middle;" alt="hashTagBeginSymbol"></span>
+                        </span>
+                        <span class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" 
+                            style="font-size: 1.4rem;"
+                            data-bind=" click: $root.beginToQuoteEditText">
+                            <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
+                            <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="Edit"/> 
+                        </span>
+                        <span
+                            class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" 
+                            style="font-size: 1.4rem;"
+                            data-bind=" click: $root.beginToQuoteText">
+                            <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
+                            <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
+                            <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="Edit"/> 
+                        </span>
+                        
+                    </span>
+                </div>
+            </span>
+        </span>
+    </div>
 
+</script>
 
 <script type="text/html" id="operation-template">
-        <div class="w3-col w3-container s12 m12 l12 webpad-operation-card prevent-select" style="position: absolute;" data-bind="style : { bottom: $data.globalBottom}, attr: { id: $index() + '-card'}">
-            <div 
-                style="font-size: 1.3rem;" 
-                class="webpad-card w3-animate-opacity" 
-                 >
-                 <!-- data-bind="dblclick: $data.switchToolBoxVisibility" -->
-                <span>
-                    <div style="font-size: 0.6rem; text-align: left;"><span class="w3-animate-opacity" style="color: rgb(221, 150, 63);" data-bind="text: $data.createDateToOrder"></span></div>
-                    <span data-bind="if: name === 'quote' || name === 'quote-edit' " >
-                        <div class="webpad-brightness-dimmed " data-bind="css:{ 'webpad-quote-edit' : name === 'quote-edit', 'webpad-quote' : name === 'quote'}">
-                            <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data.quoted }  -->
-                            <!-- /ko -->
-                            <div style="margin-top: 0.5rem;">
-                                <span  class="w3-animate-opacity webpad-brightness-dimmed">
-                                    <span class="webpad-button-no-border webpad-brightness-dimmed webpad-golden-frame prevent-select cursor-pointer" 
-                                        style="font-size: 1.4rem; padding-left: 0.5rem; padding-right: 0.5rem; " data-bind=" click: $root.jumpToCardFromQuotedOperation">
-                                        <img src="svg/search.svg" class="webpad-edit-pencil" alt="jump to quote source"/> 
-                                    </span>
-                                    <span
-                                        class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" 
-                                        style="font-size: 1.4rem;"
-                                        data-bind=" click: $root.beginToQuoteQuotedText">
-                                        <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
-                                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
-                                        <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="Edit"/> 
-                                    </span>
-                                </span>
-                            </div>
-                        </div>
-                    </span>
-                    <span >
-                        <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data }  -->
-                        <!-- /ko -->
-                        
-                        <div style="margin-top: 0.5rem;">
-                            <span  class="w3-animate-opacity webpad-brightness-dimmed">
-                                <span 
-                                    class="webpad-brightness-dimmed webpad-button-no-border webpad-glass-button webpad-golden-frame prevent-select cursor-pointer" 
-                                    style="font-size: 1.4rem;"
-                                    data-bind=" click: $root.jumpToCardFromOperation">   
-                                    <img src="svg/search.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;"  alt="jump to quote source"/> 
-                                    <span class="" style="color: #84bfff; vertical-align: middle;" alt="hashTagBeginSymbol"></span>
-                                </span>
-                                <span class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" 
-                                    style="font-size: 1.4rem;"
-                                    data-bind=" click: $root.beginToQuoteEditText">
-                                    <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
-                                    <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil" style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="Edit"/> 
-                                </span>
-                                <span
-                                    class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" 
-                                    style="font-size: 1.4rem;"
-                                    data-bind=" click: $root.beginToQuoteText">
-                                    <span class="" style="color: #84bfff; vertical-align: middle; margin-left: 0.5rem;" alt="hashTagBeginSymbol"></span>
-                                    <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil" alt="Add information" /> 
-                                    <img src="svg/plus.svg" class="webpad-edit-pencil" style="margin-right: 0.5rem;" alt="Edit"/> 
-                                </span>
-                                
-                            </span>
-                        </div>
-                    </span>
-                </span>
-            </div>
-            
-            
-            
+        <div class="w3-col w3-container s12 m12 l12 webpad-operation-card prevent-select" style="position: absolute;" 
+            data-bind="style : { bottom: $data.globalOffset}, attr: { id: $index() + '-card'}">
+            <!-- ko template: { name: 'card-template', data: $data }  -->
+            <!-- /ko -->
         </div>
+</script>
+
+<script type="text/html" id="operation-below-template">
+    <div class="w3-col w3-container s12 m12 l12 webpad-operation-card prevent-select" style="position: absolute;" 
+        data-bind="style : { top: $data.globalOffset}, attr: { id: $index() + '-card-below'}">
+        <!-- ko template: { name: 'card-template', data: $data }  -->
+        <!-- /ko -->
+    </div>
 </script>
 
 <script type="text/html" id="show-more-template">
@@ -158,6 +167,12 @@
                     { 
                         name: 'operation-template',
                         foreach: LimitedFilteredOperations
+                    } -->
+            <!-- /ko -->
+            <!-- ko template: 
+                    { 
+                        name: 'operation-below-template',
+                        foreach: LimitedFilteredOperations_below
                     } -->
             <!-- /ko -->
         </div>
