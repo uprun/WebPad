@@ -4,8 +4,7 @@ lookup.globalMaxY = ko.observable(800);
 lookup.globalMinY = ko.observable(800);
 lookup.globalScreenHeight = ko.observable(800);
 
-lookup.first_to_render_note_data_stringified = undefined;
-lookup.first_to_render_note_globalBottom = 0;
+
 
 lookup.resetGlobalOffsetY = function()
 {

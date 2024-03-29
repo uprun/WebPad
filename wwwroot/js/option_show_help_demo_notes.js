@@ -1,6 +1,8 @@
 lookup.option_show_help_demo_notes = ko.observable(false);
 lookup.set_option_show_help_demo_notes_to_true = function() 
 {
+    if (typeof(lookup) === "undefined") return;
+    if (typeof(lookup.localStorage) === "undefined") return;
     lookup.option_show_help_demo_notes(true);
     lookup.localStorage["option_show_help_demo_notes"] = true;
     lookup.send_to_worker_update_for_option_show_help_demo_notes();
@@ -8,6 +10,8 @@ lookup.set_option_show_help_demo_notes_to_true = function()
 
 lookup.set_option_show_help_demo_notes_to_false = function() 
 {
+    if (typeof(lookup) === "undefined") return;
+    if (typeof(lookup.localStorage) === "undefined") return;
     lookup.option_show_help_demo_notes(false);
     lookup.localStorage["option_show_help_demo_notes"] = false;
     lookup.send_to_worker_update_for_option_show_help_demo_notes();

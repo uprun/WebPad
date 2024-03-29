@@ -5,6 +5,8 @@ lookup.Notes = ko.observableArray([]);
 lookup.ColorPresets = ko.observableArray([]);
 lookup.Connections = ko.observableArray([]);
 lookup.history = ko.observableArray([]); 
+lookup.first_to_render_note_data_stringified = undefined;
+lookup.first_to_render_note_globalBottom = 0;
 lookup.cards_container_height = ko.observable(10);
 lookup.data_color_presets = [ 
     { 
@@ -1321,6 +1323,8 @@ lookup.populate_reset_helpers = function()
 lookup.option_show_help_demo_notes = ko.observable(false);
 lookup.set_option_show_help_demo_notes_to_true = function() 
 {
+    if (typeof(lookup) === "undefined") return;
+    if (typeof(lookup.localStorage) === "undefined") return;
     lookup.option_show_help_demo_notes(true);
     lookup.localStorage["option_show_help_demo_notes"] = true;
     lookup.send_to_worker_update_for_option_show_help_demo_notes();
@@ -1328,6 +1332,8 @@ lookup.set_option_show_help_demo_notes_to_true = function()
 
 lookup.set_option_show_help_demo_notes_to_false = function() 
 {
+    if (typeof(lookup) === "undefined") return;
+    if (typeof(lookup.localStorage) === "undefined") return;
     lookup.option_show_help_demo_notes(false);
     lookup.localStorage["option_show_help_demo_notes"] = false;
     lookup.send_to_worker_update_for_option_show_help_demo_notes();
@@ -1479,8 +1485,7 @@ lookup.globalMaxY = ko.observable(800);
 lookup.globalMinY = ko.observable(800);
 lookup.globalScreenHeight = ko.observable(800);
 
-lookup.first_to_render_note_data_stringified = undefined;
-lookup.first_to_render_note_globalBottom = 0;
+
 
 lookup.resetGlobalOffsetY = function()
 {

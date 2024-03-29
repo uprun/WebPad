@@ -1,5 +1,11 @@
 lookup.set_visible_note_information = function(current_scroll_state)
 {
+    current_scroll_state.note_data_stringified = undefined;
+    current_scroll_state.note_global_bottom = 0;
+    if (typeof(lookup) === "undefined") return;
+    if (typeof(lookup.LimitedFilteredOperations) === "undefined") return;
+    if (typeof(lookup.LimitedFilteredOperations_below) === "undefined") return;
+
     const cards = lookup.LimitedFilteredOperations().concat(lookup.LimitedFilteredOperations_below());
     var visible_note_id = cards.findIndex(e => e.visible());
     var note_data_stringified = undefined;
