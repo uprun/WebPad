@@ -1,5 +1,6 @@
 importScripts("../lib/knockout/knockout-latest.debug.js" + "?v=" + new Date().toString())
 <lisperanto-just-paste src="js/lookup.js"  />
+<lisperanto-just-paste src="js/cards_container_height.js"  />
 <lisperanto-just-paste src="js/populateColorPresets.js" />
 <lisperanto-just-paste src="js/model_Card.js" />
 <lisperanto-just-paste src="js/model_ColorPreset.js" />

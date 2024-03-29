@@ -89,6 +89,8 @@ function ConnectedNotesViewModel()
 
     lookup.operations_to_add_below_handler = function()
     {
+        let height = document.getElementById( "webpad-search-results-absolute-position" ).offsetHeight;
+        lookup.cards_container_height(height);
 
         var length = lookup.LimitedFilteredOperations_below().length;
         
@@ -110,8 +112,7 @@ function ConnectedNotesViewModel()
             }
             else
             {
-                let height = document.getElementById( "webpad-search-results-absolute-position" ).offsetHeight;
-                lookup.cards_container_height(height);
+                
                 next_offset =  height - lookup.first_to_render_note_globalBottom;
 
             }
@@ -204,6 +205,9 @@ function ConnectedNotesViewModel()
     lookup.ExtendCurrentResultLimit = function()
     {
         //lookup.onListChanged_keepHeightOffset();
+        let visible_note_info = {};
+        lookup.set_visible_note_information(visible_note_info);
+        lookup.restore_first_to_render_note_information(visible_note_info);
         lookup.backendWorker.sendQuery("ExtendCurrentResultLimit");
     };
 

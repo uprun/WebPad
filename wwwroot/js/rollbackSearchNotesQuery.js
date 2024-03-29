@@ -6,9 +6,8 @@ lookup.rollbackSearchNotesQuery = function()
         previousQuery = lookup.stackSearchNotesQuery.pop();
         lookup.globalOffsetY(previousQuery.scrollPosition);
         lookup.SearchNotesQuery(previousQuery.query);
-        lookup.SetCurrentResultLimit(previousQuery.amountOfCardsLimit)
-        lookup.first_to_render_note_data_stringified = previousQuery.note_data_stringified;
-        lookup.first_to_render_note_globalBottom = previousQuery.note_global_bottom;
+        lookup.SetCurrentResultLimit(previousQuery.amountOfCardsLimit);
+        lookup.restore_first_to_render_note_information(previousQuery);
     }
     else
     {

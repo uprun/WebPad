@@ -2,27 +2,20 @@ lookup.pushToSearchNotesQueryText = function(query)
 {
     var currentValue = lookup.SearchNotesQuery().trim();
 
+    let current_scroll_state = {
+        query: currentValue,
+        scrollPosition: lookup.globalOffsetY(),
+        amountOfCardsLimit: lookup.CurrentResultLimit()
+    };
+
+    lookup.set_visible_note_information(current_scroll_state);
+
     
-    const cards = lookup.LimitedFilteredOperations().concat(lookup.LimitedFilteredOperations_below());
-    var visible_note_id = cards.findIndex(e => e.visible());
-    var note_data_stringified = undefined;
-    var note_global_bottom = 0;
-    if (visible_note_id >= 0)
-    {
-        var actual_note = cards[visible_note_id];
-        note_data_stringified = JSON.stringify( actual_note.ConvertToJs() );
-        note_global_bottom = actual_note.offset_bottom();
-    }
+    
     
     
     lookup.stackSearchNotesQuery.push(
-        {
-            query: currentValue,
-            scrollPosition: lookup.globalOffsetY(),
-            amountOfCardsLimit: lookup.CurrentResultLimit(),
-            note_data_stringified: note_data_stringified,
-            note_global_bottom: note_global_bottom
-        }
+        current_scroll_state
     );
 
     lookup.first_to_render_note_data_stringified = undefined;

@@ -20,10 +20,20 @@ lookup.model_Operation = function(data)
         return self.offset() - lookup.globalOffsetY();
     } );
 
+    self.on_screen_top_measured_from_bottom = ko.computed(() => {
+        if (self.bottom_anchor()) return self.globalOffset() + self.offsetHeight();
+        return self.offset_bottom() + lookup.globalOffsetY() + self.offsetHeight();
+    });
+
+    self.on_screen_bottom_measured_from_bottom = ko.computed(() => {
+        if (self.bottom_anchor()) return self.globalOffset();
+        return self.offset_bottom() + lookup.globalOffsetY();
+    });
+
     self.visible = ko.computed(() => {
-         var top = self.globalOffset() + self.offsetHeight();
-         var bottom = self.globalOffset();
-         var height = lookup.globalScreenHeight();
+         var top = self.on_screen_top_measured_from_bottom();
+         var bottom = self.on_screen_bottom_measured_from_bottom();
+         var height = lookup.cards_container_height();
          // this is basically an inverse of invisibility rules
          var visible = top >= 0 && bottom <= height;
          return visible;
