@@ -15,12 +15,12 @@ namespace WebPad
     public class Startup
     {
 
-        Bundle_Watcher _bundle_Watcher = new Bundle_Watcher();
+        //Bundle_Watcher _bundle_Watcher = new Bundle_Watcher();
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _bundle_Watcher.Start();
+            //_bundle_Watcher.Start();
         }
 
         private static int homePageCounter = 0;
