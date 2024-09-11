@@ -103,6 +103,12 @@ public class Bundle_Watcher
         var actual_path = src_from_script.Substring("src=\"".Length, src_from_script.Length - "src=\"\"".Length);
 
         var path_to_src_file = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", actual_path);
+
+        if (File.Exists(path_to_src_file) == false)
+        {
+            Console.WriteLine($"File does not exist {path_to_src_file}");
+            return;
+        }
         
         using (var extra_reader = new StreamReader(path_to_src_file))
         {
