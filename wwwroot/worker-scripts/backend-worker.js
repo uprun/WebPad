@@ -1,25 +1,21 @@
-importScripts("../lib/knockout/knockout-latest.debug.js" + "?v=" + new Date().toString())
+function fake_backend_worker()
+{
+    var self = this;
 <lisperanto-just-paste src="js/lookup.js"  />
 <lisperanto-just-paste src="js/cards_container_height.js"  />
 <lisperanto-just-paste src="js/populateColorPresets.js" />
 <lisperanto-just-paste src="js/model_Card.js" />
 <lisperanto-just-paste src="js/model_ColorPreset.js" />
-<lisperanto-just-paste src="js/model_Connection.js" />
-<lisperanto-just-paste src="js/model_Node.js" />
 <lisperanto-just-paste src="js/model_Operation.js" />
 <lisperanto-just-paste src="js/get_Operation_Index.js" />
 <lisperanto-just-paste src="js/migrate_to_Operations.js" />
-<lisperanto-just-paste src="js/Instanciate_model_node.js" />
 <lisperanto-just-paste src="js/GetRandomColor.js" />
-<lisperanto-just-paste src="js/Instanciate_model_connection.js" />
 <lisperanto-just-paste src="js/findNodeById.js" />
 <lisperanto-just-paste src="js/SearchNotesQuery.js" />
-<lisperanto-just-paste src="js/findCardByMainNodeId.js" />
 <lisperanto-just-paste src="js/populate_Operations.js" />
 <lisperanto-just-paste src="js/Operation_was_added.js" />
 <lisperanto-just-paste src="js/demo_notes_en.js" />
 <lisperanto-just-paste src="js/empty_note.js" />
-<lisperanto-just-paste src="js/populate.js" />
 <lisperanto-just-paste src="js/option_show_help_demo_notes.js" />
 <lisperanto-just-paste src="js/option_use_Japanese_tokeniser.js" />
 <lisperanto-just-paste src="js/find_aliases.js" />
@@ -156,7 +152,7 @@ lookup
     lookup.FilteredOperations
         .subscribe(function(changes)
             {
-              reply('FilteredCards.length.changed', lookup.FilteredOperations().length);
+              self.reply('FilteredCards.length.changed', lookup.FilteredOperations().length);
             });
     
     lookup.LimitedFilteredOperations = ko.pureComputed(function()
@@ -177,7 +173,7 @@ lookup
     lookup.NumberOfHiddenOperations
         .subscribe(function(changes)
             {
-                reply('NumberOfHiddenOperations.changed', lookup.NumberOfHiddenOperations());
+                self.reply('NumberOfHiddenOperations.changed', lookup.NumberOfHiddenOperations());
             });
 
     lookup.LimitedFilteredOperations
@@ -188,7 +184,7 @@ lookup
                 var toSend = ko.utils.arrayMap(toProcess, function(item) {
                     return item.ConvertToJs();
                 });
-                reply('LimitedFilteredOperations.changed.event', toSend);
+                self.reply('LimitedFilteredOperations.changed.event', toSend);
 
             });
 
@@ -213,7 +209,7 @@ lookup
     lookup.CurrentResultLimit
         .subscribe(function(changes)
             {
-                reply('CurrentResultLimit.changed', lookup.CurrentResultLimit());
+                self.reply('CurrentResultLimit.changed', lookup.CurrentResultLimit());
             });
 
 
@@ -259,31 +255,39 @@ function on_operations_changed(changes)
                 );
 
 
-            reply('saveOperationsToStorage.event', toStoreOperations);
+            self.reply('saveOperationsToStorage.event', toStoreOperations);
         }
     }
 };
 
 
 // system functions
+this.listeners = {};
 
-function defaultReply(message) {
-  // your default PUBLIC function executed only when main page calls the queryableWorker.postMessage() method directly
-  // do something
-}
-
-function reply() {
-  if (arguments.length < 1) { throw new TypeError('reply - not enough arguments'); return; }
-  postMessage({ 'queryMethodListener': arguments[0], 'queryMethodArguments': Array.prototype.slice.call(arguments, 1) });
-}
-
-lookup.reply_from_backend_worker = reply;
-
-onmessage = function(oEvent) {
-  if (oEvent.data instanceof Object && oEvent.data.hasOwnProperty('queryMethod') && oEvent.data.hasOwnProperty('queryMethodArguments')) {
-    lookup[oEvent.data.queryMethod].apply(self, oEvent.data.queryMethodArguments);
-    reply(oEvent.data.queryMethod + '.finished');
-  } else {
-    defaultReply(oEvent.data);
+this.reply = function(eventName, eventArgs) {
+  if (eventName in this.listeners)
+  {
+    this.listeners[eventName].forEach(function(item, index) {
+        item(eventArgs);
+        });
   }
+};
+
+
+this.addListener = function(eventName, func)
+{
+    if (eventName in this.listeners)
+    {
+        this.listeners[eventName].push(func);
+    }
+    else
+    {
+        this.listeners[eventName] = [func];
+    }
+}
+this.sendQuery = function(queryMethod, queryMethodArguments)
+{
+    lookup[queryMethod](queryMethodArguments);
+    self.reply(queryMethod + '.finished');
+};
 };

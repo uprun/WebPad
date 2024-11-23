@@ -1,6 +1,12 @@
 lookup.find_aliases = function(query)
     {
         // backend-worker context
+        if ("Aliases" in lookup)
+        {}
+        else
+        {
+            lookup.Aliases = {};
+        }
         query = query.trim().toLowerCase();
         const found_aliases = lookup.Aliases[query];
         if(typeof(found_aliases) === 'undefined')

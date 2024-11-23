@@ -2,6 +2,7 @@
 
 function ConnectedNotesViewModel()
 {
+    //[2024-09-12] this is for sure too big method
     var self = this;
     
 
@@ -12,31 +13,16 @@ function ConnectedNotesViewModel()
     lookup.apply_saved_option_show_help_demo_notes();
     lookup.apply_saved_option_use_Japanese_tokeniser();
 
-    lookup.hashCards = {};
-
     lookup.populateColorPresets();
 
-    lookup.backendWorker = new lookup.QueryableWorker("worker-scripts/bundle-backend-worker.js?v=" + new Date().toString());
+    lookup.backendWorker = new fake_backend_worker();
 
     lookup.send_to_worker_update_for_option_show_help_demo_notes();
-
-
-    lookup.backendWorker.addListener('saveItemsToStorage.event', function(toStoreNotes, toStoreConnections) 
-    {
-        lookup.saveItemsToStorage(toStoreNotes, toStoreConnections);
-    });
 
     lookup.backendWorker.addListener('saveOperationsToStorage.event', function(toStoreOperations) 
     {
         lookup.save_Operations_to_storage(toStoreOperations);
     });
-
-    lookup.backendWorker.addListener('saveAliasesToStorage.event', function(toStoreAliases) 
-    {
-        lookup.save_Aliases_to_storage(toStoreAliases);
-    });
-
-    
 
 
     lookup.check_platform();
@@ -89,6 +75,7 @@ function ConnectedNotesViewModel()
 
     lookup.operations_to_add_below_handler = function()
     {
+        // 
         let height = document.getElementById( "webpad-search-results-absolute-position" ).offsetHeight;
         lookup.cards_container_height(height);
 
@@ -189,17 +176,6 @@ function ConnectedNotesViewModel()
     lookup.backendWorker.addListener('CurrentResultLimit.changed', function(length) 
     {
         lookup.CurrentResultLimit(length);
-    });
-
-    lookup.backendWorker.addListener('populate_Operations.finished', function(length) 
-    {
-        //[2022-05-01] no aliases for current release, I will create a seperate UI-screen for adding them
-        lookup.load_aliases();
-    });
-
-    lookup.backendWorker.addListener('import_Operations.finished', function(length) 
-    {
-        lookup.backendWorker.sendQuery('regenerate_Aliases');
     });
 
     lookup.ExtendCurrentResultLimit = function()

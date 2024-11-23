@@ -11,15 +11,7 @@ lookup.loadNotes = function()
         {
             if(typeof(lookup.localStorage["Notes"]) !== 'undefined')
             {
-                data.notes = JSON.parse(lookup.localStorage.getItem("Notes"));
-                data.connections = JSON.parse(lookup.localStorage.getItem("Connections"));
-                //lookup.populate(data);
-                lookup.backendWorker.addListener('populate.finished', function()
-                {
-                    console.log('populate.finished');
-                    lookup.backendWorker.sendQuery('migrate_to_Operations');
-                });
-                lookup.backendWorker.sendQuery('populate', data);
+                alert("This version does not support migration of data, use version 2.0.0 2024-03-29");
             }
             else
             {

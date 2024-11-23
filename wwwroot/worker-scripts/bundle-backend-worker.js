@@ -1,4 +1,6 @@
-importScripts("../lib/knockout/knockout-latest.debug.js" + "?v=" + new Date().toString())
+function fake_backend_worker()
+{
+    var self = this;
 var lookup = {
 };
 lookup.Notes = ko.observableArray([]);
@@ -55,262 +57,6 @@ lookup.populateColorPresets = function()
 
 };
 
-lookup.model_Card = function(data)
-{   
-    // DEPRECATED: use model_Operation.js instead
-    var self = this;
-    self.Note = data.Note;
-    self.isRoot = typeof(data.connections_incoming) === 'undefined';
-    self.hasTags = typeof(data.connections_outgoing) !== 'undefined';
-    self.Tags = ko.observableArray([]);
-
-    self.ConvertToJs = function()
-    {
-        var data = {};
-        data.Note_serialized = self.Note.ConvertToJs();
-        data.connections_incoming = self.isRoot ? undefined : [];
-        data.connections_outgoing = self.hasTags ? [] : undefined;
-        return data;
-    }
-
-    self.AdditionalInformationText = ko.observable("");
-    self.AdditionalInformationTextVisible = ko.observable(false);
-    self
-        .AdditionalInformationTextVisible
-        .subscribe(function(data) 
-        {
-            if(data)
-            {
-                self.AdditionalInformationTextFocus(true);
-            }
-        });
-    self.AdditionalInformationTextFocus = ko.observable(false);
-    self.AnalyzeText = function(text, query)
-    {
-        return text.toLowerCase().indexOf(query) >= 0
-    };
-    self.IsForSearchResult = function(query)
-    {
-        var result = self.Note.IsForSearchResult(query);
-        if(result)
-        {
-            return result;
-        }
-        var filtered =  
-            ko.utils.arrayFilter
-            (
-                self.SmallTags(),
-                function(item)
-                { 
-                    var result = 
-                        item.Destination.IsForSearchResult(query)
-                    return result; 
-                } 
-            );
-        var tagsAnyPassed = filtered.length > 0 ;
-        if(tagsAnyPassed)
-        {
-            return true;
-        }
-        var filteredReferencedBy =  
-            ko.utils.arrayFilter
-            (
-                self.Note.ReferencedBy(),
-                function(item)
-                { 
-                    var result = 
-                        item.Source.IsForSearchResult(query);
-                    return result; 
-                } 
-            );
-
-        var referencedByPassed = filteredReferencedBy.length > 0;
-        return referencedByPassed;
-    };
-    self.underEdit = ko.observable(false);
-    
-    self.AdditionalInformationTextColor = ko.observable(lookup.GetRandomColor().Color());
-    self.toolBoxVisible = ko.observable(false);
-    self.switchToolBoxVisibility = function()
-    {
-        self.toolBoxVisible(!self.toolBoxVisible());
-        return true;
-    };
-
-    self.markAsDone = function()
-    {
-        event.stopPropagation();
-        self.convertTo("done");
-        self.convertFrom("not-done");
-    };
-    self.removeDone = function()
-    {
-        event.stopPropagation();
-        self.convertFrom("done");
-        self.convertTo("not-done");
-    }
-
-    self.toBeRemoved = ko.observable(false);
-    self.prepareToBeRemoved = function()
-    {
-        self.toBeRemoved(true);
-    }
-    self.rollbackRemoval = function()
-    {
-        self.toBeRemoved(false);
-    }
-    self.completlyRemoved = ko.observable(false);
-    self.reallyRemove = function()
-    {
-        self.completlyRemoved(true);
-        // remove incoming references
-        ko.utils.arrayForEach
-        (
-            self.Note.ReferencedBy(), 
-            function(item) 
-            {
-                lookup.RemoveConnection(item);
-            }
-        );
-        
-        //remove tags
-        ko.utils.arrayForEach
-        (
-            self.SmallTags(), 
-            function(item) 
-            {
-                lookup.RemoveConnection(item);
-                lookup.RemoveNote({Note: item.Destination });
-            }
-        );
-        lookup.RemoveNote(self);
-    }
-
-    self.isTask = ko.pureComputed(function()
-    {
-        return self.hasSmallTag("task");
-    });
-
-    self.isDone = ko.pureComputed(function()
-    {
-        return self.hasSmallTag("done");
-    });
-
-    self.hasSmallTag = function(tag)
-    {
-        tag = tag.toLowerCase().trim();
-        var foundTaskTag = ko.utils.arrayFirst(self.SmallTags(), function(item){
-            return item.Destination.text().toLowerCase().trim() === tag;
-        });
-        return  typeof(foundTaskTag) !== 'undefined';
-    };
-
-
-    self.convertFromTask = function()
-    {
-        self.convertFrom("task");
-    };
-
-    self.convertFrom = function(tag)
-    {
-        tag = tag.toLowerCase().trim();
-        var foundTaskTags = 
-        ko.utils.arrayFilter(self.SmallTags(),
-            function(item)
-            {
-                return item.Destination.text().toLowerCase().trim() === tag;
-            });
-        ko.utils.arrayForEach
-        (
-            foundTaskTags, 
-            function(item) 
-            {
-                lookup.RemoveConnection(item);
-                lookup.RemoveNote({Note: item.Destination });
-            }
-        );
-        
-    };
-
-    self.removeTag = function(item)
-    {
-        lookup.RemoveConnection(item.originalTag);
-        lookup.RemoveNote({Note: item.originalTag.Destination });
-    };
-
-    self.convertToTask = function()
-    {
-        self.convertTo("task");
-    };
-
-    self.convertTo = function(tag)
-    {
-        tag = tag.toLowerCase().trim();
-        if(self.hasSmallTag(tag) === false)
-        {
-            lookup.AddInformationToExistingOne(self, tag);
-        }
-    };
-
-    self.isSmallTagChecker = function(item)
-    {
-        if(typeof(item.DestinationCard) !== 'undefined' 
-            && item.DestinationCard.Tags().length > 0)
-        {
-            return false;
-        }
-        else
-        {
-            return item.Destination.text().length < 20;
-        }
-    };
-
-    self.SmallTags = ko.pureComputed(function()
-    {
-        return ko.utils.arrayFilter(self.Tags(), function(item)
-        {
-            return self.isSmallTagChecker(item);
-        })
-    });
-
-    self.SmallTagsWrapped = ko.pureComputed(function()
-    {
-        return ko.utils.arrayMap(self.SmallTags(), function(elem)
-        {
-            var item = elem.Destination;
-            var result = {
-                originalTag: elem,
-                color: item.color,
-                id: item.id,
-                parentNodeId: self.Note.id,
-                textSplitted: ko.pureComputed(function()
-                {
-                    return ko.utils.arrayMap(item.textSplitted(), function(elemWord)
-                    {
-                        return {
-                            word: elemWord.word,
-                            wordNode: elemWord.wordNode,
-                            wordQuery: elemWord.wordQuery,
-                            exists: elemWord.exists,
-                            isUrl: elemWord.isUrl,
-                            parentNodeId: self.Note.id
-                        };
-
-                    });
-                })
-            };
-            return result;
-        })
-    });
-
-    self.BigTags = ko.pureComputed(function()
-    {
-        return ko.utils.arrayFilter(self.Tags(), function(item)
-        {
-            return self.isSmallTagChecker(item) === false;
-        })
-    });
-};
 lookup.model_ColorPreset = function(data)
 {
 
@@ -323,280 +69,6 @@ lookup.model_ColorPreset = function(data)
             Background: self.Background()
         };
     };
-};
-lookup.model_Connection = function(data)
-{
-    var id = data.id;
-    var sourceId = data.sourceId;
-    var destinationId = data.destinationId;
-    var label = data.label;
-    var generated = data.generated;
-    var findNodeByIdFunc = data.findNodeByIdFunc;
-
-    var self = this;
-    self.id = id;
-    self.SourceId = sourceId;
-    self.DestinationId = destinationId;
-    self.Source = findNodeByIdFunc(self.SourceId);
-    self.Destination = findNodeByIdFunc(self.DestinationId);
-    self.DestinationCard = lookup.hashCards[self.DestinationId];
-    self.Destination.isReferenced(true);
-    self.Destination.AddExternalReferencedBy(self);
-    self.label = ko.observable(label);
-    if(typeof(data.textChangedHandler) != "undefined")
-    {
-        self.label.subscribe(function(changes)
-        {
-            data.textChangedHandler(changes, self);
-        });
-    }
-    self.labelAlmost = ko.computed(function()
-    {
-        var valueToCheck = self.label();
-        if( 
-            typeof(valueToCheck) == "undefined" ||
-             valueToCheck == null || 
-             valueToCheck == "")
-             {
-                 return "";
-             }
-        else
-        {
-            return valueToCheck;
-        }
-    });
-    self.labelUpdateCallback;
-    self.generated = generated ? generated : false;
-    self.underEdit = ko.observable(false);
-    self.ConvertToJs = function() {
-        return {
-            id: self.id,
-            SourceId: self.SourceId,
-            DestinationId:  self.DestinationId,
-            label: self.label(),
-            generated: generated
-        };
-    };
-    self.switchDone = function()
-    {
-        self.Destination.switchDone();
-    }
-
-    self.toolBoxVisible = ko.observable(false);
-    self.switchToolBoxVisibility = function()
-    {
-        self.toolBoxVisible(!self.toolBoxVisible());
-    };
-    self.DisplayNextLevel = ko.observable(true);
-    self.SwitchDisplayNextLevel = function()
-    {
-        self.DisplayNextLevel(!self.DisplayNextLevel());
-    };
-    self.toUnlink = ko.observable(false);
-    self.prepareToUnlink = function()
-    {
-        self.toUnlink(true);
-    };
-    self.cancelUnlink = function()
-    {
-        self.toUnlink(false);
-    };
-    self.confirmUnlink = function()
-    {
-        lookup.RemoveConnection(self);
-    };
-
-};
-// DEPRECATED: use model_Operation.js instead
-
-
-lookup.model_Node = function(data)
-{
-    // DEPRECATED: use model_Operation.js instead
-    var self = this;
-    self.id = data.id;
-    self.text = ko.observable(data.text);
-    if(typeof(data.textChangedHandler) != "undefined")
-    {
-        self.text.subscribe(function(changes)
-        {
-            data.textChangedHandler(changes, self);
-        });
-    }
-
-    self.color = data.color;
-    self.createDate = data.createDate;
-    if(typeof(data.isDone) != "undefined")
-    {
-        self.isDone = ko.observable(data.isDone);
-    }
-    else
-    {
-        self.isDone = ko.observable(false);
-    }
-    self.switchDone = function()
-    {
-        self.isDone(!self.isDone());
-        var info = self.ConvertToJs();
-        lookup.pushToHistory({
-            action: lookup.actions.NoteUpdated,
-            data: info
-        });
-
-    }
-
-    self.IsForSearchResult = function(query)
-    {
-        
-        var entry = lookup.dictionary_of_notes[query];
-        if(typeof(entry) !== 'undefined')
-        {
-            var own_id_entry = entry[self.id];
-            if(typeof(own_id_entry) !== 'undefined' )
-            {
-                return own_id_entry;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
-        }
-        
-    };
-
-    // DEPRECATED: use model_Operation.js instead
-
-    self.hasIncomingConnection = data.hasIncomingConnection;
-
-    self.isReferenced = ko.observable(false);
-    self.ReferencedBy = ko.observableArray([]);
-    self.ReferencedByWrapped = ko.pureComputed(function()
-    {
-        return ko.utils.arrayMap(self.ReferencedBy(), function(elem)
-        {
-            var item = elem.Source;
-            var result = {
-                color: item.color,
-                id: item.id,
-                parentNodeId: self.id,
-                textSplitted: ko.pureComputed(function()
-                {
-                    return ko.utils.arrayMap(item.textSplitted(), function(elemWord)
-                    {
-                        return {
-                            word: elemWord.word,
-                            wordNode: elemWord.wordNode,
-                            wordQuery: elemWord.wordQuery,
-                            exists: elemWord.exists,
-                            isUrl: elemWord.isUrl,
-                            parentNodeId: self.id
-                        };
-
-                    });
-                })
-            };
-            return result;
-        })
-    });
-    self.AddExternalReferencedBy = function(data)
-    {
-        var filtered =  
-            ko.utils.arrayFilter
-            (
-                self.ReferencedBy(),
-                function(item)
-                { 
-                    return  item.Source.id === data.Source.id;
-                } 
-            );
-        if(filtered.length === 0)
-        {
-            self.ReferencedBy.push(data);
-        }
-    };
-    
-    
-    // DEPRECATED: use model_Operation.js instead
-
-    if(typeof(self.color) == "undefined" || self.color == null)
-    {
-        self.color = '#d190ff';
-    }
-    
-
-
-    self.ConvertToJs = function() {
-        return {
-            id: self.id,
-            text: self.text(),
-            color: self.color,
-            createDate: self.createDate,
-            isDone: self.isDone(),
-            hasIncomingConnection: self.hasIncomingConnection
-        };
-    };
-
-    if(typeof(self.createDate) == "undefined" || self.createDate == null)
-    {
-        self.createDate = new Date();
-        if(self.id !== -1 )
-        {
-            var info = self.ConvertToJs();
-            lookup.pushToHistory({
-                action: lookup.actions.NoteUpdated,
-                data: info
-            });
-        }
-        // DEPRECATED: use model_Operation.js instead
-    }
-    else
-    {
-        self.createDate = new Date(self.createDate);
-    }
-
-    self.textSplitted = ko.pureComputed(function(){
-        var anotherDummyTriggerCall = lookup.dictionary_of_notes_updated();
-        var all_words = self.text().split(" ");
-
-        // DEPRECATED: use model_Operation.js instead
-        var result = ko.utils.arrayMap(all_words, function(item)
-            {
-                var toSearch = 
-                    item
-                    .replace("\r", " ")
-                    .replace("\n", " ")
-                    .replace("\t", " ")
-                    .toLowerCase()
-                    .trim();
-                
-                if(
-                    toSearch.endsWith(",") 
-                    || toSearch.endsWith(".") 
-                    || toSearch.endsWith("?")
-                    || toSearch.endsWith("!")
-                )
-                {
-                    toSearch = toSearch.substring(0, toSearch.length - 1);
-                }
-
-                var found = lookup.dictionary_of_notes[toSearch];
-                return {
-                    word: item,
-                    wordQuery: toSearch,
-                    wordNode: found,
-                    exists: typeof(found) !== 'undefined',
-                    isUrl: item.startsWith("https://"),
-                    parentNodeId: self.id
-                };
-            }
-        );
-        // DEPRECATED: use model_Operation.js instead
-        return result;
-    });
 };
 lookup.model_Operation = function(data)
 {
@@ -787,172 +259,10 @@ lookup.get_Operation_Index = function() {
     }
     return toReturn;
 };
-
-lookup.migrate_to_Operations = function()
-{
-    var toProcess = lookup.Notes();
-    var buffer = [];
-    
-    ko.utils.arrayForEach(
-        toProcess, 
-        function(elem)
-        {
-            if(elem.ReferencedBy().length === 0)
-            {
-                var toPush = operation_create(elem);
-                buffer.push
-                (
-                    toPush  
-                );
-            }
-            else
-            {
-                var externalReferences = elem.ReferencedBy();
-                ko.utils.arrayForEach
-                (
-                    externalReferences,
-                    function(sub)
-                    {
-                        var toPush = operation_quote(sub.Source, elem);
-                        buffer.push
-                        (
-                            toPush  
-                        );
-                    }
-                );
-            }
-        }
-    );
-
-    buffer = buffer.sort(
-        function (left, right) {
-            if (left.time === right.time) {
-                return 0;
-            }
-
-            else {
-                if (left.time < right.time) {
-                    return -1;
-                }
-
-                else {
-                    return 1;
-                }
-            }
-        }
-    );
-
-    ko.utils.arrayPushAll(lookup.Operations, buffer);
-};
-
-function operation_quote(sub, elem) {
-    return new lookup.model_Operation(
-        {
-            id: lookup.get_Operation_Index(),
-            name: "quote",
-            data: {
-                quoted: {
-                    text: sub.text(),
-                    color: sub.color
-                },
-                current: {
-                    text: elem.text(),
-                    color: elem.color
-                }
-            },
-            time: elem.createDate
-        }
-    );
-}
-
-function operation_create(elem) {
-    return new lookup.model_Operation(
-        {
-            id: lookup.get_Operation_Index(),
-            name: "create",
-            data: {
-                text: elem.text(),
-                color: elem.color
-            },
-            time: elem.createDate
-        }
-    );
-}
-lookup.Instanciate_model_node = function(data)
-    {
-        data.textChangedHandler = function(changes, model) 
-        {
-            if(changes 
-                //&& changes != model.text()
-                )
-            {
-                var toSend = model.ConvertToJs();
-                toSend.text = changes;
-                
-                lookup.pushToHistory({
-                        action: lookup.actions.NoteUpdated,
-                        data: toSend
-                    }
-                );
-            }
-        };
-        var result = new lookup.model_Node(data);
-        return result;
-    };
 lookup.GetRandomColor = function() {
     var selectedColorIndex = Math.floor(Math.random() * lookup.ColorPresets().length);
     var selectedColor = lookup.ColorPresets()[selectedColorIndex];
     return selectedColor;
-};
-lookup.Instanciate_model_connection = function(data)
-    {
-        data.textChangedHandler = function(changes, model) 
-        {
-            if(changes  
-                //&& changes != model.label()
-                )
-            {
-                var toSend = model.ConvertToJs();
-                toSend.label = changes;
-                lookup.pushToHistory({
-                    action: lookup.actions.ConnectionUpdated,
-                    data: toSend
-                });
-            }
-        };
-        var result = new lookup.model_Connection(data);
-        return result;
-    };
-lookup.findNodeById_buffer = undefined;
-lookup.findNodeById_notFound = new lookup.model_Node({id: -1, text: 'not found'});
-lookup.findNodeById = function(id)
-{
-    if(typeof(lookup.findNodeById_buffer) == "undefined")
-    {
-        lookup.findNodeById_buffer = {};
-        ko.utils.arrayForEach
-        (
-            lookup.Notes(), 
-            function(item) 
-                {
-                    lookup.findNodeById_buffer[item.id] = item;
-                }
-        );
-    }
-
-    var result = lookup.findNodeById_buffer[id];
-    if(typeof(result) == "undefined")
-    {
-        var filtered = ko.utils.arrayFilter(lookup.Notes(), function(item){ return item.id == id;} );
-        result = filtered.length > 0 ? filtered[0] : undefined;
-    }
-    if(typeof(result) === 'undefined')
-    {
-        result = lookup.findNodeById_notFound;
-    }
-
-    return result;
-
 };
 lookup.SearchNotesQuery = ko.observable("");
 // lookup.SearchNotesQuery
@@ -968,18 +278,6 @@ lookup.SearchNotesQuery
         }
         
     });
-lookup.findCardByMainNodeId = function(mainId)
-{
-    var found = lookup.hashCards[mainId];
-    if(found)
-    {
-        return found;
-    }
-    else
-    {
-        return null;
-    }
-};
 lookup.populate_Operations = function(data) {
 
     var buffer = [];
@@ -1129,197 +427,6 @@ lookup.empty_note =
     },
     "time": "2023-12-15T13:16:53.119Z"
 };
-lookup.CheckIfEveryNodeHasMigratedColor = function()
-    {
-            ko.utils.arrayForEach(lookup.Notes(), function(item) {
-                lookup.MigrationOfColorOfNode(item);
-            });
-    };
-
-    lookup.composedCards = ko.observableArray([]);
-    lookup.dictionary_of_notes = {};
-
-    lookup.dictionary_of_notes_updated = ko.observable(0);
-
-    lookup.split_search_key_and_add_to_dictionary = function(key, note_id, flag)
-    {
-        var index = 0;
-        
-        while(key.length > 0)
-        {
-            for(index = 0; index < key.length; index++)
-            {
-                var to_work_with = key.substring(index);
-                var entry = lookup.dictionary_of_notes[to_work_with];
-                if(typeof(entry) === 'undefined')
-                {
-                    lookup.dictionary_of_notes[to_work_with] = {};
-                    entry = lookup.dictionary_of_notes[to_work_with];
-                }
-                entry[note_id] = flag;
-                
-            }
-            key = key.substring(0, key.length - 1);
-        }
-    };
-
-    lookup.generateDictionary = function()
-    {
-        
-        ko.utils.arrayForEach(lookup.composedCards(), function(item) 
-        {    
-            var key = 
-                item
-                .Note
-                .text()
-                .replace("\r", " ")
-                .replace("\n", " ")
-                .replace("\t", " ")
-                .toLowerCase()
-                .trim();
-            
-            lookup.split_search_key_and_add_to_dictionary(key, item.Note.id, true);
-
-        });
-        var val = lookup.dictionary_of_notes_updated();
-        lookup.dictionary_of_notes_updated(val + 1);
-    };
-
-    lookup.generateDictionary_NoteAdded = function(note)
-    {
-        
-        var key = 
-                note
-                .text()
-                .replace("\r", " ")
-                .replace("\n", " ")
-                .replace("\t", " ")
-                .toLowerCase()
-                .trim();
-        lookup.split_search_key_and_add_to_dictionary(key, note.id, true);
-        var val = lookup.dictionary_of_notes_updated();
-        lookup.dictionary_of_notes_updated(val + 1);
-
-    };
-
-
-    lookup.populateConnections = function()
-    {
-        
-        lookup.populateConnections_startIndex = lookup.data.connections.length -1;
-        while(lookup.populateConnections_startIndex >= 0)
-        {
-            console.log('populateConnections: ' + lookup.populateConnections_startIndex);
-            var batchArray = [];
-            for(var batchKey = 0; batchKey < 100 && lookup.populateConnections_startIndex >= 0; batchKey++, lookup.populateConnections_startIndex--)
-            {
-                var elem = lookup.data.connections[lookup.populateConnections_startIndex];
-                var connectionToAdd = lookup.Instanciate_model_connection(
-                    {
-                        id: elem.id,
-                        sourceId: elem.SourceId,
-                        destinationId: elem.DestinationId,
-                        label: elem.label,
-                        generated: elem.generated,
-                        findNodeByIdFunc: lookup.findNodeById
-                    });
-                var found = lookup.hashCards[connectionToAdd.SourceId];
-                if(found)
-                {
-                    found.Tags.unshift(connectionToAdd);
-                }
-                batchArray.push(connectionToAdd);
-
-            }
-            ko.utils.arrayPushAll(lookup.Connections, batchArray);
-
-        }
-        setTimeout(lookup.generateDictionary, 1);
-
-    };
-
-
-    lookup.populateNotes = function()
-    {
-        lookup.populateNotes_startIndex = lookup.data.notes.length -1;
-        while(lookup.populateNotes_startIndex >= 0)
-        {
-            console.log('populateNotes: ' + lookup.populateNotes_startIndex);
-            var batchArray = [];
-            var cardsBatch = [];
-            for(var batchKey = 0; batchKey < 100 && lookup.populateNotes_startIndex >= 0; batchKey++, lookup.populateNotes_startIndex--)
-            {
-                var elem = lookup.data.notes[lookup.populateNotes_startIndex];
-                var noteToAdd = lookup.Instanciate_model_node(elem);
-                var outgoing = lookup.outgoing_connections[noteToAdd.id];
-                var incoming = lookup.incoming_connections[noteToAdd.id];
-                var composedCard = new lookup.model_Card({ Note: noteToAdd, connections_incoming: incoming, connections_outgoing: outgoing });
-                lookup.hashCards[noteToAdd.id] = composedCard;
-                cardsBatch.push(composedCard);
-                batchArray.push(noteToAdd);
-            }
-            ko.utils.arrayPushAll(lookup.Notes, batchArray);
-            ko.utils.arrayPushAll(lookup.composedCards, cardsBatch);
-
-        }
-        lookup.populateConnections();
-
-
-        
-
-    };
-
-    lookup.outgoing_connections = {};
-    lookup.incoming_connections = {};
-
-
-    lookup.populate_incoming_outgoing_connections = function()
-    {
-        lookup.populate_incoming_outgoing_connections_index = lookup.data.connections.length -1;
-        console.log('populate_incoming_outgoing_connections: ' + lookup.populate_incoming_outgoing_connections_index);
-
-        for(;  lookup.populate_incoming_outgoing_connections_index >= 0; lookup.populate_incoming_outgoing_connections_index--)
-        {
-            var elem = lookup.data.connections[lookup.populate_incoming_outgoing_connections_index];
-            var stored_outgoing = lookup.outgoing_connections[elem.SourceId];
-            if(typeof(stored_outgoing) === 'undefined')
-            {
-                lookup.outgoing_connections[elem.SourceId] = [];
-                stored_outgoing = lookup.outgoing_connections[elem.SourceId];
-            }
-            stored_outgoing.push(elem);
-
-            var stored_incoming = lookup.incoming_connections[elem.DestinationId];
-            if(typeof(stored_incoming) === 'undefined')
-            {
-                lookup.incoming_connections[elem.DestinationId] = [];
-                stored_incoming = lookup.incoming_connections[elem.DestinationId];
-            }
-            stored_incoming.push(elem);
-            
-        }
-
-        lookup.populateNotes();       
-
-    };
-
-    lookup.populate = function(data) {
-        lookup.for_code_access_hash_of_color_presets = {};
-        lookup.data_color_presets.forEach(element => {
-            lookup.for_code_access_hash_of_color_presets[element.color] = true;
-        });
-        lookup.data = data;
-
-        lookup.populate_incoming_outgoing_connections();    
-    };
-
-lookup.populate_reset_helpers = function()
-{
-    lookup.populate_incoming_outgoing_connections_index = undefined;
-    lookup.populateNotes_startIndex = undefined;
-    lookup.populateConnections_startIndex = undefined;
-};
-
 lookup.option_show_help_demo_notes = ko.observable(false);
 lookup.set_option_show_help_demo_notes_to_true = function() 
 {
@@ -1399,6 +506,12 @@ lookup.send_to_worker_update_for_option_use_Japanese_tokeniser = function()
 lookup.find_aliases = function(query)
     {
         // backend-worker context
+        if ("Aliases" in lookup)
+        {}
+        else
+        {
+            lookup.Aliases = {};
+        }
         query = query.trim().toLowerCase();
         const found_aliases = lookup.Aliases[query];
         if(typeof(found_aliases) === 'undefined')
@@ -1415,60 +528,6 @@ lookup.import_Operations = function(data) {
 
     lookup.populate_Operations(data);
 
-};
-lookup.populate_Aliases = function(data)
-    {
-        var _aliases = JSON.parse(data.Aliases);
-        // backend-worker context
-        lookup.define_Aliases_if_needed();
-        lookup.Aliases = _aliases;
-        // var aliases_keys = Object.getOwnPropertyNames(data.Aliases);
-        // for(var k = 0; k < aliases_keys.length; k++)
-        // {
-        //     var actual_key = aliases_keys[k];
-        //     var connected_aliases = data.Aliases[actual_key];
-        //     if( typeof(lookup.Aliases[actual_key]) === 'undefined')
-        //     {
-        //         lookup.Aliases[actual_key] = {};
-        //     }
-        //     // just in case if there are some aliases already
-        //     Object.getOwnPropertyNames(connected_aliases).forEach(element => {
-        //         lookup.Aliases[actual_key][element] = true;
-        //     });
-        // }
-    };
-lookup.regenerate_Aliases = function()
-    {
-        // backend-worker context
-        lookup.define_Aliases_if_needed();
-        lookup.reply_from_backend_worker('saveAliasesToStorage.event', lookup.Aliases);
-    };
-lookup.define_Aliases_if_needed = function() {
-    // backend-worker context
-    if (typeof (lookup.Aliases) === 'undefined') {
-        // [2022-01-08] in future here can be added some spelling mistakes and some pronunciation mistakes
-        // for example: monthes <-> months // this mistake occured with me some times
-        lookup.Aliases = {
-            'example': {
-                'examples': true
-            },
-            'month': {
-                'months': true
-            },
-            'monthes': {
-                'months': true
-            }
-        };
-    }
-};
-lookup.add_Alias = function(left, right)
-{
-    // backend-worker context
-    if( typeof(lookup.Aliases[left]) === 'undefined')
-    {
-        lookup.Aliases[left] = {};
-    }
-    lookup.Aliases[left][right] = true;
 };
 lookup.remove_Alias = function(left, right)
 {
@@ -1628,7 +687,7 @@ lookup
     lookup.FilteredOperations
         .subscribe(function(changes)
             {
-              reply('FilteredCards.length.changed', lookup.FilteredOperations().length);
+              self.reply('FilteredCards.length.changed', lookup.FilteredOperations().length);
             });
     
     lookup.LimitedFilteredOperations = ko.pureComputed(function()
@@ -1649,7 +708,7 @@ lookup
     lookup.NumberOfHiddenOperations
         .subscribe(function(changes)
             {
-                reply('NumberOfHiddenOperations.changed', lookup.NumberOfHiddenOperations());
+                self.reply('NumberOfHiddenOperations.changed', lookup.NumberOfHiddenOperations());
             });
 
     lookup.LimitedFilteredOperations
@@ -1660,7 +719,7 @@ lookup
                 var toSend = ko.utils.arrayMap(toProcess, function(item) {
                     return item.ConvertToJs();
                 });
-                reply('LimitedFilteredOperations.changed.event', toSend);
+                self.reply('LimitedFilteredOperations.changed.event', toSend);
 
             });
 
@@ -1685,7 +744,7 @@ lookup
     lookup.CurrentResultLimit
         .subscribe(function(changes)
             {
-                reply('CurrentResultLimit.changed', lookup.CurrentResultLimit());
+                self.reply('CurrentResultLimit.changed', lookup.CurrentResultLimit());
             });
 
 
@@ -1731,31 +790,39 @@ function on_operations_changed(changes)
                 );
 
 
-            reply('saveOperationsToStorage.event', toStoreOperations);
+            self.reply('saveOperationsToStorage.event', toStoreOperations);
         }
     }
 };
 
 
 // system functions
+this.listeners = {};
 
-function defaultReply(message) {
-  // your default PUBLIC function executed only when main page calls the queryableWorker.postMessage() method directly
-  // do something
-}
-
-function reply() {
-  if (arguments.length < 1) { throw new TypeError('reply - not enough arguments'); return; }
-  postMessage({ 'queryMethodListener': arguments[0], 'queryMethodArguments': Array.prototype.slice.call(arguments, 1) });
-}
-
-lookup.reply_from_backend_worker = reply;
-
-onmessage = function(oEvent) {
-  if (oEvent.data instanceof Object && oEvent.data.hasOwnProperty('queryMethod') && oEvent.data.hasOwnProperty('queryMethodArguments')) {
-    lookup[oEvent.data.queryMethod].apply(self, oEvent.data.queryMethodArguments);
-    reply(oEvent.data.queryMethod + '.finished');
-  } else {
-    defaultReply(oEvent.data);
+this.reply = function(eventName, eventArgs) {
+  if (eventName in this.listeners)
+  {
+    this.listeners[eventName].forEach(function(item, index) {
+        item(eventArgs);
+        });
   }
+};
+
+
+this.addListener = function(eventName, func)
+{
+    if (eventName in this.listeners)
+    {
+        this.listeners[eventName].push(func);
+    }
+    else
+    {
+        this.listeners[eventName] = [func];
+    }
+}
+this.sendQuery = function(queryMethod, queryMethodArguments)
+{
+    lookup[queryMethod](queryMethodArguments);
+    self.reply(queryMethod + '.finished');
+};
 };
