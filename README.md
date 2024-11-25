@@ -1,7 +1,7 @@
 # WebPad
 Linked data, semantic web, semantic knowledge, knowledge graph.
 
-Hmm  this all was beaten up by LLMs
+Hmm  this all was beaten up by LLMs, I do not believe in them fully, but as a new Search engine they work flawlessly.
 
 Personal and secure.
 
