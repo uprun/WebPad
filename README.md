@@ -3,8 +3,6 @@ Micro-blog with easy tag navigation.
 
 Try it now at https://webpad.com.ua
 
-#RDF #LinkedData #SemanticWeb #JSON-ld #OWL
-
 # Support on Patreon
 
 https://www.patreon.com/o_kryvonos
