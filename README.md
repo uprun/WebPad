@@ -1,6 +1,8 @@
 # WebPad
 Linked data, semantic web, semantic knowledge, knowledge graph.
 
+Hmm  this all was beaten up by LLMs
+
 Personal and secure.
 
 Try it now at https://webpad.com.ua
