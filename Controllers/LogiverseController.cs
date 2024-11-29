@@ -13,7 +13,7 @@ namespace WebPad.Controllers
     public class LogiverseController : Controller
     {
 
-        public IActionResult ideas(string source)
+        public IActionResult index(string source)
         {
             Interlocked.Increment(ref homePageCounter);
             Console.WriteLine($"#{homePageCounter} open of \"{nameof(ideas)}\" page");
