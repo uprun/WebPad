@@ -12,7 +12,7 @@ namespace WebPad.Controllers
     [RequestSizeLimit(4_000)]// explicit restriction to 4 kilobytes
     public class LogiverseController : Controller
     {
-
+        private static int homePageCounter = 0;
         public IActionResult index(string source)
         {
             Interlocked.Increment(ref homePageCounter);
