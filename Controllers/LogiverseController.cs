@@ -17,6 +17,12 @@ namespace WebPad.Controllers
         {
             return new JsonResult("hello GetUsers");
         }
+
+        [HttpPost]
+        public JsonResult CreateUser()
+        {
+
+        }
     
     }
 }
