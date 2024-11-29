@@ -44,6 +44,7 @@ public class Bundle_Watcher
 
     private void OnChanged(object sender, FileSystemEventArgs e)
     {
+        string fullPath = e.FullPath;
         Console.WriteLine(e.FullPath);
         if (e.FullPath.EndsWith( "bundle_ideas.html")) return;
         if (e.FullPath.EndsWith("bundle-backend-worker.js")) return;
