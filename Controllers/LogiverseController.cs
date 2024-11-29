@@ -19,7 +19,7 @@ namespace WebPad.Controllers
         }
 
         [HttpPost]
-        public JsonResult CreateUser()
+        public JsonResult CreateUser(string user, string password)
         {
         }
     
