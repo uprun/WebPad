@@ -12,8 +12,11 @@ namespace WebPad.Controllers
     [RequestSizeLimit(4_000)]// explicit restriction to 4 kilobytes
     public class LogiverseController : Controller
     {
-        
-        public JsonResult 
+        [HttpGet]
+        public JsonResult GetUsers()
+        {
+            return JsonResult("");
+        }
 
         private static int homePageCounter = 0;
 
