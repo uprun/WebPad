@@ -21,7 +21,6 @@ namespace WebPad.Controllers
         [HttpPost]
         public JsonResult CreateUser()
         {
-
         }
     
     }
