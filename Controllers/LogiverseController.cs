@@ -21,6 +21,7 @@ namespace WebPad.Controllers
         [HttpPost]
         public JsonResult CreateUser([FromBody]string user, [FromBody] string password)
         {
+            return new JsonResult("hello GetUsers");
         }
     
     }
