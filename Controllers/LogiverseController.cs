@@ -9,7 +9,7 @@ using System.Threading;
 namespace WebPad.Controllers
 {
     
-    [RequestSizeLimit(100_000)]// explicit restriction to 100 kilobytes
+    [RequestSizeLimit(4_000)]// explicit restriction to 4 kilobytes
     public class LogiverseController : Controller
     {
         
