@@ -45,6 +45,23 @@ public class Bundle_Watcher
     private void OnChanged(object sender, FileSystemEventArgs e)
     {
         string fullPath = e.FullPath;
+        if (fullPath.Contains("/.git/"))
+        {
+            //Console.WriteLine($"Ignoring {fullPath}");
+            return;
+        }
+
+        if (fullPath.Contains("/bin/"))
+        {
+            //Console.WriteLine($"Ignoring {fullPath}");
+            return;
+        }
+
+        if (fullPath.Contains("/obj/"))
+        {
+            //Console.WriteLine($"Ignoring {fullPath}");
+            return;
+        }
         Console.WriteLine(e.FullPath);
         if (e.FullPath.EndsWith( "bundle_ideas.html")) return;
         if (e.FullPath.EndsWith("bundle-backend-worker.js")) return;
