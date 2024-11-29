@@ -17,11 +17,6 @@ namespace WebPad.Controllers
         {
             return new JsonResult("hello GetUsers");
         }
-
-        private static int homePageCounter = 0;
-
-        
-
     
     }
 }
