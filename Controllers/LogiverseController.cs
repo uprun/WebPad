@@ -10,7 +10,7 @@ namespace WebPad.Controllers
 {
     
     [RequestSizeLimit(100_000)]// explicit restriction to 100 kilobytes
-    public class HomeController : Controller
+    public class LogiverseController : Controller
     {
         
         public IActionResult ideas(string source)
