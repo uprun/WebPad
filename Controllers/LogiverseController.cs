@@ -16,7 +16,7 @@ namespace WebPad.Controllers
         public IActionResult index(string source)
         {
             Interlocked.Increment(ref homePageCounter);
-            Console.WriteLine($"#{homePageCounter} open of \"{nameof(ideas)}\" page");
+            Console.WriteLine($"#{homePageCounter} open of \"{nameof(index)}\" page");
             
             Response.Redirect("/Logiverse/index.html");
             
