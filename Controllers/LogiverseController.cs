@@ -15,7 +15,7 @@ namespace WebPad.Controllers
         [HttpGet]
         public JsonResult GetUsers()
         {
-            return JsonResult("");
+            return new JsonResult("");
         }
 
         private static int homePageCounter = 0;
