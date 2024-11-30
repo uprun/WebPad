@@ -23,7 +23,16 @@ namespace WebPad.Controllers
             return View();
         }
 
-        
+        public IActionResult logiverse(string source)
+        {
+            Interlocked.Increment(ref homePageCounter);
+            Console.WriteLine($"#{homePageCounter} open of \"{nameof(ideas)}\" page");
+            
+            Response.Redirect("bundle_ideas.html");
+            
+            return View();
+        }
+
 
         private static int homePageCounter = 0;
 
