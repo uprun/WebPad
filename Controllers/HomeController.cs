@@ -23,6 +23,8 @@ namespace WebPad.Controllers
             return View();
         }
 
+        
+
         private static int homePageCounter = 0;
 
         
