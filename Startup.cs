@@ -66,7 +66,7 @@ namespace WebPad
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=ideas}/{id?}",
+                    pattern: "{controller=Home}/{action=ideas}/{id?}"
                     );
             });
         }
