@@ -26,7 +26,7 @@ namespace WebPad.Controllers
         public IActionResult logiverse(string source)
         {
             Interlocked.Increment(ref homePageCounter);
-            Console.WriteLine($"#{homePageCounter} open of \"{nameof(ideas)}\" page");
+            Console.WriteLine($"#{homePageCounter} open of \"{nameof(logiverse)}\" page");
             
             Response.Redirect("bundle_ideas.html");
             
