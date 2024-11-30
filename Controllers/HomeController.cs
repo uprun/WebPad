@@ -28,7 +28,7 @@ namespace WebPad.Controllers
             Interlocked.Increment(ref homePageCounter);
             Console.WriteLine($"#{homePageCounter} open of \"{nameof(logiverse)}\" page");
             
-            Response.Redirect("logiverse.html");
+            Response.Redirect("/home/logiverse.html");
             
             return View();
         }
