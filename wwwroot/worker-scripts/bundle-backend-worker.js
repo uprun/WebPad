@@ -678,4 +678,151 @@ lookup
                                 }
                             }
                         }
-              
+                    );
+                    return filtered_operations;
+                }
+            }
+        );
+
+    lookup.FilteredOperations
+        .subscribe(function(changes)
+            {
+              self.reply('FilteredCards.length.changed', lookup.FilteredOperations().length);
+            });
+    
+    lookup.LimitedFilteredOperations = ko.pureComputed(function()
+            {
+                var startIndex = lookup.FilteredOperations().length - lookup.CurrentResultLimit()
+                if(startIndex < 0)
+                {
+                    startIndex = 0;
+                }
+                return lookup.FilteredOperations().slice(startIndex);
+            });
+
+    lookup.NumberOfHiddenOperations = ko.pureComputed(function()
+    {
+        return lookup.FilteredOperations().length - lookup.LimitedFilteredOperations().length;
+    });
+
+    lookup.NumberOfHiddenOperations
+        .subscribe(function(changes)
+            {
+                self.reply('NumberOfHiddenOperations.changed', lookup.NumberOfHiddenOperations());
+            });
+
+    lookup.LimitedFilteredOperations
+        .subscribe(function(changes)
+            {
+                console.log('LimitedFilteredOperations changed');
+                var toProcess = lookup.LimitedFilteredOperations();
+                var toSend = ko.utils.arrayMap(toProcess, function(item) {
+                    return item.ConvertToJs();
+                });
+                self.reply('LimitedFilteredOperations.changed.event', toSend);
+
+            });
+
+    lookup.ResetCurrentResultLimit = function()
+    {
+        lookup.CurrentResultLimit(45);
+    };
+
+    lookup.ExtendAmountForCurrentResultLimit = 45;
+
+
+    lookup.ExtendCurrentResultLimit = function()
+    {
+        lookup.CurrentResultLimit(lookup.CurrentResultLimit() + lookup.ExtendAmountForCurrentResultLimit);
+    };
+
+    lookup.SetCurrentResultLimit = function(value)
+    {
+        lookup.CurrentResultLimit(value);
+    };
+
+    lookup.CurrentResultLimit
+        .subscribe(function(changes)
+            {
+                self.reply('CurrentResultLimit.changed', lookup.CurrentResultLimit());
+            });
+
+
+
+function on_operations_changed(changes)
+{
+    if (changes && changes.length > 0) {
+        var addedChanges = ko.utils.arrayFilter
+            (
+                changes, 
+                function (item) 
+                {
+                    return item.status == "added"
+                }
+            );
+
+        if (addedChanges && addedChanges.length > 0) {
+            var toStoreOperations = ko.utils.arrayMap
+            (
+                lookup.Operations(), 
+                function (item) {
+                return item.ConvertToJs()
+                }
+            );
+
+            toStoreOperations = toStoreOperations
+                .sort(
+                    function (left, right) {
+                        if (left.time === right.time) {
+                            return 0;
+                        }
+
+                        else {
+                            if (left.time < right.time) {
+                                return -1;
+                            }
+
+                            else {
+                                return 1;
+                            }
+                        }
+                    }
+                );
+
+
+            self.reply('saveOperationsToStorage.event', toStoreOperations);
+        }
+    }
+};
+
+
+// system functions
+this.listeners = {};
+
+this.reply = function(eventName, eventArgs) {
+  if (eventName in this.listeners)
+  {
+    this.listeners[eventName].forEach(function(item, index) {
+        item(eventArgs);
+        });
+  }
+};
+
+
+this.addListener = function(eventName, func)
+{
+    if (eventName in this.listeners)
+    {
+        this.listeners[eventName].push(func);
+    }
+    else
+    {
+        this.listeners[eventName] = [func];
+    }
+}
+this.sendQuery = function(queryMethod, queryMethodArguments)
+{
+    lookup[queryMethod](queryMethodArguments);
+    self.reply(queryMethod + '.finished');
+};
+};
