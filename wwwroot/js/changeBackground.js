@@ -6,6 +6,8 @@ lookup.changeBackground = function()
     lookup.localStorage["backgroundColor"] = background;
 };
 
+002451
+
 lookup.changeBackgroundToDefault = function() 
 {
     var background = "#000000";
