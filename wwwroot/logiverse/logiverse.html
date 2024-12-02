@@ -448,6 +448,7 @@
         break;
       }
       status.className = "post-" + entry.username + "@" + entry.instance;
+      var selectedColorIndex = Math.floor(Math.random() * lookup.ColorPresets().length);
       status.classList.add("status");
       status.classList.add("instance-" + entry.instance);
       const strong = status.querySelector("strong");
