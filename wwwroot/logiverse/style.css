@@ -95,38 +95,38 @@
     font-size: 1.1em;
   }
 
-  uprun-status-1{ 
+  .uprun-status-1{ 
     background: "inherit";
     color: "#ffa26b" ;
 }
-uprun-status-2{ 
+  .uprun-status-2{ 
     background: "inherit";
     color: "#84bfff" ;
 }
-uprun-status-3{ 
+  .uprun-status-3{ 
     background: "inherit";
     color: "#ff94eb";
 }
-uprun-status-4{ 
+  .uprun-status-4{ 
     background: "inherit";
     color: "#64e05e";
 }
-uprun-status-5{ 
+  .uprun-status-5{ 
     background: "inherit";
     color: "#f8e755";
 }
-uprun-status-6{ 
+  .uprun-status-6{ 
     background: "inherit";
     color: "#ffbbdc" ;
-},
-uprun-status-8{ 
+}
+  .uprun-status-8{ 
     background: "inherit";
     color: "#d190ff" ;
-},
-uprun-status-9{ 
+  }
+  .uprun-status-9{ 
     background: "inherit";
     color: "#ff8f95" ;
-}
+  }
   
   audio,
   video {
