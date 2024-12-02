@@ -451,7 +451,7 @@
       var selectedColorIndex = Math.floor(Math.random() * 9) + 1;
       status.classList.add("status");
       status.classList.add("instance-" + entry.instance);
-      status.classList.add(`uprun-status-{sele}`);
+      status.classList.add(`uprun-status-${selectedColorIndex}`);
       const strong = status.querySelector("strong");
       status.id = "post-" + entry.username + "@" + entry.instance;
       strong.className = "name-" + entry.username + "@" + entry.instance;
