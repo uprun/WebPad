@@ -8,12 +8,12 @@ lookup.changeBackground = function()
 
 lookup.changeBackgroundToMidnight = function() 
 {
-    var background = "#333333";
+    var background = "#002451";
     lookup.backgroundColor(background);
     lookup.localStorage["backgroundColor"] = background;
 };
 
-002451
+
 
 lookup.changeBackgroundToDefault = function() 
 {
