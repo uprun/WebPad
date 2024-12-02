@@ -97,11 +97,11 @@
 
   uprun-status-1{ 
     background: "inherit";
-    color: "#ffa26b" 
+    color: "#ffa26b" ;
 }
 uprun-status-2{ 
     background: "inherit";
-    color: "#84bfff" 
+    color: "#84bfff" ;
 }
 uprun-status-3{ 
     background: "inherit";
@@ -117,15 +117,15 @@ uprun-status-5{
 }
 uprun-status-6{ 
     background: "inherit";
-    color: "#ffbbdc" 
+    color: "#ffbbdc" ;
 },
 uprun-status-8{ 
     background: "inherit";
-    color: "#d190ff" 
+    color: "#d190ff" ;
 },
 uprun-status-9{ 
     background: "inherit";
-    color: "#ff8f95" 
+    color: "#ff8f95" ;
 }
   
   audio,
