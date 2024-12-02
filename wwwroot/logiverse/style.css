@@ -105,25 +105,25 @@ uprun-status-2{
 }
 uprun-status-3{ 
     background: "inherit";
-    color: "#ff94eb" 
+    color: "#ff94eb";
 }
 uprun-status-4{ 
     background: "inherit";
-    color: "#64e05e" 
+    color: "#64e05e";
 }
 uprun-status-5{ 
     background: "inherit";
-    color: "#f8e755" 
-},
-{ 
+    color: "#f8e755";
+}
+uprun-status-6{ 
     background: "inherit",
     color: "#ffbbdc" 
 },
-{ 
+uprun-status-8{ 
     background: "inherit",
     color: "#d190ff" 
 },
-{ 
+uprun-status-9{ 
     background: "inherit",
     color: "#ff8f95" 
 }
