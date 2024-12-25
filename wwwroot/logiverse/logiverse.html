@@ -877,8 +877,11 @@
       statusInput.value = `@${username}@${instance} `;
       statusInput.focus();
     });
-
-    userActionsElement.appendChild(replyButton);
+    if (allowReply)
+    {
+      userActionsElement.appendChild(replyButton);
+    }
+    
 
     const likeButton = document.createElement("button");
     likeButton.textContent = "Like";
