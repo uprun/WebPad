@@ -448,7 +448,7 @@
         break;
       }
       status.className = "post-" + entry.username + "@" + entry.instance;
-      entry.timestamp.getSeconds()
+      entry.timestamp.getSeconds() % 8
       var selectedColorIndex = Math.floor(Math.random() * 8) + 1;
       status.classList.add("status");
       status.classList.add("instance-" + entry.instance);
