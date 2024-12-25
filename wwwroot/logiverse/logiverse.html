@@ -449,7 +449,7 @@
       }
       status.className = "post-" + entry.username + "@" + entry.instance;
       
-      var selectedColorIndex = Math.floor(Math.random() * 8) + 1;
+      var selectedColorIndex = Math.floor(entry.timestamp.getSeconds() % 8) + 1;
       status.classList.add("status");
       status.classList.add("instance-" + entry.instance);
       status.classList.add(`uprun-status-${selectedColorIndex}`);
