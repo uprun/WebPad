@@ -860,6 +860,7 @@
   // });
   // }
 
+  var allowReply = false;
   function addUserActions({
     userActionsElement,
     username,
@@ -876,6 +877,7 @@
       statusInput.value = `@${username}@${instance} `;
       statusInput.focus();
     });
+
     userActionsElement.appendChild(replyButton);
 
     const likeButton = document.createElement("button");
