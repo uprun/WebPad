@@ -483,8 +483,8 @@
 
       const span_time = status.querySelector(".user-time");
       var month_formatted = (entry.timestamp.getMonth()+1).toString().padStart(2, '0');
-      var day_formatted = entry.timestamp.getDate().toString()
-      const date_formatted = `${entry.timestamp.getFullYear()}-${month_formatted}-${}`
+      var day_formatted = entry.timestamp.getDate().toString().padStart(2, '0');
+      const date_formatted = `${entry.timestamp.getFullYear()}-${month_formatted}-${day_formatted}`
 
       span_time.innerHTML = ` on ${date_formatted} wrote:`;
 
