@@ -461,7 +461,7 @@
       h3.className = "title-" + entry.username + "@" + entry.instance;
       h3.classList.add("post-title");
 
-      const span = status.querySelector(".user");
+      const span = status.querySelector(".user-name");
       span.innerHTML = getHtmlFromMarkdown(entry.status);
       if (entry.username === config.instance_admin) {
         // protip: log from individual user
