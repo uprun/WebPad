@@ -507,7 +507,7 @@
       const p = document.createElement("p");
       p.className = "post-" + entry.username + "@" + entry.instance;
       p.classList.add("status");
-      
+
       const strong = document.createElement("strong");
       strong.textContent = entry.username + "@" + entry.instance;
       strong.className = "name-" + entry.username + "@" + entry.instance;
@@ -517,6 +517,7 @@
       h3.classList.add("post-title");
       p.appendChild(h3);
       h3.appendChild(strong);
+      
       const br = document.createElement("br");
       p.appendChild(br);
       const span = document.createElement("span");
