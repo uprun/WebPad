@@ -558,6 +558,7 @@
 
 
       span_time.innerHTML = ` on ${date_formatted} ${time_formatted} wrote:`;
+      span_time.innerHTML = " on " + entry.timestamp + " wrote:";
       span_time.classList.add("user-time");
       h3.appendChild(span_time)
 
