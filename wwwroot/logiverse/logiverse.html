@@ -40,8 +40,9 @@
  <script>
   function rainbow(e)
   {
-    var multiple = document.getElementsByClassName("rainbow");
-    for( var e in Array(multiple))
+    var multiple = Array(document.getElementsByClassName("rainbow"));
+
+    for( var e in multiple)
     {
       console.log(e);
 
