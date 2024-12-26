@@ -489,7 +489,7 @@
 
 
 
-      span_time.innerHTML = ` on ${date_formatted} wrote:`;
+      span_time.innerHTML = ` on ${date_formatted} ${time_formatted} wrote:`;
 
       const span = status.querySelector(".user-status");
       span.innerHTML = getHtmlFromMarkdown(entry.status);
