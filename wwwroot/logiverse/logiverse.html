@@ -522,8 +522,9 @@
       const br = document.createElement("br");
       p.appendChild(br);
       const span = document.createElement("span");
-      span.classList.add("user-name");
+      
       span.className = "status-" + entry.username + "@" + entry.instance;
+      span.classList.add("user-name");
       span.innerHTML = getHtmlFromMarkdown(entry.status);
       span.style.maxHeight = "90px";
       span.style.overflowY = "auto";
