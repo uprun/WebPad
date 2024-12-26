@@ -6,6 +6,15 @@ lookup.changeBackground = function()
     lookup.localStorage["backgroundColor"] = background;
 };
 
+lookup.changeBackgroundToMidnight = function() 
+{
+    var background = "#002451";
+    lookup.backgroundColor(background);
+    lookup.localStorage["backgroundColor"] = background;
+};
+
+
+
 lookup.changeBackgroundToDefault = function() 
 {
     var background = "#000000";

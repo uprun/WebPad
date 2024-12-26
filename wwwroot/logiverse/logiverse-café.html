@@ -5,13 +5,14 @@
 
 <!-- Metadata -->
 <!DOCTYPE html>
-<title>Login</title>
+<meta charset="utf-8">
+<title>Logiverse café</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="shortcut icon" href="/favicon.png" />
 <meta property="og:image" content="https://todepond.com/lab/og.png" />
-<meta property="og:title" content="Login" />
+<meta property="og:title" content="Logiverse café" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Login" />
+<meta name="twitter:title" content="Logiverse café" />
 <meta name="twitter:description" content="" />
 <meta name="twitter:image" content="https://todepond.com/lab/og.png" />
 
@@ -36,7 +37,23 @@
 <!----------------------------------------------------->
 
 <!-- Title -->
-<h1>Login</h1>
+ <script>
+  function search_where_to_generate_rainbow()
+  {
+    var multiple = document.getElementsByClassName("generate-rainbow");
+
+    for( var element of multiple)
+    {
+      //console.log(element);
+      var preparedHtml = element.textContent.split('').map((e,i) => `<span class="uprun-status-${(Math.floor(Math.random() * 8))+1}">${e}</span>`).join("");
+      element.innerHTML = preparedHtml;
+
+    }
+
+  }
+ </script>
+<body onload="search_where_to_generate_rainbow()">
+  <h1 class="generate-rainbow">Logiverse café</h1>
 <a
   href="https://github.com/TodePond/TodePondDotCom/blob/main/lab/login/"
   style="float: right; position: relative; top: -2px"
@@ -52,7 +69,7 @@
 >
 
 <!-- Login screen -->
-<header>
+<header style="display: none;">
   <label for="username">Public username</label>
   <input type="text" id="username" name="username" autocomplete="off" />
   <br /><br />
@@ -70,13 +87,16 @@
 <!-- Statuses get put inside this -->
 <main></main>
 
+</body>
+
+
 <!----------------------------------------------------->
 <!--------------- behaviour stuff ---------------->
 <!----------------------------------------------------->
 <!----------------------------------------------------->
 <script type="module">
   import { config } from "./logiverse.js";
-  const PAGE_PATH = "/lab/login/";
+  const PAGE_PATH = "/logiverse/logiverse.html";
 
   const refreshSign = document.querySelector("#refresh-sign");
   const loadingFeed = document.querySelector("#loading-feed");
@@ -448,8 +468,11 @@
         break;
       }
       status.className = "post-" + entry.username + "@" + entry.instance;
+      
+      var selectedColorIndex = Math.floor(entry.timestamp.getSeconds() % 8) + 1;
       status.classList.add("status");
       status.classList.add("instance-" + entry.instance);
+      status.classList.add(`uprun-status-${selectedColorIndex}`);
       const strong = status.querySelector("strong");
       status.id = "post-" + entry.username + "@" + entry.instance;
       strong.className = "name-" + entry.username + "@" + entry.instance;
@@ -458,13 +481,24 @@
       h3.className = "title-" + entry.username + "@" + entry.instance;
       h3.classList.add("post-title");
 
-      const span = status.querySelector("span");
+      const span_time = status.querySelector(".user-time");
+      var month_formatted = (entry.timestamp.getMonth()+1).toString().padStart(2, '0');
+      var day_formatted = entry.timestamp.getDate().toString().padStart(2, '0');
+      const date_formatted = `${entry.timestamp.getFullYear()}-${month_formatted}-${day_formatted}`;
+      const time_formatted = `${entry.timestamp.getHours().toString().padStart(2, '0')}h:${entry.timestamp.getMinutes().toString().padStart(2, '0')}m:${entry.timestamp.getSeconds().toString().padStart(2, '0')}s`;
+
+
+
+      span_time.innerHTML = ` on ${date_formatted} ${time_formatted} wrote:`;
+
+      const span = status.querySelector(".user-status");
       span.innerHTML = getHtmlFromMarkdown(entry.status);
       if (entry.username === config.instance_admin) {
         // protip: log from individual user
         // console.log(entry.status);
       }
       span.className = "status-" + entry.username + "@" + entry.instance;
+      span.classList.add("user-status");
 
       const img = status.querySelector("img.gif");
       img.src = entry.gif ? `https://todepond.com/image/${entry.gif}.gif` : "";
@@ -504,6 +538,7 @@
       const p = document.createElement("p");
       p.className = "post-" + entry.username + "@" + entry.instance;
       p.classList.add("status");
+
       const strong = document.createElement("strong");
       strong.textContent = entry.username + "@" + entry.instance;
       strong.className = "name-" + entry.username + "@" + entry.instance;
@@ -513,10 +548,29 @@
       h3.classList.add("post-title");
       p.appendChild(h3);
       h3.appendChild(strong);
+      const span_time = document.createElement("span");
+
+      var date = new Date(entry.timestamp);
+      var month_formatted = (date.getMonth()+1).toString().padStart(2, '0');
+      var day_formatted = date.getDate().toString().padStart(2, '0');
+      const date_formatted = `${date.getFullYear()}-${month_formatted}-${day_formatted}`;
+      const time_formatted = `${date.getHours().toString().padStart(2, '0')}h:${date.getMinutes().toString().padStart(2, '0')}m:${date.getSeconds().toString().padStart(2, '0')}s`;
+
+
+
+      span_time.innerHTML = ` on ${date_formatted} ${time_formatted} wrote:`;
+
+      
+      //span_time.innerHTML = " on " + entry.timestamp + " wrote:";
+      span_time.classList.add("user-time");
+      h3.appendChild(span_time)
+
       const br = document.createElement("br");
       p.appendChild(br);
       const span = document.createElement("span");
+      
       span.className = "status-" + entry.username + "@" + entry.instance;
+      span.classList.add("user-status");
       span.innerHTML = getHtmlFromMarkdown(entry.status);
       span.style.maxHeight = "90px";
       span.style.overflowY = "auto";
@@ -857,6 +911,7 @@
   // });
   // }
 
+  var allowReply = false;
   function addUserActions({
     userActionsElement,
     username,
@@ -873,7 +928,11 @@
       statusInput.value = `@${username}@${instance} `;
       statusInput.focus();
     });
-    userActionsElement.appendChild(replyButton);
+    if (allowReply)
+    {
+      userActionsElement.appendChild(replyButton);
+    }
+    
 
     const likeButton = document.createElement("button");
     likeButton.textContent = "Like";
