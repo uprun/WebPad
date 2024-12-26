@@ -554,7 +554,7 @@
       var month_formatted = (date.getMonth()+1).toString().padStart(2, '0');
       var day_formatted = date.getDate().toString().padStart(2, '0');
       const date_formatted = `${date.getFullYear()}-${month_formatted}-${day_formatted}`;
-      const time_formatted = `${date.getHours().toString().padStart(2, '0')}h:${entry.timestamp.getMinutes().toString().padStart(2, '0')}m:${entry.timestamp.getSeconds().toString().padStart(2, '0')}s`;
+      const time_formatted = `${date.getHours().toString().padStart(2, '0')}h:${date.getMinutes().toString().padStart(2, '0')}m:${entry.timestamp.getSeconds().toString().padStart(2, '0')}s`;
 
 
 
