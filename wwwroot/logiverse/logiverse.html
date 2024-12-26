@@ -483,7 +483,7 @@
 
       const span_time = status.querySelector(".user-time");
 
-      const time_formatted = `${entry.timestamp.getFullYear()}-${entry.timestamp.get}`
+      const time_formatted = `${entry.timestamp.getFullYear()}-${entry.timestamp.getMonth()+1}-${}`
 
       span_time.innerHTML = " on " + entry.timestamp + " wrote:";
 
