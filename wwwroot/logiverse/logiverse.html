@@ -482,8 +482,9 @@
       h3.classList.add("post-title");
 
       const span_time = status.querySelector(".user-time");
-
-      const date_formatted = `${entry.timestamp.getFullYear()}-${entry.timestamp.getMonth()+1}-${entry.timestamp.getDate()}`
+      var month_formatted = (entry.timestamp.getMonth()+1).toString().padStart(2, '0');
+      var day_formatted = entry.timestamp.getDate().toString()
+      const date_formatted = `${entry.timestamp.getFullYear()}-${month_formatted}-${}`
 
       span_time.innerHTML = ` on ${date_formatted} wrote:`;
 
