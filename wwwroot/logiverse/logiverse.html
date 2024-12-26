@@ -481,6 +481,8 @@
       h3.className = "title-" + entry.username + "@" + entry.instance;
       h3.classList.add("post-title");
 
+      const span = status.querySelector(".user-status");
+
       span_time.innerHTML = " on " + entry.timestamp + " wrote:";
       span_time.classList.add("user-time");
 
