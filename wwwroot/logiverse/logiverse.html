@@ -484,7 +484,6 @@
       const span_time = status.querySelector(".user-time");
 
       span_time.innerHTML = " on " + entry.timestamp + " wrote:";
-      span_time.classList.add("user-time");
 
       const span = status.querySelector(".user-status");
       span.innerHTML = getHtmlFromMarkdown(entry.status);
