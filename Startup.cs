@@ -20,7 +20,7 @@ namespace WebPad
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _bundle_Watcher.Start();
+            //_bundle_Watcher.Start();
         }
 
         private static int homePageCounter = 0;
