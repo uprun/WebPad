@@ -14,9 +14,9 @@ lookup.pushToSearchNotesQueryText = function(query)
     
     
     
-    lookup.stackSearchNotesQuery.push(
-        current_scroll_state
-    );
+    // lookup.stackSearchNotesQuery.push(
+    //     current_scroll_state
+    // );
 
     lookup.first_to_render_note_data_stringified = undefined;
     lookup.first_to_render_note_globalBottom = 0;
