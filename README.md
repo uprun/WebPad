@@ -5,7 +5,11 @@ Try it now at https://uprun.github.io/WebPad/wwwroot/bundle_ideas.html
 
 The main motto:
 
-[YAnGNI] : You Are not Gonna Need It 
+1) [YAnGNI] : You Are not Gonna Need It 
+2) functions and files of less than 60 lines
+3) names should be compact
+4) no usage of "and" in names
+
 
 # Support on Patreon
 
