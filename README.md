@@ -9,6 +9,7 @@ The main motto:
 2) functions and files of less than 60 lines
 3) names should be compact
 4) no usage of "and" in names
+5) ideally amount of files should be really small as well, maybe 10-20
 
 
 # Support on Patreon
