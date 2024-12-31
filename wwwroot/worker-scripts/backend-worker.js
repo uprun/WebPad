@@ -7,7 +7,6 @@ function fake_backend_worker()
 <lisperanto-just-paste src="js/model_Card.js" />
 <lisperanto-just-paste src="js/model_ColorPreset.js" />
 <lisperanto-just-paste src="js/model_Operation.js" />
-<lisperanto-just-paste src="js/get_Operation_Index.js" />
 <lisperanto-just-paste src="js/migrate_to_Operations.js" />
 <lisperanto-just-paste src="js/GetRandomColor.js" />
 <lisperanto-just-paste src="js/findNodeById.js" />
