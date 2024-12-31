@@ -17,15 +17,7 @@ lookup.import = function()
                     typeof(parsed.Connections) !== 'undefined'
                 )
                 {
-                    var data = {};
-                    data.notes = parsed.Notes;
-                    data.connections = parsed.Connections
-                    lookup.backendWorker.addListener('populate.finished', function()
-                    {
-                        console.log('populate.finished');
-                        lookup.backendWorker.sendQuery('migrate_to_Operations');
-                    });
-                    lookup.backendWorker.sendQuery('populate', data);
+                    alert('Notes and Connections file is not supported anymore')
                 }
                 if(typeof(parsed.Operations) !== 'undefined')
                 {

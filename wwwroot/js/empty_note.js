@@ -1,9 +1,5 @@
 lookup.empty_note = 
 {
-    "id": {
-        "is_local": true,
-        "prefix": "to-be-defined"
-    },
     "name": "create",
     "data": {
         "text": "",
