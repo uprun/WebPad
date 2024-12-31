@@ -495,26 +495,6 @@ lookup.send_to_worker_update_for_option_use_Japanese_tokeniser = function()
     }
     
 };
-lookup.find_aliases = function(query)
-    {
-        // backend-worker context
-        if ("Aliases" in lookup)
-        {}
-        else
-        {
-            lookup.Aliases = {};
-        }
-        query = query.trim().toLowerCase();
-        const found_aliases = lookup.Aliases[query];
-        if(typeof(found_aliases) === 'undefined')
-        {
-            return [];
-        }
-        else
-        {
-            return Object.getOwnPropertyNames(found_aliases).filter(element => found_aliases[element]);
-        }
-    };
 lookup.import_Operations = function(data) {
     // needed in order to know when to call 'regenerate_Aliases'
 
@@ -636,15 +616,12 @@ lookup
                 }
                 else
                 {
-                    const first_jump = lookup.find_aliases(search_query);
-                    const second_jump = first_jump.flatMap(first => lookup.find_aliases(first));
                     // [2022-01-09] Aliases should search only by backward-index (from word to note)
                     // [2022-01-09] if search query matches any present word then it should search by word-backward-index
-                    var aliases = [].concat([search_query], first_jump, second_jump)
+                    var aliases = [search_query]
                         .filter(query => query.length > 0);
                     var reduced = aliases.reduce((ac, elem) => { ac[elem] = true; return ac;}, {});
                     aliases = Object.getOwnPropertyNames(reduced);
-                    console.log(aliases);
                     // classic search approach
                     const filtered_operations = ko.utils.arrayFilter
                     (

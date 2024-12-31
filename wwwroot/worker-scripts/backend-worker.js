@@ -17,7 +17,6 @@ function fake_backend_worker()
 <lisperanto-just-paste src="js/empty_note.js" />
 <lisperanto-just-paste src="js/option_show_help_demo_notes.js" />
 <lisperanto-just-paste src="js/option_use_Japanese_tokeniser.js" />
-<lisperanto-just-paste src="js/find_aliases.js" />
 <lisperanto-just-paste src="js/import_Operations.js" />
 <lisperanto-just-paste src="js/populate_Aliases.js" />
 <lisperanto-just-paste src="js/regenerate_Aliases.js" />
@@ -108,15 +107,12 @@ lookup
                 }
                 else
                 {
-                    const first_jump = lookup.find_aliases(search_query);
-                    const second_jump = first_jump.flatMap(first => lookup.find_aliases(first));
                     // [2022-01-09] Aliases should search only by backward-index (from word to note)
                     // [2022-01-09] if search query matches any present word then it should search by word-backward-index
-                    var aliases = [].concat([search_query], first_jump, second_jump)
+                    var aliases = [search_query]
                         .filter(query => query.length > 0);
                     var reduced = aliases.reduce((ac, elem) => { ac[elem] = true; return ac;}, {});
                     aliases = Object.getOwnPropertyNames(reduced);
-                    console.log(aliases);
                     // classic search approach
                     const filtered_operations = ko.utils.arrayFilter
                     (
