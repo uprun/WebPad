@@ -251,14 +251,6 @@ lookup.prefill_Operation = function(self, abc) {
     }
     );
 }
-lookup.get_Operation_Index = function() {
-    var toReturn = 
-    {
-        is_local: true,
-        prefix: "to-be-defined"
-    }
-    return toReturn;
-};
 lookup.GetRandomColor = function() {
     var selectedColorIndex = Math.floor(Math.random() * lookup.ColorPresets().length);
     var selectedColor = lookup.ColorPresets()[selectedColorIndex];
