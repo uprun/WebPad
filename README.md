@@ -1,7 +1,11 @@
 # WebPad
-Micro-blog with easy tag navigation.
+nano wiki
 
-Try it now at https://webpad.com.ua
+Try it now at https://uprun.github.io/WebPad/wwwroot/bundle_ideas.html
+
+The main motto:
+
+[YAnGNI] : You Are not Gonna Need It 
 
 # Support on Patreon
 
