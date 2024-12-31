@@ -1,3 +1,0 @@
-lookup.pushToHistory = function(item) {
-    
-};
