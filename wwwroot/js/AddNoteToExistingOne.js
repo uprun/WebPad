@@ -33,11 +33,6 @@ lookup.AddNoteToExistingOne = function() {
         };
         var operation =
         {
-            id: 
-            {
-                is_local: true,
-                prefix: "to-be-defined"
-            },
             name: isQuoteEdit ? 'quote-edit' : 'quote',
             data: data,
             time: new Date().toISOString()

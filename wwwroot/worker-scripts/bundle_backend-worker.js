@@ -501,15 +501,6 @@ lookup.import_Operations = function(data) {
     lookup.populate_Operations(data);
 
 };
-lookup.remove_Alias = function(left, right)
-{
-    // backend-worker context
-    if( typeof(lookup.Aliases[left]) === 'undefined')
-    {
-        lookup.Aliases[left] = {};
-    }
-    lookup.Aliases[left][right] = false;
-};
 lookup.globalOffsetY = ko.observable(0);
 lookup.globalOffsetX = ko.observable(0);
 lookup.globalMaxY = ko.observable(800);

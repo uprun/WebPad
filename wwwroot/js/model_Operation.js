@@ -66,7 +66,6 @@ lookup.model_Operation = function(data)
     {
         var toReturn =
         {
-            id: self.id,
             name: self.name,
             data: self.data,
             time: self.time

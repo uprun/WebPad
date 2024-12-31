@@ -22,7 +22,6 @@ function fake_backend_worker()
 <lisperanto-just-paste src="js/regenerate_Aliases.js" />
 <lisperanto-just-paste src="js/define_Aliases_if_needed.js" />
 <lisperanto-just-paste src="js/add_Alias.js" />
-<lisperanto-just-paste src="js/remove_Alias.js" />
 <lisperanto-just-paste src="js/globalOffsets.js" />
 
 

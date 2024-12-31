@@ -10,11 +10,6 @@ lookup.CreateNoteFromSearchQuery = function() {
         lookup.resetGlobalOffsetY();
         var operation = 
         {
-            id: 
-            {
-                is_local: true,
-                prefix: "to-be-defined"
-            },
             name: 'create',
             data: data,
             time: new Date().toISOString()
