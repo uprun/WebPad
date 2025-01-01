@@ -84,6 +84,23 @@
         
     </div>
     <div class="w3-row">
+        <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 2rem;">
+            <span >
+                <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.cancelAddingQuote">
+                    <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
+                </div>
+            </span>
+            
+        </div>
+        <div class="w3-col w3-container s6  webpad-hide-on-large-screen" style="font-size: 2rem;">
+            <span data-bind="if: $root.actualTextOfQuote().trim().length > 0 && $root.actualTextOfQuote().trim() !== $root.operationToBeQuoted().text.trim() ">
+                <div class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" style="float: right;" data-bind=" click: $root.AddNoteToExistingOne">
+                    <img src="svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" /> 
+                    <span style="color: aliceblue; font-size: 1.4rem; margin-right: 0.5rem;">
+                    </span>
+                </div>
+            </span>
+        </div>
         <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
             &NonBreakingSpace;
             <span style="float: right;">
@@ -92,7 +109,7 @@
                 </div>
             </span>
         </div>
-        <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-small-screen" style="font-size: 1.4rem;">
+        <div class="w3-col w3-container s12 m8 l6" style="font-size: 1.4rem;">
             
             <span class="webpad-brightness-dimmed webpad-button-no-border" >
                 <!-- ko ifnot: $root.isQuoteEdit -->
@@ -110,6 +127,7 @@
                             color: $root.colorOfNextQuote,
                         },">
                 <input 
+                    id="quote-or-edit-input"
                     placeholder="add quote" 
                     class="webpad-extra-information w3-animate-opacity"
                     type="text" 
@@ -131,56 +149,6 @@
             </span>
             &NonBreakingSpace;
 
-        </div>
-        <div class="w3-col w3-container s12 m8 l6 webpad-hide-on-large-screen" style="font-size: 1.4rem; margin: 0px; padding: 0px;">
-            <div class="w3-row">
-                <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 2rem;">
-                    <span >
-                        <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.cancelAddingQuote">
-                            <img src="svg/times-green.svg" class="webpad-edit-pencil" alt="cancel edit"/> 
-                        </div>
-                    </span>
-                    
-                </div>
-                <div class="w3-col w3-container s6  webpad-hide-on-large-screen" style="font-size: 2rem;">
-                    <span data-bind="if: $root.actualTextOfQuote().trim().length > 0 && $root.actualTextOfQuote().trim() !== $root.operationToBeQuoted().text.trim() ">
-                        <div class="webpad-brightness-dimmed webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" style="float: right;" data-bind=" click: $root.AddNoteToExistingOne">
-                            <img src="svg/check.svg" class="webpad-edit-pencil" alt="Apply edit" /> 
-                            <span style="color: aliceblue; font-size: 1.4rem; margin-right: 0.5rem;">
-                            </span>
-                        </div>
-                    </span>
-                </div>
-                <div class="w3-col w3-container s12 webpad-hide-on-large-screen" style="font-size: 1.4rem;">
-                    
-                    <span class="webpad-brightness-dimmed webpad-button-no-border" >
-                        <!-- ko ifnot: $root.isQuoteEdit -->
-                        <img src="svg/quote-left-sky.svg" class="webpad-edit-pencil prevent-select" alt="Add information" /> 
-                        <!-- /ko -->
-                        <!-- ko if: $root.isQuoteEdit -->
-                        <img src="svg/pencil-alt-yellow.svg" class="webpad-edit-pencil prevent-select" alt="Edit"/> 
-                        <!-- /ko -->
-                    </span>
-                    
-                    <span style="width: calc(100% - 2em);" class="webpad-break-words-node"
-                        data-bind="
-                                style:
-                                {
-                                    color: $root.colorOfNextQuote,
-                                },">
-                        <input 
-                            placeholder="add quote" 
-                            class="webpad-extra-information w3-animate-opacity"
-                            type="text" 
-                            data-bind="
-                                textInput:  $root.actualTextOfQuote,
-                                event: {keypress: $root.additionalInfoKeyPress}, 
-                                hasFocus: true
-                                " 
-                        />
-                    </span>
-                </div>
-            </div>
         </div>
     </div>
 </div>
