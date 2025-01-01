@@ -1,6 +1,6 @@
 lookup.operationToBeQuoted = ko.observable(undefined);
 lookup.actualTextOfQuote = ko.observable(undefined);
-lookup.colorOfNextQuote = ko.observable(undefined);
+lookup.colorOfNextQuote = ko.observable(lookup.GetRandomColor().Color());
 lookup.isQuoteEdit = ko.observable(false);
 
 lookup.beginToQuoteText = function(data)

@@ -13,7 +13,6 @@ function ConnectedNotesViewModel()
     lookup.apply_saved_option_show_help_demo_notes();
     lookup.apply_saved_option_use_Japanese_tokeniser();
 
-    lookup.populateColorPresets();
 
     lookup.backendWorker = new fake_backend_worker();
 

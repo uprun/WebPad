@@ -25,7 +25,11 @@
                 type="text" 
                 data-bind="
                     textInput: $root.SearchNotesQuery,
-                    event: {keypress: $root.searchBarKeyPress}
+                    event: {keypress: $root.searchBarKeyPress},
+                    style:
+                        {
+                            color: $root.colorOfNextQuote,
+                        },
                     " 
             /> 
         </div>
@@ -68,7 +72,11 @@
                         type="text" 
                         data-bind="
                             textInput: $root.SearchNotesQuery,
-                            event: {keypress: $root.searchBarKeyPress}
+                            event: {keypress: $root.searchBarKeyPress},
+                            style:
+                            {
+                                color: $root.colorOfNextQuote,
+                            },
                             " 
                     />
                 </div>

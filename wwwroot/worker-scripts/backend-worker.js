@@ -43,7 +43,6 @@ lookup.actions =
 
 lookup.hashCards = {};
 
-lookup.populateColorPresets();
 
 lookup.CurrentResultLimit = ko.observable(45);
 

@@ -2,8 +2,10 @@ lookup.CreateNoteFromSearchQuery = function() {
     var data = 
     {
         text: lookup.SearchNotesQuery().trim(),
-        color: lookup.GetRandomColor().Color()
+        color: lookup.colorOfNextQuote()
     };
+
+    lookup.colorOfNextQuote(lookup.GetRandomColor().Color());
     lookup.SearchNotesQuery("");
     if(data.text.length > 0)
     {

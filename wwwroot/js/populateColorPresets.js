@@ -31,7 +31,7 @@ lookup.data_color_presets = [
         background: "inherit",
         color: "#ff8f95" 
     }
-];;
+];
 
 lookup.populateColorPresets = function()
 {
@@ -44,4 +44,6 @@ lookup.populateColorPresets = function()
     ko.utils.arrayPushAll(lookup.ColorPresets, toAddColors);
 
 };
+
+lookup.populateColorPresets();
 
