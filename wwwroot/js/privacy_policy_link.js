@@ -5,16 +5,16 @@ lookup.privacy_policy_link = ko.computed(function()
         //&& window.cordova.platformId !== "electron"
         if(lookup.platform_is_cordova_electron_mac())
         {
-            return "file:///Applications/WebPad.app/Contents/Resources/app.asar/privacy_policy_mac.html";
+            return "file:///Applications/WebPad.app/Contents/Resources/app.asar/privacy-policy/privacy_policy_mac.html";
         }
         else
         {
-            return "file:///android_asset/www/privacy_policy_android.html";
+            return "file:///android_asset/www/privacy-policy/privacy_policy_android.html";
         }
         
     }
     else
     {
-        return "/privacy_policy.html";
+        return "privacy-policy/privacy_policy.html";
     }
 });
