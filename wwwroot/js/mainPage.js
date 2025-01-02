@@ -135,10 +135,7 @@ function ConnectedNotesViewModel()
     {
         lookup.backendWorker.sendQuery("SetCurrentResultLimit", value);
     };
-
-    if(typeof(Worker) == "undefined") {
-        console.log("Failed to find Worker.");
-    }
+    
     if(!lookup.localStorage) {
         console.log("Local web-storage is unavailable.");
     }
