@@ -7,9 +7,6 @@ lookup.on_resize = function()
     search_results.style.left = spare_size + "px";
     console.log("on_resize");
 
-    
-    let visible_note_info = {};
-    lookup.set_visible_note_information(visible_note_info);
     if (lookup.option_show_help_demo_notes())
     {
         lookup.set_option_show_help_demo_notes_to_false();
@@ -18,7 +15,6 @@ lookup.on_resize = function()
     {
         lookup.set_option_show_help_demo_notes_to_true();
     }
-    lookup.restore_first_to_render_note_information(visible_note_info);
     if (lookup.option_show_help_demo_notes())
     {
         lookup.set_option_show_help_demo_notes_to_false();

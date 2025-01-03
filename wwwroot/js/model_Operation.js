@@ -1,43 +1,10 @@
 lookup.model_Operation = function(data)
 {
     var self = this;
-    self.id = data.id;
     self.name = data.name;
     self.data = data.data;
     self.time = data.time;
 
-    self.bottom_anchor = ko.observable(true);
-    self.offset = ko.observable(0);
-    self.offset_bottom = ko.computed(() => {
-        if (self.bottom_anchor()) return self.offset();
-        return  lookup.cards_container_height() - self.offset() - self.offsetHeight();
-    });
-    
-    self.offsetHeight = ko.observable(0);
-
-    self.globalOffset = ko.computed(() => {
-        if (self.bottom_anchor()) return self.offset() + lookup.globalOffsetY();
-        return self.offset() - lookup.globalOffsetY();
-    } );
-
-    self.on_screen_top_measured_from_bottom = ko.computed(() => {
-        if (self.bottom_anchor()) return self.globalOffset() + self.offsetHeight();
-        return self.offset_bottom() + lookup.globalOffsetY() + self.offsetHeight();
-    });
-
-    self.on_screen_bottom_measured_from_bottom = ko.computed(() => {
-        if (self.bottom_anchor()) return self.globalOffset();
-        return self.offset_bottom() + lookup.globalOffsetY();
-    });
-
-    self.visible = ko.computed(() => {
-         var top = self.on_screen_top_measured_from_bottom();
-         var bottom = self.on_screen_bottom_measured_from_bottom();
-         var height = lookup.cards_container_height();
-         // this is basically an inverse of invisibility rules
-         var visible = top >= 0 && bottom <= height;
-         return visible;
-        });
 
     self.createDate = new Date(self.time);
 
@@ -71,13 +38,6 @@ lookup.model_Operation = function(data)
             time: self.time
         };
         return toReturn;
-    };
-
-    self.toolBoxVisible = ko.observable(false);
-    self.switchToolBoxVisibility = function()
-    {
-        self.toolBoxVisible(!self.toolBoxVisible());
-        return true;
     };
 
     self.toTupleKey = function()
