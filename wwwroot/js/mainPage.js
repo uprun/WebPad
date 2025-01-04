@@ -46,31 +46,6 @@ function ConnectedNotesViewModel()
         
     };
 
-    lookup.backendWorker.addListener('LimitedFilteredOperations.changed.event', function(cards) 
-    {
-        return;
-        var start = new Date;
-        console.log("start", start);
-        var next = new Date;
-        console.log("removal diff", next - start)
-        start = next;
-        var processed = ko.utils.arrayMap(cards, function(item) {
-            var operation = new lookup.model_Operation(item)
-            return operation;
-        });
-        //processed.reverse();
-        next = new Date
-        console.log("creation diff", next - start)
-        start = next;
-        //ko.utils.arrayPushAll(lookup.LimitedFilteredOperations, processed);
-        lookup.operationsToAddGradually = processed;
-        if ( typeof(lookup.operationsToAddGradually_timer) === "undefined")
-            {
-                lookup.operationsToAddGradually_timer = setTimeout(lookup.operationsToAddGradually_handler, lookup.operationsToAddGradually_miliseconds);
-            }
-        return ;
-    });
-
     if(!lookup.localStorage) {
         console.log("Local web-storage is unavailable.");
     }

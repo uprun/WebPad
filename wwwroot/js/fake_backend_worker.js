@@ -121,17 +121,14 @@ lookup
     });
 
 
-    lookup.LimitedFilteredOperations
-        .subscribe(function(changes)
-            {
-                console.log('LimitedFilteredOperations changed');
-                var toProcess = lookup.LimitedFilteredOperations();
-                var toSend = ko.utils.arrayMap(toProcess, function(item) {
-                    return item.ConvertToJs();
-                });
-                self.reply('LimitedFilteredOperations.changed.event', toSend);
-
-            });
+    lookup.ReversedLimitedFilteredOperations = ko.pureComputed(
+        function()
+        {
+            var result = lookup.LimitedFilteredOperations();
+            result.reverse();
+            return result;
+        }
+    );
 
     lookup.ResetCurrentResultLimit = function()
     {
