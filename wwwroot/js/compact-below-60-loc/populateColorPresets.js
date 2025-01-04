@@ -1,37 +1,31 @@
 lookup.data_color_presets = [ 
     { 
-        background: "inherit",
         color: "#ffa26b" 
     },
     { 
-        background: "inherit",
         color: "#84bfff" 
     },
     { 
-        background: "inherit",
         color: "#ff94eb" 
     },
     { 
-        background: "inherit",
         color: "#64e05e" 
     },
     { 
-        background: "inherit",
         color: "#f8e755" 
     },
     { 
-        background: "inherit",
         color: "#ffbbdc" 
     },
     { 
-        background: "inherit",
         color: "#d190ff" 
     },
     { 
-        background: "inherit",
         color: "#ff8f95" 
     }
 ];
+
+lookup.ColorPresets = ko.observableArray([]);
 
 lookup.populateColorPresets = function()
 {
@@ -46,4 +40,3 @@ lookup.populateColorPresets = function()
 };
 
 lookup.populateColorPresets();
-

@@ -6,10 +6,10 @@ Try it now at https://uprun.github.io/WebPad/wwwroot/bundle_ideas.html
 The main motto:
 
 1) [YAnGNI] : You Are not Gonna Need It 
-2) functions and files of less than 60 lines
+2) files of less than 60 lines, ideally 43
 3) names should be compact
 4) no usage of "and" in names
-5) ideally amount of files in [module or folder] should be really small as well, maybe 10-20
+5) amount of files in folder less than 20
 
 
 # Support on Patreon

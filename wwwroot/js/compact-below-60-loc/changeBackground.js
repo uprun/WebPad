@@ -13,8 +13,6 @@ lookup.changeBackgroundToMidnight = function()
     lookup.localStorage["backgroundColor"] = background;
 };
 
-
-
 lookup.changeBackgroundToDefault = function() 
 {
     var background = "#000000";

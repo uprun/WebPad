@@ -1,0 +1,1 @@
+lookup.SearchNotesQuery = ko.observable("");
