@@ -68,6 +68,7 @@
 
     <script language="JavaScript" type="text/javascript" src="js/compact-below-60-loc/defineLocalStorage.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/jump-to-card/jumpToCardFromWord.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/jump-to-card/jump_to_search_from_symbol.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/compact-below-60-loc/open_url.js" ></script>
 
     <script language="JavaScript" type="text/javascript" src="js/search-related/SearchNotesQuery.js" ></script>
@@ -118,6 +119,8 @@
     <script language="JavaScript" type="text/javascript" src="js/to-mention-in-menu/codeContributors.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/to-mention-in-menu/librariesInUse.js" ></script>
 
+    <script language="JavaScript" type="text/javascript" src="js/search-related/all_substrings_with_index_to_preserve.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="js/search-related/unique_strings.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/search-related/CurrentResultLimit.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/compact-below-60-loc/mainPage.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/compact-below-60-loc/document_ready_ideas.js" ></script>
@@ -132,10 +135,22 @@
     <script language="JavaScript" type="text/javascript" src="js/search-related/FilteredOperations.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/search-related/LimitedFilteredOperations.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/search-related/hidden_operations_count.js" ></script>
-    <script language="JavaScript" type="text/javascript" src="js/search-related/ReversedLimitedFilteredOperations.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/compact-below-60-loc/fake_backend_worker.js"></script>
 
 </head>
+
+<script type="text/html" id="text-symbol-by-symbol-template">
+    <!-- ko foreach: $data.all_symbols --><span class="webpad-break-words-node" data-bind="
+            text: $data,
+            style:
+            {
+                color: $parent.color,
+                'border-color': $parent.color_border,
+                'border-bottom-style': 'none',
+            },
+            click: $root.jump_to_search_from_symbol"></span><!-- /ko -->
+
+</script>
 
 <script type="text/html" id="text-with-dictionary-light-template">
     <!-- ko foreach: $data.textSplitted -->  
@@ -173,8 +188,7 @@
     <div
         class="webpad-sky-frame webpad-brightness-dimmed"
         style=" font-size: 1rem; margin-left: 1rem; margin-right: 1rem; padding-right: 0.5rem; padding-left: 0.5rem;" >
-            <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data }  -->
-            <!-- /ko -->
+            <!-- ko template: { name: 'text-symbol-by-symbol-template', data: $data }  --><!-- /ko -->
     </div>
     <div class="webpad-hide-on-small-screen" style="height: 1rem;">
     </div>
@@ -189,8 +203,7 @@
             <div style="font-size: 0.6rem; text-align: left;"><span class="w3-animate-opacity" style="color: rgb(221, 150, 63);" data-bind="text: $data.createDateToOrder"></span></div>
             <span data-bind="if: name === 'quote' || name === 'quote-edit' " >
                 <div class="webpad-brightness-dimmed " data-bind="css:{ 'webpad-quote-edit' : name === 'quote-edit', 'webpad-quote' : name === 'quote'}">
-                    <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data.quoted }  -->
-                    <!-- /ko -->
+                    <!-- ko template: { name: 'text-symbol-by-symbol-template', data: $data.quoted }  --><!-- /ko -->
                     <div style="margin-top: 0.5rem;">
                         <span  class="w3-animate-opacity webpad-brightness-dimmed">
                             <span class="webpad-button-no-border webpad-brightness-dimmed webpad-golden-frame prevent-select cursor-pointer" 
@@ -210,8 +223,7 @@
                 </div>
             </span>
             <span >
-                <!-- ko template: { name: 'text-with-dictionary-light-template', data: $data }  -->
-                <!-- /ko -->
+                <!-- ko template: { name: 'text-symbol-by-symbol-template', data: $data }  --><!-- /ko -->
                 
                 <div style="margin-top: 0.5rem;">
                     <span  class="w3-animate-opacity webpad-brightness-dimmed">
@@ -615,7 +627,7 @@ flex-direction: column-reverse;">
     <!-- ko template: 
             { 
                 name: 'card-template',
-                foreach: ReversedLimitedFilteredOperations
+                foreach: LimitedFilteredOperations
             } -->
     <!-- /ko -->
     <div id="show-more"  data-bind="template: { name: 'show-more-template' } " ></div>
@@ -639,14 +651,14 @@ flex-direction: column-reverse;">
     style=" bottom: 0rem; margin-bottom: 0.2em;" >
     <div class="w3-row">
         <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 2rem;">
-            <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
+            <span data-bind="if: $root.SearchNotesQuery().length > 0">
                 <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.rollbackSearchNotesQuery">
                     <img src="svg/times-close-menu.svg" class="webpad-edit-pencil" style=" margin-left: 0.5rem; margin-right: 0.5rem;" alt="create"/> 
                 </div>
             </span>
         </div>
         <div class="w3-col w3-container s6  webpad-hide-on-large-screen" style="font-size: 2rem;">
-            <span data-bind="if: $root.SearchNotesQuery().trim().length > 0">
+            <span data-bind="if: $root.SearchNotesQuery().length > 0">
                 <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" style="float: right;" data-bind=" click: $root.CreateNoteFromSearchQuery">
                     <img src="svg/plus.svg" class="webpad-edit-pencil" style=" margin-left: 0.5rem; margin-right: 0.5rem;" alt="create"/> 
                 </div>
@@ -654,7 +666,7 @@ flex-direction: column-reverse;">
         </div>
         <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
             &NonBreakingSpace;
-            <span style="float: right;" data-bind="if: $root.SearchNotesQuery().trim().length > 0">
+            <span style="float: right;" data-bind="if: $root.SearchNotesQuery().length > 0">
                 <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.rollbackSearchNotesQuery">
                     <img src="svg/times-close-menu.svg" class="webpad-edit-pencil" style=" margin-left: 0.5rem; margin-right: 0.5rem;" alt="create"/> 
                 </div>
@@ -677,7 +689,7 @@ flex-direction: column-reverse;">
             /> 
         </div>
         <div class="w3-col w3-container s0 m2 l3 webpad-hide-on-small-screen" style="font-size: 2rem; margin: 0px; padding: 0px;">
-            <span style="float: left;" data-bind="if: $root.SearchNotesQuery().trim().length > 0">
+            <span style="float: left;" data-bind="if: $root.SearchNotesQuery().length > 0">
                 <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.CreateNoteFromSearchQuery">
                     <img src="svg/plus.svg" class="webpad-edit-pencil " style=" margin-left: 0.5rem; margin-right: 0.5rem;" alt="create"/> 
                 </div>

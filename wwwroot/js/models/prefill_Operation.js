@@ -12,6 +12,8 @@ lookup.prefill_Operation = function(self, abc) {
 
         self.color_border = lookup.form_rgba_string_constant(color_with_components, '0.6')
     }
+
+    self.all_symbols = abc.text.split("");
     var all_words = abc.text.split(" ");
 
     //added by  https://github.com/uprun/WebPad/commit/94fd9c41916641fbafc4fb8d62f639e384f31349?diff=split&w=1

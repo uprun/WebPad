@@ -1,7 +1,7 @@
 lookup.CreateNoteFromSearchQuery = function() {
     var data = 
     {
-        text: lookup.SearchNotesQuery().trim(),
+        text: lookup.SearchNotesQuery(),
         color: lookup.colorOfNextQuote()
     };
 

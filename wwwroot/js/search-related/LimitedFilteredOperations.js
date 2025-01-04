@@ -1,10 +1,11 @@
 lookup.LimitedFilteredOperations = ko.pureComputed(function()
     {
-        var startIndex = lookup.FilteredOperations().length - lookup.CurrentResultLimit()
-        if(startIndex < 0)
+        var to_work_with = lookup.FilteredOperations();
+        var selected_length = lookup.CurrentResultLimit();
+        if(selected_length > to_work_with.length)
         {
-            startIndex = 0;
+            selected_length = to_work_with.length;
         }
-        var result =  lookup.FilteredOperations().slice(startIndex);
+        var result =  to_work_with.slice(0,selected_length);
         return result;
     });
