@@ -1,7 +1,7 @@
 # WebPad
 nano wiki
 
-Try it now at https://uprun.github.io/WebPad/wwwroot/bundle_ideas.html
+Try it now at https://uprun.github.io/WebPad/wwwroot/WebPad-mini-wiki.html
 
 The main motto:
 
