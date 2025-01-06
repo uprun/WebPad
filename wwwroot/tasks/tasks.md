@@ -3,3 +3,5 @@ maybe I need to fix scroll
 === for next release
 [] do all actions only with keyboard
 [] migrate storage of notes to files
+[] maybe add possibility to resurface notes
+[] add support of Smalltalk-ish language
