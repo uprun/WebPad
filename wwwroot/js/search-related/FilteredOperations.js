@@ -3,10 +3,10 @@ lookup.FilteredOperations = ko.pureComputed
             function()
             {
                 var search_query = lookup.SearchNotesQuery().toLowerCase();
-                var before_reverse = lookup.Operations_And_Options();
                 var operationsToWorkWith =  lookup.Operations_And_Options();
                 var reversed_operations = [];
-                for (var index = operationsToWorkWith.length - 1; index >= 0; index --)
+                // show just last 200 items
+                for (var index = operationsToWorkWith.length - 1; index >= 0 && index >= operationsToWorkWith.length - 200 ; index --)
                 {
                     reversed_operations.push(operationsToWorkWith[index]);
                 }
@@ -16,8 +16,6 @@ lookup.FilteredOperations = ko.pureComputed
                 }
                 else
                 {
-                    // [2022-01-09] Aliases should search only by backward-index (from word to note)
-                    // [2022-01-09] if search query matches any present word then it should search by word-backward-index
                     var index_to_preserve = search_query.length / 2;
                     if (lookup.Index_to_preserve() >= 0)
                     {
@@ -30,63 +28,29 @@ lookup.FilteredOperations = ko.pureComputed
 
                     for (var single_search of mupliple_searches)
                     {
-                        const filtered_operations = ko.utils.arrayFilter
-                        (
-                            reversed_operations,
-                            function(item, index)
+                        for(var search_index = operationsToWorkWith.length - 1; search_index >= 0; search_index --)
+                        {
+                            var item = operationsToWorkWith[search_index];
+                            var searchResult = lookup.does_it_match_search(item, single_search);
+                            if ( searchResult )
                             {
-                                if(item.name === 'create')
+                                var key = item.toTupleKey();
+                                if (key in map)
                                 {
-                                    var searchResult =  item.data.text.toLowerCase().indexOf(single_search) >= 0;
-                                    if ( searchResult )
-                                    {
-                                        var key = item.toTupleKey();
-                                        if (key in map)
-                                        {
-                                            searchResult = false;
-                                        }
-                                        else
-                                        {
-                                            map[key] = true;
-                                        }
-                                    }
-                                    return searchResult;
+                                    searchResult = false;
                                 }
                                 else
                                 {
-                                    if(item.name === 'quote' || item.name === 'quote-edit')
-                                    {
-                                        var searchResult1 = item.data.quoted.text.toLowerCase().indexOf(single_search) >= 0;
-                                        var searchResult2 = item.data.current.text.toLowerCase().indexOf(single_search) >= 0;
-                                        var searchResult =  searchResult1 || searchResult2;
-                                        if ( searchResult )
-                                        {
-                                            var key = item.toTupleKey();
-                                            if (key in map)
-                                            {
-                                                searchResult = false;
-                                            }
-                                            else
-                                            {
-                                                map[key] = true;
-                                            }
-                                        }
-                                        return searchResult;
-                                    }
-                                    else
-                                    {
-                                        return false;
-                                    }
+                                    map[key] = true;
+                                    result.push(item);
                                 }
                             }
-                        );
-                        result = result.concat(filtered_operations);
-                        if (result.length > 1000)
-                        {
-                            return result;
+                            if (result.length > 1000)
+                            {
+                                return result;
+                            }
                         }
                     }
-                    // classic search approach
                     return result;
                 }
             }

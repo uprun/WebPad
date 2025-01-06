@@ -6,10 +6,10 @@ lookup.demo_notes_en = [
         },
         "name": "create",
         "data": {
-            "text": "WebPad is micro wiki",
+            "text": "WebPad is mini wiki",
             "color": "#ffa26b"
         },
-        "time": "2024-12-31T00:53:53.119Z"
+        "time": "2025-01-06T00:53:53.119Z"
     },
     {
         "id": {
