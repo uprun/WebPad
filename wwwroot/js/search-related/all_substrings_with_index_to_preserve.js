@@ -1,6 +1,5 @@
 lookup.all_substrings_with_index_to_preserve = function(search, index_to_preserve)
 {
-    search = search.substr(0, 22);
     var result = [];
     for(var start_index = 0; start_index < search.length; start_index ++)
     {
@@ -20,5 +19,6 @@ lookup.all_substrings_with_index_to_preserve = function(search, index_to_preserv
     }
     result.sort((a,b) => a.length - b.length);
     result.reverse();
+    result.push("");
     return result;
 };

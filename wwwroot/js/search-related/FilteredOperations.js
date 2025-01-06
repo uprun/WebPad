@@ -4,17 +4,6 @@ lookup.FilteredOperations = ko.pureComputed
             {
                 var search_query = lookup.SearchNotesQuery().toLowerCase();
                 var operationsToWorkWith =  lookup.Operations_And_Options();
-                var reversed_operations = [];
-                // show just last 200 items
-                for (var index = operationsToWorkWith.length - 1; index >= 0 && index >= operationsToWorkWith.length - 200 ; index --)
-                {
-                    reversed_operations.push(operationsToWorkWith[index]);
-                }
-                if(search_query.length === 0)
-                {
-                    return reversed_operations;
-                }
-                else
                 {
                     var index_to_preserve = search_query.length / 2;
                     if (lookup.Index_to_preserve() >= 0)
