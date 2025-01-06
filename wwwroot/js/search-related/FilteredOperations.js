@@ -3,11 +3,16 @@ lookup.FilteredOperations = ko.pureComputed
             function()
             {
                 var search_query = lookup.SearchNotesQuery().toLowerCase();
-                var operationsToWorkWith = lookup.Operations_And_Options();
-                operationsToWorkWith.reverse();
+                var before_reverse = lookup.Operations_And_Options();
+                var operationsToWorkWith =  lookup.Operations_And_Options();
+                var reversed_operations = [];
+                for (var index = operationsToWorkWith.length - 1; index >= 0; index --)
+                {
+                    reversed_operations.push(operationsToWorkWith[index]);
+                }
                 if(search_query.length === 0)
                 {
-                    return operationsToWorkWith;
+                    return reversed_operations;
                 }
                 else
                 {
@@ -27,7 +32,7 @@ lookup.FilteredOperations = ko.pureComputed
                     {
                         const filtered_operations = ko.utils.arrayFilter
                         (
-                            operationsToWorkWith,
+                            reversed_operations,
                             function(item, index)
                             {
                                 if(item.name === 'create')
