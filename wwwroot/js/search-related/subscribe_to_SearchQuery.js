@@ -33,6 +33,12 @@ lookup.iterative_search_loop = function()
 
 lookup.iterative_search_loop_handler = setTimeout(lookup.iterative_search_loop, 30);
 
+lookup.search_status_message = ko.observable("");
+lookup.update_search_status_message = function()
+{
+    lookup.search_status_message(`Searching ${lookup.current_search_context.single_search_index + 1} out of ${lookup.current_search_context.mupliple_searches.length} smaller searches`);
+};
+
 lookup.iterative_search = function()
 {
     var iterations_counter = 0;
@@ -49,12 +55,14 @@ lookup.iterative_search = function()
                 var time_diff_miliseconds = current_time - start_time;
                 if (time_diff_miliseconds > 30)
                 {
+                    lookup.update_search_status_message();
                     console.log("exit by time-out after", iterations_counter)
                     return;
                 }
             }
             if (lookup.FilteredOperations().length >= lookup.CurrentResultLimit())
             {
+                lookup.update_search_status_message();
                 return;
             }
 

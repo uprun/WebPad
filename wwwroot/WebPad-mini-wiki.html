@@ -265,7 +265,7 @@
                     <button  class="webpad-node webpad-green" 
                         data-bind=
                             "click: $root.ExtendCurrentResultLimit,
-                            text: 'Load next 50 out of ( ' + ($root.Operations_And_Options().length - $root.LimitedFilteredOperations().length) + ' hidden)'">
+                            text: 'Load next 50 out of ' + ($root.Operations_And_Options().length - $root.LimitedFilteredOperations().length)">
                     </button>
                 </span>
             </div>
@@ -377,7 +377,7 @@
 
             </span>
         </div>
-        <div class="w3-col w3-container s12 m12 l12 webpad-color-orange">
+        <div class="w3-col w3-container s12 m12 l12 webpad-color-orange webpad-hide-on-small-screen" data-bind="ifnot: $root.platform_is_cordova()">
             UPDATE of WARNING !!! : This website will be at the new location : <a href="https://uprun.github.io/WebPad/wwwroot/bundle_ideas.html">WebPad new</a> ; so if you are using it actively - export data [2024-12-31].
             
         </div>
@@ -652,6 +652,10 @@ flex-direction: column-reverse;">
     class="webpad-search-absolute-position" 
     style=" bottom: 0rem; margin-bottom: 0.2em;" >
     <div class="w3-row">
+        <div class="w3-col w3-container s12 m2 l3 webpad-hide-on-small-screen"></div>
+        <div class="w3-col w3-container s12 m8 l6" style="color:#f0f8ffaa;" data-bind="text: $root.search_status_message"></div></div>
+    <div class="w3-row">
+        
         <div class="w3-col w3-container s6 webpad-hide-on-large-screen" style="font-size: 2rem;">
             <span data-bind="if: $root.SearchNotesQuery().length > 0">
                 <div class="webpad-button-no-border webpad-golden-frame prevent-select cursor-pointer" data-bind=" click: $root.rollbackSearchNotesQuery">
