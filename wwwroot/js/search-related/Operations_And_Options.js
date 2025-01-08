@@ -24,3 +24,7 @@ lookup.Operations_And_Options = ko.pureComputed(
         return lookup.Operations();
     }
 );
+
+lookup.Operations_And_Options.subscribe(function() {
+    lookup.reset_current_search_context(lookup.SearchNotesQuery());
+});

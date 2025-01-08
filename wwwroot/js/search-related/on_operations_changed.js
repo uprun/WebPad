@@ -39,5 +39,6 @@ lookup.on_operations_changed = function (changes)
                 );
             lookup.backendWorker.reply('saveOperationsToStorage.event', toStoreOperations);
         }
+        lookup.reset_current_search_context(lookup.SearchNotesQuery());
     }
 };

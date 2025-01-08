@@ -6,10 +6,11 @@ Try it now at https://uprun.github.io/WebPad/wwwroot/WebPad-mini-wiki.html
 The main motto:
 
 1) [YAnGNI] : You Are not Gonna Need It 
-2) files of less than 60 lines, ideally 43
+2) files of maximum 43 lines, each line is maximum 112 characters
 3) names should be compact
 4) no usage of "and" in names
 5) amount of files in folder less than 20
+6) write notes down on interruptions
 
 
 # Support on Patreon
@@ -30,4 +31,4 @@ dotnet run
 
 ## License
 
-Copyright © Kryvonos Oleksandr 2018-2024 <oleksandr.kryvonos.ods.ua@gmail.com>. Provided under the [MIT License](http://opensource.org/licenses/MIT).
+Copyright © Kryvonos Oleksandr 2018-2025 <oleksandr.kryvonos.ods.ua@gmail.com>. Provided under the [MIT License](http://opensource.org/licenses/MIT).

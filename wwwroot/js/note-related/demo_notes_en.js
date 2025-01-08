@@ -1,80 +1,24 @@
 lookup.demo_notes_en = [
     {
-        "id": {
-            "is_local": true,
-            "prefix": "to-be-defined"
-        },
-        "name": "create",
-        "data": {
-            "text": "WebPad is mini wiki",
-            "color": "#ffa26b"
-        },
-        "time": "2025-01-06T00:53:53.119Z"
-    },
-    {
-        "id": {
-            "is_local": true,
-            "prefix": "to-be-defined"
-        },
-        "name": "create",
-        "data": {
-            "text": "actually WebPad is a non-hierarchical notes app",
-            "color": "#ffbbdc"
-        },
-        "time": "2020-04-18T14:59:51.957Z"
-    },
-    {
-        "id": {
-            "is_local": true,
-            "prefix": "to-be-defined"
-        },
-        "name": "create",
-        "data": {
-            "text": "every word is a hashtag by default, try it - click any word",
-            "color": "#84bfff"
-        },
-        "time": "2020-04-18T14:59:54.957Z"
-    },
-    {
-        "id": {
-            "is_local": true,
-            "prefix": "to-be-defined"
-        },
         "name": "quote",
         "data": {
             "quoted": {
-                "text": "you can quote",
+                "text": "WebPad is mini wiki",
                 "color": "#ff94eb"
             },
             "current": {
-                "text": "try to click on empty space",
+                "text": "here you can search with one touch",
                 "color": "#64e05e"
             }
         },
-        "time": "2020-04-18T15:04:12.836Z"
+        "time": "2025-01-07T15:04:12.836Z"
     },
     {
-        "id": {
-            "is_local": true,
-            "prefix": "to-be-defined"
-        },
         "name": "create",
         "data": {
-            "text": "app for Android is here https://play.google.com/store/apps/details?id=ua.com.webpad",
-            "color": "#ffbbdc"
-        },
-        "time": "2020-04-18T15:15:29.295Z"
-    },
-    {
-        "id": {
-            "is_local": true,
-            "prefix": "to-be-defined"
-        },
-        "name": "create",
-        "data": {
-            "text": "try out a search bar at the bottom",
+            "text": "in WebPad creation of notes is streamlined",
             "color": "#ff8f95"
         },
-        "time": "2020-04-18T15:19:04.446Z"
+        "time": "2025-01-07T15:19:04.446Z"
     }
 ];
