@@ -1,5 +1,5 @@
 I need to write down tasks and not keep them in my mind
-maybe I need to fix scroll
+remove tokenizer approach
 === for next release
 [] do all actions only with keyboard
 [] migrate storage of notes to files

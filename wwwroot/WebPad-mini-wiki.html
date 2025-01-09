@@ -158,38 +158,6 @@
 
 </script>
 
-<script type="text/html" id="text-with-dictionary-light-template">
-    <!-- ko foreach: $data.textSplitted -->  
-        <!-- ko if: $data.word.startsWith('https://') -->
-            <span class="webpad-break-words-node" data-bind="
-                text: word,
-                style:
-                {
-                    color: $parent.color,
-                    'border-color': $parent.color_border,
-                    'border-bottom-style': 'none',
-                    'word-break': word.length < 20 ? 'break-word' : 'break-all',
-                },
-                click: $root.open_url
-                    ">
-            </span>
-        <!-- /ko -->
-        <!-- ko ifnot: $data.word.startsWith('https://') -->         
-            <span class="webpad-break-words-node webpad-border-bottom-dotted" data-bind="
-                text: word,
-                style:
-                {
-                    color: $parent.color,
-                    'border-color': $parent.color_border,
-                    'border-bottom-style': 'none',
-                    'word-break': word.length < 20 ? 'break-word' : 'break-all',
-                },
-                click: $root.jumpToCardFromWord
-                    "></span>
-        <!-- /ko -->            
-    <!-- /ko -->
-</script>
-
 <script type="text/html" id="referenced-operation-template">
     <div
         class="webpad-sky-frame webpad-brightness-dimmed"
@@ -382,7 +350,7 @@
             </span>
         </div>
         <div class="w3-col w3-container s12 m12 l12 webpad-color-orange webpad-hide-on-small-screen" data-bind="ifnot: $root.platform_is_cordova()">
-            UPDATE of WARNING !!! : This website will be at the new location : <a href="https://uprun.github.io/WebPad/wwwroot/bundle_ideas.html">WebPad new</a> ; so if you are using it actively - export data [2024-12-31].
+            UPDATE of WARNING !!! : This website will be at the new location : <a href="https://uprun.github.io/WebPad/wwwroot/WebPad-mini-wiki.html">WebPad new</a> ; so if you are using it actively - export data [2024-12-31].
             
         </div>
     </div>
@@ -618,7 +586,7 @@
             For more information you can visit a website of the project <a href="https://webpad.com.ua">https://webpad.com.ua</a> <br/>
         </div>
         <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
-            <span class="webpad-color-blue" style="font-size: 1.4rem;" >Version 3.0.* [2025-01-04]</span>
+            <span class="webpad-color-blue" style="font-size: 1.4rem;" >Version 3.0.* [2025-01-09]</span>
         </div>
         
         
