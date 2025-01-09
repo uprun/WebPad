@@ -8,11 +8,11 @@ lookup.iterative_search = function()
         for( ;lookup.current_search_context.search_index >= 0; lookup.current_search_context.search_index --)
         {
             iterations_counter++;
-            if (iterations_counter % 1000 === 0)
+            if (iterations_counter % 100 === 0)
             {
                 var current_time = new Date();
                 var time_diff_miliseconds = current_time - start_time;
-                if (time_diff_miliseconds > 30)
+                if (time_diff_miliseconds > 10)
                 {
                     lookup.update_search_status_message();
                     return;
@@ -31,6 +31,7 @@ lookup.iterative_search = function()
                 {
                     lookup.current_search_context.map[key] = true;
                     lookup.FilteredOperations.push(item);
+                    return;
                 }
             }
         }
