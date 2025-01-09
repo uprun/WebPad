@@ -31,4 +31,4 @@ dotnet run
 
 ## License
 
-Copyright © Kryvonos Oleksandr 2018-2025 <oleksandr.kryvonos.ods.ua@gmail.com>. Provided under the [MIT License](http://opensource.org/licenses/MIT).
+Copyright © Kryvonos Oleksandr 2018-2025 <oleksandr.kryvonos.games.and.tools@gmail.com>. Provided under the [MIT License](http://opensource.org/licenses/MIT).
