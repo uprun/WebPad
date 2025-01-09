@@ -2,10 +2,6 @@
 lookup.librariesInUse = ko.observableArray(
     [
         {
-            "library": "TinySegmenter [Japanese tokeniser]",
-            "url": "http://chasen.org/~taku/software/TinySegmenter/"
-        },
-        {
             "library": "Knockout.js [MVVM library, two-way bindings]",
             "url": "https://knockoutjs.com/"
         },

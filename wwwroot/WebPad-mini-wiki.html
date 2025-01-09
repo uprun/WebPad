@@ -36,7 +36,6 @@
     <script src="lib/jquery/jquery.js"  lisperanto-skip-bundle="true"></script>
     
     <script src="lib/knockout/knockout-latest.debug.js"  lisperanto-skip-bundle="true"></script>
-    <script src="lib/tiny-segmenter/tiny-segmenter-0.2.0.js"  lisperanto-skip-bundle="true"></script>
 
 
 
@@ -67,7 +66,6 @@
     <script language="JavaScript" type="text/javascript" src="js/models/model_ColorPreset.js" ></script>
 
     <script language="JavaScript" type="text/javascript" src="js/compact-below-60-loc/defineLocalStorage.js" ></script>
-    <script language="JavaScript" type="text/javascript" src="js/jump-to-card/jumpToCardFromWord.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/jump-to-card/jump_to_search_from_symbol.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/compact-below-60-loc/open_url.js" ></script>
 
@@ -76,7 +74,6 @@
     <script language="JavaScript" type="text/javascript" src="js/note-related/demo_notes_en.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/note-related/empty_note.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/to-mention-in-menu/option_show_help_demo_notes.js" ></script>
-    <script language="JavaScript" type="text/javascript" src="js/to-mention-in-menu/option_use_Japanese_tokeniser.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/note-related/import_Operations.js" ></script>
     
     <script language="JavaScript" type="text/javascript" src="js/search-related/pushToSearchNotesQueryText.js" ></script>
@@ -490,39 +487,11 @@
 
         <div class="w3-col w3-container s12 m12 l12">
             <span class="webpad-color-blue" style="font-size: 1.4rem; " >
-                    Japanise tokeniser is:
-            </span>
-        </div>
-        <div class="w3-col w3-container s12 m12 l12">
-            
-            <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
-                    data-bind="
-                        click: $root.set_option_use_Japanese_tokeniser_to_false,
-                        style:
-                        {
-                            visibility: $root.option_use_Japanese_tokeniser() ? 'inherit' : 'hidden'
-                        }">
-                    on
-            </div>
-            <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
-                    data-bind="
-                        click: $root.set_option_use_Japanese_tokeniser_to_true,
-                        style:
-                        {
-                            visibility: $root.option_use_Japanese_tokeniser() ? 'hidden' : 'inherit'
-                        }">
-                    off
-            </div>
-
-        </div>
-
-        <div class="w3-col w3-container s12 m12 l12">
-            <span class="webpad-color-blue" style="font-size: 1.4rem; " >
                     Export & import:
             </span>
         </div>
         <div class="w3-col w3-container s12 m12 l12">
-            <div style="color: yellow;">All data is stored only on your device, use export regularly to perform a backup:</div>
+            <div style="color: yellow;">All data is stored <span class="webpad-color-coral" style="font-size: 1.4rem;">only on your device</span> , use export regularly to perform a backup:</div>
             <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-golden-frame webpad-color-orange prevent-select cursor-pointer" 
                     data-bind="click: $root.export">
                     export
@@ -577,13 +546,13 @@
         
         
         <address class="webpad-color-yellow" style="padding-left: 1rem; margin-bottom: 1rem;">
-            This app is created by <span class="webpad-color-coral" style="font-size: 1.4rem;">Oleksandr Kryvonos</span>, a developer from Odesa, Ukraine  <span style="font-size: 2rem;"><span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="made by Ukrainian"/></span></span>  . <br/>
+            This app was created by Ukrainian <span style="font-size: 2rem;"><span style="vertical-align: text-bottom;"><img src="svg/Flag_of_Ukraine.svg" class="webpad-svg-element " style="margin-left: 0.5rem; margin-right: 0.5rem;" alt="flag of Ukrainian"/></span></span>  - <span class="webpad-color-coral" style="font-size: 1.4rem;">Oleksandr Kryvonos</span>  . <br/>
             It is an open-source project: <a href="https://github.com/uprun/WebPad">https://github.com/uprun/WebPad</a> <br/>
             
-            if you have any suggestions feel free to e-mail me: <a href="mailto:oleksandr.kryvonos.ods.ua@gmail.com">oleksandr.kryvonos.ods.ua@gmail.com</a><br/>
+            if you have any suggestions feel free to e-mail me: <a href="mailto:oleksandr.kryvonos.games.and.tools@gmail.com">oleksandr.kryvonos.games.and.tools@gmail.com</a><br/>
         </address> 
         <div class="w3-col w3-container s12 m12 l12 webpad-color-coral" data-bind="if: $root.platform_is_cordova()">
-            For more information you can visit a website of the project <a href="https://webpad.com.ua">https://webpad.com.ua</a> <br/>
+            For more information you can visit a website of the project <a href="https://uprun.github.io/WebPad/wwwroot/WebPad-mini-wiki.html">https://uprun.github.io/WebPad/wwwroot/WebPad-mini-wiki.html</a> <br/>
         </div>
         <div class="w3-col w3-container s12 m12 l12" style="margin-top: 0.5rem;" >
             <span class="webpad-color-blue" style="font-size: 1.4rem;" >Version 3.0.* [2025-01-09]</span>
