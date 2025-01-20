@@ -18,7 +18,7 @@ namespace WebPad.Controllers
             Interlocked.Increment(ref homePageCounter);
             Console.WriteLine($"#{homePageCounter} open of \"{nameof(ideas)}\" page");
             
-            Response.Redirect("bundle_ideas.html");
+            Response.Redirect("WebPad-mini-wiki.html");
             
             return View();
         }
