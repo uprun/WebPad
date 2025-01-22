@@ -16,10 +16,6 @@ function ConnectedNotesViewModel()
     });
 
     lookup.check_platform();
-
-    if(!lookup.localStorage) {
-        console.log("Local web-storage is unavailable.");
-    }
   
     self.ApplyLookupToSelf = function()
     {
