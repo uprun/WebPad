@@ -73,7 +73,6 @@
     <script language="JavaScript" type="text/javascript" src="js/note-related/Operation_was_added.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/note-related/demo_notes_en.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/note-related/empty_note.js" ></script>
-    <script language="JavaScript" type="text/javascript" src="js/to-mention-in-menu/option_show_help_demo_notes.js" ></script>
     <script language="JavaScript" type="text/javascript" src="js/note-related/import_Operations.js" ></script>
     
     <script language="JavaScript" type="text/javascript" src="js/search-related/pushToSearchNotesQueryText.js" ></script>
@@ -397,7 +396,7 @@
                 <a style="color: rgb(242, 155, 103);" data-bind="attr:
                 {
                     href: privacy_policy_link
-                }">Privacy policy</a>
+                }">Privacy policy</a> <span class="webpad-color-coral"> compact version: Your data is stored only on your device. </span>
             </h2>
             <div style="height: 0.8rem;"></div>
         </div>
@@ -453,33 +452,6 @@
                     data-bind="click: $root.changeBackgroundToMidnight">
                     midnight
             </div>
-        </div>
-        <div class="w3-col w3-container s12 m12 l12">
-            <span class="webpad-color-blue" style="font-size: 1.4rem; " >
-                    Demo notes use is:
-            </span>
-        </div>
-        <div class="w3-col w3-container s12 m12 l12">
-            
-            <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-green-frame webpad-color-orange prevent-select cursor-pointer" 
-                    data-bind="
-                        click: $root.set_option_show_help_demo_notes_to_false,
-                        style:
-                        {
-                            visibility: $root.option_show_help_demo_notes() ? 'inherit' : 'hidden'
-                        }">
-                    on
-            </div>
-            <div style="font-size: 1.4rem; " class="webpad-button-no-border webpad-button-paddings webpad-orange-frame webpad-color-orange prevent-select cursor-pointer" 
-                    data-bind="
-                        click: $root.set_option_show_help_demo_notes_to_true,
-                        style:
-                        {
-                            visibility: $root.option_show_help_demo_notes() ? 'hidden' : 'inherit'
-                        }">
-                    off
-            </div>
-
         </div>
 
         <div class="w3-col w3-container s12 m12 l12">

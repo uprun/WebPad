@@ -1,5 +1,3 @@
-
-
 function ConnectedNotesViewModel()
 {
     //[2024-09-12] this is for sure too big method
@@ -9,9 +7,6 @@ function ConnectedNotesViewModel()
     lookup.defineLocalStorage();
 
     lookup.backgroundApplySaved();
-
-    lookup.apply_saved_option_show_help_demo_notes();
-
     
     lookup.backendWorker = new fake_backend_worker();
 

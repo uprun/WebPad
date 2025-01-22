@@ -5,6 +5,5 @@ $(document).ready(function()
     ko.applyBindings(viewModel);
     viewModel.loadNotes();
     viewModel.check_platform();
-    console.log("document ready");
     document.getElementById("search-bar-input").focus();
 });
