@@ -5,7 +5,7 @@ lookup.CreateNoteFromSearchQuery = function() {
         color: lookup.colorOfNextQuote()
     };
 
-    lookup.colorOfNextQuote(lookup.GetRandomColor().Color());
+    lookup.colorOfNextQuote(lookup.GetRandomColor().color);
     lookup.SearchNotesQuery("");
     if(data.text.length > 0)
     {

@@ -1,4 +1,4 @@
-lookup.data_color_presets = [ 
+lookup.ColorPresets = [ 
     { 
         color: "#ffa26b" 
     },
@@ -24,19 +24,3 @@ lookup.data_color_presets = [
         color: "#ff8f95" 
     }
 ];
-
-lookup.ColorPresets = ko.observableArray([]);
-
-lookup.populateColorPresets = function()
-{
-    var toAddColors = ko.utils.arrayMap(lookup.data_color_presets, function(elem) 
-    {
-        var toReturn = new lookup.model_ColorPreset(elem);
-        return toReturn;
-    });
-
-    ko.utils.arrayPushAll(lookup.ColorPresets, toAddColors);
-
-};
-
-lookup.populateColorPresets();
