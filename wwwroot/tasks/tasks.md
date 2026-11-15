@@ -1,6 +1,7 @@
 I need to write down tasks and not keep them in my mind
 
 === for next release
+[ ] Upgrade the Android SDK usage to SDK-36
 [] do all actions only with keyboard
 [] migrate storage of notes to files
 [] maybe add possibility to resurface notes
