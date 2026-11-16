@@ -16,7 +16,8 @@ lookup.export = function()
     var content = JSON.stringify(toExport);
     
     var dateTime = new Date();
-    var fileName = "WebPad-snapshot-" + dateTime.toDateString() + ".txt";
+    let time_stamp = lookup.transform_date_to_sortable_string(dateTime);
+    var fileName = "WebPad-snapshot-" + time_stamp + ".txt";
 
 
     if (lookup.platform_is_cordova_android()) 
