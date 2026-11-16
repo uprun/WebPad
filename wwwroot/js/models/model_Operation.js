@@ -8,15 +8,7 @@ lookup.model_Operation = function(data)
 
     self.createDate = new Date(self.time);
 
-    var date = "" + self.createDate.getFullYear() +
-        "-" + ((self.createDate.getMonth() + 1) + "").padStart(2, "0") +
-        "-" + (self.createDate.getDate() + "").padStart(2, "0");
-    
-    var time = (self.createDate.getHours() + "").padStart(2, "0") +
-    ":" + (self.createDate.getMinutes() + "").padStart(2, "0") + 
-    ":" + (self.createDate.getSeconds() + "").padStart(2, "0");
-
-    self.createDateToOrder = date + "  " +  time;
+    self.createDateToOrder = lookup.transform_date_to_sortable_string(self.createDate);
 
     if(self.name === 'create')
     {
